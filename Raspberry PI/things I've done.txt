@@ -1,0 +1,4 @@
+things I've done
+npm install express --save
+npm install express-generator -g
+express --hbs -css less --git server

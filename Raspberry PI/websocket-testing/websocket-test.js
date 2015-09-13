@@ -18,12 +18,12 @@ app.use(function (req, res, next) {
 });
 
 // register a websocked endpoint
-app.ws('/connect', function(ws, req) {/*
+app.ws('/connect', function(ws, req) {
   ws.on('message', function(msg) {
   	//logs connection and sends a welcome message. ("i.e. initial state")
     console.log("Received: " + msg);
     ws.send('Hello World!');
-  });*/
+  });
   console.log('socket', req.testing);
 });
 
