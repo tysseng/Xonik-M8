@@ -1,25 +1,19 @@
-var express = require('express');
-var app = express();
-var expressWs = require('express-ws')(app);
-var EventGenerator = require("./websocket-event-generator");
-
-
-// listen to events and send data on websocket connection. 
-var eventGenerator = new EventGenerator();
-eventGenerator.on("someevent", function (event) {
-  aWebSocketService.clients.forEach(function (client) {
-  	console.log("Sent " + event + " to client");
-    client.send('hello ' + event);
-  });
-})
-
-// register a websocked endpoint
-app.ws('/connect', function(ws, req) {
-  console.log("Connection received");
-});
-
-// aWebSocketService is a view of all connections to an endpoint.
-// Send a message to each registered client every second.
-var aWebSocketService = expressWs.getWss('/connect');
+var SPI = require('pi-spi');
  
-app.listen(3000);
+var spi = SPI.initialize("/dev/spidev0.0"),
+    test = Buffer("Hello, World!");
+ 
+// reads and writes simultaneously
+spi.transfer(test, test.length, function (e,d) {
+    if (e) console.error(e);
+    else console.log("Got \""+d.toString()+"\" back.");
+    
+    if (test.toString() === d.toString()) {
+        console.log(msg);
+    } else {
+        // NOTE: this will likely happen unless MISO is jumpered to MOSI
+        console.warn(msg);
+        process.exit(-2);
+    }
+    
+});
