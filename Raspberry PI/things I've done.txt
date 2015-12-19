@@ -2,3 +2,39 @@ things I've done
 npm install express --save
 npm install express-generator -g
 express --hbs -css less --git server
+
+
+Installere raspberry:
+- Last ned minibian (usikker på om det er det jeg kjører på PI2 nå men...)
+- Pakk ut
+- Skriv til SD-kort med Win32 Disk Imager
+
+På PI:
+http://raspberrypi.stackexchange.com/questions/499/how-can-i-resize-my-root-partition
+
+Oppgradere til Jessie (må for å støtte node):
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get dist-upgrade
+to make sure wheezy is fully up to date.
+
+Edit /etc/apt/sources.list and change wheezy to jessie.
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get dist-upgrade
+
+Legg til spi-støtte:
+nano /etc/modules
+
+Legg til:
+# SPI devices
+spi-dev
+
+------
+
+http://www.andrewconnell.com/blog/setup-node-js-on-raspberry-pi-2-b
+- apt-get update
+- apt-get upgrade
+- wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+- dpkg -i node_latest_armhf.deb
