@@ -1,6 +1,9 @@
 /*
 Web socket example. See test.html for client side.
-Client connects to ws://localhost:3000/connect and starts by sending a message that
+
+Go to http://pi_address:3000/
+
+Client connects to ws://<hardcoded pi ip>:3000/connect and starts by sending a message that
 is logged by the server.
 
 The server sends messages back to any client registered to the ws endpoint on a regular
@@ -17,10 +20,16 @@ app.use(function (req, res, next) {
   return next();
 });
 
+app.use(express.static('static'));
+
+app.get('/', function (req, res) {
+  res.redirect("/websocket-test.html");
+});
+
 // register a websocked endpoint
 app.ws('/connect', function(ws, req) {
   ws.on('message', function(msg) {
-  	//logs connection and sends a welcome message. ("i.e. initial state")
+    //logs connection and sends a welcome message. ("i.e. initial state")
     console.log("Received: " + msg);
     ws.send('Hello World!');
   });
@@ -34,8 +43,12 @@ var i = 0;
 var aWebSocketService = expressWs.getWss('/connect');
 setInterval(function () {
   aWebSocketService.clients.forEach(function (client) {
-  	console.log("Sent " + i + " to client");
-    client.send('hello ' + i);
+    console.log("Sent " + i + " to client");
+    try{
+      client.send('hello ' + i);
+    } catch (ex){
+      console.log("Client not available");
+    }
   });
   i++;
 }, 10);
