@@ -31,23 +31,21 @@ var SPI = require('pi-spi');
 var spi = SPI.initialize("/dev/spidev0.0"),
     test = Buffer("Hello, World!");
  
+var state = 0;
 
+function writeToSpi(){
+	test = Buffer(state);
+	spi.transfer(test, test.length, function (e,d) {
+	    console.log("Wrote " + state + " to SPI"):
+
+	    if (e) console.error(e);
+	    else console.log("Got \""+d.toString()+"\" back.");
+	});	
+	setTimeout(writeToSpi, 1000);
+}
 
 spi.dataMode(1); // clock idle low, clock phase active to idle.
 spi.clockSpeed(4e6); //4MHz
 spi.bitOrder(SPI.order.MSB_FIRST);
 
-// reads and writes simultaneously
-spi.transfer(test, test.length, function (e,d) {
-    if (e) console.error(e);
-    else console.log("Got \""+d.toString()+"\" back.");
-    
-    if (test.toString() === d.toString()) {
-        console.log(msg);
-    } else {
-        // NOTE: this will likely happen unless MISO is jumpered to MOSI
-        console.warn(msg);
-        process.exit(-2);
-    }
-
-});
+writeToSpi();
