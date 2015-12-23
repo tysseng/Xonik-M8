@@ -1,0 +1,20 @@
+{
+  "name": "XonikM8",
+  "version": "0.0.1",
+  "description": "Xonik M8 prototype",
+  "main": "xm8-server.js",
+  "scripts": {
+    "build-js": "browserify src/js/main.js > static/js/xm8.js",
+    "watch-js": "watchify src/js/main.js -o static/js/xm8.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3",
+    "express-ws": "^0.2.6"
+  },
+    "devDependencies": {
+    "browserify": "latest",
+    "watchify": "latest"
+  }  
+}
