@@ -1,18 +1,50 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var output = {};
+var input = {};
+
+function setInputOutputMappings(controller){
+	output[controller.intId] = controller;
+	input[controller.extId] = controller;
+}
+
+var controllers = [
+	{
+		intId: "volume",
+		extId: 2,
+		name: "Volume"
+	},
+	{
+		intId: "frequency",
+		extId: 3,
+		name: "Frequency"
+	},
+];
+
+var controllerCount = controllers.length;
+for(var i = 0; i < controllerCount; i++){
+	setInputOutputMappings(controllers[i]);
+}
+
+var mappings = {
+    input: input,
+    output: output
+}
+
+module.exports = mappings;
+},{}],2:[function(require,module,exports){
 var events = require("./eventbusses.js");
 
 function setupEventDebugging(){
-	// event debugger
 	events.controls.output.subscribe("controller", function(ev){
 		console.log("output ctrl " + ev.detail.id + ":" + ev.detail.value);
 	});
-	events.controls.input.subscribe("3", function(ev){
-		console.log("input ctrl 3: " + ev.detail);
+	events.controls.input.subscribe("volume", function(ev){
+		console.log("input ctrl volume: " + ev.detail);
 	});
 }
 
 module.exports = setupEventDebugging();
-},{"./eventbusses.js":2}],2:[function(require,module,exports){
+},{"./eventbusses.js":3}],3:[function(require,module,exports){
 var EventBus = function(){};
 EventBus.prototype.subscribe = function(event, fn) {
     $(this).bind(event, fn);
@@ -29,7 +61,7 @@ var busses = {
 }
 
 module.exports = busses;
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var events = require("./eventbusses.js")
 
 var colors = [
@@ -69,7 +101,7 @@ function initKnob(){
 		value: 154,
 		inEventBus: events.controls.input,
 		outEventBus: events.controls.output,
-		controllerId: 3,
+		controllerId: "volume",
 		turn : function(ratio){
 			numBars = Math.round(colorBars.length*ratio);
 			
@@ -89,15 +121,16 @@ function initKnob(){
 module.exports = initKnob();
 
 
-},{"./eventbusses.js":2}],4:[function(require,module,exports){
+},{"./eventbusses.js":3}],5:[function(require,module,exports){
 require('./wsclient.js');
 require('./knobWithRing.js');
 require('./eventDebug.js');
 
 console.log("Starting Xonik M8");
 
-},{"./eventDebug.js":1,"./knobWithRing.js":3,"./wsclient.js":5}],5:[function(require,module,exports){
+},{"./eventDebug.js":2,"./knobWithRing.js":4,"./wsclient.js":6}],6:[function(require,module,exports){
 var events = require("./eventbusses.js");
+var maps = require("./controllerSetup.js");
 
 function createMessage(id, value){
   return id + "," + value;
@@ -119,22 +152,29 @@ function wsConnect(){
     ws.onopen = function(){
       console.log("Connected to XM8 server");
 
-      events.controls.output.subscribe("controller", function(ev){        
-        var message = createMessage(ev.detail.id, ev.detail.value);
-        console.log("sending message through ws: " + message);        
-        ws.send(message);
+      events.controls.output.subscribe("controller", function(ev){      
+        var mapping = maps.output[ev.detail.id];
+        if(mapping){
+          var id = mapping.extId;
+
+          var message = createMessage(id, ev.detail.value);
+          console.log("sending message through ws: " + message);        
+          ws.send(message);          
+        }
       });
     }
 
     ws.onmessage = function(evt){ 
-      var message = parseMessage(evt.data);         
-      console.log("received message through ws. id=" + message.id + ", value=" + message.value);  
+      var message = parseMessage(evt.data);  
+      var mapping = maps.input[message.id];      
+      var id = mapping.intId;
+
+      console.log("received message through ws. id=" + id + ", value=" + message.value);  
 
       events.controls.input.publish(
-        new CustomEvent(message.id, {detail: message.value})
-      );               
-    };    
-
+        new CustomEvent(id, {detail: message.value})
+      );              
+    };
   } else {
     console.log("WebSocket not supported by your browser, cannot communicate with Xonik M8 server");
   }
@@ -143,4 +183,4 @@ function wsConnect(){
 
 module.exports = wsConnect();
 
-},{"./eventbusses.js":2}]},{},[4]);
+},{"./controllerSetup.js":1,"./eventbusses.js":3}]},{},[5]);

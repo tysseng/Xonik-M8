@@ -37,7 +37,7 @@ function initKnob(){
 		value: 154,
 		inEventBus: events.controls.input,
 		outEventBus: events.controls.output,
-		controllerId: 3,
+		controllerId: "volume",
 		turn : function(ratio){
 			numBars = Math.round(colorBars.length*ratio);
 			
