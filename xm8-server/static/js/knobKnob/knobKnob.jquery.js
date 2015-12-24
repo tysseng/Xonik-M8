@@ -44,7 +44,6 @@
 
 			// attach eventbus to receive external control signals
 		    if(options.inEventBus){
-		    	console.log(options.inEventBus);
 		    	options.inEventBus.subscribe("" + options.controllerId, function(ev){
 		    		options.value=ev.detail;
 		    		render();
