@@ -116,7 +116,7 @@
 					// publish events to bus, may be transmitted to hardware.
 				    if(options.outEventBus){
 				    	options.outEventBus.publish(
-				    		new CustomEvent("" + options.controllerId, {detail: currentDeg})
+				    		new CustomEvent("controller", {detail: {id: options.controllerId, value: currentDeg}})
 			    		);
 				    }					
 					options.turn(currentDeg/359);
