@@ -1,16 +1,18 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var events = require("./eventbusses.js");
+
 function setupEventDebugging(){
 	// event debugger
-	controllerOutEventBus.subscribe("3", function(ev){
+	events.controls.output.subscribe("3", function(ev){
 		console.log("output ctrl 3: " + ev.detail);
 	});
-	controllerInEventBus.subscribe("3", function(ev){
+	events.controls.input.subscribe("3", function(ev){
 		console.log("input ctrl 3: " + ev.detail);
 	});
 }
 
 module.exports = setupEventDebugging();
-},{}],2:[function(require,module,exports){
+},{"./eventbusses.js":2}],2:[function(require,module,exports){
 //TODO: Make this into a single reusable eventbus definition instead of two or more duplications
 
 var controllerInEventBus = {
@@ -73,6 +75,8 @@ var colorBars = bars.find('.colorBar');
 var numBars = 0, lastNum = -1;
 	
 function initKnob(){
+
+	console.log(events);
 
 	$('#control').knobKnob({
 		snap : 10,

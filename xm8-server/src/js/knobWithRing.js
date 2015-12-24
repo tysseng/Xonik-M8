@@ -32,6 +32,8 @@ var numBars = 0, lastNum = -1;
 	
 function initKnob(){
 
+	console.log(events);
+
 	$('#control').knobKnob({
 		snap : 10,
 		value: 154,

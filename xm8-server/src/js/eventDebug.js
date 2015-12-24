@@ -1,9 +1,11 @@
+var events = require("./eventbusses.js");
+
 function setupEventDebugging(){
 	// event debugger
-	controllerOutEventBus.subscribe("3", function(ev){
+	events.controls.output.subscribe("3", function(ev){
 		console.log("output ctrl 3: " + ev.detail);
 	});
-	controllerInEventBus.subscribe("3", function(ev){
+	events.controls.input.subscribe("3", function(ev){
 		console.log("input ctrl 3: " + ev.detail);
 	});
 }
