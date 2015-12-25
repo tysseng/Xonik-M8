@@ -107,7 +107,7 @@ function wsConnect(){
   if ("WebSocket" in window) {
     console.log("WebSocket is supported by your Browser!");
       
-    var ws = new WebSocket("ws://localhost:3000/echo");
+    var ws = new WebSocket("ws://localhost:3000/controller");
     ws.onopen = function(){
       console.log("Connected to XM8 server");
 
