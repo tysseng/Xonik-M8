@@ -50,14 +50,14 @@ section, footer{
 -----------------------------*/
 
 
-#bars{
+.bars{
 	height: 212px;
 	margin: 0 auto;
 	position: relative;
 	width: 228px;
 }
 
-#control{
+.control{
 	width:90px;
 	height:90px;
 	position:absolute;

@@ -1,11 +1,4 @@
-var output = {};
-var input = {};
-
-function setInputOutputMappings(controller){
-	output[controller.intId] = controller;
-	input[controller.extId] = controller;
-}
-
+// controller config, mapping internal/gui controllers to hardware controller ids etc.
 var controllers = [
 	{
 		intId: "volume",
@@ -18,6 +11,14 @@ var controllers = [
 		name: "Frequency"
 	},
 ];
+
+var output = {};
+var input = {};
+
+function setInputOutputMappings(controller){
+	output[controller.intId] = controller;
+	input[controller.extId] = controller;
+}
 
 var controllerCount = controllers.length;
 for(var i = 0; i < controllerCount; i++){

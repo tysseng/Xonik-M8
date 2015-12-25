@@ -7,51 +7,99 @@
  */
 
 (function($){
-	
+	var colors = [
+		'26e000','2fe300','37e700','45ea00','51ef00',
+		'61f800','6bfb00','77ff02','80ff05','8cff09',
+		'93ff0b','9eff09','a9ff07','c2ff03','d7ff07',
+		'f2ff0a','fff30a','ffdc09','ffce0a','ffc30a',
+		'ffb509','ffa808','ff9908','ff8607','ff7005',
+		'ff5f04','ff4f03','f83a00','ee2b00','e52000'
+	];	
+
 	$.fn.knobKnob = function(props){
-	
 		var options = $.extend({
 			snap: 0,
 			value: 0,
 			turn: function(){}
 		}, props || {});
-	
+
 		var tpl = '<div class="knob">\
-				<div class="top"></div>\
-				<div class="base"></div>\
-			</div>';
-	
+					   <div class="top"></div>\
+					   <div class="base"></div>\
+				   </div>';
+
+		function createColorBars(barsWrapper){
+			var rad2deg = 180/Math.PI;
+			var deg = 0;			
+
+			for(var i=0;i<colors.length;i++){
+				
+				deg = i*12;
+				$('<div class="colorBar">').css({
+					backgroundColor: '#'+colors[i],
+					transform:'rotate('+deg+'deg)',
+					top: -Math.sin(deg/rad2deg)*80+100,
+					left: Math.cos((180 - deg)/rad2deg)*80+100,
+				}).appendTo(barsWrapper);
+			}		
+		}
+
 		return this.each(function(){
 			
 			var el = $(this);
 			el.append(tpl);
-			
+			el.wrap('<div class="bars">');
+			el = el.parent();			
+
 			var knob = $('.knob',el),
 				knobTop = knob.find('.top'),
 				startDeg = -1,
 				currentDeg = 0,
 				rotation = 0,
 				lastDeg = 0,
+				lastBarNum = -1;
 				doc = $(document);
 			
+			createColorBars(el);
+
 			function render(){
-				if(options.value > 0 && options.value <= 359){
-					rotation = currentDeg = options.value;
-					knobTop.css('transform','rotate('+(currentDeg)+'deg)');
-					options.turn(currentDeg/359);
-				}
+				knobTop.css('transform','rotate('+(currentDeg)+'deg)');
+				options.turn(currentDeg/359);
+				renderBars(el, currentDeg/359);
 			}
+
+			function renderFromValue(value){
+				if(value > 0 && value <= 359){
+					rotation = currentDeg = value;
+					render();
+				}				
+			}
+
+			function renderBars(bars, ratio){
+				var colorBars = bars.find('.colorBar');
+				var numBars = 0;
+
+				numBars = Math.round(colorBars.length * ratio);
+				
+				// Update the dom only when the number of active bars
+				// changes, instead of on every move		
+				if(numBars == lastBarNum){
+					return false;
+				}
+				lastBarNum = numBars;
+				
+				colorBars.removeClass('active').slice(0, numBars).addClass('active');
+			}	
 
 			// attach eventbus to receive external control signals
 		    if(options.inEventBus){
 		    	options.inEventBus.subscribe("" + options.controllerId, function(ev){
-		    		options.value=ev.detail;
-		    		render();
+		    		renderFromValue(ev.detail);
 		    	});
 		    }
 
 		    // initial position
-			render();
+			renderFromValue(options.value);
 
 			knob.on('mousedown touchstart', function(e){
 			
@@ -111,15 +159,15 @@
 					currentDeg = tmp;
 					lastDeg = tmp;
 		
-					knobTop.css('transform','rotate('+(currentDeg)+'deg)');
-
 					// publish events to bus, may be transmitted to hardware.
 				    if(options.outEventBus){
 				    	options.outEventBus.publish(
 				    		new CustomEvent("controller", {detail: {id: options.controllerId, value: currentDeg}})
 			    		);
-				    }					
-					options.turn(currentDeg/359);
+				    }
+
+				    // show dial in GUI
+			    	render();
 				});
 			
 				doc.on('mouseup.rem  touchend.rem',function(){
@@ -131,8 +179,7 @@
 					
 					// Marking the starting degree as invalid
 					startDeg = -1;
-				});
-			
+				});	
 			});
 		});
 	};
