@@ -1,9 +1,13 @@
-var eventbus = require('./eventbus.js');
-var spi = require('./spi.js');
+// the spi repository serializes, sends and receives data through the SPI bus. 
+// It communicates through events and exports nothing.
 
-//Call this from receiver
-function publishControllerChange(message){
-  var event = fromSpiMessage(message);
+var eventbus = require('./eventbus.js');
+//var spi = require('./spi.js');
+var config = require('./config.js');
+
+
+function publishControllerChange(buffer){
+  var event = fromSpiBuffer(buffer);
   eventbus.controls.emit("controller", event);
   console.log("Published event from SPI: " + event.id + " to " + event.value);
 }
@@ -11,42 +15,34 @@ function publishControllerChange(message){
 function listenToControllerChanges(){
   eventbus.controls.on("controller",function(event){
     if(event.source !== "spi"){
-      sendController(toSpiMessage(event));
+      sendController(toSpiBuffer(event));
     }
   });
 }
 
-function fromSpiMessage(message){
-  var idStr = message.substring(0, 3);
-  var id = parseInt(idStr);
-
-  var valueStr = message.substr(3,6);
-  var value = parseInt(valueStr);
+function fromSpiBuffer(buffer){
+  var id = buffer[0];
+  var value = buffer[1];
 
   return {source: "spi", id: id, value: value};
 }
 
-function toSpiMessage(event){
-  return zeroPad(event.id) + zeroPad(event.value); 
+function toSpiBuffer(event){
+  return new Buffer([event.id, event.value]); 
 }
 
-function zeroPad(value){
-  if(value > 99){
-  	return "" + value;
-  } else if(value > 9){
-  	return "0" + value;
+function sendController(buffer){
+  if(config.spi.loopback){
+    publishControllerChange(buffer);  	
   } else {
-  	return "00" + value;
+  	//spi.write(buffer);
   }
 }
 
-function sendController(message){
-  // loopback
-  publishControllerChange(message);
-  
-  // implement spi send here
-  console.log("Trying to send controller " + message + " through SPI");  
+function receive(buffer){
+	//Todo - implement multiple types here. For now controller messages are the only ones.
+	publishControllerChange(buffer);
 }
 
-
 listenToControllerChanges();
+//spi.setReceiveCallback(receive);

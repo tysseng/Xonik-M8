@@ -133,3 +133,10 @@ footer a i b{
 	color:#c92020;
 	font-weight: normal;
 }
+
+#config {
+	position: absolute;
+	top: 100px;
+	left: 100px;
+	color: #fff;
+}

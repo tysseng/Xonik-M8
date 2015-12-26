@@ -81,15 +81,25 @@ module.exports = initKnob();
 
 
 },{"./eventbusses.js":3}],5:[function(require,module,exports){
-require('./wsclient.js');
+var wsclient = require('./wsclient.js');
 require('./knobWithRing.js');
 require('./eventDebug.js');
+
+console.log($("#receiveOn"));
+
+$('#receiveOn').click(function() {
+    var $this = $(this);
+    // $this will contain a reference to the checkbox   
+    wsclient.toggleReceive($this.is(':checked'));
+});
 
 console.log("Starting Xonik M8");
 
 },{"./eventDebug.js":2,"./knobWithRing.js":4,"./wsclient.js":6}],6:[function(require,module,exports){
 var events = require("./eventbusses.js");
 var maps = require("./controllerSetup.js");
+
+var receiveOn = true;
 
 function createMessage(id, value){
   return id + "," + value;
@@ -124,6 +134,9 @@ function wsConnect(){
     }
 
     ws.onmessage = function(evt){ 
+      if(!receiveOn){
+        return;
+      }
       var message = parseMessage(evt.data);  
       var mapping = maps.input[message.id];      
       var id = mapping.intId;
@@ -139,7 +152,14 @@ function wsConnect(){
   }
 }
 
+function toggleReceive(state){
+  console.log("Switched receive to " + state);
+  receiveOn = state;
+}
 
-module.exports = wsConnect();
+//Kickstart WS integration
+wsConnect();
+
+module.exports.toggleReceive = toggleReceive;
 
 },{"./controllerSetup.js":1,"./eventbusses.js":3}]},{},[5]);
