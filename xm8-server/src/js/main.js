@@ -1,3 +1,12 @@
+/*
+
+//TODO: 
+- controllers must be 8 bit, transmitting > 255 will wrap! 
+	- scale controllers
+	- support 16bit controller values.
+- Protect receive from transmit - send must wait for interrupt to go low
+*/
+
 var wsclient = require('./wsclient.js');
 require('./knobWithRing.js');
 require('./eventDebug.js');

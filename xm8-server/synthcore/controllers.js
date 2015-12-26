@@ -16,10 +16,11 @@ function init(){
 
 function setValue(event){
 	var id = event.id;
+	var src = event.source;
 	var value = event.value;
 
 	controllers[id] = value;
-	console.log("Set state for controller " + id + " to " + controllers[id]);
+	console.log("Set state for controller " + id + " to " + controllers[id] + " from " + src);
 }
 
 init();

@@ -1,38 +1,54 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var types = require('./datatypes.js');
+
 // controller config, mapping internal/gui controllers to hardware controller ids etc.
 var controllers = [
 	{
-		intId: "volume",
-		extId: 2,
-		name: "Volume"
+		guiId: "volume",
+		srvId: 2,
+		hwId: 2,
+		name: "Volume",
+		type: types.CTRL_16_BIT
 	},
 	{
-		intId: "frequency",
-		extId: 3,
-		name: "Frequency"
+		guiId: "frequency",
+		srvId: 3,
+		hwId: 3,
+		name: "Frequency",
+		type: types.CTRL_8_BIT
 	},
 ];
 
-var output = {};
-var input = {};
+var gui = {};
+var srv = {};
+var hw = {};
 
-function setInputOutputMappings(controller){
-	output[controller.intId] = controller;
-	input[controller.extId] = controller;
+function setMappings(controller){
+	gui[controller.guiId] = controller;
+	srv[controller.srvId] = controller;
+	hw[controller.hwId] = controller;
 }
 
 var controllerCount = controllers.length;
 for(var i = 0; i < controllerCount; i++){
-	setInputOutputMappings(controllers[i]);
+	setMappings(controllers[i]);
 }
 
 var mappings = {
-    input: input,
-    output: output
+    gui: gui,
+    srv: srv,
+    hw: hw
 }
 
 module.exports = mappings;
-},{}],2:[function(require,module,exports){
+},{"./datatypes.js":2}],2:[function(require,module,exports){
+datatypes = {
+	CTRL_8_BIT: 0,
+	CTRL_16_BIT: 1
+}
+
+module.exports = datatypes;
+},{}],3:[function(require,module,exports){
 var events = require("./eventbusses.js");
 
 function setupEventDebugging(){
@@ -45,7 +61,7 @@ function setupEventDebugging(){
 }
 
 module.exports = setupEventDebugging();
-},{"./eventbusses.js":3}],3:[function(require,module,exports){
+},{"./eventbusses.js":4}],4:[function(require,module,exports){
 var EventBus = function(){};
 EventBus.prototype.subscribe = function(event, fn) {
     $(this).bind(event, fn);
@@ -62,7 +78,7 @@ var busses = {
 }
 
 module.exports = busses;
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var events = require("./eventbusses.js")
 	
 function initKnob(){
@@ -80,7 +96,16 @@ function initKnob(){
 module.exports = initKnob();
 
 
-},{"./eventbusses.js":3}],5:[function(require,module,exports){
+},{"./eventbusses.js":4}],6:[function(require,module,exports){
+/*
+
+//TODO: 
+- controllers must be 8 bit, transmitting > 255 will wrap! 
+	- scale controllers
+	- support 16bit controller values.
+- Protect receive from transmit - send must wait for interrupt to go low
+*/
+
 var wsclient = require('./wsclient.js');
 require('./knobWithRing.js');
 require('./eventDebug.js');
@@ -95,22 +120,24 @@ $('#receiveOn').click(function() {
 
 console.log("Starting Xonik M8");
 
-},{"./eventDebug.js":2,"./knobWithRing.js":4,"./wsclient.js":6}],6:[function(require,module,exports){
+},{"./eventDebug.js":3,"./knobWithRing.js":5,"./wsclient.js":7}],7:[function(require,module,exports){
 var events = require("./eventbusses.js");
-var maps = require("./controllerSetup.js");
+var ctrlSetup = require("../../shared/controllerSetup.js");
 
 var receiveOn = true;
 
-function createMessage(id, value){
-  return id + "," + value;
+function createMessage(event){
+  var id = ctrlSetup.gui[event.detail.id].srvId;
+  return id + "," + event.detail.value;
 }
 
 function parseMessage(message){
   var parts = message.split(",");
+  var id = ctrlSetup.srv[parts[0]].guiId; 
   return {
-    id: parts[0],
+    id: id,
     value: parts[1]
-  }
+  };
 }
 
 function wsConnect(){
@@ -121,30 +148,23 @@ function wsConnect(){
     ws.onopen = function(){
       console.log("Connected to XM8 server");
 
-      events.controls.output.subscribe("controller", function(ev){      
-        var mapping = maps.output[ev.detail.id];
-        if(mapping){
-          var id = mapping.extId;
-
-          var message = createMessage(id, ev.detail.value);
-          console.log("sending message through ws: " + message);        
-          ws.send(message);          
-        }
+      events.controls.output.subscribe("controller", function(event){      
+        var message = createMessage(event);
+        console.log("sending message through ws: " + message);        
+        ws.send(message);          
       });
     }
 
-    ws.onmessage = function(evt){ 
+    ws.onmessage = function(event){ 
       if(!receiveOn){
         return;
       }
-      var message = parseMessage(evt.data);  
-      var mapping = maps.input[message.id];      
-      var id = mapping.intId;
+      var message = parseMessage(event.data);  
 
-      console.log("received message through ws. id=" + id + ", value=" + message.value);  
+      console.log("received message through ws. id=" + message.id + ", value=" + message.value);  
 
       events.controls.input.publish(
-        new CustomEvent(id, {detail: message.value})
+        new CustomEvent(message.id, {detail: message.value})
       );              
     };
   } else {
@@ -153,7 +173,7 @@ function wsConnect(){
 }
 
 function toggleReceive(state){
-  console.log("Switched receive to " + state);
+  console.log("Switched ws client receive to " + state);
   receiveOn = state;
 }
 
@@ -162,4 +182,4 @@ wsConnect();
 
 module.exports.toggleReceive = toggleReceive;
 
-},{"./controllerSetup.js":1,"./eventbusses.js":3}]},{},[5]);
+},{"../../shared/controllerSetup.js":1,"./eventbusses.js":4}]},{},[6]);

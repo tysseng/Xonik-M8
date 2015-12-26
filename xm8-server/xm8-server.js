@@ -10,6 +10,7 @@ var expressWs = require('express-ws')(app);
 var eventbus = require('./synthcore/eventbus.js');
 
 var controllers = require('./synthcore/controllers.js');
+var ctrlSetup = require('./shared/controllerSetup.js');
 var spiRepository = require('./synthcore/spiRepository.js');
 
 function publishControllerChange(message){
@@ -25,20 +26,21 @@ function publishControllerChange(message){
 function listenToControllerChanges(){
   eventbus.controls.on("controller",function(event){
     if(event.source !== "gui"){
+      console.log("Received event from " + event.source);
       sendController("" + event.id + "," + event.value);
     }
   });
 }
 
 function sendController(message){
-  console.log("Trying to send controller " + message);
+  console.log("Trying to send controller " + message + " to gui");
 
   //todo: move this out of function?
   var wss = expressWs.getWss('/controller');
   wss.clients.forEach(function (client) {
 
     try{
-      console.log("Sending message " + message);
+      console.log("Sending message " + message + " to gui " + client);
       client.send(message);
     } catch (ex){
       console.log("Client went missing before server could send message");

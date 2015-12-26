@@ -4,12 +4,17 @@
 var eventbus = require('./eventbus.js');
 //var spi = require('./spi.js');
 var config = require('./config.js');
-
+var ctrlConfig = require('../shared/controllerSetup.js');
+var types = require('../shared/datatypes.js');
 
 function publishControllerChange(buffer){
   var event = fromSpiBuffer(buffer);
-  eventbus.controls.emit("controller", event);
-  console.log("Published event from SPI: " + event.id + " to " + event.value);
+  var type = ctrlConfig.srv[event.id].type;
+
+  if(type === types.CTRL_8_BIT || type === types.CTRL_16_BIT){
+    eventbus.controls.emit("controller", event);
+    console.log("Published event from SPI: " + event.id + " to " + event.value);    
+  }
 }
 
 function listenToControllerChanges(){
@@ -21,18 +26,39 @@ function listenToControllerChanges(){
 }
 
 function fromSpiBuffer(buffer){
-  var id = buffer[0];
-  var value = buffer[1];
+  var type = buffer[0];
+  var id = ctrlConfig.hw[buffer[1]].srvId;
+
+  var value = getValueFromSpi(type, buffer);
 
   return {source: "spi", id: id, value: value};
 }
 
+function getValueFromSpi(type, buffer){
+  if(type === types.CTRL_8_BIT){
+    return buffer[2];
+  } else {
+    return buffer[2] + buffer[3] * 256;
+  }
+}
+
 function toSpiBuffer(event){
-  return new Buffer([event.id, event.value]); 
+  var controller = ctrlConfig.srv[event.id];
+  var type = controller.type;
+  var id = controller.hwId;
+  if(type === types.CTRL_8_BIT){
+    return new Buffer([type, id, event.value]); 
+  } else if (types.CTRL_16_BIT){
+    return new Buffer([type, id, event.value, event.value / 256 ]); 
+  }
 }
 
 function sendController(buffer){
   if(config.spi.loopback){
+    console.log("SPI loopback, resending");
+    for(var i = 0; i<buffer.length; i++){
+      console.log(buffer[i]);
+    }    
     publishControllerChange(buffer);  	
   } else {
   	//spi.write(buffer);

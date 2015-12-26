@@ -43,7 +43,7 @@ function setReadCallback(callback){
 
 function read(){
   //TODO: Extend to read multiple types and lengths.
-  var buffer = new Buffer([0x00, 0x00]);
+  var buffer = new Buffer([0x00, 0x00, 0x00]);
   spi.write(buffer, function(device, buf) {
     for(i = 0; i<buf.length, i++){
       console.log("wrote " + buf[i] + " to SPI");
