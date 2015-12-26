@@ -5,14 +5,14 @@ var controllers = [
 	{
 		guiId: "volume",
 		srvId: 2,
-		hwId: 2,
+		hwId: 26,
 		name: "Volume",
 		type: types.CTRL_16_BIT
 	},
 	{
 		guiId: "frequency",
 		srvId: 3,
-		hwId: 3,
+		hwId: 36,
 		name: "Frequency",
 		type: types.CTRL_8_BIT
 	},

@@ -9,9 +9,8 @@ var types = require('../shared/datatypes.js');
 
 function publishControllerChange(buffer){
   var event = fromSpiBuffer(buffer);
-  var type = ctrlConfig.srv[event.id].type;
 
-  if(type === types.CTRL_8_BIT || type === types.CTRL_16_BIT){
+  if(event.type === types.CTRL_8_BIT || event.type === types.CTRL_16_BIT){
     eventbus.controls.emit("controller", event);
     console.log("Published event from SPI: " + event.id + " to " + event.value);    
   }
@@ -28,16 +27,15 @@ function listenToControllerChanges(){
 function fromSpiBuffer(buffer){
   var type = buffer[0];
   var id = ctrlConfig.hw[buffer[1]].srvId;
-
-  var value = getValueFromSpi(type, buffer);
-
-  return {source: "spi", id: id, value: value};
+  var value = getValueFromSpi(buffer);
+  return {source: "spi", type: type, id: id, value: value};
 }
 
-function getValueFromSpi(type, buffer){
+function getValueFromSpi(buffer){
+  var type = buffer[0];
   if(type === types.CTRL_8_BIT){
     return buffer[2];
-  } else {
+  } else if(type === types.CTRL_16_BIT){
     return buffer[2] + buffer[3] * 256;
   }
 }

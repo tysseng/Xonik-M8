@@ -2,6 +2,8 @@ var eventbus = require('./eventbus.js');
 var config = require('./config.js');
 var gpio = require('rpi-gpio');
 var SPI = require('spi');
+var types = require('../shared/datatypes.js');
+var ctrlConfig = require('../shared/controllerSetup.js');
 
 var spi;
 var readCallback;
@@ -42,16 +44,37 @@ function setReadCallback(callback){
 }
 
 function read(){
-  //TODO: Extend to read multiple types and lengths.
-  var buffer = new Buffer([0x00, 0x00, 0x00]);
-  spi.write(buffer, function(device, buf) {
-    for(i = 0; i<buf.length, i++){
-      console.log("wrote " + buf[i] + " to SPI");
+  // read byte to decide type and thus length
+  spi.read(new Buffer[0x00];, function(device, typeBuffer) {
+    var type = typeBuffer[0];
+    console.log("Received type " + type);
+
+    // read data bytes
+    spi.read(getValueBuffer(type), function(device, valueBuffer) {
+      for(i = 0; i<valueBuffer.length, i++){
+        console.log("read " + valueBuffer[i] + " from SPI");
+      }
+      var bufferContents = [];
+      bufferContents.push(type);
+      for(value of valueBuffer){
+        bufferContents.push(value);
+      }
+      if(readCallback){
+        readCallback(bufferContents);
+      }
     }
   });
+}
 
-  if(readCallback){
-    readCallback(buffer);
+// Get a value buffer of the correct size for the type to be received.
+// This means that some implementation details will leak down from the spi repo
+// to the adapter. We COULD use a TLV format (Type, Length, Value), but this means
+// a 33% overhead on 8 bit controllers. 
+function getValueBuffer(type){
+  if(type === type.CTRL_8_BIT){
+    return new Buffer(2);
+  } else if (type == type.CTRL_16_BIT){
+    return new Buffer(3);
   }
 }
 

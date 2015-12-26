@@ -16,9 +16,10 @@ var spiRepository = require('./synthcore/spiRepository.js');
 function publishControllerChange(message){
   var msgParts = message.split(',');
   var id = msgParts[0];
+  var type = ctrlSetup.srv[id].type;
   var value = msgParts[1];
 
-  eventbus.controls.emit("controller", {source: "gui", id: id, value: value});
+  eventbus.controls.emit("controller", {type: type, source: "gui", id: id, value: value});
   
   console.log("Published event from GUI: " + id + " to " + value);
 }
