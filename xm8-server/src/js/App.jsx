@@ -11,15 +11,20 @@ http://easyreactbook.com/blog/react-fundamentals-configuring-browserify-babelify
 
 https://github.com/babel/babelify#options
 
+browserify src/js/App.jsx -t [ babelify --presets [ es2015 react ] ] > static/js/xm8.js
+NB: Space før siste ] er kritisk!
+
+
 npm run build-js
 npm run watch-js
 */
-
-var React = require('react');
+var ReactDOM = require('react-dom');
 
 var Knob = require('./components/Knob.jsx');
 
-React.render(
+console.log(document.getElementById('config'));
+
+ReactDOM.render(
   <Knob />,
   document.getElementById('content')
 );

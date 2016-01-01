@@ -1,29 +1,22 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Xonik M8 controller test</title>
-        
-        <!-- CSS stylesheets -->
-        <link rel="stylesheet" href="/css/styles.css" />
-        <link rel="stylesheet" href="/js/knobKnob/knobKnob.css" />
-    </head>
+  <head>
+    <meta charset="utf-8" />
+    <title>Xonik M8 controller test</title>
     
-    <body>
+    <!-- CSS stylesheets -->
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/js/knobKnob/knobKnob.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.min.js"></script>
+  </head>
+  
+  <body>
 
-      <div id="config">
-        <input type="checkbox" id="receiveOn" checked> Receive events from server  
-      </div>
-      <section id="main">
-        <div class="ctrl1 control"></div>
-      </section>
-
-      
-      <!-- JavaScript includes -->
-      <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-      <script src="/js/knobKnob/knobKnob.jquery.js"></script>
-      <script src="/js/xm8.js"></script>
-
-    </body>
+    <div id="config">
+      <input type="checkbox" id="receiveOn" checked> Receive events from server  
+    </div>
+    <div id="content"></div>
+    <script src="/js/xm8.js"></script>
+  </body>
 </html>
 
