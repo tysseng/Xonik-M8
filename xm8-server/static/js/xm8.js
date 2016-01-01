@@ -19043,7 +19043,7 @@ var ReactDOM = require('react-dom');
 
 var Knob = require('./components/Knob.jsx');
 
-console.log(document.getElementById('content'));
+console.log(document.getElementById('config'));
 
 ReactDOM.render(React.createElement(Knob, null), document.getElementById('content'));
 

@@ -5,7 +5,7 @@
   "main": "xm8-server.js",
   "scripts": {
     "build-js": "browserify -t [babelify --presets [react] ] src/js/App.jsx > static/js/xm8.js",
-    "watch-js": "watchify src/js/main.js -o static/js/xm8.js"
+    "watch-js": "watchify   -t [babelify --presets [react] ]  src/js/App.jsx -o static/js/xm8.js"
   },
   "author": "",
   "license": "ISC",
