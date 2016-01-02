@@ -2,7 +2,7 @@
 // It communicates through events and exports nothing.
 
 var eventbus = require('./eventbus.js');
-//var spi = require('./spi.js');
+var spi = require('./spi.js');
 var config = require('./config.js');
 var ctrlConfig = require('../shared/controllerSetup.js');
 var types = require('../shared/datatypes.js');
@@ -64,13 +64,13 @@ function sendController(buffer){
     }    
     publishControllerChange(buffer);  	
   } else {
-  	//spi.write(buffer);
+    spi.write(buffer);
   }
 }
 
 function receive(buffer){
-	//Todo - implement multiple types here. For now controller messages are the only ones.
-	publishControllerChange(buffer);
+  //Todo - implement multiple types here. For now controller messages are the only ones.
+  publishControllerChange(buffer);
 }
 
 listenToControllerChanges();

@@ -45,13 +45,13 @@ function setReadCallback(callback){
 
 function read(){
   // read byte to decide type and thus length
-  spi.read(new Buffer[0x00];, function(device, typeBuffer) {
+  spi.read(new Buffer[0x00], function(device, typeBuffer) {
     var type = typeBuffer[0];
     console.log("Received type " + type);
 
     // read data bytes
     spi.read(getValueBuffer(type), function(device, valueBuffer) {
-      for(i = 0; i<valueBuffer.length, i++){
+      for(i = 0; i<valueBuffer.length; i++){
         console.log("read " + valueBuffer[i] + " from SPI");
       }
       var bufferContents = [];
@@ -62,7 +62,7 @@ function read(){
       if(readCallback){
         readCallback(bufferContents);
       }
-    }
+    });
   });
 }
 
@@ -79,11 +79,11 @@ function getValueBuffer(type){
 }
 
 function write(buffer){
-    spi.write(buffer, function(device, buf) {
-      for(i = 0; i<buf.length, i++){
-        console.log("wrote " + buf[i] + " to SPI");
-      }
-    });
+  spi.write(buffer, function(device, buf) {
+    for(i = 0; i<buf.length; i++){
+      console.log("wrote " + buf[i] + " to SPI");
+    }
+  });
 }
 
 initSPI();
