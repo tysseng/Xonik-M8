@@ -1,4 +1,5 @@
 var React = require('react');
+var events = require("../eventbusses.js");
 
 var Knob = React.createClass({
 
@@ -10,7 +11,29 @@ var Knob = React.createClass({
       lastDeg: 0,
       startDeg: -1
     };          
+  },  
+
+  componentDidMount: function() {
+    this.registerListener();
+  },  
+
+  registerListener: function(){
+    var that = this;
+    console.log("Registering listener for " + this.props.controllerId);
+    events.controls.input.subscribe("" + this.props.controllerId, function(ev){
+      var value = ev.detail;
+      if(value > 0 && value <= 359){
+        that.setState({
+          rotation: value,
+          currentDeg: value
+        });
+      }
+    });
   },
+
+  componentWillUnmount: function() {
+    // Todo: Remove listener
+  },  
 
   handleMouseDown: function(e){
     e.preventDefault();
@@ -73,6 +96,10 @@ var Knob = React.createClass({
     if(Math.abs(tmp - this.state.lastDeg) > 180){
       return false;
     }
+
+    events.controls.output.publish(
+      new CustomEvent("controller", {detail: {id: this.props.controllerId, value: tmp}})
+    );
 
     // save state and trigger re-render
     this.setState({

@@ -1,3 +1,5 @@
+$ = require('jquery');
+
 var EventBus = function(){};
 EventBus.prototype.subscribe = function(event, fn) {
     $(this).bind(event, fn);

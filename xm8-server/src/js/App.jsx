@@ -19,33 +19,21 @@ npm run build-js
 npm run watch-js
 */
 var ReactDOM = require('react-dom');
+var wsclient = require('./wsclient.js');
+require('./eventDebug.js');
 
 var Knob = require('./components/Knob.jsx');
 
-console.log(document.getElementById('config'));
-
 ReactDOM.render(
-  <Knob />,
+  <Knob controllerId="volume"/>,
   document.getElementById('content')
 );
 
 console.log("Starting Xonik M8");
-
-/*
-var wsclient = require('./wsclient.js');
-require('./knobWithRing.js');
-require('./eventDebug.js');
-
-console.log($("#receiveOn"));
 
 $('#receiveOn').click(function() {
     var $this = $(this);
     // $this will contain a reference to the checkbox   
     wsclient.toggleReceive($this.is(':checked'));
 });
-
-console.log("Starting Xonik M8");
-
-var wsclient = require('./wsclient.js');
-*/
 
