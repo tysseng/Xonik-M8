@@ -25,18 +25,19 @@ function listenToControllerChanges(){
 }
 
 function fromSpiBuffer(buffer){
-  var type = buffer[0];
-  var id = ctrlConfig.hw[buffer[1]].srvId;
-  var value = getValueFromSpi(buffer);
+  var controller = ctrlConfig.hw[buffer[0]]; 
+  var type = controller.type;
+  var id = controller.srvId;
+  var value = getValueFromSpi(type, buffer);
+  console.log("Converted spi buffer - type: " + type + ", id: " + id + ", value: " + value);
   return {source: "spi", type: type, id: id, value: value};
 }
 
-function getValueFromSpi(buffer){
-  var type = buffer[0];
+function getValueFromSpi(type, buffer){
   if(type === types.CTRL_8_BIT){
-    return buffer[2];
+    return buffer[1];
   } else if(type === types.CTRL_16_BIT){
-    return buffer[2] + buffer[3] * 256;
+    return buffer[1] + buffer[2] * 256;
   }
 }
 
@@ -44,10 +45,13 @@ function toSpiBuffer(event){
   var controller = ctrlConfig.srv[event.id];
   var type = controller.type;
   var id = controller.hwId;
-  if(type === types.CTRL_8_BIT){
-    return new Buffer([type, id, event.value]); 
-  } else if (types.CTRL_16_BIT){
-    return new Buffer([type, id, event.value, event.value / 256 ]); 
+  switch(type){
+    case types.CTRL_8_BIT:
+      return new Buffer([id, event.value]); 
+    case types.CTRL_16_BIT:
+      return new Buffer([id, event.value, event.value / 256 ]); 
+    default:
+      return 0; 
   }
 }
 
