@@ -50,7 +50,7 @@ function sendController(message){
 }
 
 app.use(function (req, res, next) {
-  console.log('middleware accessed through ' + req);
+  //console.log('middleware accessed through ' + req);
   req.testing = 'testing';
   return next();
 });

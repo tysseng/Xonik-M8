@@ -1,11 +1,11 @@
 var events = require("./eventbusses.js");
 
 function setupEventDebugging(){
-	events.controls.output.subscribe("controller", function(ev){
-		console.log("output ctrl " + ev.detail.id + ":" + ev.detail.value);
+	events.controls.output.on("controller", function(ev){
+		console.log("output ctrl " + ev.id + ":" + ev.value);
 	});
-	events.controls.input.subscribe("volume", function(ev){
-		console.log("input ctrl volume: " + ev.detail);
+	events.controls.input.on("volume", function(ev){
+		console.log("input ctrl volume: " + ev);
 	});
 }
 

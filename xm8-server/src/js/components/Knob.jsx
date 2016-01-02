@@ -20,8 +20,8 @@ var Knob = React.createClass({
   registerListener: function(){
     var that = this;
     console.log("Registering listener for " + this.props.controllerId);
-    events.controls.input.subscribe("" + this.props.controllerId, function(ev){
-      var value = ev.detail;
+    events.controls.input.on("" + this.props.controllerId, function(ev){
+      var value = ev;
       if(value > 0 && value <= 359){
         that.setState({
           rotation: value,
@@ -97,8 +97,9 @@ var Knob = React.createClass({
       return false;
     }
 
-    events.controls.output.publish(
-      new CustomEvent("controller", {detail: {id: this.props.controllerId, value: tmp}})
+    events.controls.output.emit(
+      "controller", 
+      {id: this.props.controllerId, value: tmp}
     );
 
     // save state and trigger re-render

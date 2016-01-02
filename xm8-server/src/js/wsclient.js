@@ -5,8 +5,8 @@ var ctrlSetup = require("../../shared/controllerSetup.js");
 var receiveOn = true;
 
 function createMessage(event){
-  var id = ctrlSetup.gui[event.detail.id].srvId;
-  return id + "," + event.detail.value;
+  var id = ctrlSetup.gui[event.id].srvId;
+  return id + "," + event.value;
 }
 
 function parseMessage(message){
@@ -26,7 +26,7 @@ function wsConnect(){
     ws.onopen = function(){
       console.log("Connected to XM8 server");
 
-      events.controls.output.subscribe("controller", function(event){      
+      events.controls.output.on("controller", function(event){      
         var message = createMessage(event);
         console.log("sending message through ws: " + message);        
         ws.send(message);          
@@ -41,9 +41,7 @@ function wsConnect(){
 
       console.log("received message through ws. id=" + message.id + ", value=" + message.value);  
 
-      events.controls.input.publish(
-        new CustomEvent(message.id, {detail: message.value})
-      );              
+      events.controls.input.emit(message.id, message.value);
     };
   } else {
     console.log("WebSocket not supported by your browser, cannot communicate with Xonik M8 server");
