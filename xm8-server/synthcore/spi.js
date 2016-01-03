@@ -4,6 +4,7 @@ var gpio = require('rpi-gpio');
 var SPI = require('spi');
 var types = require('../shared/datatypes.js');
 var ctrlConfig = require('../shared/controllerSetup.js');
+var exit = require('./exit.js');
 
 var spi;
 var readCallback;
@@ -102,7 +103,8 @@ function onExit(){
 initSPI();
 initGPIO();
 
-process.on('SIGINT', onExit);
+// register cleanup function
+exit.onExit(onExit);
 
 module.exports.write = write;
 module.exports.setReadCallback = setReadCallback;
