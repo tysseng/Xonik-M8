@@ -1,6 +1,6 @@
 // runs a set of functions and quits the program regardless of how the program flow
 // ended
-
+// TODO: discriminate between various exit reasons and set appropriate exit code
 var callbacks =[];
 var hasRun = false;
 
@@ -21,7 +21,7 @@ function exitHandler(){
     callbacks[i]();
   }
   
-  process.exit(1);
+  process.exit();
 }
 
 process.on('exit', exitHandler);
