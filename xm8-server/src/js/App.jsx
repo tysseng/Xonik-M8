@@ -3,7 +3,9 @@
 //TODO: 
 - controllers must be 8 bit, transmitting > 255 will wrap! 
 	- scale controllers
-- Protect receive from transmit - send must wait for interrupt to go low
+- Protect receive from transmit - send must wait for interrupt to go low - queue up messages and send when
+  ready. Similarly, returns should only happen when no transmission is in progress (Check if chip select is high before 
+  preparing data for transmission/raising interrupt).
 - Add client id instead of not resending event to gui to event to prevent resending message to same client
 - Add support for multiple voices / indicate what voice cards to send messages to.
 - Do not resend events to the clients they came from (or only update gui on server returns, flux style)
@@ -32,7 +34,7 @@ var Knob = require('./components/Knob.jsx');
 ReactDOM.render(
   <div class="none">
   	<Knob controllerId="volume"/>
-	<Knob controllerId="frequency"/>
+	  <Knob controllerId="frequency"/>
   </div>
   ,
   document.getElementById('content')
