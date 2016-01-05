@@ -4,22 +4,28 @@ var gpio = require('rpi-gpio');
 var SPI = require('spi');
 var types = require('../shared/datatypes.js');
 var ctrlConfig = require('../shared/controllerSetup.js');
+var exit = require('./exit.js');
 
 var spi;
 var readCallback;
 
 // watch changes on pin that indicates that the SPI slave has data it wants transferred 
 // to the master.
-function initInterrupt(){
+// NB: pin numbers are physical pin numbers, not gpioX-pin number. (e.g. GPIO7 = pin 26)
+function initGPIO(){
+  
   gpio.on('change', function(channel, value) {
     if(value > 0){
       console.log("Interrupt triggered on SPI slave transmit pin");
-      read();    
+//      read();
     } else {
       console.log("Interrupt reset on SPI slave transmit pin");
     }
   });
-  gpio.setup(config.spi.interruptPin, gpio.DIR_IN, gpio.EDGE_BOTH);
+  gpio.setup(config.spi.interruptPin, gpio.DIR_IN, gpio.EDGE_BOTH, function(err){
+    if(err) throw err;
+    console.log("Setup spi slave interrupt on physical pin " + config.spi.interruptPin);
+  });
 }
 
 function initSPI(){
@@ -34,7 +40,7 @@ function initSPI(){
     config.spi.device, 
     spiConfig, 
     function(s){
-        s.open();
+      s.open();
     }
   );
 }
@@ -45,13 +51,13 @@ function setReadCallback(callback){
 
 function read(){
   // read byte to decide type and thus length
-  spi.read(new Buffer[0x00];, function(device, typeBuffer) {
+  spi.read(new Buffer[0x00], function(device, typeBuffer) {
     var type = typeBuffer[0];
     console.log("Received type " + type);
 
     // read data bytes
     spi.read(getValueBuffer(type), function(device, valueBuffer) {
-      for(i = 0; i<valueBuffer.length, i++){
+      for(i = 0; i<valueBuffer.length; i++){
         console.log("read " + valueBuffer[i] + " from SPI");
       }
       var bufferContents = [];
@@ -62,7 +68,7 @@ function read(){
       if(readCallback){
         readCallback(bufferContents);
       }
-    }
+    });
   });
 }
 
@@ -79,15 +85,26 @@ function getValueBuffer(type){
 }
 
 function write(buffer){
-    spi.write(buffer, function(device, buf) {
-      for(i = 0; i<buf.length, i++){
-        console.log("wrote " + buf[i] + " to SPI");
-      }
-    });
+  spi.write(buffer, function(device, buf) {
+    for(i = 0; i<buf.length; i++){
+      console.log("wrote " + buf[i] + " to SPI");
+    }
+  });
+}
+
+function onExit(){
+  console.log("Cleaning up SPI module");
+  gpio.destroy(function(){
+    console.log("Closed all GPIO pins");
+  });
+  process.exit(1);
 }
 
 initSPI();
-initInterrupt();
+initGPIO();
+
+// register cleanup function
+exit.onExit(onExit);
 
 module.exports.write = write;
 module.exports.setReadCallback = setReadCallback;
