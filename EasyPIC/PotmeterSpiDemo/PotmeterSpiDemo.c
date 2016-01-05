@@ -24,34 +24,52 @@
  *    PIC18F and a PIC32.
  */
 
+#include <built_in.h>
+
 enum packageTypes {
   CTRL_8_BIT = 0,
   CTRL_16_BIT
 };
 
 unsigned short spiPackageLengths[2];
- 
-unsigned short rcdata;
+
 unsigned short bytecounter = 0;
-unsigned short inputlength;
+unsigned short inputlength = 0;
 unsigned short inputbuffer[256];
-unsigned short dataReady;
+
+unsigned short outputlength = 0;
+unsigned short outputBuffer[256];
+
+unsigned short dataToSend = 0;
+unsigned short dataReady = 0;
+
 void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
 
-  char rxByte;
+  volatile char rxByte;
 
   rxByte = SPI4BUF;
-  
-  // detect what type of package we're receiving
-  if(bytecounter == 0){
-    inputlength = spiPackageLengths[rxByte];
-  }
-  inputbuffer[bytecounter++] = rxByte;
 
-  // signal to the main program that a whole package has been received.
-  if(bytecounter == inputlength){
-    dataReady = 1;
-    bytecounter = 0;
+  if(dataToSend){
+    if(bytecounter < outputlength){
+      SPI4BUF = outputBuffer[bytecounter];
+      bytecounter++;
+    } else {
+      dataToSend = 0;
+      PORTB.F1 = 0; // remove interrupt to indicate that all data has been transmitted.
+      bytecounter = 0;
+    }
+  } else {
+    // detect what type of package we're receiving
+    if(bytecounter == 0){
+      inputlength = spiPackageLengths[rxByte];
+    }
+    inputbuffer[bytecounter++] = rxByte;
+
+    // signal to the main program that a whole package has been received.
+    if(bytecounter == inputlength){
+      dataReady = 1;
+      bytecounter = 0;
+    }
   }
 
   //reset interrupt
@@ -86,9 +104,25 @@ void initTypes(){
   spiPackageLengths[CTRL_16_BIT] = 4;
 }
 
+
+void initADC() {
+  AD1PCFG = 0xFFFE;              // Configure AN pins as digital I/O, PORTB.B0 as analog
+  JTAGEN_bit = 0;                // Disable JTAG port
+  TRISB0_bit = 1;                // Set PORTB.B0 as input
+  ADC1_Init();                   // Initialize ADC module
+  Delay_ms(100);
+}
+
+void initSlaveInterrupt(){
+  TRISB1_bit = 0; //PORTB.B1 as output
+  LATB1_bit = 0;
+}
+
 void main() {
 
   unsigned short i;
+  unsigned short j= 1;
+  unsigned short adc;
 
   initTypes();
 
@@ -106,19 +140,38 @@ void main() {
     _SPI_CLK_IDLE_LOW,
     _SPI_ACTIVE_2_IDLE);
 
-
-  //Visualise input on port B
-  TRISB = 0;
-  PORTB = 0;
-
-  //Show that I'm alive on port D
+  //Set portD as output
   TRISD = 0;
-  PORTD = 0;
+  LATD = 0;
+
+  initSlaveInterrupt();
+  initADC();
+
+  delay_ms(1000);
+
+
 
   while(1){
     if(dataReady){
-      PORTB = inputbuffer[2];
+      //PORTB = inputbuffer[2];
       dataReady = 0;
     }
+
+    // indicate that data is ready
+//    if(byteCounter == 0 && dataToSend == 0){
+      adc = ADC1_Get_Sample(0) >> 2;   // Get ADC value from corresponding channel
+
+      outputBuffer[0] = CTRL_8_BIT;
+      outputBuffer[1] = 1;
+      outputBuffer[2] = adc;
+
+      outputlength = spiPackageLengths[outputBuffer[0]];
+      dataToSend = 1;
+      SPI4BUF = outputBuffer[0];
+      bytecounter++;
+      PORTB.F1 = 1; // raise interrupt to get master to fetch data
+//    }
+
+    Delay_ms(10);
   }
 }
