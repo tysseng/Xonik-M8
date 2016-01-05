@@ -16,10 +16,7 @@ function initGPIO(){
   
   gpio.on('change', function(channel, value) {
     if(value > 0){
-      console.log("Interrupt triggered on SPI slave transmit pin");
-//      read();
-    } else {
-      console.log("Interrupt reset on SPI slave transmit pin");
+      read();
     }
   });
   gpio.setup(config.spi.interruptPin, gpio.DIR_IN, gpio.EDGE_BOTH, function(err){
@@ -51,20 +48,18 @@ function setReadCallback(callback){
 
 function read(){
   // read byte to decide type and thus length
-  spi.read(new Buffer[0x00], function(device, typeBuffer) {
+  spi.read(new Buffer(1), function(device, typeBuffer) {
     var type = typeBuffer[0];
-    console.log("Received type " + type);
+    var bufferLength = getBufferLength(type);
 
     // read data bytes
-    spi.read(getValueBuffer(type), function(device, valueBuffer) {
-      for(i = 0; i<valueBuffer.length; i++){
-        console.log("read " + valueBuffer[i] + " from SPI");
-      }
+    spi.read(new Buffer(bufferLength), function(device, valueBuffer) {
       var bufferContents = [];
       bufferContents.push(type);
       for(value of valueBuffer){
         bufferContents.push(value);
       }
+
       if(readCallback){
         readCallback(bufferContents);
       }
@@ -76,11 +71,14 @@ function read(){
 // This means that some implementation details will leak down from the spi repo
 // to the adapter. We COULD use a TLV format (Type, Length, Value), but this means
 // a 33% overhead on 8 bit controllers. 
-function getValueBuffer(type){
-  if(type === type.CTRL_8_BIT){
-    return new Buffer(2);
-  } else if (type == type.CTRL_16_BIT){
-    return new Buffer(3);
+function getBufferLength(type){
+  switch(type){
+    case types.CTRL_8_BIT:
+      return 2;
+    case types.CTRL_16_BIT:
+      return 3;
+    default:
+      return 0;
   }
 }
 
