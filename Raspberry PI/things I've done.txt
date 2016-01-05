@@ -31,6 +31,12 @@ Legg til:
 # SPI devices
 spi-dev
 
+Legg til link til init.d script
+cp /root/git/Xonik-M8/xm8-server/init.d/xm8-server /etc/init.d/
+chmod 755 /etc/init.d/xm8-server
+update-rc.d node-app defaults
+
+
 ------
 
 http://www.andrewconnell.com/blog/setup-node-js-on-raspberry-pi-2-b
