@@ -78,13 +78,14 @@ void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
 
 void SPI4_init_interrupts(){
 
-  //Trigger interrupt when buffer is not empty
-   SPI4CON.SRXISEL1 = 0;
-   SPI4CON.SRXISEL0 = 1;
+  // Trigger interrupt when buffer is not empty.
+  // Only used in enhanced buffer mode
+/*   SPI4CON.SRXISEL1 = 0;
+   SPI4CON.SRXISEL0 = 1;*/
 
    //Turn on if you want to be able to receive multiple bytes before
    //treating them.
-   //SPI4CON.ENHBUF = 1;
+   SPI4CON.ENHBUF = 0;
 
    //Clear data received interrupt flag
    SPI4RXIF_bit = 0;
@@ -123,6 +124,7 @@ void main() {
   unsigned short i;
   unsigned short j= 1;
   unsigned short adc;
+  unsigned short prevSent = 0;
 
   initTypes();
 
@@ -157,21 +159,24 @@ void main() {
       dataReady = 0;
     }
 
-    // indicate that data is ready
-//    if(byteCounter == 0 && dataToSend == 0){
-      adc = ADC1_Get_Sample(0) >> 2;   // Get ADC value from corresponding channel
+    adc = ADC1_Get_Sample(0) >> 2;   // Get ADC value from corresponding channel
+
+    // transmit changes if no transmission is in progress
+    if(byteCounter == 0 && dataToSend == 0 && adc != prevSent){
 
       outputBuffer[0] = CTRL_8_BIT;
       outputBuffer[1] = 1;
       outputBuffer[2] = adc;
+      prevSent = adc;
 
+      SPI4BUF = outputBuffer[0];
       outputlength = spiPackageLengths[outputBuffer[0]];
       dataToSend = 1;
-      SPI4BUF = outputBuffer[0];
+
       bytecounter++;
       PORTB.F1 = 1; // raise interrupt to get master to fetch data
-//    }
+    }
 
-    Delay_ms(10);
+    Delay_ms(20);
   }
 }
