@@ -22,7 +22,7 @@ var Knob = React.createClass({
     console.log("Registering listener for " + this.props.controllerId);
     events.controls.input.on("" + this.props.controllerId, function(ev){
       var value = ev;
-      if(value > 0 && value <= 359){
+      if(value >= 0 && value < 360){
         that.setState({
           rotation: value,
           currentDeg: value
