@@ -22,6 +22,14 @@ function initGPIO(){
   gpio.setup(config.spi.interruptPin, gpio.DIR_IN, gpio.EDGE_BOTH, function(err){
     if(err) throw err;
     console.log("Setup spi slave interrupt on physical pin " + config.spi.interruptPin);
+    
+    // do an initial read of the interrupt pin as it may have been high when the program started.
+    gpio.read(config.spi.interruptPin, function(err, value) {
+      if(err) throw err;
+      if(value){
+        read();
+      }
+    });
   });
 }
 
