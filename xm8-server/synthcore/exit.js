@@ -8,7 +8,7 @@ function onExit(callback){
   callbacks.push(callback);
 }
 
-function exitHandler(){
+function cleanup(){
   if(hasRun){
     return;
   } else {
@@ -24,9 +24,20 @@ function exitHandler(){
   process.exit();
 }
 
+function exitHandler(){
+  cleanup();
+  process.exit();
+}
+
+function uncaughtExExitHandler(err){
+  console.log(err);
+  cleanup();
+  throw err;
+}
+
 process.on('exit', exitHandler);
 process.on('SIGINT', exitHandler);
-process.on('uncaughtException', exitHandler);
+process.on('uncaughtException', uncaughtExExitHandler);
 
 module.exports.onExit = onExit;
 

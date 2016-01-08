@@ -1,3 +1,16 @@
 xm8-server/node_modules/*
 xm8-server/static/js/xm8.js
+EasyPIC/**/*.cfg
+EasyPIC/**/*.cp
+EasyPIC/**/*.dbg
+EasyPIC/**/*.dct
+EasyPIC/**/*.dlt
+EasyPIC/**/*.emcl
+EasyPIC/**/*.hex
+EasyPIC/**/*.log
+EasyPIC/**/*.lst
+EasyPIC/**/*.mcp32_cal
+EasyPIC/**/*.user.dic
+EasyPIC/**/*.asm
+EasyPIC/**/*.mcp32_callertable.txt
 .DS_Store

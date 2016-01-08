@@ -26,11 +26,15 @@ function listenToControllerChanges(){
 
 function fromSpiBuffer(buffer){
   var controller = ctrlConfig.hw[buffer[1]]; 
-  var type = controller.type;
-  var id = controller.srvId;
-  var value = getValueFromSpi(buffer);
-  console.log("Converted spi buffer - type: " + type + ", id: " + id + ", value: " + value);
-  return {source: "spi", type: type, id: id, value: value};
+  if(controller){
+    var type = controller.type;
+    var id = controller.srvId;
+    var value = getValueFromSpi(buffer);
+    console.log("Converted spi buffer - type: " + type + ", id: " + id + ", value: " + value);
+    return {source: "spi", type: type, id: id, value: value};
+  } else {
+    return {source: "spi", type: types.UNKNOWN, id: -1, value: -1}
+  }
 }
 
 function getValueFromSpi(buffer){
@@ -74,4 +78,4 @@ function receive(buffer){
 }
 
 listenToControllerChanges();
-//spi.setReceiveCallback(receive);
+spi.setReadCallback(receive);
