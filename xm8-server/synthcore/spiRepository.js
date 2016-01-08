@@ -1,7 +1,10 @@
+//TODO: Change data format to send length as first byte.
+
 // the spi repository serializes, sends and receives data through the SPI bus. 
 // It communicates through events and exports nothing.
 
 var eventbus = require('./eventbus.js');
+//var spi = require('./spi-fd.js');
 var spi = require('./spi.js');
 var config = require('./config.js');
 var ctrlConfig = require('../shared/controllerSetup.js');
@@ -79,3 +82,4 @@ function receive(buffer){
 
 listenToControllerChanges();
 spi.setReadCallback(receive);
+//spi.onRead(receive); 
