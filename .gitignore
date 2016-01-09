@@ -1,4 +1,5 @@
 xm8-server/node_modules/*
+xm8-server/static/js/xm8.js
 EasyPIC/**/*.cfg
 EasyPIC/**/*.cp
 EasyPIC/**/*.dbg

@@ -36,7 +36,25 @@ cp /root/git/Xonik-M8/xm8-server/init.d/xm8-server /etc/init.d/
 chmod 755 /etc/init.d/xm8-server
 update-rc.d node-app defaults
 
+Installere wifi (https://www.raspberrypi.org/forums/viewtopic.php?f=66&t=108863):
+apt-get install firmware-ralink
+apt-get install firmware-realtek
+(apt-get install wireless-tools)
+apt-get install wpasupplicant
 
+editere /etc/network/interfaces og legg til 
+allow-hotplug wlan0
+iface wlan0 inet manual
+wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+iface default inet dhcp
+
+edit /etc/wpa_supplicant/wpa_supplicant.conf:
+network={
+  ssid="yourssid"
+  psk="yourpassword"
+}
+
+reboot
 ------
 
 http://www.andrewconnell.com/blog/setup-node-js-on-raspberry-pi-2-b

@@ -1,0 +1,33 @@
+TODO:
+
+Oppstart RPi
+- Sjekk om wifi-config finnes
+- Sjekk om man får logget på nett. 
+- Start Ad hoc wifi hvis man ikke får logget på
+- Vis wifinett man er koblet til (ink ad hoc), vis ipadresse
+- Detektere ipadresse og sette opp node til å lytte på denne. Send ut som del av adresse til ws.
+
+PicoUPS
+- script som skrur av pi når strømmen forsvinner
+
+MikroC
+- Vente med å sende data til rpi har sagt at den er klar, dvs. rpi må sette/holde en pinne høy for å indikere at server kjører.
+- Sending låser seg noen ganger, men jeg mistenker at det er fordi man kommer borti RB1 (som er ved siden av analog input)
+
+Annet
+- Log rotation
+
+
+Til presentasjon
+- Speed: WebSockets, kompakt SPI-protokoll på 8MHz
+- Hva er bra til hva
+	- PIC32 - realtime, lightweight, cheap(er)
+	- PI: Enkelt å programmere server, WebSockets etc. Enkelt med wifi. Endel kraft
+	- SPI: Kjapt men må passe på samtidighet for send/receive
+	- Interrupts på PI for å kjapt få vite at slave har data tilgjengelig
+	- React: Enkel kode for komponent, samlet på ett sted
+	- Browserify/node - samme kode på server og frontend
+- Ulemper
+	- PI: Oppstart/shutdown-tid. Kun SPI master. Ikke realtime
+- Reboot: 18 sek fra reboot til webapp er oppe igjen.
+- Ikke midi fordi det er ment å være INNI synthen

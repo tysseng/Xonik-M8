@@ -1,0 +1,77 @@
+/*
+
+Scan for networks, virker også i ad-hoc mode
+iwlist wlan0 scan|grep ESSID
+                    ESSID:"Poly"
+                    ESSID:"Mono"
+                    ESSID:"Telenor3860sum"
+                    ESSID:"privat2451rom"
+                    ESSID:"privat2451rom_2GEXT"
+                    ESSID:"Poly"
+                    ESSID:"Mono"
+
+Dette fungerer for å sette opp ad-hoc-nettverk:
+
+Edit /etc/network/interfaces
+
+auto wlan0
+iface wlan0 inet static
+    address 192.168.1.1
+    netmask 255.255.255.0
+    wireless-channel 1
+    wireless-essid MYNETWORK
+    wireless-mode ad-hoc
+
+Start/stop network:
+ifconfig wlan0 down
+ifconfig wlan0 up
+
+NB: Endringer i interfaces mellom down og up plukkes ikke opp
+
+For å reloade config:
+Editere /etc/wpa_supplicant/wpa_supplicant.conf
+Endre nett/passord
+
+Kjør
+wpa_cli reconfigure
+
+Sjekk med
+wpa_cli status
+
+Hent ip med
+dhclient wlan0
+
+wpa_supplicant.conf:
+Må ha med 
+
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+network={
+  ssid="Poly"
+  psk="jupiter8prophet5"
+}
+
+Programmatisk endre nett: http://sirlagz.net/2012/08/27/how-to-use-wpa_cli-to-connect-to-a-wireless-network/
+
+For å 
+
+Denne kan ha masse ulike ting som protokoll osv. Sjekk hva som er lurt å ha med.
+
+https://wiki.netbsd.org/tutorials/how_to_use_wpa_supplicant/
+-- Hindre heng i boot hvis nett ikke er tilgjengelig.
+
+Ser ut til at wpa_cli kan brukes til å endre config:
+1) list_networks - viser lagrede nett
+2) add_network - gir ny id (0 f.eks)
+3) set_network 0 ssid "myssid"
+4) set_network 0 psk "mypsk"
+5) select_network 0 - må gjøres også etter passordskifte
+6) disconnect - koble fra (når wpa_cli brukes virker ikke ifconfig down)
+7) delete_network - hvis man vil fjerne
+
+
+
+NB: så fort wifi er oppe er server tilgjengelig på ip'en.
+
+NB: Deling av passord pr HTTPS?
+Hva med åpent nett, er det sikkert?
+*/
