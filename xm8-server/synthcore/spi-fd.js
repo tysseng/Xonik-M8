@@ -44,8 +44,7 @@ function initGPIO(){
     // it seems that such an interrupt will NOT trigger a change-to-positive event after all, as 
     // long as the interrupt pin is lowered again before the read is completed. 
 
-    // Writing and reading are synchronous, so read/write will be completed before events are triggered
-
+    // Writing and reading is synchronous, so read/write will be completed before events are triggered
     if(pin == config.spi.interruptPin && interruptStatus != 0){
       console.log("Reading data from slave after interrupt was raised");
       read();
@@ -56,7 +55,7 @@ function initGPIO(){
     if(err) throw err;
     console.log("Setup spi slave interrupt on physical pin " + config.spi.interruptPin);
     
-    // do an initial read of the interrupt pin as it may have been high when the program started.
+    // Do an initial read of the interrupt pin as it may have been high when the program started.
     //checkInterruptPinAndReadIfNecessary();
     writeSome();
   });
@@ -103,7 +102,7 @@ function read(){
   // indicated by the first received byte.
 
   // Unfortunately, two successive reads from SPI, calling a second read within the callback of the
-  // first read, incurrs a penalty of about 2ms on the Raspberry PI. This is quite significant, as
+  // first read, incurrs a penalty of about 2ms on the Raspberry PI. This is quite significant as
   // a transmission speed of 1MHz would let us send 250 bytes in this interval.
 
   // As most reads from the slave will be tiny bursts of a few bytes, mostly controller updates, a 
@@ -146,10 +145,18 @@ function onRead(callback){
 
 function triggerReadCallback(initialBuffer, remainderBuffer){
   var bufferContents = [];
-  for(value of initialBuffer){
-    bufferContents.push(value);
+  var bufferSize = 0;
+  var transmissionLength = initialBuffer[0];
+
+  // We may have received more bytes than the indicated transmission length
+  // (Remember, we always read at least 16 bytes). Return only the real bytes.
+  for(var i = 0; i<transmissionLength; i++){
+    bufferContents.push(initialBuffer[i]);
   }
-  // if a second read was necessary, add the data from this one as well
+
+  // If a second read was necessary, add the data from this one as well. This
+  // one will always be the correct number of bytes as we only read what is
+  // requested the second time around.
   if(remainderBuffer){
     for(value of remainderBuffer){
       bufferContents.push(value);
@@ -186,11 +193,15 @@ function write(txbuffer){
 
       if(transmissionLength > 0){       
         console.log("Slave sent " + (rxbuffer.length - i) + " of " + transmissionLength + " bytes during write");
-        readHasBeenHandledByWrite = true;
+
         // discard the parts of the receive buffer that was not part of the slave's data
         // transmission, then read whatever is missing.
         var initialBuffer = rxbuffer.slice(i); 
-        readRemainder(initialBuffer, transmissionLength);
+        if(transmissionLength > initialBuffer.length){
+          readRemainder(initialBuffer, transmissionLength);
+        } else {
+          triggerReadCallback(initialBuffer);
+        }       
       }
     });
 }
