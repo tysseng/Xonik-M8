@@ -4,8 +4,8 @@
 // It communicates through events and exports nothing.
 
 var eventbus = require('./eventbus.js');
-//var spi = require('./spi-fd.js');
-var spi = require('./spi.js');
+var spi = require('./spi-fd.js');
+//var spi = require('./spi.js');
 var config = require('./config.js');
 var ctrlConfig = require('../shared/controllerSetup.js');
 var types = require('../shared/datatypes.js');
@@ -81,5 +81,5 @@ function receive(buffer){
 }
 
 listenToControllerChanges();
-spi.setReadCallback(receive);
-//spi.onRead(receive); 
+//spi.setReadCallback(receive);
+spi.onRead(receive); 

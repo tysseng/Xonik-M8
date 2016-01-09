@@ -37,12 +37,14 @@ function initGPIO(){
     // javascript is synchronous). If this is the case, we need to work around it by adding a signal
     // in the write method indicating that the data has already been handled.
     
-    // Perhaps like this?
-    if(pin == config.spi.interruptPin && value > 0 && !sendInProgress && !receiveInProgress){
+    if(pin == config.spi.interruptPin && interruptvalue > 0 && !sendInProgress && !receiveInProgress){
+      console.log("Interrupt raised");
       // check if data has already been read while writing to slave
       if(readHasBeenHandledByWrite){
+        console.log("Data has already been handeled");
         readHasBeenHandledByWrite = false;
       } else {
+        console.log("Reading data from slave after interrupt was raised");
         read();
       }
     }    
@@ -53,8 +55,14 @@ function initGPIO(){
     console.log("Setup spi slave interrupt on physical pin " + config.spi.interruptPin);
     
     // do an initial read of the interrupt pin as it may have been high when the program started.
-    checkInterruptPinAndReadIfNecessary();
+    //checkInterruptPinAndReadIfNecessary();
+    writeSome();
   });
+}
+
+function writeSome(){
+  var buffer = new Buffer([10,1,2,3,4,5,6,7,8,9]);
+  write(buffer);
 }
 
 function checkInterruptPinAndReadIfNecessary(){
@@ -120,7 +128,9 @@ function read(){
 }
 
 function readRemainder(initialBuffer, transmissionLength){
-  var remainder = transmissionLength - initialbuffer.length;  
+  var remainder = transmissionLength - initialBuffer.length;  
+
+  console.log("Going to read remaining " + remainder + " bytes from slave");
 
   spi.read(new Buffer(remainder), function(device, remainderBuffer) {
     receiveInProgress = false;
@@ -145,12 +155,16 @@ function triggerReadCallback(initialBuffer, remainderBuffer){
   }
 
   if(readCallback){
-    readCallback(bufferContents);
+    console.log("Received data: ");
+    console.log(bufferContents);
+    //readCallback(bufferContents);
   }  
 }
 
 function write(txbuffer){
 
+  console.log("Going to write " + txbuffer.length + " bytes");
+ 
   // Do not start a transmission while one is currently ongoing.
   if(receiveInProgress){
     // TODO: This may never be the case if read and writes are indeed synchronous. Check!
@@ -159,7 +173,7 @@ function write(txbuffer){
     // as the data will be transferred during the write.
     sendInProgress = true;  
 
-    spi.transfer(txbuffer, rxbufferplaceholder, function(device, rxbuffer) {
+    spi.transfer(txbuffer, new Buffer(txbuffer.length), function(device, rxbuffer) {
       // Detect if any data was received from the slave during write. The slave does not check
       // if a master send is in progress before it starts sending data, but it raises an interrupt.
       // This interrupt may be received while the master sends data and must be handled here.
@@ -175,15 +189,17 @@ function write(txbuffer){
       }
 
       if(transmissionLength > 0){
+       
+        console.log("Slave sent " + (rxbuffer.length - i) + " of " + transmissionLength + " bytes during write");
         readHasBeenHandledByWrite = true;
         // discard the parts of the receive buffer that was not part of the slave's data
         // transmission, then read whatever is missing.
-        initialBuffer = rxbuffer.slice(i); 
+        var initialBuffer = rxbuffer.slice(i); 
         readRemainder(initialBuffer, transmissionLength);
       }
       sendInProgress = false;
-    }
-  });
+    });
+  }
 }
 
 function onExit(){
@@ -201,4 +217,4 @@ initGPIO();
 exit.onExit(onExit);
 
 module.exports.write = write;
-module.exports.setReadCallback = setReadCallback;
+module.exports.onRead = onRead;
