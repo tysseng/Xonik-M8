@@ -1,8 +1,24 @@
 // Fullish-duplex version of spi adapter, data may be sent by the slave at any time even if master is
 // currently transmitting.
 
+// INTERRUPTS
+// Interrupts are a bit interesting. It seems that if a pin with an interrupt bound to it changes 
+// multiple times while the program is doing something else, only the last change will trigger an 
+// event. 
+//
+// For example, if we listen to both edges (0->1 and 1->0) and the pin changes 0 -> 1 -> 0 
+// while the program is busy writing to SPI, only the last change will trigger an event. 
+// As javascript is single threaded, the event is not triggered untill the synchronous write code
+// has completed.
+//
+// This behaviour is not necessarily a bad thing. If an interrupt arrives during write, data will
+// be read anyway, and the interrupt is reset right after the last byte is received. Thus, the
+// only triggered event is the lowering of the interrupt. This means that interrupts during write
+// will not trigger a read once write is completed. 
+
 // TODO: SPI error handling! Perhaps ink. checksums. Decide how to reset state if something
 // goes wrong!
+
 // NB: The code is written with the assumption that the SPI write/read is synchronous and that 
 // the callbacks are called before control is released back to the system, so no other events
 // may intermingle with the process.
@@ -18,22 +34,19 @@ var exit = require('./exit.js');
 var spi;
 var readCallback;
 
-// watch changes on pin that indicates that the SPI slave has data it wants transferred 
+// Watch changes on pin that indicates that the SPI slave has data it wants transferred 
 // to the master.
 // NB: pin numbers are physical pin numbers, not gpioX-pin number. (e.g. GPIO7 = pin 26)
 function initGPIO(){
   
-  gpio.on('change', function(pin, interruptvalue) {
-    // only start retrieving data if no transfer is currently in progress as a slave send interrupt
-    // may have risen while the master is sending data - and if so, the master will fetch the data.
-
+  gpio.on('change', function(pin, interruptStatus) {
     // I thought earlier that we would have  problem if an interrupt was received during write. Now 
     // it seems that such an interrupt will NOT trigger a change-to-positive event after all, as 
     // long as the interrupt pin is lowered again before the read is completed. 
 
-    // Writing and reading are synchronous, so read/write will be finished before events are triggered
+    // Writing and reading are synchronous, so read/write will be completed before events are triggered
 
-    if(pin == config.spi.interruptPin && interruptvalue > 0 && !sendInProgress && !receiveInProgress){
+    if(pin == config.spi.interruptPin && interruptStatus != 0){
       console.log("Reading data from slave after interrupt was raised");
       read();
     }    
@@ -158,9 +171,10 @@ function write(txbuffer){
     spi.transfer(txbuffer, new Buffer(txbuffer.length), function(device, rxbuffer) {
       // Detect if any data was received from the slave during write. The slave does not check
       // if a master send is in progress before it starts sending data, but it raises an interrupt.
-      // This interrupt may be received while the master sends data and must be handled here.
-
-      // If any data was received, continue reading the remainder.
+      // This interrupt may be received while the master sends data, in which case parts of the 
+      // data the slave wants to send will be received while the master writes data. 
+      // We therefore have to check if any data was received and get the remainding data from 
+      // the slave.
       var transmissionLength = 0;
       var receivedBytes = [];
       for(var i = 0; i<rxbuffer.length; i++){
@@ -170,8 +184,7 @@ function write(txbuffer){
         }
       }
 
-      if(transmissionLength > 0){
-       
+      if(transmissionLength > 0){       
         console.log("Slave sent " + (rxbuffer.length - i) + " of " + transmissionLength + " bytes during write");
         readHasBeenHandledByWrite = true;
         // discard the parts of the receive buffer that was not part of the slave's data
