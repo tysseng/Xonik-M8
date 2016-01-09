@@ -26,6 +26,9 @@
 
 #include <built_in.h>
 
+#define TX_INTERRUPT_TRIS TRISB1_bit
+#define TX_INTERRUPT LATB1_bit
+
 enum packageTypes {
   CTRL_8_BIT = 0,
   CTRL_16_BIT
@@ -33,42 +36,62 @@ enum packageTypes {
 
 unsigned short spiPackageLengths[2];
 
-unsigned short bytecounter = 0;
-unsigned short inputlength = 0;
-unsigned short inputbuffer[256];
+unsigned short rxbytecounter = 0;
+unsigned short rxlength = 0;
+unsigned short rxbuffer[256];
 
-unsigned short outputlength = 0;
-unsigned short outputBuffer[256];
+unsigned short txbytecounter = 0;
+unsigned short txlength = 0;
+unsigned short txbuffer[256];
 
 unsigned short dataToSend = 0;
 unsigned short dataReady = 0;
 
 void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
 
-  volatile char rxByte;
+  volatile char rxbyte;
 
-  rxByte = SPI4BUF;
+  rxbyte = SPI4BUF;
 
   if(dataToSend){
-    if(bytecounter < outputlength){
-      SPI4BUF = outputBuffer[bytecounter];
-      bytecounter++;
+    // Remove interrupt after first byte has been sent.
+    if(txbytecounter == 1){
+      TX_INTERRUPT = 0;
+    }
+    
+    // Prepare next byte if one is present. 
+    // If not, indicate that sending is complete
+    if(txbytecounter < txlength){
+      SPI4BUF = txbuffer[txbytecounter];
+      txbytecounter++;
     } else {
+      txbytecounter = 0;
       dataToSend = 0;
-      PORTB.F1 = 0; // remove interrupt to indicate that all data has been transmitted.
-      bytecounter = 0;
     }
-  } else {
-    // detect what type of package we're receiving
-    if(bytecounter == 0){
-      inputlength = spiPackageLengths[rxByte];
-    }
-    inputbuffer[bytecounter++] = rxByte;
+  } 
+
+  // The next data returned to the master should be empty if no data is queued 
+  // for send. This also covers the case when the master is writing but not
+  // expecting any returned data.
+  if(!dataToSend){
+    SPI4BUF = 0;
+  }
+  
+  // Detect the length of the incoming message
+  if(rxbytecounter == 0){
+    rxlength = rxbyte;
+  }
+
+  // Treat received data. If the master is just reading (not writing), all
+  // received bytes will be zero and the detected length is thus zero.
+  // In this case, no data is written to the receive buffer
+  if(rxlength > 0){
+    rxbuffer[rxbytecounter++] = rxbyte;
 
     // signal to the main program that a whole package has been received.
-    if(bytecounter == inputlength){
+    if(rxbytecounter == rxlength){
       dataReady = 1;
-      bytecounter = 0;
+      rxbytecounter = 0;
     }
   }
 
@@ -105,7 +128,6 @@ void initTypes(){
   spiPackageLengths[CTRL_16_BIT] = 4;
 }
 
-
 void initADC() {
   AD1PCFG = 0xFFFE;              // Configure AN pins as digital I/O, PORTB.B0 as analog
   JTAGEN_bit = 0;                // Disable JTAG port
@@ -115,8 +137,8 @@ void initADC() {
 }
 
 void initSlaveInterrupt(){
-  TRISB1_bit = 0; //PORTB.B1 as output
-  LATB1_bit = 0;
+  TX_INTERRUPT_TRIS = 0; //Interrupt pin as output
+  TX_INTERRUPT = 0;
 }
 
 void main() {
@@ -151,8 +173,6 @@ void main() {
 
   delay_ms(1000);
 
-
-
   while(1){
     if(dataReady){
       //PORTB = inputbuffer[2];
@@ -162,19 +182,21 @@ void main() {
     adc = ADC1_Get_Sample(0) >> 2;   // Get ADC value from corresponding channel
 
     // transmit changes if no transmission is in progress
-    if(byteCounter == 0 && dataToSend == 0 && adc != prevSent){
+    if(txbytecounter == 0 && dataToSend == 0 && adc != prevSent){
 
-      outputBuffer[0] = CTRL_8_BIT;
-      outputBuffer[1] = 1;
-      outputBuffer[2] = adc;
+      txbuffer[0] = 3;
+      txbuffer[1] = 1;
+      txbuffer[2] = adc;
       prevSent = adc;
 
-      SPI4BUF = outputBuffer[0];
-      outputlength = spiPackageLengths[outputBuffer[0]];
+      SPI4BUF = txbuffer[0];
+      txlength = txbuffer[0];
+
+      txbytecounter++;
       dataToSend = 1;
 
-      bytecounter++;
-      PORTB.F1 = 1; // raise interrupt to get master to fetch data
+      // raise interrupt to make master to fetch data
+      TX_INTERRUPT = 1;
     }
 
     Delay_ms(20);
