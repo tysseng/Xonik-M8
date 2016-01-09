@@ -18,11 +18,6 @@ var exit = require('./exit.js');
 var spi;
 var readCallback;
 
-// send/receive state variables
-var receiveInProgress = false;
-var sendInProgress = false;
-var readHasBeenHandledByWrite = false;
-
 // watch changes on pin that indicates that the SPI slave has data it wants transferred 
 // to the master.
 // NB: pin numbers are physical pin numbers, not gpioX-pin number. (e.g. GPIO7 = pin 26)
@@ -32,21 +27,15 @@ function initGPIO(){
     // only start retrieving data if no transfer is currently in progress as a slave send interrupt
     // may have risen while the master is sending data - and if so, the master will fetch the data.
 
-    // NB: We may have a problem if the master has just finished its transfer or if this event is
-    // received while we are writing but not triggered untill after the read has finished (because
-    // javascript is synchronous). If this is the case, we need to work around it by adding a signal
-    // in the write method indicating that the data has already been handled.
-    
+    // I thought earlier that we would have  problem if an interrupt was received during write. Now 
+    // it seems that such an interrupt will NOT trigger a change-to-positive event after all, as 
+    // long as the interrupt pin is lowered again before the read is completed. 
+
+    // Writing and reading are synchronous, so read/write will be finished before events are triggered
+
     if(pin == config.spi.interruptPin && interruptvalue > 0 && !sendInProgress && !receiveInProgress){
-      console.log("Interrupt raised");
-      // check if data has already been read while writing to slave
-      if(readHasBeenHandledByWrite){
-        console.log("Data has already been handeled");
-        readHasBeenHandledByWrite = false;
-      } else {
-        console.log("Reading data from slave after interrupt was raised");
-        read();
-      }
+      console.log("Reading data from slave after interrupt was raised");
+      read();
     }    
   });
 
@@ -112,14 +101,15 @@ function read(){
 
   // Incidently, 16 bytes is the size of the enhanced buffer of the PIC32, which lets us write 
   // all data to the output buffer of the PIC32 in one go.
-  receiveInProgress = true;
+  
+  // Since javascript is single threaded, and spi read/write are synchronous, reading and writing 
+  // are completely isolated. Thus, we do not need to check if a read or write is in progress.
   var minBufferSize = config.spi.minBufferSize;
 
   spi.read(new Buffer(minBufferSize), function(device, rxbuffer) {
     var transmissionLength = rxbuffer[0];
 
     if(transmissionLength <= minBufferSize){
-      receiveInProgress = false;
       triggerReadCallback(rxbuffer);      
     } else {
       readRemainder(rxbuffer, transmissionLength);
@@ -133,7 +123,6 @@ function readRemainder(initialBuffer, transmissionLength){
   console.log("Going to read remaining " + remainder + " bytes from slave");
 
   spi.read(new Buffer(remainder), function(device, remainderBuffer) {
-    receiveInProgress = false;
     triggerReadCallback(initialBuffer, remainderBuffer);
   });  
 }
@@ -162,17 +151,10 @@ function triggerReadCallback(initialBuffer, remainderBuffer){
 }
 
 function write(txbuffer){
-
+  // Since javascript is single threaded, and spi read/write are synchronous, reading and writing
+  // are completely isolated. Thus, we do not need to check if a read or write is in progress.
   console.log("Going to write " + txbuffer.length + " bytes");
  
-  // Do not start a transmission while one is currently ongoing.
-  if(receiveInProgress){
-    // TODO: This may never be the case if read and writes are indeed synchronous. Check!
-  } else {
-    // Indicate to the read function that it should not start if it has not already started
-    // as the data will be transferred during the write.
-    sendInProgress = true;  
-
     spi.transfer(txbuffer, new Buffer(txbuffer.length), function(device, rxbuffer) {
       // Detect if any data was received from the slave during write. The slave does not check
       // if a master send is in progress before it starts sending data, but it raises an interrupt.
@@ -197,9 +179,7 @@ function write(txbuffer){
         var initialBuffer = rxbuffer.slice(i); 
         readRemainder(initialBuffer, transmissionLength);
       }
-      sendInProgress = false;
     });
-  }
 }
 
 function onExit(){
