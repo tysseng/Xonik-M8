@@ -56,8 +56,8 @@ function initGPIO(){
     console.log("Setup spi slave interrupt on physical pin " + config.spi.interruptPin);
     
     // Do an initial read of the interrupt pin as it may have been high when the program started.
-    //checkInterruptPinAndReadIfNecessary();
-    writeSome();
+    checkInterruptPinAndReadIfNecessary();
+    //writeSome();
   });
 }
 
@@ -201,7 +201,9 @@ function write(txbuffer){
           readRemainder(initialBuffer, transmissionLength);
         } else {
           triggerReadCallback(initialBuffer);
-        }       
+        }
+
+        // TODO: HANDLE MULTIPLE RECEIVED MESSAGES DURING ONE WRITE!       
       }
     });
 }
