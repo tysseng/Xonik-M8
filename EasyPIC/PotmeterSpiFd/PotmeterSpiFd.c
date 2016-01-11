@@ -38,7 +38,11 @@ unsigned short inputlength = 0;
 unsigned short inputbuffer[256];
 
 unsigned short outputlength = 0;
-unsigned short outputBuffer[] = {0,0,0,0,0,0,0,0,16,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14};
+unsigned short outputBuffer[] = {
+ 0,0, // 3 empty bytes
+ 4,1,1,1, // then a valid message that arrives just in time to be read on write
+ 0,0,0,0, // 4 empty bytes
+ 4,2,2,2, 0,0,0,0, 0,0,0,0, 0,0,0,0}; // then a valid message that arrives just too late to be read on write but that should trigger a read
 
 unsigned short dataToSend = 0;
 unsigned short dataReady = 0;
@@ -48,15 +52,18 @@ void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
   volatile char rxByte;
   rxByte = SPI4BUF;
 
-  if(bytecounter == 7 || bytecounter == 14) {
-    PORTB.F1 = 1; // raise interrupt to get master to fetch data
-  } else if(bytecounter == 10 || bytecounter == 18){
-    PORTB.F1 = 0;
-  }
-
   //prepare next send
-  bytecounter = ((bytecounter + 1) % 24);
+  
   SPI4BUF = outputBuffer[byteCounter];
+
+    if(bytecounter == 2 || bytecounter == 10) {
+      PORTB.F1 = 1; // raise interrupt to get master to fetch data
+    } else if(bytecounter == 3 || bytecounter == 11){
+      PORTB.F1 = 0;
+    }
+
+  bytecounter++;
+  
 
   //reset interrupt
   SPI4RXIF_bit = 0;
@@ -124,17 +131,10 @@ void main() {
   TRISD = 0;
   LATD = 0;
 
-//  initSlaveInterrupt();
-//  LATB.F1 = 0;
-//  delay_ms(4000);
+  initSlaveInterrupt();
+
   //SPI4BUF = outputBuffer[byteCounter];
-  while(1){/*
-    if(loop < 10){
-      LATB.F1 = 1;
-//      Delay_ms();
-      LATB.F1 = 0;
-//      Delay_ms(50);
-      loop++;
-    }        */
+  SPI4BUF = 0;
+  while(1){
   }
 }

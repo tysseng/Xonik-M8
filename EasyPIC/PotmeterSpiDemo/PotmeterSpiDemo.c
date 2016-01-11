@@ -68,8 +68,8 @@ void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
       txbytecounter = 0;
       dataToSend = 0;
     }
-  } 
-
+  }
+  
   // The next data returned to the master should be empty if no data is queued 
   // for send. This also covers the case when the master is writing but not
   // expecting any returned data.
@@ -141,6 +141,10 @@ void initSlaveInterrupt(){
   TX_INTERRUPT = 0;
 }
 
+void integrationTest(){
+
+}
+
 void main() {
 
   unsigned short i;
@@ -189,11 +193,11 @@ void main() {
       txbuffer[2] = adc;
       prevSent = adc;
 
-      SPI4BUF = txbuffer[0];
       txlength = txbuffer[0];
-
-      txbytecounter++;
-      dataToSend = 1;
+      dataToSend = 1; // tell the world that we have data to send.
+      
+      SPI4BUF = txbuffer[0];
+      SPI4BUF = 4;
 
       // raise interrupt to make master to fetch data
       TX_INTERRUPT = 1;
