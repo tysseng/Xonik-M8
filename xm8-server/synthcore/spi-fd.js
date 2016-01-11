@@ -98,6 +98,16 @@ function read(){
   // The master must send a buffer the size of the data it expects to receive in order
   // to run the clock that retrieves data from the slave.
 
+  // Because we've elected to always send 0 back and forth when data is not valid, and because SPIxBUF
+  // on the slave side must always be populated right after a byte is written, the first byte in any
+  // read operation will be 0/not valid. The second byte is the first byte of the real transmission. In
+  // other words, the master has to write 17 bytes to read 16 bytes of valid data. 
+
+  // The only exception to this rule is if the initial 0 was read during a master write(). In this case 
+  // the write function will not have detected that the slave want to send any data, but since the 
+  // interrupt still will be triggered (after write completes), a read() operation is started. 
+  // In this case the first byte will also be the first valid byte.
+
   // When we start receiving data we do not know how much data the slave wants to send. This is
   // indicated by the first received byte.
 
@@ -119,9 +129,15 @@ function read(){
   var minBufferSize = config.spi.minBufferSize;
 
   spi.read(new Buffer(minBufferSize), function(device, rxbuffer) {
+    // see comment above to understand why we try twice to read length
     var transmissionLength = rxbuffer[0];
+    if(transmissionLength == 0 && rxbuffer.length > 1){
+      transmissionLength = rxbuffer[1];
+      // discard first byte (always 0)
+      rxbuffer = rxbuffer.slice(1);
+    }
 
-    if(transmissionLength <= minBufferSize){
+    if(transmissionLength <= rxbuffer.length){
       triggerReadCallback(rxbuffer);      
     } else {
       readRemainder(rxbuffer, transmissionLength);
