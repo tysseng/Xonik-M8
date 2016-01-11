@@ -40,7 +40,7 @@ var readCallback;
 function initGPIO(){
   
   gpio.on('change', function(pin, interruptStatus) {
-    // I thought earlier that we would have  problem if an interrupt was received during write. Now 
+    // I thought earlier that we would have a problem if an interrupt was received during write. Now 
     // it seems that such an interrupt will NOT trigger a change-to-positive event after all, as 
     // long as the interrupt pin is lowered again before the read is completed. 
 
@@ -57,13 +57,7 @@ function initGPIO(){
     
     // Do an initial read of the interrupt pin as it may have been high when the program started.
     checkInterruptPinAndReadIfNecessary();
-    //writeSome();
   });
-}
-
-function writeSome(){
-  var buffer = new Buffer([10,1,2,3,4,5,6,7,8,9]);
-  write(buffer);
 }
 
 function checkInterruptPinAndReadIfNecessary(){
@@ -130,6 +124,9 @@ function read(){
 
   spi.read(new Buffer(minBufferSize), function(device, rxbuffer) {
     // see comment above to understand why we try twice to read length
+    console.log("rxbuffer:");
+    console.log(rxbuffer);
+    
     var transmissionLength = rxbuffer[0];
     if(transmissionLength == 0 && rxbuffer.length > 1){
       transmissionLength = rxbuffer[1];
@@ -161,13 +158,11 @@ function onRead(callback){
 
 function triggerReadCallback(initialBuffer, remainderBuffer){
   var bufferContents = [];
-  var bufferSize = 0;
-  var transmissionLength = initialBuffer[0];
 
   // We may have received more bytes than the indicated transmission length
   // (Remember, we always read at least 16 bytes). Return only the real bytes.
-  for(var i = 0; i<transmissionLength; i++){
-    bufferContents.push(initialBuffer[i]);
+  for(value of initialBuffer){
+    bufferContents.push(value);
   }
 
   // If a second read was necessary, add the data from this one as well. This
