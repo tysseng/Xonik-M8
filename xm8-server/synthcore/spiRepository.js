@@ -5,7 +5,6 @@
 
 var eventbus = require('./eventbus.js');
 var spi = require('./spi-fd.js');
-//var spi = require('./spi.js');
 var config = require('./config.js');
 var ctrlConfig = require('../shared/controllerSetup.js');
 var types = require('../shared/datatypes.js');
@@ -32,7 +31,7 @@ function fromSpiBuffer(buffer){
   if(controller){
     var type = controller.type;
     var id = controller.srvId;
-    var value = getValueFromSpi(buffer);
+    var value = getValueFromSpi(type, buffer);
     console.log("Converted spi buffer - type: " + type + ", id: " + id + ", value: " + value);
     return {source: "spi", type: type, id: id, value: value};
   } else {
@@ -40,8 +39,8 @@ function fromSpiBuffer(buffer){
   }
 }
 
-function getValueFromSpi(buffer){
-  switch(buffer[0]){
+function getValueFromSpi(type, buffer){
+  switch(type){
     case types.CTRL_8_BIT:
       return buffer[2];
     case types.CTRL_16_BIT:
@@ -55,9 +54,9 @@ function toSpiBuffer(event){
   var id = controller.hwId;
   switch(type){
     case types.CTRL_8_BIT:
-      return new Buffer([type, id, event.value]); 
+      return new Buffer([3, id, event.value]); 
     case types.CTRL_16_BIT:
-      return new Buffer([type, id, event.value, event.value / 256 ]); 
+      return new Buffer([4, id, event.value, event.value / 256 ]); 
     default:
       return 0; 
   }
@@ -81,5 +80,4 @@ function receive(buffer){
 }
 
 listenToControllerChanges();
-//spi.setReadCallback(receive);
 spi.onRead(receive); 

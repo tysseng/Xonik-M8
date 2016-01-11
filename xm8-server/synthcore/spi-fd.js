@@ -40,7 +40,7 @@ var readCallback;
 function initGPIO(){
   
   gpio.on('change', function(pin, interruptStatus) {
-    // I thought earlier that we would have  problem if an interrupt was received during write. Now 
+    // I thought earlier that we would have a problem if an interrupt was received during write. Now 
     // it seems that such an interrupt will NOT trigger a change-to-positive event after all, as 
     // long as the interrupt pin is lowered again before the read is completed. 
 
@@ -56,14 +56,8 @@ function initGPIO(){
     console.log("Setup spi slave interrupt on physical pin " + config.spi.interruptPin);
     
     // Do an initial read of the interrupt pin as it may have been high when the program started.
-    //checkInterruptPinAndReadIfNecessary();
-    writeSome();
+    checkInterruptPinAndReadIfNecessary();
   });
-}
-
-function writeSome(){
-  var buffer = new Buffer([10,1,2,3,4,5,6,7,8,9]);
-  write(buffer);
 }
 
 function checkInterruptPinAndReadIfNecessary(){
@@ -98,6 +92,16 @@ function read(){
   // The master must send a buffer the size of the data it expects to receive in order
   // to run the clock that retrieves data from the slave.
 
+  // Because we've elected to always send 0 back and forth when data is not valid, and because SPIxBUF
+  // on the slave side must always be populated right after a byte is written, the first byte in any
+  // read operation will be 0/not valid. The second byte is the first byte of the real transmission. In
+  // other words, the master has to write 17 bytes to read 16 bytes of valid data. 
+
+  // The only exception to this rule is if the initial 0 was read during a master write(). In this case 
+  // the write function will not have detected that the slave want to send any data, but since the 
+  // interrupt still will be triggered (after write completes), a read() operation is started. 
+  // In this case the first byte will also be the first valid byte.
+
   // When we start receiving data we do not know how much data the slave wants to send. This is
   // indicated by the first received byte.
 
@@ -119,9 +123,19 @@ function read(){
   var minBufferSize = config.spi.minBufferSize;
 
   spi.read(new Buffer(minBufferSize), function(device, rxbuffer) {
+    // see comment above to understand why we try twice to read length
+    console.log("rxbuffer:");
+    console.log(rxbuffer);
+    
     var transmissionLength = rxbuffer[0];
+    if(transmissionLength == 0 && rxbuffer.length > 1){
+      transmissionLength = rxbuffer[1];
+      // discard first byte (always 0)
+      rxbuffer = rxbuffer.slice(1);
+    }
 
-    if(transmissionLength <= minBufferSize){
+    if(transmissionLength <= rxbuffer.length){
+      rxbuffer = rxbuffer.slice(0, transmissionLength);
       triggerReadCallback(rxbuffer);      
     } else {
       readRemainder(rxbuffer, transmissionLength);
@@ -145,13 +159,11 @@ function onRead(callback){
 
 function triggerReadCallback(initialBuffer, remainderBuffer){
   var bufferContents = [];
-  var bufferSize = 0;
-  var transmissionLength = initialBuffer[0];
 
   // We may have received more bytes than the indicated transmission length
   // (Remember, we always read at least 16 bytes). Return only the real bytes.
-  for(var i = 0; i<transmissionLength; i++){
-    bufferContents.push(initialBuffer[i]);
+  for(value of initialBuffer){
+    bufferContents.push(value);
   }
 
   // If a second read was necessary, add the data from this one as well. This
@@ -201,7 +213,9 @@ function write(txbuffer){
           readRemainder(initialBuffer, transmissionLength);
         } else {
           triggerReadCallback(initialBuffer);
-        }       
+        }
+
+        // TODO: HANDLE MULTIPLE RECEIVED MESSAGES DURING ONE WRITE!       
       }
     });
 }
