@@ -135,6 +135,7 @@ function read(){
     }
 
     if(transmissionLength <= rxbuffer.length){
+      rxbuffer = rxbuffer.slice(0, transmissionLength);
       triggerReadCallback(rxbuffer);      
     } else {
       readRemainder(rxbuffer, transmissionLength);
