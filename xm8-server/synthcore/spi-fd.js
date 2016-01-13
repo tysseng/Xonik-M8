@@ -232,18 +232,3 @@ exit.onExit(onExit);
 
 module.exports.write = write;
 module.exports.onRead = onRead;
-
-
-
-/*
-For testing border conditions:
-
-function writeSome(){
-  write(new Buffer([4,1,1,1]));
-  setTimeout(writeMore, 1000);
-}
-
-function writeMore(){
-  write(new Buffer([4,2,2,2]));
-}
-*/
