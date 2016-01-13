@@ -153,10 +153,6 @@ function readRemainder(initialBuffer, transmissionLength){
   });  
 }
 
-function onRead(callback){
-  readCallback = callback;
-}
-
 function triggerReadCallback(initialBuffer, remainderBuffer){
   var bufferContents = [];
 
@@ -193,31 +189,31 @@ function write(txbuffer){
       // This interrupt may be received while the master sends data, in which case parts of the 
       // data the slave wants to send will be received while the master writes data. 
       // We therefore have to check if any data was received and get the remainding data from 
-      // the slave.
+      // the slave. Multiple slave transmissions may have occurred.
       var transmissionLength = 0;
       var receivedBytes = [];
       for(var i = 0; i<rxbuffer.length; i++){
         if(rxbuffer[i] > 0 ){
           transmissionLength = rxbuffer[i];
-          break;
+
+          if(i + transmissionLength <= rxbuffer.length){
+            console.log("Slave sent a full transmission of " + transmissionLength + " bytes during write");
+            triggerReadCallback(rxbuffer.slice(i, i + transmissionLength));
+          } else {
+            console.log("Slave sent " + (rxbuffer.length - i) + " of " + transmissionLength + " bytes during write");
+            readRemainder(rxbuffer.slice(i), transmissionLength);
+          }
+           
+          // skip to the end of the transmission to see if we have received more. 
+          // We substract  1 as i is incremented before the next iteration.
+          i = i + transmissionLength - 1;          
         }
-      }
-
-      if(transmissionLength > 0){       
-        console.log("Slave sent " + (rxbuffer.length - i) + " of " + transmissionLength + " bytes during write");
-
-        // discard the parts of the receive buffer that was not part of the slave's data
-        // transmission, then read whatever is missing.
-        var initialBuffer = rxbuffer.slice(i); 
-        if(transmissionLength > initialBuffer.length){
-          readRemainder(initialBuffer, transmissionLength);
-        } else {
-          triggerReadCallback(initialBuffer);
-        }
-
-        // TODO: HANDLE MULTIPLE RECEIVED MESSAGES DURING ONE WRITE!       
       }
     });
+}
+
+function onRead(callback){
+  readCallback = callback;
 }
 
 function onExit(){
@@ -236,3 +232,18 @@ exit.onExit(onExit);
 
 module.exports.write = write;
 module.exports.onRead = onRead;
+
+
+
+/*
+For testing border conditions:
+
+function writeSome(){
+  write(new Buffer([4,1,1,1]));
+  setTimeout(writeMore, 1000);
+}
+
+function writeMore(){
+  write(new Buffer([4,2,2,2]));
+}
+*/
