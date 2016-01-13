@@ -174,7 +174,7 @@ function triggerReadCallback(initialBuffer, remainderBuffer){
   if(readCallback){
     console.log("Received data: ");
     console.log(bufferContents);
-    //readCallback(bufferContents);
+    readCallback(bufferContents);
   }  
 }
 
@@ -182,6 +182,7 @@ function write(txbuffer){
   // Since javascript is single threaded, and spi read/write are synchronous, reading and writing
   // are completely isolated. Thus, we do not need to check if a read or write is in progress.
   console.log("Going to write " + txbuffer.length + " bytes");
+  console.log(txbuffer);
  
     spi.transfer(txbuffer, new Buffer(txbuffer.length), function(device, rxbuffer) {
       // Detect if any data was received from the slave during write. The slave does not check
