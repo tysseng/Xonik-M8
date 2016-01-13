@@ -38,6 +38,17 @@ unsigned short inputlength = 0;
 unsigned short inputbuffer[256];
 
 unsigned short outputlength = 0;
+
+// To test multiple reads on one write - write 15 bytes to receive this
+// as three separate reads.
+/*
+unsigned short outputBuffer[] = {
+  3,1,1,4,2,2,2,0,0,0,0,0,0,5,3,3,3,3
+};
+*/
+
+// to test border conditions/interrupts.
+// write two commands of four bytes with 1 second between them
 unsigned short outputBuffer[] = {
  0,0, // 3 empty bytes
  4,1,1,1, // then a valid message that arrives just in time to be read on write
