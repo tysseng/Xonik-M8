@@ -47,6 +47,9 @@ unsigned short txbuffer[256];
 unsigned short dataToSend = 0;
 unsigned short dataReady = 0;
 
+unsigned short controller[8];
+unsigned short potmeter[8]; // last registered potmeter value
+
 void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
 
   volatile char rxbyte;
@@ -63,6 +66,7 @@ void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
     // If not, indicate that sending is complete
     if(txbytecounter < txlength){
       SPI4BUF = txbuffer[txbytecounter];
+      //txbuffer[txbytecounter] = 0;
       txbytecounter++;
     } else {
       txbytecounter = 0;
@@ -141,8 +145,79 @@ void initSlaveInterrupt(){
   TX_INTERRUPT = 0;
 }
 
-void integrationTest(){
+void showAsBarOnPortD(unsigned short value){
+  if(value < 16){
+    LATD = 0;
+  } else if (value < 48){
+    LATD = 0b00000001;
+  } else if (value < 80){
+    LATD = 0b00000011;
+  } else if (value < 112){
+    LATD = 0b00000111;
+  } else if (value < 144){
+    LATD = 0b00001111;
+  } else if (value < 176){
+    LATD = 0b00011111;
+  } else if (value < 208){
+    LATD = 0b00111111;
+  } else if (value < 240){
+    LATD = 0b01111111;
+  } else {
+    LATD = 0b11111111;
+  }
+}
 
+void updateControllerFromSpi(unsigned short id, unsigned short value){
+  controller[id] = value;
+}
+
+void updateControllerAndSendThroughSpi(unsigned short id, unsigned short value){
+  potmeter[id] = value;
+  controller[id] = value;
+
+  // transmit changes if no transmission is in progress
+  // TODO: Debounce
+  // TODO: Queue sends if transmission is in progress.
+  if(txbytecounter == 0 && dataToSend == 0){
+
+    txbuffer[0] = 3;
+    txbuffer[1] = id;
+    txbuffer[2] = value;
+
+    txlength = txbuffer[0];
+    dataToSend = 1; // tell the world that we have data to send.
+
+    SPI4BUF = txbuffer[0];
+
+    // raise interrupt to make master to fetch data
+    TX_INTERRUPT = 1;
+  }
+}
+
+void updateControllerFromPotmeter(unsigned short id, unsigned short value){
+  if(value == potmeter[id] || value == controller[id]){
+    return;
+  }
+  
+  // if controller has changed and is now not in sync with the potmeter
+  if(controller[id] != potmeter[id]){
+  
+    if(potmeter[id] < controller[id]){
+      if(value >= controller[id]){
+        // if potmeter was below the correct controller value, it has to be
+        // moved up to and above the controller before a new value is registered
+        updateControllerAndSendThroughSpi(id, value);
+      }
+    } else if (potmeter[id] > controller[id]){
+      if(value <= controller[id]){
+        // if potmeter was above the correct controller value, it has to be
+        // moved down to and below the controller before a new value is registered
+        updateControllerAndSendThroughSpi(id, value);      
+      }
+    }
+  } else {
+    updateControllerAndSendThroughSpi(id, value);
+  }
 }
 
 void main() {
@@ -150,7 +225,6 @@ void main() {
   unsigned short i;
   unsigned short j= 1;
   unsigned short adc;
-  unsigned short prevSent = 0;
 
   initTypes();
 
@@ -179,30 +253,17 @@ void main() {
 
   while(1){
     if(dataReady){
-      //PORTB = inputbuffer[2];
+      // TODO: QUEUE
+      updateControllerFromSpi(rxbuffer[1], rxbuffer[2]);
       dataReady = 0;
     }
 
     adc = ADC1_Get_Sample(0) >> 2;   // Get ADC value from corresponding channel
 
-    // transmit changes if no transmission is in progress
-    if(txbytecounter == 0 && dataToSend == 0 && adc != prevSent){
-
-      txbuffer[0] = 3;
-      txbuffer[1] = 1;
-      txbuffer[2] = adc;
-      prevSent = adc;
-
-      txlength = txbuffer[0];
-      dataToSend = 1; // tell the world that we have data to send.
-      
-      SPI4BUF = txbuffer[0];
-      SPI4BUF = 4;
-
-      // raise interrupt to make master to fetch data
-      TX_INTERRUPT = 1;
-    }
-
+    updateControllerFromPotmeter(1, adc);
+ 
+    showAsBarOnPortD(controller[1]);
+    
     Delay_ms(20);
   }
 }
