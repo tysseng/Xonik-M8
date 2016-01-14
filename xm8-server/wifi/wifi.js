@@ -1,7 +1,12 @@
 var execSync = require('child_process').execSync;
 var exec = require('child_process').exec;
+var jsonfile = require('jsonfile');
+
+var persistedNetsFile = 'persisted_nets.json';
 
 var detectedNets = [];
+
+var knownNets = {};
 
 function connect(){
   console.log("Connecting to default networks");
@@ -121,5 +126,36 @@ function listNetworks(){
   });
 }
 
+function loadPersistedNets(){
+  jsonfile.readFile(persistedNetsFile, function(err, obj){
+    if(err){
+      persistedNets = {};
+    } else {
+      persistedNets = obj;
+    }
+    console.log(persistedNets);
+  });
+}
+
+function persistNets(){
+  jsonfile.writeFile(persistedNetsFile, knownNets, function(err){
+    if(err){
+      console.log("Error while persisting nets:");
+      console.log(err);
+    } else {
+      console.log("Network list saved to disk");
+    }
+  });
+}
+
+function addNetToKnown(ssid, psk){
+  knownNets[ssid] = {
+    ssid: ssid,
+    psk: psk
+  }
+  persistNets(); 
+}
+
 //connect();
-setTimeout(scan, 1000);
+addNetToKnown("Mono", "jupiter8prophet5");
+setTimeout(loadPersistedNets, 1000);
