@@ -20,12 +20,61 @@ function connect(){
     exec("dhclient -r wlan0", function (error, stdout, stderr){
       console.log(stdout);
 
+      try{
+        execSync("wpa_cli terminate");
+     } catch(err){
+        console.log("wpa_supplicant probably terminated, continuing");
+     }
+
       console.log("Starting wpa_supplicant with default settings");
       exec("wpa_supplicant -B -Dwext -iwlan0 -c/etc/wpa_supplicant/wpa_supplicant.conf", function(error, stdout, stderr){
         console.log(stdout);
+
+        execSync("iwconfig wlan0 mode Managed");
+        execSync("ifconfig wlan0 up");       
+        execSync("dhclient wlan0");       
       });
     });
   });
+}
+
+function startAdHoc(){
+  console.log("Starting Ad Hoc wifi network");
+  console.log("Bringing down wlan0");
+
+  exec("ifconfig wlan0 down", function (error, stdout, stderr){
+    //Do something if error
+    console.log(stdout);
+
+    console.log("Removing dhcp entry");
+    exec("dhclient -r wlan0", function (error, stdout, stderr){
+      console.log(stdout);
+
+      console.log("Trying to set up ad hoc network");
+      try{
+        execSync("wpa_cli terminate");
+      } catch(err){
+        console.log("wpa_supplicant probably terminated, continuing");
+      }      
+      execSync("iwconfig wlan0 mode ad-hoc");
+      execSync("iwconfig wlan0 key abcdef123456");
+      execSync("iwconfig wlan0 essid XM8");
+      execSync("ifconfig wlan0 10.0.0.200 netmask 255.255.255.0");
+      
+      console.log("Bringing up wlan0");
+      
+      setTimeout(function(){ 
+        exec("ifconfig wlan0 up", function(error, stdout, stderr){
+          console.log(stdout);
+          if(error){
+            console.log(error);
+            console.log(stderr);
+          }
+        });
+      }, 500);
+    });
+  });
+
 }
 
 function scan(){
@@ -157,5 +206,14 @@ function addNetToKnown(ssid, psk){
 }
 
 //connect();
-addNetToKnown("Mono", "jupiter8prophet5");
-setTimeout(loadPersistedNets, 1000);
+startAdHoc(); 
+//addNetToKnown("Mono", "jupiter8prophet5");
+//setTimeout(loadPersistedNets, 1000);
+
+/*
+root@raspberrypi:~# iwconfig wlan0 mode managed 
+Error for wireless request "Set Mode" (8B06) :
+    SET failed on device wlan0 ; Operation not permitted.
+
+løsning: starte wpa_supplicant, fjernet problemet
+*/
