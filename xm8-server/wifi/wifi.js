@@ -1,12 +1,58 @@
 var execSync = require('child_process').execSync;
 var exec = require('child_process').exec;
 var jsonfile = require('jsonfile');
+var fs = require('fs');
 
 var persistedNetsFile = 'persisted_nets.json';
+var wpaSupplicantFile = '/etc/wpa_supplicant/wpa_supplicant.conf';
 
 var detectedNets = [];
 
-var knownNets = {};
+var knownNets = [];
+
+function generateWpaSupplicantConf(nets, success){
+  var fileContent = "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n" +
+    "fast_reauth=1\n" +
+    "#Priority: Higher number seems to take presedence\n";
+
+  for (var i = 0; i < nets.length; i++) {
+
+    var net = nets[i];
+    fileContent += 'network={\n';
+
+    // keys to include for this particular network
+    var keysToInclude = net.keysToInclude;
+    for(var keyIndex = 0; keyIndex < keysToInclude.length; keyIndex++){
+      var key = keysToInclude[keyIndex];
+      var value = net[key];
+      fileContent +='  ' + key + '=' + value + '\n';
+    }
+ 
+    // default content to include for all nets 
+    var priority = nets.length - i;
+    fileContent +=
+      '  scan_ssid=1\n' + // makes it possible to connect even if network ssid is not broadcast
+      '  priority=' + priority + '\n' +
+      '}\n';
+  }
+
+  fs.writeFile(wpaSupplicantFile, fileContent, function(err) {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log("Wpa supplicant config saved.");
+      success();
+    }
+  });   
+}
+
+function selectNetAndConnect(net){
+  generateWpaSupplicantConf([net], connect);
+}
+
+function connectToKnownNets(){
+  generateWpaSupplicantConf(knownNets, connect);
+}
 
 function connect(){
   console.log("Connecting to default networks");
@@ -27,7 +73,7 @@ function connect(){
      }
 
       console.log("Starting wpa_supplicant with default settings");
-      exec("wpa_supplicant -B -Dwext -iwlan0 -c/etc/wpa_supplicant/wpa_supplicant.conf", function(error, stdout, stderr){
+      exec("wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile, function(error, stdout, stderr){
         console.log(stdout);
 
         execSync("iwconfig wlan0 mode Managed");
@@ -175,14 +221,19 @@ function listNetworks(){
   });
 }
 
-function loadPersistedNets(){
+function loadPersistedNets(success){
+  console.log("Going to load persisted networks");
   jsonfile.readFile(persistedNetsFile, function(err, obj){
     if(err){
-      persistedNets = {};
+      console.log("Could not load persisted networks");
+      console.log(err);
+      knownNets = {};
     } else {
-      persistedNets = obj;
+      knownNets = obj;
+      console.log("Loaded persisted networks");
+      console.log(knownNets);
+      success();
     }
-    console.log(persistedNets);
   });
 }
 
@@ -198,17 +249,48 @@ function persistNets(){
 }
 
 function addNetToKnown(ssid, psk){
-  knownNets[ssid] = {
+  knownNets.push({
+    keysToInclude: ['ssid', 'psk'],
     ssid: ssid,
     psk: psk
-  }
+  });
   persistNets(); 
 }
 
-//connect();
-startAdHoc(); 
-//addNetToKnown("Mono", "jupiter8prophet5");
-//setTimeout(loadPersistedNets, 1000);
+
+function debugCreateNetworks(){
+  addNetToKnown('"Poly"', '"jupiter8prophet5"');
+  addNetToKnown('"Mono"', '"prophet5jupiter8"');
+}
+
+function debugExecuteCommand(){
+  var cmd;
+
+  // print process.argv
+  process.argv.forEach(function (val, index, array) {
+    if(index == 2) cmd = val;
+  });
+
+  if(cmd == "1"){
+    selectNetAndConnect(knownNets[0]);
+  } else if(cmd == "2"){
+    selectNetAndConnect(knownNets[1]);
+  } else if(cmd == "3"){
+    connectToKnownNets();
+  } else if(cmd == "4"){
+    startAdHoc();
+  } else if(cmd == "create"){
+    debugCreateNetworks();
+  }
+}
+
+function debugRun(){
+
+  // load all known nets from disk - has to be done elsewhere later
+  loadPersistedNets(debugExecuteCommand);
+}
+
+debugRun();
 
 /*
 root@raspberrypi:~# iwconfig wlan0 mode managed 
