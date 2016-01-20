@@ -123,8 +123,12 @@ function startAdHoc(){
 
 }
 
-function scan(){
-  exec("iwlist wlan0 scan", function(error, stdout, stderr){
+function scan(success, error){
+  exec("iwlist wlan0 scan", function(err, stdout, stderr){
+    if(err){
+      error(stderr);
+    }
+
     // reset list of detected nets
     detectedNets = [];
 
@@ -191,7 +195,7 @@ function scan(){
         }
       }
     }
-  console.log(detectedNets);
+    success(detectedNets);
   });
 }
 
@@ -215,10 +219,10 @@ function addSignalInfo(line, net){
   }
 }
 
-function listNetworks(){
-  exec("wpa_cli list_networks", function(error, stdout, sterr){
-    console.log(stdout);
-  });
+// lists all available networks along with their status.
+function listNetworks(success, error){
+  // todo: merge with stored nets etc
+  scan(success, error);
 }
 
 function loadPersistedNets(success){
@@ -299,3 +303,5 @@ Error for wireless request "Set Mode" (8B06) :
 
 løsning: starte wpa_supplicant, fjernet problemet
 */
+
+module.exports.listNetworks = listNetworks;

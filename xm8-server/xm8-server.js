@@ -13,6 +13,8 @@ var controllers = require('./synthcore/controllers.js');
 var ctrlSetup = require('./shared/controllerSetup.js');
 var spiRepository = require('./synthcore/spiRepository.js');
 
+var wifi = require('./wifi/wifi.js');
+
 function publishControllerChange(message){
   var msgParts = message.split(',');
   var id = msgParts[0];
@@ -88,6 +90,27 @@ app.ws('/controller', function(ws, req) {
     publishControllerChange(msg);
   });
 });
+
+// WIFI control
+app.get('/wifi', function(req, res){
+  wifi.listNetworks(
+    function(networks){
+      res.send(200, networks);
+    },
+    function(err){
+      res.send(500, err);
+    });
+});
+
+/*
+app.put('/wifi/.../select', function(req, res){
+  
+});
+
+app.put('/wifi/...', function(req, res){
+  
+});*/
+
 
 app.listen(3000);
 listenToControllerChanges();
