@@ -2,6 +2,8 @@ var execSync = require('child_process').execSync;
 var exec = require('child_process').exec;
 var jsonfile = require('jsonfile');
 var fs = require('fs');
+var display = require('../synthcore/display.js');
+var _ = require('lodash');
 
 var persistedNetsFile = 'persisted_nets.json';
 var wpaSupplicantFile = '/etc/wpa_supplicant/wpa_supplicant.conf';
@@ -46,16 +48,53 @@ function generateWpaSupplicantConf(nets, success){
   });   
 }
 
-function selectNetAndConnect(net){
-  generateWpaSupplicantConf([net], connect);
+function isInKnownNets(net){
+  return getNetBySsid(net.ssid, knownNets);
+}
+
+function selectNet(ssid, success, failure){
+  var selectedNet = getNetBySsid(ssid, detectedNets);
+  if(selectedNet){
+    selectNetAndConnect(success, failure);
+  } else {
+    failure({message: "Requested network is not available anymore, maybe it was turned off"});
+  }
+}
+
+function getNetBySsid(ssid, nets){
+  return _.find(nets, function(o) { return o.ssid === ssid});
+}
+
+function selectNetAndConnect(net, success){
+  generateWpaSupplicantConf([net], connect, 
+    addToKnownIfNew,
+    function(err){
+      display.write(0, 0, "Could not connect to " + net.ssid);
+      startAdHoc();
+    });
+}
+
+function addToKnownIfNew(connectedNet){
+  if(!isInKnownNets(net)){
+    console.log("Network " +net.ssid + " is not in list of known networks, adding it");
+    addNetToKnown(net.ssid, net.psk);
+  }
+  display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );    
 }
 
 function connectToKnownNets(){
-  generateWpaSupplicantConf(knownNets, connect);
+  generateWpaSupplicantConf(knownNets, connect, 
+    function(connectedNet){
+      display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );  
+    },
+    function(err){
+      startAdHoc();
+    });
 }
 
-function connect(){
-  console.log("Connecting to default networks");
+//todo: rewrite with callbacks
+function connect(success, connectionError){
+  console.log("Connecting to wifi using wpa_supplicant");
   console.log("Bringing down wlan0"); 
 
   exec("ifconfig wlan0 down", function (error, stdout, stderr){
@@ -68,9 +107,9 @@ function connect(){
 
       try{
         execSync("wpa_cli terminate");
-     } catch(err){
+      } catch(err){
         console.log("wpa_supplicant probably terminated, continuing");
-     }
+      }
 
       console.log("Starting wpa_supplicant with default settings");
       exec("wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile, function(error, stdout, stderr){
@@ -80,6 +119,11 @@ function connect(){
         execSync("ifconfig wlan0 up");       
         execSync("dhclient wlan0");       
       });
+
+      //TODO: Get network from status, ip from ifconfig
+      var connectedNet = {ssid: "someid"; ip: "10.0.0.123"};
+
+      success(connectedNet);
     });
   });
 }
@@ -115,7 +159,10 @@ function startAdHoc(){
           if(error){
             console.log(error);
             console.log(stderr);
-          }
+            display.write(0, 0, "Wifi startup failed, I'm useless!");  
+          } else {
+            display.write(0, 0, "I'm at 10.0.0.200 on XM8 with key 'abcdef123456'");  
+          }          
         });
       }, 500);
     });
@@ -305,3 +352,6 @@ løsning: starte wpa_supplicant, fjernet problemet
 */
 
 module.exports.listNetworks = listNetworks;
+module.exports.selectNet = selectNetAndConnect;
+module.exports.selectAdHoc = startAdHoc;
+module.exports.connectToKnownNets = connectToKnownNets;

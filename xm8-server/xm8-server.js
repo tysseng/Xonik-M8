@@ -102,9 +102,14 @@ app.get('/wifi', function(req, res){
     });
 });
 
-/*
-app.put('/wifi/.../select', function(req, res){
-  
+app.put('/wifi/:ssid/select', function(req, res){
+  wifi.selectNet(request.params.ssid, 
+    function(){
+      res.send(200);
+    },
+    function(err){
+      res.send(500, err);
+    });
 });
 
 app.put('/wifi/...', function(req, res){
