@@ -5,7 +5,7 @@ var fs = require('fs');
 var display = require('../synthcore/display.js');
 var _ = require('lodash');
 
-var persistedNetsFile = 'persisted_nets.json';
+var persistedNetsFile = 'wifi/persisted_nets.json';
 var wpaSupplicantFile = '/etc/wpa_supplicant/wpa_supplicant.conf';
 
 var detectedNets = [];
@@ -55,31 +55,39 @@ function isInKnownNets(net){
 function selectNet(ssid, success, failure){
   var selectedNet = getNetBySsid(ssid, detectedNets);
   if(selectedNet){
-    selectNetAndConnect(success, failure);
+    selectNetAndConnect(selectedNet, success, failure);
   } else {
     failure({message: "Requested network is not available anymore, maybe it was turned off"});
   }
 }
 
 function getNetBySsid(ssid, nets){
-  return _.find(nets, function(o) { return o.ssid === ssid});
+  return _.find(nets, function(o) { return o.ESSID === ssid});
 }
 
-function selectNetAndConnect(net, success){
-  generateWpaSupplicantConf([net], connect, 
-    addToKnownIfNew,
+function selectNetAndConnect(net, success, failure){
+  generateWpaSupplicantConf([net], 
+    function(){
+      connect(
+        function(connectedNet){
+          display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );   
+          addToKnownIfNew(connectedNet);
+          success(connectedNet);
+        }
+      );
+    }, 
     function(err){
       display.write(0, 0, "Could not connect to " + net.ssid);
-      startAdHoc();
-    });
+      startAdHoc(); //todo - add failure here....
+    }
+  );
 }
 
-function addToKnownIfNew(connectedNet){
+function addToKnownIfNew(net){
   if(!isInKnownNets(net)){
     console.log("Network " +net.ssid + " is not in list of known networks, adding it");
     addNetToKnown(net.ssid, net.psk);
   }
-  display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );    
 }
 
 function connectToKnownNets(){
@@ -111,19 +119,19 @@ function connect(success, connectionError){
         console.log("wpa_supplicant probably terminated, continuing");
       }
 
-      console.log("Starting wpa_supplicant with default settings");
+      console.log("Starting wpa_supplicant");
       exec("wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile, function(error, stdout, stderr){
         console.log(stdout);
 
         execSync("iwconfig wlan0 mode Managed");
         execSync("ifconfig wlan0 up");       
         execSync("dhclient wlan0");       
+
+        //TODO: Get network from status, ip from ifconfig
+        var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
+
+        success(connectedNet);
       });
-
-      //TODO: Get network from status, ip from ifconfig
-      var connectedNet = {ssid: "someid"; ip: "10.0.0.123"};
-
-      success(connectedNet);
     });
   });
 }
@@ -269,7 +277,22 @@ function addSignalInfo(line, net){
 // lists all available networks along with their status.
 function listNetworks(success, error){
   // todo: merge with stored nets etc
-  scan(success, error);
+  scan( 
+    function(selectedNets){
+      //TODO: Use smarter iteration here.
+      for(var i=0; i<detectedNets.length; i++){
+        var detectedNet = detectedNets[i];
+        detectedNet.keysToInclude=['ssid', 'psk'];
+        var knownNet = getNetBySsid(detectedNet.ESSID, knownNets);
+        console.log(detectedNet.ESSID);
+        if(knownNet){
+          detectedNet.isKnown = true;
+          _.extend(detectedNet, knownNet);
+        } 
+      }
+      success(selectedNets);
+    }, error);
+
 }
 
 function loadPersistedNets(success){
@@ -283,7 +306,7 @@ function loadPersistedNets(success){
       knownNets = obj;
       console.log("Loaded persisted networks");
       console.log(knownNets);
-      success();
+      if(success) success();
     }
   });
 }
@@ -301,14 +324,15 @@ function persistNets(){
 
 function addNetToKnown(ssid, psk){
   knownNets.push({
-    keysToInclude: ['ssid', 'psk'],
-    ssid: ssid,
+    keysToInclude: ['ssid', 'psk'], // keys to include when writing wpa_supplicant file
+    ssid: '"' + ssid + '"', // for wpa_supplicant file
+    ESSID: ssid, // for matching with detected networks
     psk: psk
   });
   persistNets(); 
 }
 
-
+/*
 function debugCreateNetworks(){
   addNetToKnown('"Poly"', '"jupiter8prophet5"');
   addNetToKnown('"Mono"', '"prophet5jupiter8"');
@@ -342,7 +366,9 @@ function debugRun(){
 }
 
 debugRun();
+*/
 
+loadPersistedNets();
 /*
 root@raspberrypi:~# iwconfig wlan0 mode managed 
 Error for wireless request "Set Mode" (8B06) :
@@ -352,6 +378,6 @@ løsning: starte wpa_supplicant, fjernet problemet
 */
 
 module.exports.listNetworks = listNetworks;
-module.exports.selectNet = selectNetAndConnect;
+module.exports.selectNet = selectNet;
 module.exports.selectAdHoc = startAdHoc;
 module.exports.connectToKnownNets = connectToKnownNets;

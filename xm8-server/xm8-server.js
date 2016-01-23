@@ -95,27 +95,22 @@ app.ws('/controller', function(ws, req) {
 app.get('/wifi', function(req, res){
   wifi.listNetworks(
     function(networks){
-      res.send(200, networks);
+      res.status(200).send(networks);
     },
     function(err){
-      res.send(500, err);
+      res.status(500).send(err);
     });
 });
 
 app.put('/wifi/:ssid/select', function(req, res){
-  wifi.selectNet(request.params.ssid, 
-    function(){
-      res.send(200);
+  wifi.selectNet(req.params.ssid, 
+    function(selectedNet){
+      res.status(200).send(selectedNet);
     },
     function(err){
-      res.send(500, err);
+      res.status(500).send(err);
     });
 });
-
-app.put('/wifi/...', function(req, res){
-  
-});*/
-
 
 app.listen(3000);
 listenToControllerChanges();
