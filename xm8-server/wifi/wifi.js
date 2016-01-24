@@ -190,8 +190,8 @@ function scan(success, error){
       return;
     }
 
-    for(var i = 1; i<nets.length; i++){ 
-      var lines = nets[i].split("\n");
+    _.forEach(nets, function(net){
+      var lines = net.split("\n");
       
       var index = lines[0].match(/^\s*[0-9]+/g)[0].trim();
       var net = {
@@ -204,7 +204,7 @@ function scan(success, error){
 
       // default number of indents, is used for detecting when an IE block ends
       var defaultIndent = lines[1].match(/^\s+/g);
-      var ieBlock; //NOT internet explorer...
+      var ieBlock; // NOT internet explorer but some wifi stuff
       var inIEBlock = false;
 
       _.forEach(lines, function(line){
@@ -246,7 +246,7 @@ function scan(success, error){
           }
         }
       });
-    }
+    });
     success(detectedNets);
   });
 }
