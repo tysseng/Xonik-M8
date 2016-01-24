@@ -190,14 +190,14 @@ function scan(success, error){
       return;
     }
 
-    _.forEach(nets, function(net){
-      var lines = net.split("\n");
-      
+    // iterating in the normal way because we want to start on index 1.
+    for(var i = 1; i<nets.length; i++){ 
+      var lines = nets[i].split("\n");
       var index = lines[0].match(/^\s*[0-9]+/g)[0].trim();
-      var net = {
+      var detectedNet = {
         Index: index
       }
-      detectedNets.push(net);
+      detectedNets.push(detectedNet);
 
       // remove index from first line
       lines[0] = lines[0].split(" - ")[1];
@@ -216,7 +216,7 @@ function scan(success, error){
         line = line.trim();
 
         if(line.startsWith('Quality')){
-          addSignalInfo(line, net);
+          addSignalInfo(line, detectedNet);
         }
 
         var splitPos = line.search(":");
@@ -228,10 +228,10 @@ function scan(success, error){
           if(key === 'IE'){
             inIEBlock = true;
             ieBlock = {type: value}
-            if(!net["IE"]){
-              net["IE"] = [];
+            if(!detectedNet["IE"]){
+              detectedNet["IE"] = [];
             } 
-            net["IE"].push(ieBlock);
+            detectedNet["IE"].push(ieBlock);
           } else {
             // detect when IE block ends.
             if(inIEBlock && indent === defaultIndent){
@@ -241,12 +241,13 @@ function scan(success, error){
             if(inIEBlock){
               ieBlock[key] = value;
             } else {
-              net[key] = value;
+              detectedNet[key] = value;
             }
           }
         }
       });
-    });
+    };
+
     success(detectedNets);
   });
 }
@@ -275,7 +276,7 @@ function listNetworks(success, error){
   // todo: merge with stored nets etc
   scan( 
     function(selectedNets){
-      _.forEach(detectedNets, function(detectedNets){
+      _.forEach(detectedNets, function(detectedNet){
 
         detectedNet.keysToInclude=['ssid', 'psk'];
 
