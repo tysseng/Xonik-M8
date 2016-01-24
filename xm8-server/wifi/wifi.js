@@ -211,7 +211,7 @@ function connect(success, connectionError){
     .then(terminateWpaSupplicant)
     .then(startWpaSupplicant)
     .then(setWlanModeToManaged)
-    .then(startAdapter);
+    .then(startAdapter)
     .then(generateDhcpEntry)
     .then(function(){
         //TODO: Get network from status, ip from ifconfig
@@ -219,7 +219,6 @@ function connect(success, connectionError){
         success(connectedNet);      
     })
     .catch(connectionError);
-  });
 }
 
 function startAdHoc(){
