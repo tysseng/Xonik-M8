@@ -23,12 +23,10 @@ function generateWpaSupplicantConf(nets, success){
     fileContent += 'network={\n';
 
     // keys to include for this particular network
-    var keysToInclude = net.keysToInclude;
-    for(var keyIndex = 0; keyIndex < keysToInclude.length; keyIndex++){
-      var key = keysToInclude[keyIndex];
+    _.forEach(net.keysToInclude, function(key){
       var value = net[key];
       fileContent +='  ' + key + '=' + value + '\n';
-    }
+    });
  
     // default content to include for all nets 
     var priority = nets.length - i;
@@ -209,8 +207,7 @@ function scan(success, error){
       var ieBlock; //NOT internet explorer...
       var inIEBlock = false;
 
-      for(var j = 0; j<lines.length; j++){
-        var line = lines[j];
+      _.forEach(lines, function(line){
 
         var indentMatch = line.match(/^\s+/g);
         if(indentMatch){
@@ -248,17 +245,16 @@ function scan(success, error){
             }
           }
         }
-      }
+      });
     }
     success(detectedNets);
   });
 }
 
 function addSignalInfo(line, net){
-  var parts = line.split('  ');
 
-  for(var i = 0; i<parts.length; i++){
-    var part = parts[i];
+  _.forEach(line.split('  '), function(part){
+
     if(part.search(":") > -1 ){
       var keyVal = part.split(":");
     } else if (part.search("=") > -1){
@@ -271,7 +267,7 @@ function addSignalInfo(line, net){
       value = value.split("/")[0].trim();
     }
     net[key] = value; 
-  }
+  });
 }
 
 // lists all available networks along with their status.
@@ -279,17 +275,18 @@ function listNetworks(success, error){
   // todo: merge with stored nets etc
   scan( 
     function(selectedNets){
-      //TODO: Use smarter iteration here.
-      for(var i=0; i<detectedNets.length; i++){
-        var detectedNet = detectedNets[i];
+      _.forEach(detectedNets, function(detectedNets){
+
         detectedNet.keysToInclude=['ssid', 'psk'];
+
         var knownNet = getNetBySsid(detectedNet.ESSID, knownNets);
         console.log(detectedNet.ESSID);
         if(knownNet){
           detectedNet.isKnown = true;
           _.extend(detectedNet, knownNet);
         } 
-      }
+      });
+
       success(selectedNets);
     }, error);
 
