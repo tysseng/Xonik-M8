@@ -98,39 +98,127 @@ function connectToKnownNets(){
     });
 }
 
-//todo: rewrite with callbacks
-function connect(success, connectionError){
-  console.log("Connecting to wifi using wpa_supplicant");
-  console.log("Bringing down wlan0"); 
+function shutdownAdapter(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Bringing down wlan0");
+    exec("ifconfig wlan0 down", function (error, stdout, stderr){
+      if(!error){
+        console.log(stdout);
+        resolve();
+      } else {
+        reject({message: "Could not shutdown wifi adapter"});
+      }
+    });
+  });
+  return promise;
+}
 
-  exec("ifconfig wlan0 down", function (error, stdout, stderr){
-    //Do something if error
-    console.log(stdout);
-
+function removeDhcpEntry(){
+  var promise = new Promise(function(resolve, reject){
     console.log("Removing dhcp entry");
     exec("dhclient -r wlan0", function (error, stdout, stderr){
-      console.log(stdout);
+      if(!error){
+        console.log(stdout);
+        resolve();
+      } else {
+        reject({message: "Could not remove dhcp entry"});
+      }
+    });
+  });
+  return promise;
+}
 
-      try{
-        execSync("wpa_cli terminate");
-      } catch(err){
+function terminateWpaSupplicant(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Terminating old wpa_supplicant instance");
+    exec("wpa_cli terminate", function (error, stdout, stderr){
+      if(!error){
+        console.log(stdout);
+      } else {
         console.log("wpa_supplicant probably terminated, continuing");
       }
+      resolve();
+    });
+  });
+  return promise;
+}
 
-      console.log("Starting wpa_supplicant");
-      exec("wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile, function(error, stdout, stderr){
+function startWpaSupplicant(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Starting wpa_supplicant");
+    exec("wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile, function (error, stdout, stderr){
+      if(!error){
         console.log(stdout);
+        resolve();
+      } else {
+        reject({message: "Could not start wpa_supplicant"});
+      }
+    });
+  });
+  return promise; 
+}
 
-        execSync("iwconfig wlan0 mode Managed");
-        execSync("ifconfig wlan0 up");       
-        execSync("dhclient wlan0");       
+function setWlanModeToManaged(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Setting wlan mode to managed");
+    exec("iwconfig wlan0 mode Managed", function (error, stdout, stderr){
+      if(!error){
+        console.log(stdout);
+        resolve();
+      } else {
+        reject({message: "Could not set wlan mode to managed"});
+      }
+    });
+  });
+  return promise; 
+}
 
+function startAdapter(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Bringing up adapter");
+    exec("ifconfig wlan0 up", function (error, stdout, stderr){
+      if(!error){
+        console.log(stdout);
+        resolve();
+      } else {
+        reject({message: "Could not set bring up adapter"});
+      }
+    });
+  });
+  return promise; 
+}
+
+function generateDhcpEntry(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Generating dhcp entry");
+    exec("dhclient wlan0", function (error, stdout, stderr){
+      if(!error){
+        console.log(stdout);
+        resolve();
+      } else {
+        reject({message: "Could not generate dhcp entry"});
+      }
+    });
+  });
+  return promise; 
+}
+
+function connect(success, connectionError){
+  console.log("Connecting to wifi using wpa_supplicant");
+   
+  shutdownAdapter()
+    .then(removeDhcpEntry)
+    .then(terminateWpaSupplicant)
+    .then(startWpaSupplicant)
+    .then(setWlanModeToManaged)
+    .then(startAdapter);
+    .then(generateDhcpEntry)
+    .then(function(){
         //TODO: Get network from status, ip from ifconfig
         var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
-
-        success(connectedNet);
-      });
-    });
+        success(connectedNet);      
+    })
+    .catch(connectionError);
   });
 }
 
