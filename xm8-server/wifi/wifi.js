@@ -205,7 +205,7 @@ function setWifiIp(){
   return execAsPromise(
     "ifconfig wlan0 10.0.0.200 netmask 255.255.255.0",
     "Setting wifi ip and netmask",    
-    "Could not set wifi ip and netmask"
+    "Could not set wifi ip and netmask");
 }
 
 // TODO: Figure out how to use reject/catch
