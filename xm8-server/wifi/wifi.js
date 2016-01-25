@@ -119,111 +119,48 @@ function shutdownAdapter(){
     "Bringing down wlan0",
     "Could not shutdown wifi adapter");
 }
-/*
-function shutdownAdapter(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Bringing down wlan0");
-    exec("ifconfig wlan0 down", function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-        resolve();
-      } else {
-        reject({message: "Could not shutdown wifi adapter"});
-      }
-    });
-  });
-  return promise;
-}*/
 
 function removeDhcpEntry(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Removing dhcp entry");
-    exec("dhclient -r wlan0", function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-        resolve();
-      } else {
-        reject({message: "Could not remove dhcp entry"});
-      }
-    });
-  });
-  return promise;
+  return execAsPromise(
+    "dhclient -r wlan0",
+    "Removing dhcp entry",
+    "Could not remove dhcp entry");
 }
 
 function terminateWpaSupplicant(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Terminating old wpa_supplicant instance");
-    exec("wpa_cli terminate", function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-      } else {
-        console.log("wpa_supplicant probably terminated, continuing");
-      }
-      resolve();
-    });
-  });
-  return promise;
+  return execAsPromise(
+    "wpa_cli terminate",
+    "Terminating old wpa_supplicant instance",    
+    "wpa_supplicant probably terminated, continuing");
 }
 
 function startWpaSupplicant(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Starting wpa_supplicant");
-    exec("wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile, function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-        resolve();
-      } else {
-        reject({message: "Could not start wpa_supplicant"});
-      }
-    });
-  });
-  return promise; 
+  return execAsPromise(
+    "wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile,
+    "Starting wpa_supplicant",
+    "Could not start wpa_supplicant");
 }
 
 // TODO: Merge these
 function setWlanModeToManaged(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Setting wlan mode to managed");
-    exec("iwconfig wlan0 mode Managed", function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-        resolve();
-      } else {
-        reject({message: "Could not set wlan mode to managed"});
-      }
-    });
-  });
-  return promise; 
+  return execAsPromise(
+    "iwconfig wlan0 mode Managed",
+    "Setting wlan mode to managed",
+    "Could not set wlan mode to managed");
 }
 
 function setWlanModeToAdHoc(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Setting wlan mode to ad-hoc");
-    exec("iwconfig wlan0 mode ad-hoc", function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-        resolve();
-      } else {
-        reject({message: "Could not set wlan mode to ad-hoc"});
-      }
-    });
-  });
-  return promise; 
+  return execAsPromise(
+    "iwconfig wlan0 mode ad-hoc",
+    "Setting wlan mode to ad-hoc",
+    "Could not set wlan mode to ad-hoc");
 }
 
 function startAdapter(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Bringing up adapter");
-    exec("ifconfig wlan0 up", function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-        resolve();
-      } else {
-        reject({message: "Could not bring up adapter"});
-      }
-    });
-  });
-  return promise; 
+  return execAsPromise(
+    "ifconfig wlan0 up", 
+    "Bringing up adapter",    
+    "Could not bring up adapter");
 }
 
 function startAdapterDelayed(){
@@ -244,63 +181,31 @@ function startAdapterDelayed(){
 }
 
 function generateDhcpEntry(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Generating dhcp entry");
-    exec("dhclient wlan0", function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-        resolve();
-      } else {
-        reject({message: "Could not generate dhcp entry"});
-      }
-    });
-  });
-  return promise; 
+  return execAsPromise(
+    "dhclient wlan0",
+    "Generating dhcp entry",
+    "Could not generate dhcp entry");
 }
 
 function setWifiKey(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Setting wifi key");
-    exec("iwconfig wlan0 key abcdef123456", function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-        resolve();
-      } else {
-        reject({message: "Could not set wifi key"});
-      }
-    });
-  });
-  return promise; 
+  return execAsPromise(
+    "iwconfig wlan0 key abcdef123456",
+    "Setting wifi key",    
+    "Could not set wifi key");
 }
 
 function setWifiEssid(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Setting wifi essid");
-    exec("iwconfig wlan0 essid XM8", function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-        resolve();
-      } else {
-        reject({message: "Could not set wifi essid"});
-      }
-    });
-  });
-  return promise; 
+  return execAsPromise(  
+    "iwconfig wlan0 essid XM8",
+    "Setting wifi essid",
+    "Could not set wifi essid");
 }
 
 function setWifiIp(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Setting wifi ip and netmask");
-    exec("ifconfig wlan0 10.0.0.200 netmask 255.255.255.0", function (error, stdout, stderr){
-      if(!error){
-        console.log(stdout);
-        resolve();
-      } else {
-        reject({message: "Could not set wifi ip and netmask"});
-      }
-    });
-  });
-  return promise; 
+  return execAsPromise(
+    "ifconfig wlan0 10.0.0.200 netmask 255.255.255.0",
+    "Setting wifi ip and netmask",    
+    "Could not set wifi ip and netmask"
 }
 
 // TODO: Figure out how to use reject/catch
