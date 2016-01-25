@@ -98,6 +98,28 @@ function connectToKnownNets(){
     });
 }
 
+function execAsPromise(command, logMsg, errorMsg){
+   var promise = new Promise(function(resolve, reject){
+    console.log(logMsg);
+    exec(command, function (error, stdout, stderr){
+      if(!error){
+        console.log(stdout);
+        resolve();
+      } else {
+        reject({message: errorMsg});
+      }
+    });
+  });
+  return promise; 
+}
+
+function shutdownAdapter(){
+  return execAsPromise(
+    "ifconfig wlan0 down",
+    "Bringing down wlan0",
+    "Could not shutdown wifi adapter");
+}
+/*
 function shutdownAdapter(){
   var promise = new Promise(function(resolve, reject){
     console.log("Bringing down wlan0");
@@ -111,7 +133,7 @@ function shutdownAdapter(){
     });
   });
   return promise;
-}
+}*/
 
 function removeDhcpEntry(){
   var promise = new Promise(function(resolve, reject){
@@ -158,6 +180,7 @@ function startWpaSupplicant(){
   return promise; 
 }
 
+// TODO: Merge these
 function setWlanModeToManaged(){
   var promise = new Promise(function(resolve, reject){
     console.log("Setting wlan mode to managed");
@@ -173,6 +196,21 @@ function setWlanModeToManaged(){
   return promise; 
 }
 
+function setWlanModeToAdHoc(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Setting wlan mode to ad-hoc");
+    exec("iwconfig wlan0 mode ad-hoc", function (error, stdout, stderr){
+      if(!error){
+        console.log(stdout);
+        resolve();
+      } else {
+        reject({message: "Could not set wlan mode to ad-hoc"});
+      }
+    });
+  });
+  return promise; 
+}
+
 function startAdapter(){
   var promise = new Promise(function(resolve, reject){
     console.log("Bringing up adapter");
@@ -181,9 +219,26 @@ function startAdapter(){
         console.log(stdout);
         resolve();
       } else {
-        reject({message: "Could not set bring up adapter"});
+        reject({message: "Could not bring up adapter"});
       }
     });
+  });
+  return promise; 
+}
+
+function startAdapterDelayed(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Bringing up adapter");
+    setTimeout(function(){
+      exec("ifconfig wlan0 up", function (error, stdout, stderr){
+        if(!error){
+          console.log(stdout);
+          resolve();
+        } else {
+          reject({message: "Could not bring up adapter"});
+        }
+      });
+    }, 500);
   });
   return promise; 
 }
@@ -203,6 +258,52 @@ function generateDhcpEntry(){
   return promise; 
 }
 
+function setWifiKey(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Setting wifi key");
+    exec("iwconfig wlan0 key abcdef123456", function (error, stdout, stderr){
+      if(!error){
+        console.log(stdout);
+        resolve();
+      } else {
+        reject({message: "Could not set wifi key"});
+      }
+    });
+  });
+  return promise; 
+}
+
+function setWifiEssid(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Setting wifi essid");
+    exec("iwconfig wlan0 essid XM8", function (error, stdout, stderr){
+      if(!error){
+        console.log(stdout);
+        resolve();
+      } else {
+        reject({message: "Could not set wifi essid"});
+      }
+    });
+  });
+  return promise; 
+}
+
+function setWifiIp(){
+  var promise = new Promise(function(resolve, reject){
+    console.log("Setting wifi ip and netmask");
+    exec("ifconfig wlan0 10.0.0.200 netmask 255.255.255.0", function (error, stdout, stderr){
+      if(!error){
+        console.log(stdout);
+        resolve();
+      } else {
+        reject({message: "Could not set wifi ip and netmask"});
+      }
+    });
+  });
+  return promise; 
+}
+
+// TODO: Figure out how to use reject/catch
 function connect(success, connectionError){
   console.log("Connecting to wifi using wpa_supplicant");
    
@@ -223,43 +324,21 @@ function connect(success, connectionError){
 
 function startAdHoc(){
   console.log("Starting Ad Hoc wifi network");
-  console.log("Bringing down wlan0");
 
-  exec("ifconfig wlan0 down", function (error, stdout, stderr){
-    //Do something if error
-    console.log(stdout);
-
-    console.log("Removing dhcp entry");
-    exec("dhclient -r wlan0", function (error, stdout, stderr){
-      console.log(stdout);
-
-      console.log("Trying to set up ad hoc network");
-      try{
-        execSync("wpa_cli terminate");
-      } catch(err){
-        console.log("wpa_supplicant probably terminated, continuing");
-      }      
-      execSync("iwconfig wlan0 mode ad-hoc");
-      execSync("iwconfig wlan0 key abcdef123456");
-      execSync("iwconfig wlan0 essid XM8");
-      execSync("ifconfig wlan0 10.0.0.200 netmask 255.255.255.0");
-      
-      console.log("Bringing up wlan0");
-      
-      setTimeout(function(){ 
-        exec("ifconfig wlan0 up", function(error, stdout, stderr){
-          console.log(stdout);
-          if(error){
-            console.log(error);
-            console.log(stderr);
-            display.write(0, 0, "Wifi startup failed, I'm useless!");  
-          } else {
-            display.write(0, 0, "I'm at 10.0.0.200 on XM8 with key 'abcdef123456'");  
-          }          
-        });
-      }, 500);
-    });
-  });
+  shutdownAdapter()
+    .then(removeDhcpEntry)
+    .then(terminateWpaSupplicant)
+    .then(setWlanModeToAdHoc)
+    .then(setWifiKey)
+    .then(setWifiEssid)
+    .then(setWifiIp)
+    .then(startAdapterDelayed)
+    .then(function(){
+        //TODO: Get network from status, ip from ifconfig
+        var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
+        success(connectedNet);      
+    })    
+    .catch(connectionError);
 
 }
 
