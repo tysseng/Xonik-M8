@@ -51,9 +51,20 @@ function isInKnownNets(net){
 }
 
 function selectNet(ssid, success, failure){
+  if(detectedNets.length == 0){
+    console.log("no nets detected, doing a re-scan before trying to connect");
+    listNetworks(function(){
+      selectNetAndConnect(ssid, success, failure);
+    });
+  } else {
+    selectNetAndConnect(ssid, success, failure);
+  }
+}
+
+function selectNetAndConnect(ssid, success, failure){
   var selectedNet = getNetBySsid(ssid, detectedNets);
   if(selectedNet){
-    selectNetAndConnect(selectedNet, success, failure);
+    connectToNet(selectedNet, success, failure);
   } else {
     failure({message: "Requested network is not available anymore, maybe it was turned off"});
   }
@@ -63,7 +74,7 @@ function getNetBySsid(ssid, nets){
   return _.find(nets, function(o) { return o.ESSID === ssid});
 }
 
-function selectNetAndConnect(net, success, failure){
+function connectToNet(net, success, failure){
   generateWpaSupplicantConf([net], 
     function(){
       connect(
