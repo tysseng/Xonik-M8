@@ -82,14 +82,18 @@ function connectToNet(net, success, failure){
           display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );   
           addToKnownIfNew(connectedNet);
           success(connectedNet);
-        }
+        },
+        handleConnectionError
       );
     }, 
-    function(err){
-      display.write(0, 0, "Could not connect to " + net.ssid);
-      startAdHoc(); //todo - add failure here....
-    }
+    handleConnectionError
   );
+}
+
+function handleConnectionError(err){
+  console.log(err);
+  display.write(0, 0, "Could not connect to network, trying ad-hoc");
+  startAdHoc(); //todo - add failure here....
 }
 
 function addToKnownIfNew(net){
@@ -109,14 +113,15 @@ function connectToKnownNets(){
     });
 }
 
-function execAsPromise(command, logMsg, errorMsg){
+function execAsPromise(command, logMsg, errorMsg, ignoreError){
    var promise = new Promise(function(resolve, reject){
     console.log(logMsg);
     exec(command, function (error, stdout, stderr){
-      if(!error){
+      if(!error || ignoreError){
         console.log(stdout);
         resolve();
       } else {
+        console.log(stderr);
         reject({message: errorMsg});
       }
     });
@@ -142,10 +147,14 @@ function terminateWpaSupplicant(){
   return execAsPromise(
     "wpa_cli terminate",
     "Terminating old wpa_supplicant instance",    
-    "wpa_supplicant probably terminated, continuing");
+    "wpa_supplicant probably terminated, continuing",
+    true); //ignore errors and continue
+
+   //TODO: Check that no wpa process is running.
 }
 
 function startWpaSupplicant(){
+  throw new Exception("crash");
   return execAsPromise(
     "wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile,
     "Starting wpa_supplicant",
@@ -176,13 +185,15 @@ function startAdapter(){
 
 function startAdapterDelayed(){
   var promise = new Promise(function(resolve, reject){
-    console.log("Bringing up adapter");
+    console.log("Delaying before bringing up adapter");
     setTimeout(function(){
+      console.log("Bringing up adapter");
       exec("ifconfig wlan0 up", function (error, stdout, stderr){
         if(!error){
           console.log(stdout);
           resolve();
         } else {
+          console.log(stderr);
           reject({message: "Could not bring up adapter"});
         }
       });
