@@ -12,38 +12,43 @@ var detectedNets = [];
 
 var knownNets = [];
 
-function generateWpaSupplicantConf(nets, success){
-  var fileContent = "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n" +
-    "fast_reauth=1\n" +
-    "#Priority: Higher number seems to take presedence\n";
+function generateWpaSupplicantConf(nets){
+  var promise = new Promise(function(resolve, reject){
+    var fileContent = 
+      "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n" +
+      "fast_reauth=1\n" +
+      "#Priority: Higher number seems to take presedence\n";
 
-  for (var i = 0; i < nets.length; i++) {
+    for (var i = 0; i < nets.length; i++) {
 
-    var net = nets[i];
-    fileContent += 'network={\n';
+      var net = nets[i];
+      fileContent += 'network={\n';
 
-    // keys to include for this particular network
-    _.forEach(net.keysToInclude, function(key){
-      var value = net[key];
-      fileContent +='  ' + key + '=' + value + '\n';
-    });
- 
-    // default content to include for all nets 
-    var priority = nets.length - i;
-    fileContent +=
-      '  scan_ssid=1\n' + // makes it possible to connect even if network ssid is not broadcast
-      '  priority=' + priority + '\n' +
-      '}\n';
-  }
-
-  fs.writeFile(wpaSupplicantFile, fileContent, function(err) {
-    if(err) {
-      console.log(err);
-    } else {
-      console.log("Wpa supplicant config saved.");
-      success();
+      // keys to include for this particular network
+      _.forEach(net.keysToInclude, function(key){
+        var value = net[key];
+        fileContent +='  ' + key + '=' + value + '\n';
+      });
+   
+      // default content to include for all nets 
+      var priority = nets.length - i;
+      fileContent +=
+        '  scan_ssid=1\n' + // makes it possible to connect even if network ssid is not broadcast
+        '  priority=' + priority + '\n' +
+        '}\n';
     }
-  });   
+
+    fs.writeFile(wpaSupplicantFile, fileContent, function(err) {
+      if(err) {
+        console.log(err);
+        reject({message: "Could not generate wpa_supplicant.conf"});
+      } else {
+        console.log("Wpa supplicant config saved.");
+        resolve();
+      }
+    });      
+  });
+  return promise;    
 }
 
 function isInKnownNets(net){
@@ -75,25 +80,17 @@ function getNetBySsid(ssid, nets){
 }
 
 function connectToNet(net, success, failure){
-  generateWpaSupplicantConf([net], 
-    function(){
-      connect(
-        function(connectedNet){
-          display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );   
-          addToKnownIfNew(connectedNet);
-          success(connectedNet);
-        },
-        handleConnectionError
-      );
-    }, 
-    handleConnectionError
-  );
+  generateWpaSupplicantConf([net])
+    .then(connect) // is not currently a promise. FIX!
+    .catch(function(err){
+      console.log(err);
+      handleConnectionError(success, failure);
+    });
 }
 
-function handleConnectionError(err){
-  console.log(err);
+function handleConnectionError(success, failure){
   display.write(0, 0, "Could not connect to network, trying ad-hoc");
-  startAdHoc(); //todo - add failure here....
+  startAdHoc(success, failure); 
 }
 
 function addToKnownIfNew(net){
@@ -104,13 +101,14 @@ function addToKnownIfNew(net){
 }
 
 function connectToKnownNets(){
+  /*
   generateWpaSupplicantConf(knownNets, connect, 
     function(connectedNet){
       display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );  
     },
     function(err){
       startAdHoc();
-    });
+    });*/
 }
 
 function execAsPromise(command, logMsg, errorMsg, ignoreError){
@@ -230,6 +228,20 @@ function setWifiIp(){
     "Could not set wifi ip and netmask");
 }
 
+function getConnectedNet(){  
+  var promise = new Promise(function(resolve, reject){
+
+    //TODO: Get network from status, ip from ifconfig
+    var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
+    display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );   
+    addToKnownIfNew(connectedNet);
+    resolve(connectedNet);
+
+    // TODO: Add failure if not connected to the requested network
+  });
+  return promise;   
+}
+
 // TODO: Figure out how to use reject/catch
 function connect(success, connectionError){
   console.log("Connecting to wifi using wpa_supplicant");
@@ -241,15 +253,14 @@ function connect(success, connectionError){
     .then(setWlanModeToManaged)
     .then(startAdapter)
     .then(generateDhcpEntry)
-    .then(function(){
-        //TODO: Get network from status, ip from ifconfig
-        var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
-        success(connectedNet);      
+    .then(getConnectedNet)
+    .then(function(connectedNet){
+      success(connectedNet);
     })
     .catch(connectionError);
 }
 
-function startAdHoc(){
+function startAdHoc(success, failure){
   console.log("Starting Ad Hoc wifi network");
 
   shutdownAdapter()
@@ -261,11 +272,11 @@ function startAdHoc(){
     .then(setWifiIp)
     .then(startAdapterDelayed)
     .then(function(){
-        //TODO: Get network from status, ip from ifconfig
-        var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
-        success(connectedNet);      
+      //TODO: Get network from status, ip from ifconfig
+      var connectedNet = {ssid: "XM8", ip: "10.0.0.123"};
+      success(connectedNet);      
     })    
-    .catch(connectionError);
+    .catch(failure);
 
 }
 
