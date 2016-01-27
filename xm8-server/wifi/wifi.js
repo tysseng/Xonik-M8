@@ -93,7 +93,13 @@ function connectToNet(net, success, failure){
 
 function handleConnectionError(success, failure){
   display.write(0, 0, "Could not connect to network, trying ad-hoc");
-  startAdHoc(success, failure); 
+  startAdHoc()
+    .then(success) 
+    .catch(function(err){
+      console.log("Could not connect to ad-hoc");
+      console.log(err);
+      failure();
+    });
 }
 
 function addToKnownIfNew(net){
@@ -155,7 +161,6 @@ function terminateWpaSupplicant(){
 }
 
 function startWpaSupplicant(){
-  console.log("Gonna throw it");
   throw new Exception("crash");
   return execAsPromise(
     "wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile,
@@ -232,7 +237,7 @@ function setWifiIp(){
     "Could not set wifi ip and netmask");
 }
 
-function getConnectedNet(){  
+function checkConnection(){
   var promise = new Promise(function(resolve, reject){
 
     //TODO: Get network from status, ip from ifconfig
@@ -246,30 +251,32 @@ function getConnectedNet(){
   return promise;   
 }
 
-function connect(){
-  var promise = new Promise(function(resolve, reject){ 
-    console.log("Connecting to wifi using wpa_supplicant"); 
+function checkAdHocConnection(){
+  var promise = new Promise(function(resolve, reject){
 
-    shutdownAdapter()
+    //TODO: Get network from status, ip from ifconfig
+    var connectedNet = {ssid: "XM8", ip: "10.0.0.123"};
+    display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );
+    resolve(connectedNet);
+
+    // TODO: Add failure if not connected to the requested network
+  });
+  return promise;
+}
+
+function connect(){
+    return shutdownAdapter()
       .then(removeDhcpEntry)
       .then(terminateWpaSupplicant)
       .then(startWpaSupplicant)
       .then(setWlanModeToManaged)
       .then(startAdapter)
       .then(generateDhcpEntry)
-      .then(getConnectedNet)
-      .then(function(connectedNet){
-        resolve(connectedNet);
-      })
-      .catch(recject);
-  });
+      .then(checkConnection);
 }
 
 function startAdHoc(){
-  var promise = new Promise(function(resolve, reject){ 
-    console.log("Starting Ad Hoc wifi network");
-
-    shutdownAdapter()
+    return shutdownAdapter()
       .then(removeDhcpEntry)
       .then(terminateWpaSupplicant)
       .then(setWlanModeToAdHoc)
@@ -277,13 +284,7 @@ function startAdHoc(){
       .then(setWifiEssid)
       .then(setWifiIp)
       .then(startAdapterDelayed)
-      .then(function(){
-        //TODO: Get network from status, ip from ifconfig
-        var connectedNet = {ssid: "XM8", ip: "10.0.0.123"};
-        resolve(connectedNet);      
-      })    
-      .catch(reject);
-  });
+      .then(checkAdHocConnection);
 }
 
 function scan(success, error){
