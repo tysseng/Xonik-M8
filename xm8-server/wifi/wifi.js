@@ -155,7 +155,7 @@ function terminateWpaSupplicant(){
 }
 
 function startWpaSupplicant(){
-  console.log("Gonna throw it");''
+  console.log("Gonna throw it");
   throw new Exception("crash");
   return execAsPromise(
     "wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile,
@@ -262,7 +262,7 @@ function connect(){
         resolve(connectedNet);
       })
       .catch(recject);
-  }
+  });
 }
 
 function startAdHoc(){
@@ -283,7 +283,7 @@ function startAdHoc(){
         resolve(connectedNet);      
       })    
       .catch(reject);
-  }
+  });
 }
 
 function scan(success, error){
