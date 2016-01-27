@@ -81,7 +81,10 @@ function getNetBySsid(ssid, nets){
 
 function connectToNet(net, success, failure){
   generateWpaSupplicantConf([net])
-    .then(connect) // is not currently a promise. FIX!
+    .then(connect)
+    .then(function(connectedNet){
+      success(connectedNet);
+    })
     .catch(function(err){
       console.log(err);
       handleConnectionError(success, failure);
@@ -152,6 +155,7 @@ function terminateWpaSupplicant(){
 }
 
 function startWpaSupplicant(){
+  console.log("Gonna throw it");''
   throw new Exception("crash");
   return execAsPromise(
     "wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile,
@@ -242,42 +246,44 @@ function getConnectedNet(){
   return promise;   
 }
 
-// TODO: Figure out how to use reject/catch
-function connect(success, connectionError){
-  console.log("Connecting to wifi using wpa_supplicant");
-   
-  shutdownAdapter()
-    .then(removeDhcpEntry)
-    .then(terminateWpaSupplicant)
-    .then(startWpaSupplicant)
-    .then(setWlanModeToManaged)
-    .then(startAdapter)
-    .then(generateDhcpEntry)
-    .then(getConnectedNet)
-    .then(function(connectedNet){
-      success(connectedNet);
-    })
-    .catch(connectionError);
+function connect(){
+  var promise = new Promise(function(resolve, reject){ 
+    console.log("Connecting to wifi using wpa_supplicant"); 
+
+    shutdownAdapter()
+      .then(removeDhcpEntry)
+      .then(terminateWpaSupplicant)
+      .then(startWpaSupplicant)
+      .then(setWlanModeToManaged)
+      .then(startAdapter)
+      .then(generateDhcpEntry)
+      .then(getConnectedNet)
+      .then(function(connectedNet){
+        resolve(connectedNet);
+      })
+      .catch(recject);
+  }
 }
 
-function startAdHoc(success, failure){
-  console.log("Starting Ad Hoc wifi network");
+function startAdHoc(){
+  var promise = new Promise(function(resolve, reject){ 
+    console.log("Starting Ad Hoc wifi network");
 
-  shutdownAdapter()
-    .then(removeDhcpEntry)
-    .then(terminateWpaSupplicant)
-    .then(setWlanModeToAdHoc)
-    .then(setWifiKey)
-    .then(setWifiEssid)
-    .then(setWifiIp)
-    .then(startAdapterDelayed)
-    .then(function(){
-      //TODO: Get network from status, ip from ifconfig
-      var connectedNet = {ssid: "XM8", ip: "10.0.0.123"};
-      success(connectedNet);      
-    })    
-    .catch(failure);
-
+    shutdownAdapter()
+      .then(removeDhcpEntry)
+      .then(terminateWpaSupplicant)
+      .then(setWlanModeToAdHoc)
+      .then(setWifiKey)
+      .then(setWifiEssid)
+      .then(setWifiIp)
+      .then(startAdapterDelayed)
+      .then(function(){
+        //TODO: Get network from status, ip from ifconfig
+        var connectedNet = {ssid: "XM8", ip: "10.0.0.123"};
+        resolve(connectedNet);      
+      })    
+      .catch(reject);
+  }
 }
 
 function scan(success, error){
