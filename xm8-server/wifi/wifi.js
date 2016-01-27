@@ -240,20 +240,39 @@ function grepForSsid(){
     "Could not check cli status");  
 }
 
+function waitForSsid(){
+  var promise = new Promise(function(resolve, reject){  
+    var maxTries = 16;
+    var delay = 250;
+    var tryCount = 0;
+
+    function checkSsid(){
+
+      // todo: Change to use promise
+      var result = execSync("wpa_cli status|grep 'ssid=Poly'");
+      if(result){
+        resolve("wpa_cli status|grep 'ssid=Poly'");
+      } else {
+        if(tryCount < maxTries){
+          reject({message: "Could not connect to network"});
+        } else {
+          console.log("ssid not found, retrying");
+          tryCount++;
+          setTimeout(checkSsid, delay);
+        }
+      }
+    }
+    checkSsid();
+  }
+}
+
 function checkConnection(ssidLine){
   var promise = new Promise(function(resolve, reject){
     
-    console.log(ssidLine);
-    if(ssidLine){
-      //TODO: Get network from status, ip from ifconfig
-      var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
-      display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );   
-      addToKnownIfNew(connectedNet);
-      resolve(connectedNet);      
-    } else {
-      reject({message: "could not connect to Poly"});
-    }
-
+    var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
+    display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );   
+    addToKnownIfNew(connectedNet);
+    resolve(connectedNet);      
 
     // TODO: Add failure if not connected to the requested network
   });
@@ -277,10 +296,10 @@ function connect(){
       .then(removeDhcpEntry)
       .then(terminateWpaSupplicant)
       .then(startWpaSupplicant)
+      .then(waitForSsid);
       .then(setWlanModeToManaged)
       .then(startAdapter)
       .then(generateDhcpEntry)
-      .then(grepForSsid) //todo: retry if still scanning.
       .then(checkConnection);
 }
 
