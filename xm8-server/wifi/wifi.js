@@ -123,10 +123,10 @@ function execAsPromise(command, logMsg, errorMsg, ignoreError){
     exec(command, function (error, stdout, stderr){
       if(!error || ignoreError){
         console.log(stdout);
-        resolve();
+        resolve(stdout);
       } else {
         console.log(stderr);
-        reject({message: errorMsg});
+        reject({message: errorMsg, stdout: stdout, strerr: strerr, error: error});
       }
     });
   });
@@ -233,14 +233,27 @@ function setWifiIp(){
     "Could not set wifi ip and netmask");
 }
 
-function checkConnection(){
-  var promise = new Promise(function(resolve, reject){
+function grepForSsid(){
+  return execAsPromise(
+    "wpa_cli status|grep 'ssid=Poly'",
+    "Looking for correct ssid",    
+    "Could not check cli status");  
+}
 
-    //TODO: Get network from status, ip from ifconfig
-    var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
-    display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );   
-    addToKnownIfNew(connectedNet);
-    resolve(connectedNet);
+function checkConnection(ssidLine){
+  var promise = new Promise(function(resolve, reject){
+    
+    console.log(ssidLine);
+    if(ssidLine){
+      //TODO: Get network from status, ip from ifconfig
+      var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
+      display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );   
+      addToKnownIfNew(connectedNet);
+      resolve(connectedNet);      
+    } else {
+      reject({message: "could not connect to Poly"});
+    }
+
 
     // TODO: Add failure if not connected to the requested network
   });
@@ -267,6 +280,7 @@ function connect(){
       .then(setWlanModeToManaged)
       .then(startAdapter)
       .then(generateDhcpEntry)
+      .then(grepForSsid) //todo: retry if still scanning.
       .then(checkConnection);
 }
 
