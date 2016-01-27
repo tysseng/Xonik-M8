@@ -86,7 +86,6 @@ function connectToNet(net, success, failure){
       success(connectedNet);
     })
     .catch(function(err){
-      console.log(err);
       handleConnectionError(success, failure);
     });
 }
@@ -96,9 +95,7 @@ function handleConnectionError(success, failure){
   startAdHoc()
     .then(success) 
     .catch(function(err){
-      console.log("Could not connect to ad-hoc");
-      console.log(err);
-      failure();
+      failure(err);
     });
 }
 
@@ -161,7 +158,6 @@ function terminateWpaSupplicant(){
 }
 
 function startWpaSupplicant(){
-  throw new Exception("crash");
   return execAsPromise(
     "wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile,
     "Starting wpa_supplicant",
@@ -253,7 +249,6 @@ function checkConnection(){
 
 function checkAdHocConnection(){
   var promise = new Promise(function(resolve, reject){
-
     //TODO: Get network from status, ip from ifconfig
     var connectedNet = {ssid: "XM8", ip: "10.0.0.123"};
     display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );
