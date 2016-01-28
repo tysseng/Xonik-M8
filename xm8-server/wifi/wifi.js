@@ -253,8 +253,8 @@ function waitForSsid(ssid, maxRetries, retry) {
 
   // httpGet returns a promise
   return checkSsid(ssid).catch(function (err) {
-    // fail after maxRetries
     if (retry >= maxRetries){
+      console.log("checking failed");
       throw err;
     }
 
@@ -296,7 +296,7 @@ function connect(){
       .then(terminateWpaSupplicant)
       .then(startWpaSupplicant)
       .then(function(){
-        waitForSsid("Poly", 16);
+        return waitForSsid("Poly", 16);
       })
       .then(setWlanModeToManaged)
       .then(startAdapter)
