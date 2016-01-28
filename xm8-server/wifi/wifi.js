@@ -234,35 +234,34 @@ function setWifiIp(){
     "Could not set wifi ip and netmask");
 }
 
-function waitForSsid(){
-  var promise = new Promise(function(resolve, reject){  
-    var maxTries = 16;
-    var delay = 250;
-    var tryCount = 0;
+function checkSsid(ssid){
+  return execAsPromise(
+    "wpa_cli status|grep 'ssid="+ ssid +"'",
+    "Checking status to find ssid=" + ssid,
+    "Ssid " + ssid + " not found in status output");
+}
 
-    function checkSsid(){
+function delay(ms){
+  return new Promise(function(resolve, reject){
+    setTimeout(resolve, ms);
+  });
+}
 
-      try{
-        var result = execSync("wpa_cli status|grep 'ssid=Poly'");
-      
-        if(result && result.length > 0){
-          console.log("result was OK");
-          resolve();
-          return;
-        }
-      } catch(exception){
-      }
+function waitForSsid(ssid, maxRetries, retry) {
+  // first try doesn't count as retry, initialize with zero
+  retry || (retry = 0);
 
-      console.log("result not ok");
-      if(tryCount == maxTries - 1){
-        reject({message: "Could not connect to network"});
-      } else {
-        console.log("ssid not found, retrying");
-        tryCount++;
-        setTimeout(checkSsid, delay);
-      }
+  // httpGet returns a promise
+  return checkSsid(ssid).catch(function (err) {
+    // fail after maxRetries
+    if (retry >= maxRetries){
+      throw err;
     }
-    checkSsid();
+
+    // wait some time and try again
+    return delay(250).then(function () {
+      return waitForSsid(ssid, maxRetries, ++retry);
+    });
   });
 }
 
@@ -296,7 +295,9 @@ function connect(){
       .then(removeDhcpEntry)
       .then(terminateWpaSupplicant)
       .then(startWpaSupplicant)
-      .then(waitForSsid)
+      .then(function(){
+        waitForSsid("Poly", 16);
+      })
       .then(setWlanModeToManaged)
       .then(startAdapter)
       .then(generateDhcpEntry)
