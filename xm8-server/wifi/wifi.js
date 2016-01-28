@@ -82,11 +82,10 @@ function getNetBySsid(ssid, nets){
 
 function connectToNet(net, success, failure){
   generateWpaSupplicantConf([net])
-    .then(connect)
-    .then(function(connectedNet){
-      success(connectedNet);
-    })
+    .then(connect.bind(null, net.ssid))
+    .then(success.bind(null, connectedNet))
     .catch(function(err){
+      // TODO: Log error?
       handleConnectionError(success, failure);
     });
 }
@@ -251,7 +250,6 @@ function waitForSsid(ssid, maxRetries, retry) {
   // first try doesn't count as retry, initialize with zero
   retry || (retry = 0);
 
-  // httpGet returns a promise
   return checkSsid(ssid).catch(function (err) {
     if (retry >= maxRetries){
       console.log("checking failed");
@@ -263,10 +261,10 @@ function waitForSsid(ssid, maxRetries, retry) {
   });
 }
 
-function checkConnection(ssidLine){
+function checkConnection(ssid){
   var promise = new Promise(function(resolve, reject){
     
-    var connectedNet = {ssid: "someid", ip: "10.0.0.123"};
+    var connectedNet = {ssid: ssid, ip: "10.0.0.123"};
     display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );   
     addToKnownIfNew(connectedNet);
     resolve(connectedNet);      
@@ -288,16 +286,16 @@ function checkAdHocConnection(){
   return promise;
 }
 
-function connect(){
+function connect(ssid){
     return shutdownAdapter()
       .then(removeDhcpEntry)
       .then(terminateWpaSupplicant)
       .then(startWpaSupplicant)
-      .then(waitForSsid.bind(null, 'Poly', 16))
+      .then(waitForSsid.bind(null, ssid, 16))
       .then(setWlanModeToManaged)
       .then(startAdapter)
       .then(generateDhcpEntry)
-      .then(checkConnection);
+      .then(checkConnection.bind(null, ssid));
 }
 
 function startAdHoc(){
