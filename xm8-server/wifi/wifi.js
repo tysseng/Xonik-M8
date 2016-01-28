@@ -69,6 +69,7 @@ function selectNet(ssid, success, failure){
 function selectNetAndConnect(ssid, success, failure){
   var selectedNet = getNetBySsid(ssid, detectedNets);
   if(selectedNet){
+    selectedNet.ssid='"Mongo"';
     connectToNet(selectedNet, success, failure);
   } else {
     failure({message: "Requested network is not available anymore, maybe it was turned off"});
@@ -126,7 +127,7 @@ function execAsPromise(command, logMsg, errorMsg, ignoreError){
         resolve(stdout);
       } else {
         console.log(stderr);
-        reject({message: errorMsg, stdout: stdout, strerr: strerr, error: error});
+        reject({message: errorMsg, stdout: stdout, stderr: stderr, error: error});
       }
     });
   });
@@ -233,13 +234,6 @@ function setWifiIp(){
     "Could not set wifi ip and netmask");
 }
 
-function grepForSsid(){
-  return execAsPromise(
-    "wpa_cli status|grep 'ssid=Poly'",
-    "Looking for correct ssid",    
-    "Could not check cli status");  
-}
-
 function waitForSsid(){
   var promise = new Promise(function(resolve, reject){  
     var maxTries = 16;
@@ -248,22 +242,28 @@ function waitForSsid(){
 
     function checkSsid(){
 
-      // todo: Change to use promise
-      var result = execSync("wpa_cli status|grep 'ssid=Poly'");
-      if(result){
-        resolve("wpa_cli status|grep 'ssid=Poly'");
-      } else {
-        if(tryCount < maxTries){
-          reject({message: "Could not connect to network"});
-        } else {
-          console.log("ssid not found, retrying");
-          tryCount++;
-          setTimeout(checkSsid, delay);
+      try{
+        var result = execSync("wpa_cli status|grep 'ssid=Poly'");
+      
+        if(result && result.length > 0){
+          console.log("result was OK");
+          resolve();
+          return;
         }
+      } catch(exception){
+      }
+
+      console.log("result not ok");
+      if(tryCount == maxTries - 1){
+        reject({message: "Could not connect to network"});
+      } else {
+        console.log("ssid not found, retrying");
+        tryCount++;
+        setTimeout(checkSsid, delay);
       }
     }
     checkSsid();
-  }
+  });
 }
 
 function checkConnection(ssidLine){
@@ -296,7 +296,7 @@ function connect(){
       .then(removeDhcpEntry)
       .then(terminateWpaSupplicant)
       .then(startWpaSupplicant)
-      .then(waitForSsid);
+      .then(waitForSsid)
       .then(setWlanModeToManaged)
       .then(startAdapter)
       .then(generateDhcpEntry)
