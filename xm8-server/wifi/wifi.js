@@ -1,3 +1,5 @@
+// TODO: Fjerne de doble begrepene ESSID og ssid, det blir bare kaos. FÃr lage mindre generell wpa_supplicant.conf-saving isteden.
+
 var execSync = require('child_process').execSync;
 var exec = require('child_process').exec;
 var jsonfile = require('jsonfile');
@@ -69,7 +71,6 @@ function selectNet(ssid, success, failure){
 function selectNetAndConnect(ssid, success, failure){
   var selectedNet = getNetBySsid(ssid, detectedNets);
   if(selectedNet){
-    selectedNet.ssid='"Mongo"';
     connectToNet(selectedNet, success, failure);
   } else {
     failure({message: "Requested network is not available anymore, maybe it was turned off"});
@@ -82,8 +83,8 @@ function getNetBySsid(ssid, nets){
 
 function connectToNet(net, success, failure){
   generateWpaSupplicantConf([net])
-    .then(connect.bind(null, net.ssid))
-    .then(success.bind(null, connectedNet))
+    .then(connect.bind(null, net.ESSID))
+    .then(success)
     .catch(function(err){
       // TODO: Log error?
       handleConnectionError(success, failure);
@@ -122,9 +123,11 @@ function execAsPromise(command, logMsg, errorMsg, ignoreError){
     console.log(logMsg);
     exec(command, function (error, stdout, stderr){
       if(!error || ignoreError){
+        console.log("Command succeded");
         console.log(stdout);
         resolve(stdout);
       } else {
+        console.log("Command failed");
         console.log(stderr);
         reject({message: errorMsg, stdout: stdout, stderr: stderr, error: error});
       }
@@ -235,7 +238,7 @@ function setWifiIp(){
 
 function checkSsid(ssid){
   return execAsPromise(
-    "wpa_cli status|grep 'ssid="+ ssid +"'",
+    "wpa_cli status|grep 'ssid=" + ssid + "'",
     "Checking status to find ssid=" + ssid,
     "Ssid " + ssid + " not found in status output");
 }
@@ -257,7 +260,7 @@ function waitForSsid(ssid, maxRetries, retry) {
     }
 
     // wait some time and try again
-    return delay(250).then(waitForSsid.bind(null, 'Poly', maxRetries, ++retry));
+    return delay(250).then(waitForSsid.bind(null, ssid, maxRetries, ++retry));
   });
 }
 
@@ -291,9 +294,14 @@ function connect(ssid){
       .then(removeDhcpEntry)
       .then(terminateWpaSupplicant)
       .then(startWpaSupplicant)
-      .then(waitForSsid.bind(null, ssid, 16))
       .then(setWlanModeToManaged)
       .then(startAdapter)
+
+      // The ssid check could have been done right after startWpaSupplicant, but 
+      // it seems that connection to the wifi continues even after that command
+      // returns. To save time, we execute the next commands before checing if we 
+      // actually have a valid conncetion.
+      .then(waitForSsid.bind(null, ssid, 16))
       .then(generateDhcpEntry)
       .then(checkConnection.bind(null, ssid));
 }
