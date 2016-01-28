@@ -108,6 +108,8 @@ app.put('/wifi/:ssid/select', function(req, res){
       res.status(200).send(selectedNet);
     },
     function(err){
+      console.log("Error");
+      console.log(err);
       res.status(500).send(err);
     });
 });

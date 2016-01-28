@@ -259,9 +259,7 @@ function waitForSsid(ssid, maxRetries, retry) {
     }
 
     // wait some time and try again
-    return delay(250).then(function () {
-      return waitForSsid(ssid, maxRetries, ++retry);
-    });
+    return delay(250).then(waitForSsid.bind(null, 'Poly', maxRetries, ++retry));
   });
 }
 
@@ -295,9 +293,7 @@ function connect(){
       .then(removeDhcpEntry)
       .then(terminateWpaSupplicant)
       .then(startWpaSupplicant)
-      .then(function(){
-        return waitForSsid("Poly", 16);
-      })
+      .then(waitForSsid.bind(null, 'Poly', 16))
       .then(setWlanModeToManaged)
       .then(startAdapter)
       .then(generateDhcpEntry)
