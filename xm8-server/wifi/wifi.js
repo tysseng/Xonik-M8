@@ -253,11 +253,11 @@ function waitForSsid(ssid, maxRetries, retry) {
   });
 }
 
-function checkConnection(ssid){
+function checkConnection(ssid, ip){
   var promise = new Promise(function(resolve, reject){
     
-    var connectedNet = {ssid: ssid, ip: "10.0.0.123"};
-    display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );   
+    var connectedNet = {ssid: ssid, ip: ip};
+    display.write(0, 0, "I'm at " + ip + " on " + ssid);   
     addToKnownIfNew(connectedNet);
     resolve(connectedNet);      
 
@@ -279,6 +279,7 @@ function checkAdHocConnection(){
 }
 
 function connect(ssid){
+
     return shutdownAdapter()
       .then(removeDhcpEntry)
       .then(terminateWpaSupplicant)
@@ -316,17 +317,18 @@ function findIP(stdout){
       var blockStart = stdout.search('wlan0');
       if(blockStart > -1){
         var block = stdout.substr(blockStart);
-        var blockEnd = -1;
 
-        //TODO: ... find end
-
-        //find ip
-        var searchResult = block.match(/^.*inet addr:(.*)$/gm);
-        console.log(searchResult);
+        // find first ip after block start
+        var searchResult = /^\s+inet addr:([0-9\.]+).*$/gm.exec(block);
+        if(searchResult && searchResult.length > 1){
+          resolve(searchResult[1]);
+          return;
+        }
       }
     }
     reject({message: "No IP address found"})   
   });
+  return promise;
 }
 
 function scan(success, error){
