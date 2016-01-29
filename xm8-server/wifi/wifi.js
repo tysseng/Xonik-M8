@@ -14,6 +14,7 @@ var detectedNets = [];
 
 var knownNets = [];
 
+
 function generateWpaSupplicantConf(nets){
   var promise = new Promise(function(resolve, reject){
     var fileContent = 
@@ -189,25 +190,6 @@ function startAdapter(){
     "Could not bring up adapter");
 }
 
-function startAdapterDelayed(){
-  var promise = new Promise(function(resolve, reject){
-    console.log("Delaying before bringing up adapter");
-    setTimeout(function(){
-      console.log("Bringing up adapter");
-      exec("ifconfig wlan0 up", function (error, stdout, stderr){
-        if(!error){
-          console.log(stdout);
-          resolve();
-        } else {
-          console.log(stderr);
-          reject({message: "Could not bring up adapter"});
-        }
-      });
-    }, 500);
-  });
-  return promise; 
-}
-
 function generateDhcpEntry(){
   return execAsPromise(
     "dhclient wlan0",
@@ -241,6 +223,13 @@ function checkSsid(ssid){
     "wpa_cli status|grep 'ssid=" + ssid + "'",
     "Checking status to find ssid=" + ssid,
     "Ssid " + ssid + " not found in status output");
+}
+
+function runIfconfig(ssid){
+  return execAsPromise(
+    "ifconfig",
+    "Capturing ifconfig output",
+    "Could not capture ifconfig output");
 }
 
 function delay(ms){
@@ -303,6 +292,8 @@ function connect(ssid){
       // actually have a valid conncetion.
       .then(waitForSsid.bind(null, ssid, 16))
       .then(generateDhcpEntry)
+      .then(runIfconfig)
+      .then(findIP)
       .then(checkConnection.bind(null, ssid));
 }
 
@@ -314,8 +305,28 @@ function startAdHoc(){
       .then(setWifiKey)
       .then(setWifiEssid)
       .then(setWifiIp)
-      .then(startAdapterDelayed)
+      .then(delay.bind(null, 500))
+      .then(startAdapter)
       .then(checkAdHocConnection);
+}
+
+function findIP(stdout){
+  var promise = new Promise(function(resolve, reject){
+    if(stdout){
+      var blockStart = stdout.search('wlan0');
+      if(blockStart > -1){
+        var block = stdout.substr(blockStart);
+        var blockEnd = -1;
+
+        //TODO: ... find end
+
+        //find ip
+        var searchResult = block.match(/^.*inet addr:(.*)$/gm);
+        console.log(searchResult);
+      }
+    }
+    reject({message: "No IP address found"})   
+  });
 }
 
 function scan(success, error){
