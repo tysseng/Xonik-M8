@@ -9,6 +9,7 @@ var config = {
 		minBufferSize: 16 
 	},
 	wifi: {
+		adapter: "wlan0",
 		adHoc: {
 			ssid: "XM8",
 			key: "abcdef123456",
