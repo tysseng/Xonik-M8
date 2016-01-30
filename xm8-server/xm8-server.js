@@ -102,7 +102,27 @@ app.get('/wifi', function(req, res){
     });
 });
 
-app.put('/wifi/:ssid/select', function(req, res){
+app.put('/wifi/connect', function(req, res){
+  wifi.connectToKnownNets(
+    function(selectedNet){
+      res.status(200).send(selectedNet);
+    },
+    function(err){
+      res.status(500).send(err);
+    });
+});
+
+app.put('/wifi/ad-hoc/connect', function(req, res){
+  wifi.connectToKnownNets(
+    function(selectedNet){
+      res.status(200).send(selectedNet);
+    },
+    function(err){
+      res.status(500).send(err);
+    });
+});
+
+app.put('/wifi/:ssid/connect', function(req, res){
   wifi.selectNet(req.params.ssid, 
     function(selectedNet){
       res.status(200).send(selectedNet);

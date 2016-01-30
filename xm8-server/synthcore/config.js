@@ -10,6 +10,10 @@ var config = {
 	},
 	wifi: {
 		adapter: "wlan0",
+		ssidRetry: {
+			max: 16,
+			delayMs: 250
+		},
 		adHoc: {
 			ssid: "XM8",
 			key: "abcdef123456",

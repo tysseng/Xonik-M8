@@ -1,7 +1,6 @@
 // TODO: Fjerne de doble begrepene ESSID og ssid, det blir bare kaos. FÃr lage mindre generell wpa_supplicant.conf-saving isteden.
-// TODO: Extract wifi conf - fallback, retries, timeouts etc.
+// TODO: Store mac, retry without if not available
 
-var execSync = require('child_process').execSync;
 var exec = require('child_process').exec;
 var jsonfile = require('jsonfile');
 var fs = require('fs');
@@ -13,9 +12,7 @@ var persistedNetsFile = 'wifi/persisted_nets.json';
 var wpaSupplicantFile = '/etc/wpa_supplicant/wpa_supplicant.conf';
 
 var detectedNets = [];
-
 var knownNets = [];
-
 
 function generateWpaSupplicantConf(nets){
   var promise = new Promise(function(resolve, reject){
@@ -90,16 +87,12 @@ function connectToNet(net, success, failure){
     .then(success)
     .catch(function(err){
       // TODO: Log error?
-      handleConnectionError(success, failure);
-    });
-}
-
-function handleConnectionError(success, failure){
-  display.write(0, 0, "Could not connect to network, trying ad-hoc");
-  startAdHoc()
-    .then(success) 
-    .catch(function(err){
-      failure(err);
+      display.write(0, 0, "Could not connect to network, trying ad-hoc");
+      startAdHoc()
+        .then(success) 
+        .catch(function(err){
+          failure(err);
+        });
     });
 }
 
@@ -110,15 +103,19 @@ function addToKnownIfNew(net){
   }
 }
 
-function connectToKnownNets(){
-  /*
-  generateWpaSupplicantConf(knownNets, connect, 
-    function(connectedNet){
-      display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );  
-    },
-    function(err){
-      startAdHoc();
-    });*/
+function connectToKnownNets(success, failure){
+  generateWpaSupplicantConf(knownNets)
+    .then(connect.bind(null, net.ESSID))
+    .then(success)
+    .catch(function(err){
+      display.write(0, 0, "Could not connect to network, trying ad-hoc");
+      startAdHoc()
+        .then(success)
+        .catch(function(err){
+          console.log(err);
+          display.write(0, 0, "Could not set up ad-hoc, gui is inaccessible over wifi");
+        });
+    });  
 }
 
 function execAsPromise(command, logMsg, errorMsg, ignoreError){
@@ -253,19 +250,19 @@ function checkSsid(expectedssid, ssid){
   return promise;   
 }
 
-function waitForSsid(ssid, maxRetries, retry) {
+function waitForSsid(ssid, retry) {
   // first try doesn't count as retry, initialize with zero
   retry || (retry = 0);
 
   return getWpaCliStatus()
     .then(findSsid)
     .catch(function (err) {
-      if (retry >= maxRetries){
+      if (retry >= config.wifi.ssidRetry.max){
         console.log("checking failed");
         throw err;
       }
       // wait some time and try again
-      return delay(250).then(waitForSsid.bind(null, ssid, maxRetries, ++retry));
+      return delay(config.wifi.ssidRetry.delayMs).then(waitForSsid.bind(null, ssid, ++retry));
     });
 }
 
@@ -295,7 +292,7 @@ function connect(ssid){
       // it seems that connection to the wifi continues even after that command
       // returns. To save time, we execute the next commands before checing if we 
       // actually have a valid conncetion.
-      .then(waitForSsid.bind(null, ssid, 16))
+      .then(waitForSsid.bind(null, ssid))
       .then(function(foundSsid){
         // store connected ssid for later
         connectedNet.ssid = foundSsid;
