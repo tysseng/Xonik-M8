@@ -239,19 +239,23 @@ function delay(ms){
 }
 
 function checkSsid(expectedssid, ssid){
-  var promise = new Promise(function(resolve, reject){
-    
+  var promise = new Promise(function(resolve, reject){    
     if(expectedssid === ssid){
       resolve(ssid);
     } else {
       reject({message: "Connected to wrong ssid"});
     }
-    var connectedNet = {ssid: ssid, ip: ip};
-    display.write(0, 0, "I'm at " + ip + " on " + ssid);   
-    addToKnownIfNew(connectedNet);
-    resolve(connectedNet);      
+  });
+  return promise;   
+}
 
-    // TODO: Add failure if not connected to the requested network
+function checkSsid(expectedssid, ssid){
+  var promise = new Promise(function(resolve, reject){    
+    if(expectedssid === ssid){
+      resolve(ssid);
+    } else {
+      reject({message: "Connected to wrong ssid"});
+    }
   });
   return promise;   
 }
@@ -262,7 +266,6 @@ function waitForSsid(ssid, maxRetries, retry) {
 
   return getWpaCliStatus()
     .then(findSsid)
-    .then(checkSsid.bind(null, ssid))
     .catch(function (err) {
       if (retry >= maxRetries){
         console.log("checking failed");
@@ -273,15 +276,11 @@ function waitForSsid(ssid, maxRetries, retry) {
     });
 }
 
-function checkConnection(ssid, ip){
-  var promise = new Promise(function(resolve, reject){
-    
-    var connectedNet = {ssid: ssid, ip: ip};
+function acceptConnection(connectedNet){
+  var promise = new Promise(function(resolve, reject){    
     display.write(0, 0, "I'm at " + ip + " on " + ssid);   
     addToKnownIfNew(connectedNet);
-    resolve(connectedNet);      
-
-    // TODO: Add failure if not connected to the requested network
+    resolve(connectedNet);
   });
   return promise;   
 }
@@ -314,10 +313,17 @@ function connect(ssid){
       // returns. To save time, we execute the next commands before checing if we 
       // actually have a valid conncetion.
       .then(waitForSsid.bind(null, ssid, 16))
+      .then(function(foundSsid){
+        connectedNet.ssid = foundSsid;
+        return checkSsid(ssid, foundSsid);
+      })
       .then(generateDhcpEntry)
       .then(runIfconfig)
       .then(findIP)
-      .then(checkConnection.bind(null, ssid));
+      .then(function(foundIp){
+        connectedNet.ip = foundIp;
+        return acceptConnection(connectedNet);
+      });
 }
 
 function startAdHoc(){
