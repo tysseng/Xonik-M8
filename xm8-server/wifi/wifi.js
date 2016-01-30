@@ -218,11 +218,11 @@ function setWifiIp(){
     "Could not set wifi ip and netmask");
 }
 
-function checkSsid(ssid){
+function getWpaCliStatus(){
   return execAsPromise(
-    "wpa_cli status|grep 'ssid=" + ssid + "'",
-    "Checking status to find ssid=" + ssid,
-    "Ssid " + ssid + " not found in status output");
+    "wpa_cli status",
+    "Checking wpa cli status",
+    "Checking wpa cli status failed");
 }
 
 function runIfconfig(ssid){
@@ -238,19 +238,39 @@ function delay(ms){
   });
 }
 
+function checkSsid(expectedssid, ssid){
+  var promise = new Promise(function(resolve, reject){
+    
+    if(expectedssid === ssid){
+      resolve(ssid);
+    } else {
+      reject({message: "Connected to wrong ssid"});
+    }
+    var connectedNet = {ssid: ssid, ip: ip};
+    display.write(0, 0, "I'm at " + ip + " on " + ssid);   
+    addToKnownIfNew(connectedNet);
+    resolve(connectedNet);      
+
+    // TODO: Add failure if not connected to the requested network
+  });
+  return promise;   
+}
+
 function waitForSsid(ssid, maxRetries, retry) {
   // first try doesn't count as retry, initialize with zero
   retry || (retry = 0);
 
-  return checkSsid(ssid).catch(function (err) {
-    if (retry >= maxRetries){
-      console.log("checking failed");
-      throw err;
-    }
-
-    // wait some time and try again
-    return delay(250).then(waitForSsid.bind(null, ssid, maxRetries, ++retry));
-  });
+  return getWpaCliStatus()
+    .then(findSsid)
+    .then(checkSsid.bind(null, ssid))
+    .catch(function (err) {
+      if (retry >= maxRetries){
+        console.log("checking failed");
+        throw err;
+      }
+      // wait some time and try again
+      return delay(250).then(waitForSsid.bind(null, ssid, maxRetries, ++retry));
+    });
 }
 
 function checkConnection(ssid, ip){
@@ -279,6 +299,8 @@ function checkAdHocConnection(){
 }
 
 function connect(ssid){
+
+    var connectedNet = {};
 
     return shutdownAdapter()
       .then(removeDhcpEntry)
@@ -309,6 +331,21 @@ function startAdHoc(){
       .then(delay.bind(null, 500))
       .then(startAdapter)
       .then(checkAdHocConnection);
+}
+
+function findSsid(stdout){
+  var promise = new Promise(function(resolve, reject){
+    if(stdout){
+      // find first ip after block start
+      var searchResult = /^ssid=(.*)$/gm.exec(stdout);
+      if(searchResult && searchResult.length > 1){
+        resolve(searchResult[1]);
+        return;
+      }
+    }
+    reject({message: "No ssid found"})   
+  });
+  return promise;
 }
 
 function findIP(stdout){
