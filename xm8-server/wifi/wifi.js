@@ -7,6 +7,7 @@ var jsonfile = require('jsonfile');
 var fs = require('fs');
 var display = require('../synthcore/display.js');
 var _ = require('lodash');
+var config = require('../synthcore/config.js');
 
 var persistedNetsFile = 'wifi/persisted_nets.json';
 var wpaSupplicantFile = '/etc/wpa_supplicant/wpa_supplicant.conf';
@@ -198,23 +199,23 @@ function generateDhcpEntry(){
     "Could not generate dhcp entry");
 }
 
-function setWifiKey(){
+function setWifiKey(key){
   return execAsPromise(
-    "iwconfig wlan0 key abcdef123456",
+    "iwconfig wlan0 key " + key,
     "Setting wifi key",    
     "Could not set wifi key");
 }
 
-function setWifiEssid(){
+function setWifiEssid(ssid){
   return execAsPromise(  
-    "iwconfig wlan0 essid XM8",
+    "iwconfig wlan0 essid " + ssid,
     "Setting wifi essid",
     "Could not set wifi essid");
 }
 
-function setWifiIp(){
+function setWifiIp(ip, netmask){
   return execAsPromise(
-    "ifconfig wlan0 10.0.0.200 netmask 255.255.255.0",
+    "ifconfig wlan0 " + ip + " netmask " + netmask,
     "Setting wifi ip and netmask",    
     "Could not set wifi ip and netmask");
 }
@@ -237,17 +238,6 @@ function delay(ms){
   return new Promise(function(resolve, reject){
     setTimeout(resolve, ms);
   });
-}
-
-function checkSsid(expectedssid, ssid){
-  var promise = new Promise(function(resolve, reject){    
-    if(expectedssid === ssid){
-      resolve(ssid);
-    } else {
-      reject({message: "Connected to wrong ssid"});
-    }
-  });
-  return promise;   
 }
 
 function checkSsid(expectedssid, ssid){
@@ -279,25 +269,15 @@ function waitForSsid(ssid, maxRetries, retry) {
     });
 }
 
-function acceptConnection(connectedNet){
+function acceptConnection(connectedNet, addToKnown){
   var promise = new Promise(function(resolve, reject){    
     display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid);   
-    addToKnownIfNew(connectedNet);
+    if(addToKnown){
+      addToKnownIfNew(connectedNet);
+    }
     resolve(connectedNet);
   });
   return promise;   
-}
-
-function checkAdHocConnection(){
-  var promise = new Promise(function(resolve, reject){
-    //TODO: Get network from status, ip from ifconfig
-    var connectedNet = {ssid: "XM8", ip: "10.0.0.123"};
-    display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid );
-    resolve(connectedNet);
-
-    // TODO: Add failure if not connected to the requested network
-  });
-  return promise;
 }
 
 function connect(ssid){
@@ -327,21 +307,29 @@ function connect(ssid){
       .then(function(foundIp){
         // store connected ip for later
         connectedNet.ip = foundIp;
-        return acceptConnection(connectedNet);
+        return acceptConnection(connectedNet, true);
       });
 }
 
 function startAdHoc(){
+    var connectedNet = {ssid: config.wifi.adHoc.ssid};
+    
     return shutdownAdapter()
       .then(removeDhcpEntry)
       .then(terminateWpaSupplicant)
       .then(setWlanModeToAdHoc)
-      .then(setWifiKey)
-      .then(setWifiEssid)
-      .then(setWifiIp)
+      .then(setWifiKey.bind(null, config.wifi.adHoc.key))
+      .then(setWifiEssid.bind(null, config.wifi.adHoc.ssid))
+      .then(setWifiIp.bind(null, config.wifi.adHoc.ip, config.wifi.adHoc.netmask))
       .then(delay.bind(null, 500))
       .then(startAdapter)
-      .then(checkAdHocConnection);
+      .then(runIfconfig)
+      .then(findIP)
+      .then(function(foundIp){
+        // store connected ip for later
+        connectedNet.ip = foundIp;
+        return acceptConnection(connectedNet, false);
+      });
 }
 
 function findSsid(stdout){

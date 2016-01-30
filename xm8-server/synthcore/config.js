@@ -7,6 +7,14 @@ var config = {
 		maxSpeed: 250000, 
 		interruptPin: 3,
 		minBufferSize: 16 
+	},
+	wifi: {
+		adHoc: {
+			ssid: "XM8",
+			key: "abcdef123456",
+			ip: "10.0.0.200",
+			netmask: "255.255.255.0"
+		}
 	}
 }
 
