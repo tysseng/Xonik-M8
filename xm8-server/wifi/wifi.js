@@ -1,4 +1,5 @@
 // TODO: Fjerne de doble begrepene ESSID og ssid, det blir bare kaos. FÃr lage mindre generell wpa_supplicant.conf-saving isteden.
+// TODO: Extract wifi conf - fallback, retries, timeouts etc.
 
 var execSync = require('child_process').execSync;
 var exec = require('child_process').exec;
@@ -252,8 +253,10 @@ function checkSsid(expectedssid, ssid){
 function checkSsid(expectedssid, ssid){
   var promise = new Promise(function(resolve, reject){    
     if(expectedssid === ssid){
+      console.log("Found correct ssid: " + ssid);
       resolve(ssid);
     } else {
+      console.log("Connected to the wrong ssid: " + ssid);
       reject({message: "Connected to wrong ssid"});
     }
   });
@@ -278,7 +281,7 @@ function waitForSsid(ssid, maxRetries, retry) {
 
 function acceptConnection(connectedNet){
   var promise = new Promise(function(resolve, reject){    
-    display.write(0, 0, "I'm at " + ip + " on " + ssid);   
+    display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid);   
     addToKnownIfNew(connectedNet);
     resolve(connectedNet);
   });
@@ -314,6 +317,7 @@ function connect(ssid){
       // actually have a valid conncetion.
       .then(waitForSsid.bind(null, ssid, 16))
       .then(function(foundSsid){
+        // store connected ssid for later
         connectedNet.ssid = foundSsid;
         return checkSsid(ssid, foundSsid);
       })
@@ -321,6 +325,7 @@ function connect(ssid){
       .then(runIfconfig)
       .then(findIP)
       .then(function(foundIp){
+        // store connected ip for later
         connectedNet.ip = foundIp;
         return acceptConnection(connectedNet);
       });
@@ -364,11 +369,13 @@ function findIP(stdout){
         // find first ip after block start
         var searchResult = /^\s+inet addr:([0-9\.]+).*$/gm.exec(block);
         if(searchResult && searchResult.length > 1){
+          console.log("Found IP " + searchResult[1]);
           resolve(searchResult[1]);
           return;
         }
       }
     }
+    console.log("No IP address found");
     reject({message: "No IP address found"})   
   });
   return promise;
