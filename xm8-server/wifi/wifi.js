@@ -141,14 +141,14 @@ function execAsPromise(command, logMsg, errorMsg, ignoreError){
 
 function shutdownAdapter(){
   return execAsPromise(
-    "ifconfig wlan0 down",
-    "Bringing down wlan0",
-    "Could not shutdown wifi adapter");
+    "ifconfig " + config.wifi.adapter + " down",
+    "Bringing down " + config.wifi.adapter,
+    "Could not shutdown " + config.wifi.adapter);
 }
 
 function removeDhcpEntry(){
   return execAsPromise(
-    "dhclient -r wlan0",
+    "dhclient -r " + config.wifi.adapter,
     "Removing dhcp entry",
     "Could not remove dhcp entry");
 }
@@ -165,7 +165,7 @@ function terminateWpaSupplicant(){
 
 function startWpaSupplicant(){
   return execAsPromise(
-    "wpa_supplicant -B -Dwext -iwlan0 -c" + wpaSupplicantFile,
+    "wpa_supplicant -B -Dwext -i" + config.wifi.adapter + " -c" + wpaSupplicantFile,
     "Starting wpa_supplicant",
     "Could not start wpa_supplicant");
 }
@@ -173,49 +173,49 @@ function startWpaSupplicant(){
 // TODO: Merge these
 function setWlanModeToManaged(){
   return execAsPromise(
-    "iwconfig wlan0 mode Managed",
+    "iwconfig " + config.wifi.adapter + " mode Managed",
     "Setting wlan mode to managed",
     "Could not set wlan mode to managed");
 }
 
 function setWlanModeToAdHoc(){
   return execAsPromise(
-    "iwconfig wlan0 mode ad-hoc",
+    "iwconfig " + config.wifi.adapter + " mode ad-hoc",
     "Setting wlan mode to ad-hoc",
     "Could not set wlan mode to ad-hoc");
 }
 
 function startAdapter(){
   return execAsPromise(
-    "ifconfig wlan0 up", 
+    "ifconfig " + config.wifi.adapter + " up", 
     "Bringing up adapter",    
     "Could not bring up adapter");
 }
 
 function generateDhcpEntry(){
   return execAsPromise(
-    "dhclient wlan0",
+    "dhclient " + config.wifi.adapter,
     "Generating dhcp entry",
     "Could not generate dhcp entry");
 }
 
 function setWifiKey(key){
   return execAsPromise(
-    "iwconfig wlan0 key " + key,
+    "iwconfig " + config.wifi.adapter + " key " + key,
     "Setting wifi key",    
     "Could not set wifi key");
 }
 
 function setWifiEssid(ssid){
   return execAsPromise(  
-    "iwconfig wlan0 essid " + ssid,
+    "iwconfig " + config.wifi.adapter + " essid " + ssid,
     "Setting wifi essid",
     "Could not set wifi essid");
 }
 
 function setWifiIp(ip, netmask){
   return execAsPromise(
-    "ifconfig wlan0 " + ip + " netmask " + netmask,
+    "ifconfig " + config.wifi.adapter + " " + ip + " netmask " + netmask,
     "Setting wifi ip and netmask",    
     "Could not set wifi ip and netmask");
 }
@@ -350,7 +350,7 @@ function findSsid(stdout){
 function findIP(stdout){
   var promise = new Promise(function(resolve, reject){
     if(stdout){
-      var blockStart = stdout.search('wlan0');
+      var blockStart = stdout.search(config.wifi.adapter);
       if(blockStart > -1){
         var block = stdout.substr(blockStart);
 
@@ -370,7 +370,7 @@ function findIP(stdout){
 }
 
 function scan(success, error){
-  exec("iwlist wlan0 scan", function(err, stdout, stderr){
+  exec("iwlist " + config.wifi.adapter + " scan", function(err, stdout, stderr){
     if(err){
       error(stderr);
     }
