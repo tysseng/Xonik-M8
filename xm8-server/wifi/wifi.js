@@ -28,6 +28,7 @@ function generateWpaSupplicantConf(nets){
 
       // keys to include for this particular network
       _.forEach(net.keysToInclude, function(key){
+        // TODO: CHECK EXCISTENCE OF KEY HERE.
         var value = net[key];
         fileContent +='  ' + key + '=' + value + '\n';
       });
@@ -82,6 +83,8 @@ function getNetBySsid(ssid, nets){
 }
 
 function connectToNet(net, success, failure){
+  var connectedNet = {};
+
   generateWpaSupplicantConf([net])
     .then(connect.bind(null, net.ESSID))
     .then(success)
@@ -104,8 +107,21 @@ function addToKnownIfNew(net){
 }
 
 function connectToKnownNets(success, failure){
+
+  if(detectedNets.length == 0){
+
+    console.log("no nets detected, doing a re-scan before trying to connect");
+    listNetworks(function(){
+      connectToKnown(success, failure);
+    });
+  } else {
+    connectToKnown(success, failure);
+  }
+}
+
+function connectToKnown(success, failure){
   generateWpaSupplicantConf(knownNets)
-    .then(connect.bind(null, net.ESSID))
+    .then(connect)
     .then(success)
     .catch(function(err){
       display.write(0, 0, "Could not connect to network, trying ad-hoc");
@@ -237,9 +253,10 @@ function delay(ms){
   });
 }
 
+// checkSsid will return positive if no expeced ssid is received.
 function checkSsid(expectedssid, ssid){
   var promise = new Promise(function(resolve, reject){    
-    if(expectedssid === ssid){
+    if(expectedssid === ssid || !expectedssid){
       console.log("Found correct ssid: " + ssid);
       resolve(ssid);
     } else {
@@ -335,11 +352,13 @@ function findSsid(stdout){
       // find first ip after block start
       var searchResult = /^ssid=(.*)$/gm.exec(stdout);
       if(searchResult && searchResult.length > 1){
+        console.log("Found ssid: " + searchResult[1]);
         resolve(searchResult[1]);
         return;
       }
     }
-    reject({message: "No ssid found"})   
+    console.log("No ssid found");
+    reject({message: "No ssid found"});
   });
   return promise;
 }
