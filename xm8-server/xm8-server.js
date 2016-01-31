@@ -112,8 +112,9 @@ app.put('/wifi/connect', function(req, res){
     });
 });
 
+// not working
 app.put('/wifi/ad-hoc/connect', function(req, res){
-  wifi.connectToKnownNets(
+  wifi.connectToAdHoc(
     function(selectedNet){
       res.status(200).send(selectedNet);
     },
