@@ -82,6 +82,14 @@ function getNetBySsid(ssid, nets){
   return _.find(nets, function(o) { return o.ESSID === ssid});
 }
 
+function connectToAdHoc(success, failure){
+  startAdHoc()
+    .then(success) 
+    .catch(function(err){
+      failure(err);
+    });
+}
+
 function connectToNet(net, success, failure){
   var connectedNet = {};
 
@@ -91,11 +99,7 @@ function connectToNet(net, success, failure){
     .catch(function(err){
       // TODO: Log error?
       display.write(0, 0, "Could not connect to network, trying ad-hoc");
-      startAdHoc()
-        .then(success) 
-        .catch(function(err){
-          failure(err);
-        });
+      connectToAdHoc(success, failure);
     });
 }
 
