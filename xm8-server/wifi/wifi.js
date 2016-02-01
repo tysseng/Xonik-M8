@@ -125,8 +125,7 @@ function isInKnownNets(net){
 function addNetToKnown(ssid, psk){
   knownNets.push({
     keysToInclude: ['ssid', 'psk'], // keys to include when writing wpa_supplicant file
-    ssid: '"' + ssid + '"', // for wpa_supplicant file
-    ESSID: ssid, // for matching with detected networks
+    ssid: ssid, 
     psk: psk
   });
   persistNets(); 
@@ -143,7 +142,7 @@ function persistNets(){
   });
 }
 
-// checkSsid will return positive if no expeced ssid is received.
+// checkSsid will return positive if no expeced ssid.
 function checkSsid(expectedssid, ssid){
   return new Promise(function(resolve, reject){    
     if(expectedssid === ssid || !expectedssid){
@@ -359,7 +358,7 @@ function generateWpaSupplicantConf(nets){
       // keys to include for this particular network
       _.forEach(net.keysToInclude, function(key){
         // TODO: CHECK EXCISTENCE OF KEY HERE.
-        var value = net[key];
+        var value = escapeValueIfNecessary(key, net[key]);
         fileContent +='  ' + key + '=' + value + '\n';
       });
    
@@ -384,6 +383,13 @@ function generateWpaSupplicantConf(nets){
   return promise;    
 }
 
+function escapeValueIfNecessary(key, value){
+  if(key === 'ssid'){
+    return '"' + value + '"';
+  } 
+  return falue;
+}
+
 function getNetworkBySsid(ssid, detectedNets){
   return new Promise(function(resolve, reject){  
     var selectedNet = findNetInList(ssid, detectedNets);
@@ -398,7 +404,7 @@ function getNetworkBySsid(ssid, detectedNets){
 }
 
 function findNetInList(ssid, nets){
-  return _.find(nets, function(o) { return o.ESSID === ssid});
+  return _.find(nets, function(o) { return o.ssid === ssid});
 }
 
 // lists all available networks along with their status.
@@ -459,6 +465,9 @@ function extractNetworks(stdout){
           var key = line.substr(0, splitPos).trim().replace(/\s/g, '_');
           var value = line.substr(splitPos + 1).trim().replace(/\"/g, '');
        
+          // we want to rename some of the keys, for example ESSID
+          var key = replaceExtractedKey(key);
+
           // start new IE block if key is IE. 
           if(key === 'IE'){
             inIEBlock = true;
@@ -490,14 +499,23 @@ function extractNetworks(stdout){
   });  
 }
 
+function replaceExtractedKey(key){
+  switch(key){
+    case 'ESSID':
+      return 'ssid';
+    default:
+      return key;
+  }
+}
+
 function mergeDetectedWithKnown(detectedNets){
   return new Promise(function(resolve, reject){
     _.forEach(detectedNets, function(detectedNet){
 
       detectedNet.keysToInclude=['ssid', 'psk'];
 
-      var knownNet = findNetInList(detectedNet.ESSID, knownNets);
-      console.log(detectedNet.ESSID);
+      var knownNet = findNetInList(detectedNet.ssid, knownNets);
+      console.log(detectedNet.ssid);
       if(knownNet){
         detectedNet.isKnown = true;
         _.extend(detectedNet, knownNet);
