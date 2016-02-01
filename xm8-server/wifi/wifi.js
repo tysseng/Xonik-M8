@@ -16,8 +16,8 @@ var knownNets = [];
 
 
 function connectToNet(ssid, success, failure){
-  listNetworks().
-    .then(getNetworkBySsid.bind(null, ssid)  
+  listNetworks()
+    .then(getNetworkBySsid.bind(null, ssid))
     .then(generateWpaSupplicantConf)
     .then(connect.bind(null, ssid))
     .then(success)
@@ -102,14 +102,13 @@ function connect(ssid){
 }
 
 function acceptConnection(connectedNet, addToKnown){
-  var promise = new Promise(function(resolve, reject){    
+  return new Promise(function(resolve, reject){    
     display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid);   
     if(addToKnown){
       addToKnownIfNew(connectedNet);
     }
     resolve(connectedNet);
   });
-  return promise;   
 }
 
 function addToKnownIfNew(net){
@@ -146,7 +145,7 @@ function persistNets(){
 
 // checkSsid will return positive if no expeced ssid is received.
 function checkSsid(expectedssid, ssid){
-  var promise = new Promise(function(resolve, reject){    
+  return new Promise(function(resolve, reject){    
     if(expectedssid === ssid || !expectedssid){
       console.log("Found correct ssid: " + ssid);
       resolve(ssid);
@@ -155,7 +154,6 @@ function checkSsid(expectedssid, ssid){
       reject({message: "Connected to wrong ssid"});
     }
   });
-  return promise;   
 }
 
 function waitForSsid(ssid, retry) {
@@ -175,7 +173,7 @@ function waitForSsid(ssid, retry) {
 }
 
 function findSsid(stdout){
-  var promise = new Promise(function(resolve, reject){
+  return new Promise(function(resolve, reject){
     if(stdout){
       // find first ip after block start
       var searchResult = /^ssid=(.*)$/gm.exec(stdout);
@@ -188,7 +186,6 @@ function findSsid(stdout){
     console.log("No ssid found");
     reject({message: "No ssid found"});
   });
-  return promise;
 }
 
 function findIP(stdout){
@@ -387,15 +384,14 @@ function generateWpaSupplicantConf(nets){
 }
 
 function getNetworkBySsid(ssid, detectedNets){
-  var promise = new Promise(function(resolve, reject){  
+  return new Promise(function(resolve, reject){  
     var selectedNet = findNetInList(ssid, detectedNets);
     if(selectedNet){
       resolve(selectedNet);
     } else {
       reject({message: "Requested network is not available anymore, maybe it was turned off"});
     }
-  }
-  return promise;
+  });
 }
 
 function findNetInList(ssid, nets){
