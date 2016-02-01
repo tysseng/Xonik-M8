@@ -22,7 +22,8 @@ function connectToNet(ssid, success, failure){
     .then(connect.bind(null, ssid))
     .then(success)
     .catch(function(err){
-      // TODO: Log error?
+      console.log("Could not connect to network. Error is:");
+      console.log(err);
       display.write(0, 0, "Could not connect to network, trying ad-hoc");
       connectToAdHoc(success, failure);
     });
@@ -359,6 +360,7 @@ function generateWpaSupplicantConf(nets){
       _.forEach(net.keysToInclude, function(key){
         // TODO: CHECK EXCISTENCE OF KEY HERE.
         var value = escapeValueIfNecessary(key, net[key]);
+        console.log(key + ": " + net[key] + " was replaced with " + value);
         fileContent +='  ' + key + '=' + value + '\n';
       });
    
@@ -384,10 +386,10 @@ function generateWpaSupplicantConf(nets){
 }
 
 function escapeValueIfNecessary(key, value){
-  if(key === 'ssid'){
+  if(key === 'ssid' || key === 'psk'){
     return '"' + value + '"';
   } 
-  return falue;
+  return value;
 }
 
 function getNetworkBySsid(ssid, detectedNets){
