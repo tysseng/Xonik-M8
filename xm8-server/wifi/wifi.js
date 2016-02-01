@@ -14,87 +14,12 @@ var wpaSupplicantFile = '/etc/wpa_supplicant/wpa_supplicant.conf';
 var detectedNets = [];
 var knownNets = [];
 
-function generateWpaSupplicantConf(nets){
-  var promise = new Promise(function(resolve, reject){
-    var fileContent = 
-      "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n" +
-      "fast_reauth=1\n" +
-      "#Priority: Higher number seems to take presedence\n";
 
-    for (var i = 0; i < nets.length; i++) {
-
-      var net = nets[i];
-      fileContent += 'network={\n';
-
-      // keys to include for this particular network
-      _.forEach(net.keysToInclude, function(key){
-        // TODO: CHECK EXCISTENCE OF KEY HERE.
-        var value = net[key];
-        fileContent +='  ' + key + '=' + value + '\n';
-      });
-   
-      // default content to include for all nets 
-      var priority = nets.length - i;
-      fileContent +=
-        '  scan_ssid=1\n' + // makes it possible to connect even if network ssid is not broadcast
-        '  priority=' + priority + '\n' +
-        '}\n';
-    }
-
-    fs.writeFile(wpaSupplicantFile, fileContent, function(err) {
-      if(err) {
-        console.log(err);
-        reject({message: "Could not generate wpa_supplicant.conf"});
-      } else {
-        console.log("Wpa supplicant config saved.");
-        resolve();
-      }
-    });      
-  });
-  return promise;    
-}
-
-function isInKnownNets(net){
-  return getNetBySsid(net.ssid, knownNets);
-}
-
-function selectNet(ssid, success, failure){
-  if(detectedNets.length == 0){
-    console.log("no nets detected, doing a re-scan before trying to connect");
-    listNetworks(function(){
-      selectNetAndConnect(ssid, success, failure);
-    });
-  } else {
-    selectNetAndConnect(ssid, success, failure);
-  }
-}
-
-function selectNetAndConnect(ssid, success, failure){
-  var selectedNet = getNetBySsid(ssid, detectedNets);
-  if(selectedNet){
-    connectToNet(selectedNet, success, failure);
-  } else {
-    failure({message: "Requested network is not available anymore, maybe it was turned off"});
-  }
-}
-
-function getNetBySsid(ssid, nets){
-  return _.find(nets, function(o) { return o.ESSID === ssid});
-}
-
-function connectToAdHoc(success, failure){
-  startAdHoc()
-    .then(success) 
-    .catch(function(err){
-      failure(err);
-    });
-}
-
-function connectToNet(net, success, failure){
-  var connectedNet = {};
-
-  generateWpaSupplicantConf([net])
-    .then(connect.bind(null, net.ESSID))
+function connectToNet(ssid, success, failure){
+  listNetworks().
+    .then(getNetworkBySsid.bind(null, ssid)  
+    .then(generateWpaSupplicantConf)
+    .then(connect.bind(null, ssid))
     .then(success)
     .catch(function(err){
       // TODO: Log error?
@@ -103,28 +28,9 @@ function connectToNet(net, success, failure){
     });
 }
 
-function addToKnownIfNew(net){
-  if(!isInKnownNets(net)){
-    console.log("Network " +net.ssid + " is not in list of known networks, adding it");
-    addNetToKnown(net.ssid, net.psk);
-  }
-}
-
 function connectToKnownNets(success, failure){
-
-  if(detectedNets.length == 0){
-
-    console.log("no nets detected, doing a re-scan before trying to connect");
-    listNetworks(function(){
-      connectToKnown(success, failure);
-    });
-  } else {
-    connectToKnown(success, failure);
-  }
-}
-
-function connectToKnown(success, failure){
-  generateWpaSupplicantConf(knownNets)
+  listNetworks()
+    .then(generateWpaSupplicantConf.bind(null, knownNets))
     .then(connect)
     .then(success)
     .catch(function(err){
@@ -138,22 +44,173 @@ function connectToKnown(success, failure){
     });  
 }
 
-function execAsPromise(command, logMsg, errorMsg, ignoreError){
-   var promise = new Promise(function(resolve, reject){
-    console.log(logMsg);
-    exec(command, function (error, stdout, stderr){
-      if(!error || ignoreError){
-        console.log("Command succeded");
-        console.log(stdout);
-        resolve(stdout);
-      } else {
-        console.log("Command failed");
-        console.log(stderr);
-        reject({message: errorMsg, stdout: stdout, stderr: stderr, error: error});
-      }
+
+function connectToAdHoc(success, failure){
+  var connectedNet = {ssid: config.wifi.adHoc.ssid};
+  
+  shutdownAdapter()
+    .then(removeDhcpEntry)
+    .then(terminateWpaSupplicant)
+    .then(setWlanModeToAdHoc)
+    .then(setWifiKey.bind(null, config.wifi.adHoc.key))
+    .then(setWifiEssid.bind(null, config.wifi.adHoc.ssid))
+    .then(setWifiIp.bind(null, config.wifi.adHoc.ip, config.wifi.adHoc.netmask))
+    .then(delay.bind(null, 500))
+    .then(startAdapter)
+    .then(runIfconfig)
+    .then(findIP)
+    .then(function(foundIp){
+      // store connected ip for later
+      connectedNet.ip = foundIp;
+      return acceptConnection(connectedNet, false);
+    })
+    .then(success)
+    .catch(function(err){
+      failure(err);
     });
+}
+
+function connect(ssid){
+
+    var connectedNet = {};
+
+    return shutdownAdapter()
+      .then(removeDhcpEntry)
+      .then(terminateWpaSupplicant)
+      .then(startWpaSupplicant)
+      .then(setWlanModeToManaged)
+      .then(startAdapter)
+
+      // The ssid check could have been done right after startWpaSupplicant, but 
+      // it seems that connection to the wifi continues even after that command
+      // returns. To save time, we execute the next commands before checing if we 
+      // actually have a valid conncetion.
+      .then(waitForSsid.bind(null, ssid))
+      .then(function(foundSsid){
+        // store connected ssid for later
+        connectedNet.ssid = foundSsid;
+        return checkSsid(ssid, foundSsid);
+      })
+      .then(generateDhcpEntry)
+      .then(runIfconfig)
+      .then(findIP)
+      .then(function(foundIp){
+        // store connected ip for later
+        connectedNet.ip = foundIp;
+        return acceptConnection(connectedNet, true);
+      });
+}
+
+function acceptConnection(connectedNet, addToKnown){
+  var promise = new Promise(function(resolve, reject){    
+    display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid);   
+    if(addToKnown){
+      addToKnownIfNew(connectedNet);
+    }
+    resolve(connectedNet);
   });
-  return promise; 
+  return promise;   
+}
+
+function addToKnownIfNew(net){
+  if(!isInKnownNets(net)){
+    console.log("Network " +net.ssid + " is not in list of known networks, adding it");
+    addNetToKnown(net.ssid, net.psk);
+  }
+}
+
+function isInKnownNets(net){
+  return findNetInList(net.ssid, knownNets);
+}
+
+function addNetToKnown(ssid, psk){
+  knownNets.push({
+    keysToInclude: ['ssid', 'psk'], // keys to include when writing wpa_supplicant file
+    ssid: '"' + ssid + '"', // for wpa_supplicant file
+    ESSID: ssid, // for matching with detected networks
+    psk: psk
+  });
+  persistNets(); 
+}
+
+function persistNets(){
+  jsonfile.writeFile(persistedNetsFile, knownNets, function(err){
+    if(err){
+      console.log("Error while persisting nets:");
+      console.log(err);
+    } else {
+      console.log("Network list saved to disk");
+    }
+  });
+}
+
+// checkSsid will return positive if no expeced ssid is received.
+function checkSsid(expectedssid, ssid){
+  var promise = new Promise(function(resolve, reject){    
+    if(expectedssid === ssid || !expectedssid){
+      console.log("Found correct ssid: " + ssid);
+      resolve(ssid);
+    } else {
+      console.log("Connected to the wrong ssid: " + ssid);
+      reject({message: "Connected to wrong ssid"});
+    }
+  });
+  return promise;   
+}
+
+function waitForSsid(ssid, retry) {
+  // first try doesn't count as retry, initialize with zero
+  retry || (retry = 0);
+
+  return getWpaCliStatus()
+    .then(findSsid)
+    .catch(function (err) {
+      if (retry >= config.wifi.ssidRetry.max){
+        console.log("checking failed");
+        throw err;
+      }
+      // wait some time and try again
+      return delay(config.wifi.ssidRetry.delayMs).then(waitForSsid.bind(null, ssid, ++retry));
+    });
+}
+
+function findSsid(stdout){
+  var promise = new Promise(function(resolve, reject){
+    if(stdout){
+      // find first ip after block start
+      var searchResult = /^ssid=(.*)$/gm.exec(stdout);
+      if(searchResult && searchResult.length > 1){
+        console.log("Found ssid: " + searchResult[1]);
+        resolve(searchResult[1]);
+        return;
+      }
+    }
+    console.log("No ssid found");
+    reject({message: "No ssid found"});
+  });
+  return promise;
+}
+
+function findIP(stdout){
+  var promise = new Promise(function(resolve, reject){
+    if(stdout){
+      var blockStart = stdout.search(config.wifi.adapter);
+      if(blockStart > -1){
+        var block = stdout.substr(blockStart);
+
+        // find first ip after block start
+        var searchResult = /^\s+inet addr:([0-9\.]+).*$/gm.exec(block);
+        if(searchResult && searchResult.length > 1){
+          console.log("Found IP " + searchResult[1]);
+          resolve(searchResult[1]);
+          return;
+        }
+      }
+    }
+    console.log("No IP address found");
+    reject({message: "No IP address found"})   
+  });
+  return promise;
 }
 
 function shutdownAdapter(){
@@ -251,142 +308,213 @@ function runIfconfig(ssid){
     "Could not capture ifconfig output");
 }
 
+function scanForNetworks(){
+  return execAsPromise(
+    "iwlist " + config.wifi.adapter + " scan",
+    "Scanning for available wifi networks",
+    "Could not scan for available wifi networks");
+}
+
+function execAsPromise(command, logMsg, errorMsg, ignoreError){
+   var promise = new Promise(function(resolve, reject){
+    console.log(logMsg);
+    exec(command, function (error, stdout, stderr){
+      if(!error || ignoreError){
+        console.log("Command succeded");
+        console.log(stdout);
+        resolve(stdout);
+      } else {
+        console.log("Command failed");
+        console.log(stderr);
+        reject({message: errorMsg, stdout: stdout, stderr: stderr, error: error});
+      }
+    });
+  });
+  return promise; 
+}
+
 function delay(ms){
   return new Promise(function(resolve, reject){
     setTimeout(resolve, ms);
   });
 }
 
-// checkSsid will return positive if no expeced ssid is received.
-function checkSsid(expectedssid, ssid){
-  var promise = new Promise(function(resolve, reject){    
-    if(expectedssid === ssid || !expectedssid){
-      console.log("Found correct ssid: " + ssid);
-      resolve(ssid);
+function generateWpaSupplicantConf(nets){
+
+  // it is possible to send a single net instead of an array. In that
+  // case it must be converted to an array
+  if( Object.prototype.toString.call( someVar ) !== '[object Array]' ) {
+    nets = [nets];
+  }
+
+  var promise = new Promise(function(resolve, reject){
+    var fileContent = 
+      "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n" +
+      "fast_reauth=1\n" +
+      "#Priority: Higher number seems to take presedence\n";
+
+    for (var i = 0; i < nets.length; i++) {
+
+      var net = nets[i];
+      fileContent += 'network={\n';
+
+      // keys to include for this particular network
+      _.forEach(net.keysToInclude, function(key){
+        // TODO: CHECK EXCISTENCE OF KEY HERE.
+        var value = net[key];
+        fileContent +='  ' + key + '=' + value + '\n';
+      });
+   
+      // default content to include for all nets 
+      var priority = nets.length - i;
+      fileContent +=
+        '  scan_ssid=1\n' + // makes it possible to connect even if network ssid is not broadcast
+        '  priority=' + priority + '\n' +
+        '}\n';
+    }
+
+    fs.writeFile(wpaSupplicantFile, fileContent, function(err) {
+      if(err) {
+        console.log(err);
+        reject({message: "Could not generate wpa_supplicant.conf"});
+      } else {
+        console.log("Wpa supplicant config saved.");
+        resolve();
+      }
+    });      
+  });
+  return promise;    
+}
+
+function getNetworkBySsid(ssid, detectedNets){
+  var promise = new Promise(function(resolve, reject){  
+    var selectedNet = findNetInList(ssid, detectedNets);
+    if(selectedNet){
+      resolve(selectedNet);
     } else {
-      console.log("Connected to the wrong ssid: " + ssid);
-      reject({message: "Connected to wrong ssid"});
+      reject({message: "Requested network is not available anymore, maybe it was turned off"});
     }
-  });
-  return promise;   
+  }
+  return promise;
 }
 
-function waitForSsid(ssid, retry) {
-  // first try doesn't count as retry, initialize with zero
-  retry || (retry = 0);
+function findNetInList(ssid, nets){
+  return _.find(nets, function(o) { return o.ESSID === ssid});
+}
 
-  return getWpaCliStatus()
-    .then(findSsid)
-    .catch(function (err) {
-      if (retry >= config.wifi.ssidRetry.max){
-        console.log("checking failed");
-        throw err;
-      }
-      // wait some time and try again
-      return delay(config.wifi.ssidRetry.delayMs).then(waitForSsid.bind(null, ssid, ++retry));
+// lists all available networks along with their status.
+function listNetworks(){
+  if(detectedNets.length == 0){
+    console.log("no nets detected, doing a re-scan");    
+    return scanForNetworks()
+      .then(extractNetworks)
+      .then(mergeDetectedWithKnown)
+    // todo: merge with stored nets etc    
+  } else {
+    return new Promise(function(resolve, reject){
+      resolve({detectedNets});
     });
+  }
 }
 
-function acceptConnection(connectedNet, addToKnown){
-  var promise = new Promise(function(resolve, reject){    
-    display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid);   
-    if(addToKnown){
-      addToKnownIfNew(connectedNet);
+function extractNetworks(stdout){
+  return new Promise(function(resolve, reject){
+    var nets = [];
+
+    var netsAsText = stdout.split("Cell");
+    if(netsAsText.length < 2){
+      return;
     }
-    resolve(connectedNet);
-  });
-  return promise;   
-}
 
-function connect(ssid){
-
-    var connectedNet = {};
-
-    return shutdownAdapter()
-      .then(removeDhcpEntry)
-      .then(terminateWpaSupplicant)
-      .then(startWpaSupplicant)
-      .then(setWlanModeToManaged)
-      .then(startAdapter)
-
-      // The ssid check could have been done right after startWpaSupplicant, but 
-      // it seems that connection to the wifi continues even after that command
-      // returns. To save time, we execute the next commands before checing if we 
-      // actually have a valid conncetion.
-      .then(waitForSsid.bind(null, ssid))
-      .then(function(foundSsid){
-        // store connected ssid for later
-        connectedNet.ssid = foundSsid;
-        return checkSsid(ssid, foundSsid);
-      })
-      .then(generateDhcpEntry)
-      .then(runIfconfig)
-      .then(findIP)
-      .then(function(foundIp){
-        // store connected ip for later
-        connectedNet.ip = foundIp;
-        return acceptConnection(connectedNet, true);
-      });
-}
-
-function startAdHoc(){
-    var connectedNet = {ssid: config.wifi.adHoc.ssid};
-    
-    return shutdownAdapter()
-      .then(removeDhcpEntry)
-      .then(terminateWpaSupplicant)
-      .then(setWlanModeToAdHoc)
-      .then(setWifiKey.bind(null, config.wifi.adHoc.key))
-      .then(setWifiEssid.bind(null, config.wifi.adHoc.ssid))
-      .then(setWifiIp.bind(null, config.wifi.adHoc.ip, config.wifi.adHoc.netmask))
-      .then(delay.bind(null, 500))
-      .then(startAdapter)
-      .then(runIfconfig)
-      .then(findIP)
-      .then(function(foundIp){
-        // store connected ip for later
-        connectedNet.ip = foundIp;
-        return acceptConnection(connectedNet, false);
-      });
-}
-
-function findSsid(stdout){
-  var promise = new Promise(function(resolve, reject){
-    if(stdout){
-      // find first ip after block start
-      var searchResult = /^ssid=(.*)$/gm.exec(stdout);
-      if(searchResult && searchResult.length > 1){
-        console.log("Found ssid: " + searchResult[1]);
-        resolve(searchResult[1]);
-        return;
+    // iterating in the normal way because we want to start on index 1.
+    for(var i = 1; i<netsAsText.length; i++){ 
+      var lines = netsAsText[i].split("\n");
+      var index = lines[0].match(/^\s*[0-9]+/g)[0].trim();
+      var detectedNet = {
+        Index: index
       }
-    }
-    console.log("No ssid found");
-    reject({message: "No ssid found"});
-  });
-  return promise;
-}
+      nets.push(detectedNet);
 
-function findIP(stdout){
-  var promise = new Promise(function(resolve, reject){
-    if(stdout){
-      var blockStart = stdout.search(config.wifi.adapter);
-      if(blockStart > -1){
-        var block = stdout.substr(blockStart);
+      // remove index from first line
+      lines[0] = lines[0].split(" - ")[1];
 
-        // find first ip after block start
-        var searchResult = /^\s+inet addr:([0-9\.]+).*$/gm.exec(block);
-        if(searchResult && searchResult.length > 1){
-          console.log("Found IP " + searchResult[1]);
-          resolve(searchResult[1]);
-          return;
+      // default number of indents, is used for detecting when an IE block ends
+      var defaultIndent = lines[1].match(/^\s+/g);
+      var ieBlock; // NOT internet explorer but some wifi stuff
+      var inIEBlock = false;
+
+      _.forEach(lines, function(line){
+
+        var indentMatch = line.match(/^\s+/g);
+        if(indentMatch){
+          var indent = indentMatch[0].length;
         }
-      }
-    }
-    console.log("No IP address found");
-    reject({message: "No IP address found"})   
+        line = line.trim();
+
+        if(line.startsWith('Quality')){
+          addSignalInfo(line, detectedNet);
+        }
+
+        var splitPos = line.search(":");
+        if(splitPos > -1){
+          var key = line.substr(0, splitPos).trim().replace(/\s/g, '_');
+          var value = line.substr(splitPos + 1).trim().replace(/\"/g, '');
+       
+          // start new IE block if key is IE. 
+          if(key === 'IE'){
+            inIEBlock = true;
+            ieBlock = {type: value}
+            if(!detectedNet["IE"]){
+              detectedNet["IE"] = [];
+            } 
+            detectedNet["IE"].push(ieBlock);
+          } else {
+            // detect when IE block ends.
+            if(inIEBlock && indent === defaultIndent){
+              inIEBlock = false; 
+            }
+
+            if(inIEBlock){
+              ieBlock[key] = value;
+            } else {
+              detectedNet[key] = value;
+            }
+          }
+        }
+      });
+    };
+
+    // save globaly
+    detectedNets = nets;
+
+    resolve(nets);
+  });  
+}
+
+function mergeDetectedWithKnown(detectedNets){
+  return new Promise(function(resolve, reject){
+    _.forEach(detectedNets, function(detectedNet){
+
+      detectedNet.keysToInclude=['ssid', 'psk'];
+
+      var knownNet = findNetInList(detectedNet.ESSID, knownNets);
+      console.log(detectedNet.ESSID);
+      if(knownNet){
+        detectedNet.isKnown = true;
+        _.extend(detectedNet, knownNet);
+      } 
+    });
+
+    resolve(detectedNets);
   });
-  return promise;
+}
+
+function getDetectedNets(){
+  return new Promise(function(resolve, reject){
+    if(detectedNets.length == 0){
+      return listNetworks()
+    }
+  });
 }
 
 function scan(success, error){
@@ -484,27 +612,6 @@ function addSignalInfo(line, net){
   });
 }
 
-// lists all available networks along with their status.
-function listNetworks(success, error){
-  // todo: merge with stored nets etc
-  scan( 
-    function(selectedNets){
-      _.forEach(detectedNets, function(detectedNet){
-
-        detectedNet.keysToInclude=['ssid', 'psk'];
-
-        var knownNet = getNetBySsid(detectedNet.ESSID, knownNets);
-        console.log(detectedNet.ESSID);
-        if(knownNet){
-          detectedNet.isKnown = true;
-          _.extend(detectedNet, knownNet);
-        } 
-      });
-
-      success(selectedNets);
-    }, error);
-
-}
 
 function loadPersistedNets(success){
   console.log("Going to load persisted networks");
@@ -520,27 +627,6 @@ function loadPersistedNets(success){
       if(success) success();
     }
   });
-}
-
-function persistNets(){
-  jsonfile.writeFile(persistedNetsFile, knownNets, function(err){
-    if(err){
-      console.log("Error while persisting nets:");
-      console.log(err);
-    } else {
-      console.log("Network list saved to disk");
-    }
-  });
-}
-
-function addNetToKnown(ssid, psk){
-  knownNets.push({
-    keysToInclude: ['ssid', 'psk'], // keys to include when writing wpa_supplicant file
-    ssid: '"' + ssid + '"', // for wpa_supplicant file
-    ESSID: ssid, // for matching with detected networks
-    psk: psk
-  });
-  persistNets(); 
 }
 
 /*
