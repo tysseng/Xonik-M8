@@ -340,10 +340,11 @@ function generateWpaSupplicantConf(nets){
 
   // it is possible to send a single net instead of an array. In that
   // case it must be converted to an array
-  if( Object.prototype.toString.call( someVar ) !== '[object Array]' ) {
+  if( Object.prototype.toString.call( nets ) !== '[object Array]' ) {
+    console.log("Looking for a single net, creating array");
     nets = [nets];
-  }
-
+  } 
+  
   var promise = new Promise(function(resolve, reject){
     var fileContent = 
       "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n" +
@@ -387,8 +388,10 @@ function getNetworkBySsid(ssid, detectedNets){
   return new Promise(function(resolve, reject){  
     var selectedNet = findNetInList(ssid, detectedNets);
     if(selectedNet){
+      console.log("Found net");
       resolve(selectedNet);
     } else {
+      console.log("Could not find net");
       reject({message: "Requested network is not available anymore, maybe it was turned off"});
     }
   });
