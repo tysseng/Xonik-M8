@@ -671,6 +671,6 @@ løsning: starte wpa_supplicant, fjernet problemet
 */
 
 module.exports.listNetworks = listNetworks;
-module.exports.selectNet = selectNet;
+module.exports.connectToNet = connectToNet;
 module.exports.connectToAdHoc = connectToAdHoc;
 module.exports.connectToKnownNets = connectToKnownNets;

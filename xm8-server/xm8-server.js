@@ -124,7 +124,7 @@ app.put('/wifi/ad-hoc/connect', function(req, res){
 });
 
 app.put('/wifi/:ssid/connect', function(req, res){
-  wifi.selectNet(req.params.ssid, 
+  wifi.connectToNet(req.params.ssid, 
     function(selectedNet){
       res.status(200).send(selectedNet);
     },
