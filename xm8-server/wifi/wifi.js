@@ -187,8 +187,8 @@ function waitForConnection(retry){
     .then(checkForConnection)
     .catch(function(controlEvents){
       if (retry >= config.wifi.connectionRetry.max){
-        console.log("Connection timed out");
-        throw err;
+        var reasons = extractReasons(controlEvents);
+        throw {message: 'Connection timed out', reasons: reasons};        
       }
       if(controlEvents){       
         if(hasConnectionFailed(controlEvents)){
