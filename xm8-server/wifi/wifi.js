@@ -1,5 +1,7 @@
-// TODO: Fjerne de doble begrepene ESSID og ssid, det blir bare kaos. FÃr lage mindre generell wpa_supplicant.conf-saving isteden.
 // TODO: Store mac, retry without if not available
+// TODO: Detect failure from wrong/missing password, prompt user
+// TODO: Get additional config from gui
+// TODO: Merge multiple nets with same SSID, add mac to supplicant config
 
 var exec = require('child_process').exec;
 var jsonfile = require('jsonfile');
@@ -7,9 +9,12 @@ var fs = require('fs');
 var display = require('../synthcore/display.js');
 var _ = require('lodash');
 var config = require('../synthcore/config.js');
+var pt = require('../synthcore/promiseTools.js');
+var wc = require('wifiCommands.js');
 
 var persistedNetsFile = 'wifi/persisted_nets.json';
 var wpaSupplicantFile = '/etc/wpa_supplicant/wpa_supplicant.conf';
+var wpaLogFile = '/tmp/wpa_supplicant.log';
 
 var detectedNets = [];
 var knownNets = [];
@@ -50,15 +55,15 @@ function connectToAdHoc(success, failure){
   var connectedNet = {ssid: config.wifi.adHoc.ssid};
   
   shutdownAdapter()
-    .then(removeDhcpEntry)
-    .then(terminateWpaSupplicant)
-    .then(setWlanModeToAdHoc)
-    .then(setWifiKey.bind(null, config.wifi.adHoc.key))
-    .then(setWifiEssid.bind(null, config.wifi.adHoc.ssid))
-    .then(setWifiIp.bind(null, config.wifi.adHoc.ip, config.wifi.adHoc.netmask))
-    .then(delay.bind(null, 500))
-    .then(startAdapter)
-    .then(runIfconfig)
+    .then(wc.removeDhcpEntry)
+    .then(wc.terminateWpaSupplicant)
+    .then(wc.setWlanModeToAdHoc)
+    .then(wc.setWifiKey.bind(null, config.wifi.adHoc.key))
+    .then(wc.setWifiEssid.bind(null, config.wifi.adHoc.ssid))
+    .then(wc.setWifiIp.bind(null, config.wifi.adHoc.ip, config.wifi.adHoc.netmask))
+    .then(pt.delay.bind(null, 500))
+    .then(wc.startAdapter)
+    .then(wc.runIfconfig)
     .then(findIP)
     .then(function(foundIp){
       // store connected ip for later
@@ -76,24 +81,26 @@ function connect(ssid){
     var connectedNet = {};
 
     return shutdownAdapter()
-      .then(removeDhcpEntry)
-      .then(terminateWpaSupplicant)
-      .then(startWpaSupplicant)
-      .then(setWlanModeToManaged)
-      .then(startAdapter)
+      .then(wc.removeDhcpEntry)
+      .then(wc.terminateWpaSupplicant)
+      .then(wc.deleteWpaLogfile)
+      .then(wc.startWpaSupplicant)
+      .then(wc.setWlanModeToManaged)
+      .then(wc.startAdapter)
 
       // The ssid check could have been done right after startWpaSupplicant, but 
       // it seems that connection to the wifi continues even after that command
       // returns. To save time, we execute the next commands before checing if we 
       // actually have a valid conncetion.
-      .then(waitForSsid.bind(null, ssid))
+      //.then(waitForSsid.bind(null, ssid))
+      .then(waitForConnection)
       .then(function(foundSsid){
         // store connected ssid for later
         connectedNet.ssid = foundSsid;
         return checkSsid(ssid, foundSsid);
       })
-      .then(generateDhcpEntry)
-      .then(runIfconfig)
+      .then(wc.generateDhcpEntry)
+      .then(wc.runIfconfig)
       .then(findIP)
       .then(function(foundIp){
         // store connected ip for later
@@ -160,16 +167,62 @@ function waitForSsid(ssid, retry) {
   // first try doesn't count as retry, initialize with zero
   retry || (retry = 0);
 
-  return getWpaCliStatus()
+  return wc.getWpaCliStatus()
     .then(findSsid)
     .catch(function (err) {
-      if (retry >= config.wifi.ssidRetry.max){
+      if (retry >= config.wifi.connectionRetry.max){
         console.log("checking failed");
         throw err;
       }
       // wait some time and try again
-      return delay(config.wifi.ssidRetry.delayMs).then(waitForSsid.bind(null, ssid, ++retry));
+      return pt.delay(config.wifi.connectionRetry.delayMs).then(waitForSsid.bind(null, ssid, ++retry));
     });
+}
+
+function waitForConnection(retry){  
+  // first try doesn't count as retry, initialize with zero
+  retry || (retry = 0);
+
+  return wc.getWpaControlEvents()
+    .then(checkForConnection)
+    .catch(function(controlEvents)){
+      if (retry >= config.wifi.connectionRetry.max){
+        console.log("Connection timed out");
+        throw err;
+      }
+      if(controlEvents){       
+        if(hasConnectionFailed(controlEvents)){
+          var reasons = extractReasons(controlEvents);
+          throw {message: 'Connection failed', reasons: reasons};
+        }
+        // wait some time and try again
+        return pt.delay(config.wifi.connectionRetry.delayMs).then(waitForConnection.bind(null, ++retry));
+      }
+    }
+}
+
+function hasConnectionFailed(controlEvents){
+  return _.find(nets, function(o) { return o.search('CONN_FAILED') > -1 });  
+}
+
+function extractReasons(controlEvents){
+  var tempDisabledEvents = _.find(nets, function(o) { return o.search('SSID-TEMP-DISABLED') > -1 });
+  // TODO: Extract and uniquify reason from here
+  return tempDisabledEvents;
+}
+
+function checkForConnection(controlEvents){
+  return new Promise(function(resolve, reject){    
+    if(isConnected(controlEvents)){
+      resolve();
+    } else {
+      reject(controlEvents);
+    }
+  }
+}
+
+function isConnected(controlEvents){
+  return _.find(nets, function(o) { return o.search('CTRL-EVENT-CONNECTED') > -1 });  
 }
 
 function findSsid(stdout){
@@ -208,132 +261,6 @@ function findIP(stdout){
     reject({message: "No IP address found"})   
   });
   return promise;
-}
-
-function shutdownAdapter(){
-  return execAsPromise(
-    "ifconfig " + config.wifi.adapter + " down",
-    "Bringing down " + config.wifi.adapter,
-    "Could not shutdown " + config.wifi.adapter);
-}
-
-function removeDhcpEntry(){
-  return execAsPromise(
-    "dhclient -r " + config.wifi.adapter,
-    "Removing dhcp entry",
-    "Could not remove dhcp entry");
-}
-
-function terminateWpaSupplicant(){
-  return execAsPromise(
-    "wpa_cli terminate",
-    "Terminating old wpa_supplicant instance",    
-    "wpa_supplicant probably terminated, continuing",
-    true); //ignore errors and continue
-
-   //TODO: Check that no wpa process is running.
-}
-
-function startWpaSupplicant(){
-  return execAsPromise(
-    "wpa_supplicant -B -Dwext -i" + config.wifi.adapter + " -c" + wpaSupplicantFile,
-    "Starting wpa_supplicant",
-    "Could not start wpa_supplicant");
-}
-
-// TODO: Merge these
-function setWlanModeToManaged(){
-  return execAsPromise(
-    "iwconfig " + config.wifi.adapter + " mode Managed",
-    "Setting wlan mode to managed",
-    "Could not set wlan mode to managed");
-}
-
-function setWlanModeToAdHoc(){
-  return execAsPromise(
-    "iwconfig " + config.wifi.adapter + " mode ad-hoc",
-    "Setting wlan mode to ad-hoc",
-    "Could not set wlan mode to ad-hoc");
-}
-
-function startAdapter(){
-  return execAsPromise(
-    "ifconfig " + config.wifi.adapter + " up", 
-    "Bringing up adapter",    
-    "Could not bring up adapter");
-}
-
-function generateDhcpEntry(){
-  return execAsPromise(
-    "dhclient " + config.wifi.adapter,
-    "Generating dhcp entry",
-    "Could not generate dhcp entry");
-}
-
-function setWifiKey(key){
-  return execAsPromise(
-    "iwconfig " + config.wifi.adapter + " key " + key,
-    "Setting wifi key",    
-    "Could not set wifi key");
-}
-
-function setWifiEssid(ssid){
-  return execAsPromise(  
-    "iwconfig " + config.wifi.adapter + " essid " + ssid,
-    "Setting wifi essid",
-    "Could not set wifi essid");
-}
-
-function setWifiIp(ip, netmask){
-  return execAsPromise(
-    "ifconfig " + config.wifi.adapter + " " + ip + " netmask " + netmask,
-    "Setting wifi ip and netmask",    
-    "Could not set wifi ip and netmask");
-}
-
-function getWpaCliStatus(){
-  return execAsPromise(
-    "wpa_cli status",
-    "Checking wpa cli status",
-    "Checking wpa cli status failed");
-}
-
-function runIfconfig(ssid){
-  return execAsPromise(
-    "ifconfig",
-    "Capturing ifconfig output",
-    "Could not capture ifconfig output");
-}
-
-function scanForNetworks(){
-  return execAsPromise(
-    "iwlist " + config.wifi.adapter + " scan",
-    "Scanning for available wifi networks",
-    "Could not scan for available wifi networks");
-}
-
-function execAsPromise(command, logMsg, errorMsg, ignoreError){
-   var promise = new Promise(function(resolve, reject){
-    console.log(logMsg);
-    exec(command, function (error, stdout, stderr){
-      if(!error || ignoreError){
-        console.log("Command succeded");
-        console.log(stdout);
-        resolve(stdout);
-      } else {
-        console.log("Command failed");
-        console.log(stderr);
-        reject({message: errorMsg, stdout: stdout, stderr: stderr, error: error});
-      }
-    });
-  });
-  return promise; 
-}
-
-function delay(ms){
-  return new Promise(function(resolve, reject){
-    setTimeout(resolve, ms);
-  });
 }
 
 function generateWpaSupplicantConf(nets){
@@ -536,82 +463,6 @@ function getDetectedNets(){
   });
 }
 
-function scan(success, error){
-  exec("iwlist " + config.wifi.adapter + " scan", function(err, stdout, stderr){
-    if(err){
-      error(stderr);
-    }
-
-    // reset list of detected nets
-    detectedNets = [];
-
-    var nets = stdout.split("Cell");
-    if(nets.length < 2){
-      return;
-    }
-
-    // iterating in the normal way because we want to start on index 1.
-    for(var i = 1; i<nets.length; i++){ 
-      var lines = nets[i].split("\n");
-      var index = lines[0].match(/^\s*[0-9]+/g)[0].trim();
-      var detectedNet = {
-        Index: index
-      }
-      detectedNets.push(detectedNet);
-
-      // remove index from first line
-      lines[0] = lines[0].split(" - ")[1];
-
-      // default number of indents, is used for detecting when an IE block ends
-      var defaultIndent = lines[1].match(/^\s+/g);
-      var ieBlock; // NOT internet explorer but some wifi stuff
-      var inIEBlock = false;
-
-      _.forEach(lines, function(line){
-
-        var indentMatch = line.match(/^\s+/g);
-        if(indentMatch){
-          var indent = indentMatch[0].length;
-        }
-        line = line.trim();
-
-        if(line.startsWith('Quality')){
-          addSignalInfo(line, detectedNet);
-        }
-
-        var splitPos = line.search(":");
-        if(splitPos > -1){
-          var key = line.substr(0, splitPos).trim().replace(/\s/g, '_');
-          var value = line.substr(splitPos + 1).trim().replace(/\"/g, '');
-       
-          // start new IE block if key is IE. 
-          if(key === 'IE'){
-            inIEBlock = true;
-            ieBlock = {type: value}
-            if(!detectedNet["IE"]){
-              detectedNet["IE"] = [];
-            } 
-            detectedNet["IE"].push(ieBlock);
-          } else {
-            // detect when IE block ends.
-            if(inIEBlock && indent === defaultIndent){
-              inIEBlock = false; 
-            }
-
-            if(inIEBlock){
-              ieBlock[key] = value;
-            } else {
-              detectedNet[key] = value;
-            }
-          }
-        }
-      });
-    };
-
-    success(detectedNets);
-  });
-}
-
 function addSignalInfo(line, net){
 
   _.forEach(line.split('  '), function(part){
@@ -630,7 +481,6 @@ function addSignalInfo(line, net){
     net[key] = value; 
   });
 }
-
 
 function loadPersistedNets(success){
   console.log("Going to load persisted networks");
