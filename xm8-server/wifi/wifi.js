@@ -349,8 +349,9 @@ function listNetworks(){
       .then(mergeDetectedWithKnown)
     // todo: merge with stored nets etc    
   } else {
+    console.log("Networks already detected")
     return new Promise(function(resolve, reject){
-      resolve({detectedNets});
+      resolve(detectedNets);
     });
   }
 }
