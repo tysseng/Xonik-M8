@@ -41,12 +41,7 @@ function connectToKnownNets(success, failure){
     .then(success)
     .catch(function(err){
       display.write(0, 0, "Could not connect to network, trying ad-hoc");
-      startAdHoc()
-        .then(success)
-        .catch(function(err){
-          console.log(err);
-          display.write(0, 0, "Could not set up ad-hoc, gui is inaccessible over wifi");
-        });
+      connectToAdHoc(success, failure);
     });  
 }
 
