@@ -10,6 +10,9 @@ var config = {
 	},
 	wifi: {
 		adapter: "wlan0",
+
+                // increase these if connection to network fails and you want to let wpa supplicant
+                // try for a longer duration before we abort it.
 		connectionRetry: {
 			max: 16,
 			delayMs: 250
@@ -22,8 +25,8 @@ var config = {
 		},
 		files: {
 		    persistedNets: 'wifi/persisted_nets.json',
-            wpaSupplicant: '/etc/wpa_supplicant/wpa_supplicant.conf',
-            wpaLog: '/tmp/wpa_supplicant.log'
+                    wpaSupplicant: '/etc/wpa_supplicant/wpa_supplicant.conf',
+                    wpaLog: '/tmp/wpa_supplicant.log'
 		}
 	}
 }

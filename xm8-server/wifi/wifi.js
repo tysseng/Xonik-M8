@@ -206,7 +206,7 @@ function hasConnectionFailed(controlEvents){
 }
 
 function extractReasons(controlEvents){
-  var tempDisabledEvents = _.find(nets, function(o) { return o.search('SSID-TEMP-DISABLED') > -1 });
+  var tempDisabledEvents = _.find(controlEvents, function(o) { return o.search('SSID-TEMP-DISABLED') > -1 });
   // TODO: Extract and uniquify reason from here
   return tempDisabledEvents;
 }
