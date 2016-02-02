@@ -1,7 +1,9 @@
+var execAsync = require('child_process').exec;
+
 function exec(command, logMsg, errorMsg, ignoreError){
    var promise = new Promise(function(resolve, reject){
     console.log(logMsg);
-    exec(command, function (error, stdout, stderr){
+    execAsync(command, function (error, stdout, stderr){
       if(!error || ignoreError){
         console.log("Command succeded");
         console.log(stdout);
