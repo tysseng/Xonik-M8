@@ -10,7 +10,7 @@ var display = require('../synthcore/display.js');
 var _ = require('lodash');
 var config = require('../synthcore/config.js');
 var pt = require('../synthcore/promiseTools.js');
-var wc = require('wifiCommands.js');
+var wc = require('./wifiCommands.js');
 
 var persistedNetsFile = 'wifi/persisted_nets.json';
 var wpaSupplicantFile = '/etc/wpa_supplicant/wpa_supplicant.conf';
@@ -54,7 +54,7 @@ function connectToKnownNets(success, failure){
 function connectToAdHoc(success, failure){
   var connectedNet = {ssid: config.wifi.adHoc.ssid};
   
-  shutdownAdapter()
+  wc.shutdownAdapter()
     .then(wc.removeDhcpEntry)
     .then(wc.terminateWpaSupplicant)
     .then(wc.setWlanModeToAdHoc)
@@ -80,7 +80,7 @@ function connect(ssid){
 
     var connectedNet = {};
 
-    return shutdownAdapter()
+    return wc.shutdownAdapter()
       .then(wc.removeDhcpEntry)
       .then(wc.terminateWpaSupplicant)
       .then(wc.deleteWpaLogfile)
@@ -88,18 +88,18 @@ function connect(ssid){
       .then(wc.setWlanModeToManaged)
       .then(wc.startAdapter)
 
-      // The ssid check could have been done right after startWpaSupplicant, but 
+      // The connection check could have been done right after startWpaSupplicant, but 
       // it seems that connection to the wifi continues even after that command
       // returns. To save time, we execute the next commands before checing if we 
       // actually have a valid conncetion.
-      //.then(waitForSsid.bind(null, ssid))
       .then(waitForConnection)
+      .then(wc.getWpaCliStatus)
+      .then(findSsid)
       .then(function(foundSsid){
         // store connected ssid for later
         connectedNet.ssid = foundSsid;
-        return checkSsid(ssid, foundSsid);
+        return wc.generateDhcpEntry();
       })
-      .then(wc.generateDhcpEntry)
       .then(wc.runIfconfig)
       .then(findIP)
       .then(function(foundIp){
@@ -185,7 +185,7 @@ function waitForConnection(retry){
 
   return wc.getWpaControlEvents()
     .then(checkForConnection)
-    .catch(function(controlEvents)){
+    .catch(function(controlEvents){
       if (retry >= config.wifi.connectionRetry.max){
         console.log("Connection timed out");
         throw err;
@@ -195,14 +195,14 @@ function waitForConnection(retry){
           var reasons = extractReasons(controlEvents);
           throw {message: 'Connection failed', reasons: reasons};
         }
-        // wait some time and try again
-        return pt.delay(config.wifi.connectionRetry.delayMs).then(waitForConnection.bind(null, ++retry));
       }
-    }
+      // wait some time and try again
+      return pt.delay(config.wifi.connectionRetry.delayMs).then(waitForConnection.bind(null, ++retry));      
+    });
 }
 
 function hasConnectionFailed(controlEvents){
-  return _.find(nets, function(o) { return o.search('CONN_FAILED') > -1 });  
+  return _.find(controlEvents, function(o) { return o.search('CONN_FAILED') > -1 });  
 }
 
 function extractReasons(controlEvents){
@@ -212,17 +212,21 @@ function extractReasons(controlEvents){
 }
 
 function checkForConnection(controlEvents){
+  if(controlEvents) {
+    controlEvents = controlEvents.split('\n');
+  }
   return new Promise(function(resolve, reject){    
     if(isConnected(controlEvents)){
       resolve();
     } else {
       reject(controlEvents);
     }
-  }
+  });
 }
 
 function isConnected(controlEvents){
-  return _.find(nets, function(o) { return o.search('CTRL-EVENT-CONNECTED') > -1 });  
+
+  return _.find(controlEvents, function(o) { return o.search('CTRL-EVENT-CONNECTED') > -1 });  
 }
 
 function findSsid(stdout){
@@ -340,7 +344,7 @@ function findNetInList(ssid, nets){
 function listNetworks(){
   if(detectedNets.length == 0){
     console.log("no nets detected, doing a re-scan");    
-    return scanForNetworks()
+    return wc.scanForNetworks()
       .then(extractNetworks)
       .then(mergeDetectedWithKnown)
     // todo: merge with stored nets etc    
@@ -543,7 +547,13 @@ Error for wireless request "Set Mode" (8B06) :
 løsning: starte wpa_supplicant, fjernet problemet
 */
 
-module.exports.listNetworks = listNetworks;
+function getAvailableNetworks(success, failure){
+ listNetworks()
+   .then(success)
+   .catch(failure); 
+}
+
+module.exports.getAvailableNetworks = getAvailableNetworks;
 module.exports.connectToNet = connectToNet;
 module.exports.connectToAdHoc = connectToAdHoc;
 module.exports.connectToKnownNets = connectToKnownNets;

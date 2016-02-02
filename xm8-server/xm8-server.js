@@ -93,7 +93,7 @@ app.ws('/controller', function(ws, req) {
 
 // WIFI control
 app.get('/wifi', function(req, res){
-  wifi.listNetworks(
+  wifi.getAvailableNetworks(
     function(networks){
       res.status(200).send(networks);
     },

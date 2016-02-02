@@ -112,7 +112,8 @@ function getWpaControlEvents(){
   return pt.exec(
     "grep 'CTRL-EVENT' "  + config.wifi.files.wpaLog,
     "Searching wpa log for control events",
-    "Failed while searching wpa log for control events"); 
+    "Failed while searching wpa log for control events",
+    true); 
 }
 
 module.exports.shutdownAdapter = shutdownAdapter;

@@ -19,7 +19,7 @@ var config = {
 			key: "abcdef123456",
 			ip: "10.0.0.200",
 			netmask: "255.255.255.0"
-		}
+		},
 		files: {
 		    persistedNets: 'wifi/persisted_nets.json',
             wpaSupplicant: '/etc/wpa_supplicant/wpa_supplicant.conf',
