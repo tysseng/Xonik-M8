@@ -106,10 +106,10 @@ app.get('/wifi', function(req, res){
 app.get('/wifi/connectedok', function(req, res){
   var lastConnectionError = wifi.getLastConnectionError();
   if(lastConnectionError){
-    res.status(200).send();
-  } else {
     console.log("Last connect failed: " + lastConnectionError);
     res.status(500).send(lastConnectionError);
+  } else {
+    res.status(200).send();    
   }
 });
 
