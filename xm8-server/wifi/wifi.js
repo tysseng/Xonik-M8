@@ -1,5 +1,4 @@
 // TODO: Store mac, retry without if not available
-// TODO: Detect failure from wrong/missing password, prompt user
 // TODO: Get additional config from gui
 // TODO: Merge multiple nets with same SSID, add mac to supplicant config
 
@@ -19,34 +18,46 @@ var wpaLogFile = '/tmp/wpa_supplicant.log';
 var detectedNets = [];
 var knownNets = [];
 
+// stores the last error, makes it possible to retrieve errors when connecting
+// to ad-hoc after connect failed
+var lastConnectionError = undefined;
+
+function getLastConnectionError(){
+  return lastConnectionError;
+}
 
 function connectToNet(ssid, success, failure){
+  lastConnectionError = undefined;
   listNetworks()
     .then(getNetworkBySsid.bind(null, ssid))
     .then(generateWpaSupplicantConf)
     .then(connect.bind(null, ssid))
     .then(success)
     .catch(function(err){
+      lastConnectionError = err;
       console.log("Could not connect to network. Error is:");
       console.log(err);
       display.write(0, 0, "Could not connect to network, trying ad-hoc");
-      connectToAdHoc(success, failure);
+      connectToAdHoc(success.bind(null, err), failure);
     });
 }
 
 function connectToKnownNets(success, failure){
+  lastConnectionError = undefined;
   listNetworks()
     .then(generateWpaSupplicantConf.bind(null, knownNets))
     .then(connect)
     .then(success)
     .catch(function(err){
+      lastConnectionError = err;
       display.write(0, 0, "Could not connect to network, trying ad-hoc");
-      connectToAdHoc(success, failure);
+      connectToAdHoc(success.bind(null, err), failure);
     });  
 }
 
 
 function connectToAdHoc(success, failure){
+  lastConnectionError = undefined;
   var connectedNet = {ssid: config.wifi.adHoc.ssid};
   
   wc.shutdownAdapter()
@@ -67,6 +78,7 @@ function connectToAdHoc(success, failure){
     })
     .then(success)
     .catch(function(err){
+      lastConnectionError = err;
       failure(err);
     });
 }
@@ -553,3 +565,4 @@ module.exports.getAvailableNetworks = getAvailableNetworks;
 module.exports.connectToNet = connectToNet;
 module.exports.connectToAdHoc = connectToAdHoc;
 module.exports.connectToKnownNets = connectToKnownNets;
+module.exports.getLastConnectionError = getLastConnectionError;
