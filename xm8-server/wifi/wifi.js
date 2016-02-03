@@ -1,6 +1,7 @@
 // TODO: Store mac, retry without if not available
 // TODO: Get additional config from gui
 // TODO: Merge multiple nets with same SSID, add mac to supplicant config
+// TODO: Add "connected", ip etc to connected net
 
 var exec = require('child_process').exec;
 var jsonfile = require('jsonfile');
@@ -17,17 +18,16 @@ var wpaLogFile = '/tmp/wpa_supplicant.log';
 
 var detectedNets = [];
 var knownNets = [];
+var connectedNet;
 
 // stores the last error, makes it possible to retrieve errors when connecting
 // to ad-hoc after connect failed
-var lastConnectionError = undefined;
-
-function getLastConnectionError(){
-  return lastConnectionError;
-}
+var lastConnectionError;
 
 function connectToNet(ssid, success, failure){
   lastConnectionError = undefined;
+  connectedNet = undefined;
+
   listNetworks()
     .then(getNetworkBySsid.bind(null, ssid))
     .then(generateWpaSupplicantConf)
@@ -44,6 +44,8 @@ function connectToNet(ssid, success, failure){
 
 function connectToKnownNets(success, failure){
   lastConnectionError = undefined;
+  connectedNet = undefined;
+
   listNetworks()
     .then(generateWpaSupplicantConf.bind(null, knownNets))
     .then(connect)
@@ -58,7 +60,9 @@ function connectToKnownNets(success, failure){
 
 function connectToAdHoc(success, failure){
   lastConnectionError = undefined;
-  var connectedNet = {ssid: config.wifi.adHoc.ssid};
+  connectedNet = undefined;
+
+  var net = {ssid: config.wifi.adHoc.ssid};
   
   wc.shutdownAdapter()
     .then(wc.removeDhcpEntry)
@@ -73,8 +77,8 @@ function connectToAdHoc(success, failure){
     .then(findIP)
     .then(function(foundIp){
       // store connected ip for later
-      connectedNet.ip = foundIp;
-      return acceptConnection(connectedNet, false);
+      net.ip = foundIp;
+      return acceptConnection(net, false);
     })
     .then(success)
     .catch(function(err){
@@ -85,7 +89,7 @@ function connectToAdHoc(success, failure){
 
 function connect(ssid){
 
-    var connectedNet = {};
+    var net = {};
 
     return wc.shutdownAdapter()
       .then(wc.removeDhcpEntry)
@@ -104,25 +108,26 @@ function connect(ssid){
       .then(findSsid)
       .then(function(foundSsid){
         // store connected ssid for later
-        connectedNet.ssid = foundSsid;
+        net.ssid = foundSsid;
         return wc.generateDhcpEntry();
       })
       .then(wc.runIfconfig)
       .then(findIP)
       .then(function(foundIp){
         // store connected ip for later
-        connectedNet.ip = foundIp;
-        return acceptConnection(connectedNet, true);
+        net.ip = foundIp;
+        return acceptConnection(net, true);
       });
 }
 
-function acceptConnection(connectedNet, addToKnown){
+function acceptConnection(net, addToKnown){
   return new Promise(function(resolve, reject){    
-    display.write(0, 0, "I'm at " + connectedNet.ip + " on " + connectedNet.ssid);   
+    display.write(0, 0, "I'm at " + net.ip + " on " + net.ssid);   
+    connectedNet = net;
     if(addToKnown){
-      addToKnownIfNew(connectedNet);
+      addToKnownIfNew(net);
     }
-    resolve(connectedNet);
+    resolve(net);
   });
 }
 
@@ -510,6 +515,15 @@ function loadPersistedNets(success){
   });
 }
 
+function getConnectedNet(){
+  return connectedNet;
+}
+
+function getLastConnectionError(){
+  return lastConnectionError;
+}
+
+
 /*
 function debugCreateNetworks(){
   addNetToKnown('"Poly"', '"jupiter8prophet5"');
@@ -566,3 +580,4 @@ module.exports.connectToNet = connectToNet;
 module.exports.connectToAdHoc = connectToAdHoc;
 module.exports.connectToKnownNets = connectToKnownNets;
 module.exports.getLastConnectionError = getLastConnectionError;
+module.exports.getConnectedNet = getConnectedNet;

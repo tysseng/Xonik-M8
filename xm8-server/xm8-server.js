@@ -108,13 +108,24 @@ app.get('/wifi/connectedok', function(req, res){
   if(lastConnectionError){
     res.status(200).send();
   } else {
+    console.log("Last connect failed: " + lastConnectionError);
     res.status(500).send(lastConnectionError);
+  }
+});
+
+app.get('/wifi/connected', function(req, res){
+  var connectedNet = wifi.getConnectedNet();
+  if(connectedNet){
+    res.status(200).send(connectedNet);
+  } else {
+    console.log("Not connected to any net");
+    res.status(500).send();
   }
 });
 
 app.put('/wifi/connect', function(req, res){
   wifi.connectToKnownNets(
-    function(selectedNet, error){
+    function(error, selectedNet){
       // error is used if an error occurs during normal connecting and 
       // the system reverts to ad-hoc
       var result = {
@@ -132,7 +143,10 @@ app.put('/wifi/connect', function(req, res){
 app.put('/wifi/ad-hoc/connect', function(req, res){
   wifi.connectToAdHoc(
     function(selectedNet){
-      res.status(200).send(selectedNet);
+      var result = {
+        selectedNet: selectedNet
+      }      
+      res.status(200).send(result);
     },
     function(err){
       res.status(500).send(err);
@@ -141,7 +155,7 @@ app.put('/wifi/ad-hoc/connect', function(req, res){
 
 app.put('/wifi/:ssid/connect', function(req, res){
   wifi.connectToNet(req.params.ssid, 
-    function(selectedNet, error){
+    function(error, selectedNet){
       // error is used if an error occurs during normal connecting and 
       // the system reverts to ad-hoc
       var result = {
