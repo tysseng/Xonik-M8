@@ -38,7 +38,7 @@ function connectToNet(ssid, success, failure){
       console.log("Could not connect to network. Error is:");
       console.log(err);
       display.write(0, 0, "Could not connect to network, trying ad-hoc");
-      connectToAdHoc(success.bind(null, err), failure);
+      connectToAdHoc(success.bind(null, err), failure, true);
     });
 }
 
@@ -53,14 +53,19 @@ function connectToKnownNets(success, failure){
     .catch(function(err){
       lastConnectionError = err;
       display.write(0, 0, "Could not connect to network, trying ad-hoc");
-      connectToAdHoc(success.bind(null, err), failure);
+      connectToAdHoc(success.bind(null, err), failure, true);
     });  
 }
 
 
-function connectToAdHoc(success, failure){
-  lastConnectionError = undefined;
+function connectToAdHoc(success, failure, isFallback){
   connectedNet = undefined;
+
+  // we do not want to reset the previous error if ad hoc connection is
+  // the fallback of a connection attempt to a "normal" network 
+  if(!isFallback){ 
+    lastConnectionError = undefined;
+  }
 
   var net = {ssid: config.wifi.adHoc.ssid};
   
