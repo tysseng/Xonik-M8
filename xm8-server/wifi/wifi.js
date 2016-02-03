@@ -523,7 +523,6 @@ function getLastConnectionError(){
   return lastConnectionError;
 }
 
-
 /*
 function debugCreateNetworks(){
   addNetToKnown('"Poly"', '"jupiter8prophet5"');
