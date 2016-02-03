@@ -32,7 +32,7 @@ function connectToNet(ssid, success, failure){
     .then(getNetworkBySsid.bind(null, ssid))
     .then(generateWpaSupplicantConf)
     .then(connect.bind(null, ssid))
-    .then(success)
+    .then(success.bind(null, undefined)) // no error but necessary to have a first parameter
     .catch(function(err){
       lastConnectionError = err;
       console.log("Could not connect to network. Error is:");
@@ -49,7 +49,7 @@ function connectToKnownNets(success, failure){
   listNetworks()
     .then(generateWpaSupplicantConf.bind(null, knownNets))
     .then(connect)
-    .then(success)
+    .then(success.bind(null, undefined)) // no error but necessary to have a first parameter
     .catch(function(err){
       lastConnectionError = err;
       display.write(0, 0, "Could not connect to network, trying ad-hoc");
