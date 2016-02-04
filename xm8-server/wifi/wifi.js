@@ -304,6 +304,9 @@ function generateWpaSupplicantConf(nets){
       var net = nets[i];
       var wpaParameters = net.wpaParameters;
 
+      console.log("wpa params");
+      console.log(wpaParameters);
+
       fileContent += 'network={\n';
 
       // keys to include for this particular network
@@ -536,7 +539,6 @@ function getLastConnectionError(){
   return lastConnectionError;
 }
 
-loadPersistedNets();
 
 /*
 root@raspberrypi:~# iwconfig wlan0 mode managed 
@@ -585,13 +587,15 @@ function setWpaParameters(ssid, wpaParameters, success, failure){
   success();  
 }
 
+loadPersistedNets();
+
 function debugCreateNetworks(){
 
   var poly = {
-    ssid: poly,
+    ssid: "Poly",
     wpaParameters: [
       {
-        key: "ssid"
+        key: "ssid",
         value: "Poly"
       },
       {
@@ -602,10 +606,10 @@ function debugCreateNetworks(){
   }
 
   var mono = {
-    ssid: mono,
+    ssid: "Mono",
     wpaParameters: [
       {
-        key: "ssid"
+        key: "ssid",
         value: "Mono"
       },
       {
@@ -640,13 +644,8 @@ function debugExecuteCommand(){
   }
 }
 
-function debugRun(){
 
-  // load all known nets from disk - has to be done elsewhere later
-  debugExecuteCommand());
-}
-
-debugRun();
+debugExecuteCommand();
 
 
 module.exports.getAvailableNetworks = getAvailableNetworks;
