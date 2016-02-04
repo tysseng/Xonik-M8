@@ -11,6 +11,7 @@ var _ = require('lodash');
 var config = require('../synthcore/config.js');
 var pt = require('../synthcore/promiseTools.js');
 var wc = require('./wifiCommands.js');
+var wpaSupplicant = require('./wpaSupplicant.js');
 
 var persistedNetsFile = 'wifi/persisted_nets.json';
 var wpaSupplicantFile = '/etc/wpa_supplicant/wpa_supplicant.conf';
@@ -62,7 +63,7 @@ function connectToAdHoc(success, failure, isFallback){
   connectedNet = undefined;
 
   // we do not want to reset the previous error if ad hoc connection is
-  // the fallback of a connection attempt to a "normal" network 
+  // the fallback of a connection attempt to a "normal" network. 
   if(!isFallback){ 
     lastConnectionError = undefined;
   }
@@ -302,14 +303,15 @@ function generateWpaSupplicantConf(nets){
     for (var i = 0; i < nets.length; i++) {
 
       var net = nets[i];
+      var wpaParameters = net.wpaParameters;
+
       fileContent += 'network={\n';
 
       // keys to include for this particular network
-      _.forEach(net.keysToInclude, function(key){
-        // TODO: CHECK EXCISTENCE OF KEY HERE.
-        var value = escapeValueIfNecessary(key, net[key]);
-        console.log(key + ": " + net[key] + " was replaced with " + value);
-        fileContent +='  ' + key + '=' + value + '\n';
+      _.forEach(wpaParameters, function(parameter){
+        var escapedValue = escapeValueIfNecessary(parameter.key, wpaParameter.value);
+        console.log(key + ": " + value + " was replaced with " + escapedValue);
+        fileContent +='  ' + key + '=' + escapedValue + '\n';
       });
    
       // default content to include for all nets 
@@ -461,6 +463,7 @@ function replaceExtractedKey(key){
 
 function mergeDetectedWithKnown(detectedNets){
   return new Promise(function(resolve, reject){
+
     _.forEach(detectedNets, function(detectedNet){
 
       detectedNet.keysToInclude=['ssid', 'psk'];
@@ -471,6 +474,10 @@ function mergeDetectedWithKnown(detectedNets){
         detectedNet.isKnown = true;
         _.extend(detectedNet, knownNet);
       } 
+      if(connectedNet && connectedNet.ssid === detectedNet.ssid){
+        _.extend(detectedNet, connectedNet);
+        detectedNet.isConnected = true;
+      }
     });
 
     resolve(detectedNets);
@@ -579,9 +586,44 @@ function getAvailableNetworks(success, failure){
    .catch(failure); 
 }
 
+function getWpaSupplicantParameters(){
+  return wpaSupplicant.parameters;
+}
+
+function setWpaParameters(ssid, wpaParameters, success, failure){
+  _.each(wpaParameters, function(parameter)){
+    if(!wpaSupplicant.parameters[parameter.key]){
+      failure({message: "No such wpa parameter exists"});
+      return;
+    }
+
+    if(!typeof parameter.value === "string"){
+      failure({message: "Input parameter " + parameter.key + "must be a string"}); 
+      return;
+    }
+  };
+
+  var knownNet = findNetInList(ssid, knownNets){
+  if(knownNet){
+    knownNet.wpaParameters.extend(wpaParameters);
+  } else {
+    knownNets.add({
+      ssid: ssid,
+      wpaParameters: wpaParameters
+    });
+  }
+  persistNets();
+  console.log("Updated known nets");
+  console.log(knownNets);
+
+  success();  
+}
+
 module.exports.getAvailableNetworks = getAvailableNetworks;
 module.exports.connectToNet = connectToNet;
 module.exports.connectToAdHoc = connectToAdHoc;
 module.exports.connectToKnownNets = connectToKnownNets;
 module.exports.getLastConnectionError = getLastConnectionError;
 module.exports.getConnectedNet = getConnectedNet;
+module.exports.getWpaSupplicantParameters = getWpaSupplicantParameters;
+module.exports.setWpaParameters = setWpaParameters;

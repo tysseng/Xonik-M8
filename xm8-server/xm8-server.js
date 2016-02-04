@@ -2,6 +2,8 @@
 Xonik M8 ws & http server
 
 Go to http://pi_address/
+
+TODO: Sanitize inputs
 */
 
 var express = require('express');
@@ -123,6 +125,10 @@ app.get('/wifi/connected', function(req, res){
   }
 });
 
+app.get('/wifi/wpa/parameters', function(req, res){
+  res.status(200).send(wifi.getWpaParameters());
+});
+
 app.put('/wifi/connect', function(req, res){
   wifi.connectToKnownNets(
     function(error, selectedNet){
@@ -149,6 +155,18 @@ app.put('/wifi/ad-hoc/connect', function(req, res){
       res.status(200).send(result);
     },
     function(err){
+      res.status(500).send(err);
+    });
+});
+
+app.put('/wifi/:ssid', function(req, res){
+  wifi.setWpaParameters(req.params.ssid, req.wpaParameters, 
+    function(
+      res.status(200).send();
+    },
+    function(err){
+      console.log("Error");
+      console.log(err);
       res.status(500).send(err);
     });
 });
