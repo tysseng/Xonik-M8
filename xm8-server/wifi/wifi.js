@@ -140,7 +140,7 @@ function acceptConnection(net, addToKnown){
 function addToKnownIfNew(net){
   if(!isInKnownNets(net)){
     console.log("Network " +net.ssid + " is not in list of known networks, adding it");
-    addNetToKnown(net.ssid, net.psk);
+    addNetToKnown(net);
   }
 }
 
@@ -148,11 +148,10 @@ function isInKnownNets(net){
   return findNetInList(net.ssid, knownNets);
 }
 
-function addNetToKnown(ssid, psk){
+function addNetToKnown(net){
   knownNets.push({
-    keysToInclude: ['ssid', 'psk'], // keys to include when writing wpa_supplicant file
-    ssid: ssid, 
-    psk: psk
+    ssid: net.ssid,
+    wpaParameters: net.wpaParameters
   });
   persistNets(); 
 }
@@ -537,43 +536,8 @@ function getLastConnectionError(){
   return lastConnectionError;
 }
 
-/*
-function debugCreateNetworks(){
-  addNetToKnown('"Poly"', '"jupiter8prophet5"');
-  addNetToKnown('"Mono"', '"prophet5jupiter8"');
-}
-
-function debugExecuteCommand(){
-  var cmd;
-
-  // print process.argv
-  process.argv.forEach(function (val, index, array) {
-    if(index == 2) cmd = val;
-  });
-
-  if(cmd == "1"){
-    selectNetAndConnect(knownNets[0]);
-  } else if(cmd == "2"){
-    selectNetAndConnect(knownNets[1]);
-  } else if(cmd == "3"){
-    connectToKnownNets();
-  } else if(cmd == "4"){
-    startAdHoc();
-  } else if(cmd == "create"){
-    debugCreateNetworks();
-  }
-}
-
-function debugRun(){
-
-  // load all known nets from disk - has to be done elsewhere later
-  loadPersistedNets(debugExecuteCommand);
-}
-
-debugRun();
-*/
-
 loadPersistedNets();
+
 /*
 root@raspberrypi:~# iwconfig wlan0 mode managed 
 Error for wireless request "Set Mode" (8B06) :
@@ -620,6 +584,70 @@ function setWpaParameters(ssid, wpaParameters, success, failure){
 
   success();  
 }
+
+function debugCreateNetworks(){
+
+  var poly = {
+    ssid: poly,
+    wpaParameters: [
+      {
+        key: "ssid"
+        value: "Poly"
+      },
+      {
+        key: "psk",
+        value: "jupiter8prophet5"
+      }    
+    ]
+  }
+
+  var mono = {
+    ssid: mono,
+    wpaParameters: [
+      {
+        key: "ssid"
+        value: "Mono"
+      },
+      {
+        key: "psk",
+        value: "prophet5jupiter8"
+      }    
+    ]
+  }
+
+  addNetToKnown(poly);
+  addNetToKnown(mono);
+}
+
+function debugExecuteCommand(){
+  var cmd;
+
+  // print process.argv
+  process.argv.forEach(function (val, index, array) {
+    if(index == 2) cmd = val;
+  });
+
+  if(cmd == "1"){
+    selectNetAndConnect(knownNets[0]);
+  } else if(cmd == "2"){
+    selectNetAndConnect(knownNets[1]);
+  } else if(cmd == "3"){
+    connectToKnownNets();
+  } else if(cmd == "4"){
+    startAdHoc();
+  } else if(cmd == "create"){
+    debugCreateNetworks();
+  }
+}
+
+function debugRun(){
+
+  // load all known nets from disk - has to be done elsewhere later
+  debugExecuteCommand());
+}
+
+debugRun();
+
 
 module.exports.getAvailableNetworks = getAvailableNetworks;
 module.exports.connectToNet = connectToNet;
