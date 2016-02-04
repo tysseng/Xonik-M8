@@ -1,4 +1,4 @@
-var parameres = {
+var parameters = {
 
 /*
 // Always set to 1, not user selectable
@@ -131,7 +131,7 @@ private_key_passwd:
 `Password for any private key file.`,
 
 dh_file:
-`Pathname to a file	holding	DH/DSA parameters (in PEM format).`
+`Pathname to a file	holding	DH/DSA parameters (in PEM format).
 This file holds parameters	for an ephemeral DH key	exchange.  In
 most cases, the default RSA authentication	does not use this con-
 figuration.  However, it is possible to set up RSA	to use an
@@ -147,19 +147,19 @@ cate is only accepted if it contains this string in the subject.
 The subject string	is in following	format:
 
 /C=US/ST=CA/L=San Francisco/CN=Test
-AS/emailAddress=as@example.com`
+AS/emailAddress=as@example.com`,
 
 phase1:
-Phase1 (outer authentication, i.e., TLS tunnel) parameters
+`Phase1 (outer authentication, i.e., TLS tunnel) parameters
 (string with field-value pairs, e.g., "peapver=0" or "peapver=1
 peaplabel=1").
 
 peapver can be used to force which	PEAP version (0	or 1) is used.
 
-peaplabel=1 can be	used to	force new label, ``client PEAP
-encryption'', to be used during key derivation when PEAPv1	or
+peaplabel=1 can be	used to	force new label, 'iclient PEAP
+encryption', to be used during key derivation when PEAPv1	or
 newer.  Most existing PEAPv1 implementations seem to be using the
-old label,	``client EAP encryption'', and wpa_supplicant(8) is
+old label,	"client EAP encryption", and wpa_supplicant(8) is
 now using that as the default value.  Some	servers, e.g.,
 Radiator, may require peaplabel=1 configuration to	interoperate
 with PEAPv1; see eap_testing.txt for more details.
@@ -167,7 +167,7 @@ with PEAPv1; see eap_testing.txt for more details.
 peap_outer_success=0 can be used to terminate PEAP	authentication
 on	tunneled EAP-Success.  This is required	with some RADIUS
 servers that implement draft-josefsson-pppext-eap-tls-eap-05.txt
-(e.g., Lucent NavisRadius v4.4.0 with PEAP	in ``IETF Draft	5''
+(e.g., Lucent NavisRadius v4.4.0 with PEAP	in IETF Draft	5''
 mode).
 
 include_tls_length=1 can be used to force wpa_supplicant(8) to
@@ -226,8 +226,8 @@ ured by setting this to 0.`,
 wep_tx_keyidx:
 `which key to use for transmission of packets.`,
 
-wep_keyN key:
-`An	ASCII string enclosed in quotation marks to encode the WEP
+wep_keyN:
+`key: An	ASCII string enclosed in quotation marks to encode the WEP
 key.  Without quotes this is a hex	string of the actual key.  WEP
 is	considered insecure and	should be avoided.  The	exact transla-
 tion from an ASCII	key to a hex key varies.  Use hex keys where

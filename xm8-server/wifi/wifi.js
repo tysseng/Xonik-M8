@@ -309,7 +309,9 @@ function generateWpaSupplicantConf(nets){
 
       // keys to include for this particular network
       _.forEach(wpaParameters, function(parameter){
-        var escapedValue = escapeValueIfNecessary(parameter.key, wpaParameter.value);
+        var key = parameter.key;
+        var value = parameter.value;
+        var escapedValue = escapeValueIfNecessary(key, value);
         console.log(key + ": " + value + " was replaced with " + escapedValue);
         fileContent +='  ' + key + '=' + escapedValue + '\n';
       });
@@ -591,7 +593,7 @@ function getWpaSupplicantParameters(){
 }
 
 function setWpaParameters(ssid, wpaParameters, success, failure){
-  _.each(wpaParameters, function(parameter)){
+  _.each(wpaParameters, function(parameter){
     if(!wpaSupplicant.parameters[parameter.key]){
       failure({message: "No such wpa parameter exists"});
       return;
@@ -600,10 +602,10 @@ function setWpaParameters(ssid, wpaParameters, success, failure){
     if(!typeof parameter.value === "string"){
       failure({message: "Input parameter " + parameter.key + "must be a string"}); 
       return;
-    }
-  };
+    };
+  });
 
-  var knownNet = findNetInList(ssid, knownNets){
+  var knownNet = findNetInList(ssid, knownNets);
   if(knownNet){
     knownNet.wpaParameters.extend(wpaParameters);
   } else {
