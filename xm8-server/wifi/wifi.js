@@ -554,7 +554,7 @@ function getAvailableNetworks(success, failure){
    .catch(failure); 
 }
 
-function getWpaSupplicantParameters(){
+function getWpaParameters(){
   return wpaSupplicant.parameters;
 }
 
@@ -654,5 +654,5 @@ module.exports.connectToAdHoc = connectToAdHoc;
 module.exports.connectToKnownNets = connectToKnownNets;
 module.exports.getLastConnectionError = getLastConnectionError;
 module.exports.getConnectedNet = getConnectedNet;
-module.exports.getWpaSupplicantParameters = getWpaSupplicantParameters;
+module.exports.getWpaParameters = getWpaParameters;
 module.exports.setWpaParameters = setWpaParameters;
