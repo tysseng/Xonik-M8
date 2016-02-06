@@ -15,27 +15,6 @@ function removeDhcpEntry(){
     "Could not remove dhcp entry");
 }
 
-function terminateWpaSupplicant(){
-  return pt.exec(
-    "wpa_cli terminate",
-    "Terminating old wpa_supplicant instance",    
-    "wpa_supplicant probably terminated, continuing",
-    true); //ignore errors and continue
-}
-
-function deleteWpaLogfile(){
-  return pt.exec(
-    "rm -rf " + config.wifi.files.wpaLog,
-    "Deleting wpa log file",    
-    "Could not delete wpa log file");
-}
-
-function startWpaSupplicant(){
-  return pt.exec(
-    "wpa_supplicant -B -Dwext -i" + config.wifi.adapter + " -c" + config.wifi.files.wpaSupplicant + " -f" + config.wifi.files.wpaLog,
-    "Starting wpa_supplicant",
-    "Could not start wpa_supplicant");
-}
 
 // TODO: Merge these
 function setWlanModeToManaged(){
@@ -43,13 +22,6 @@ function setWlanModeToManaged(){
     "iwconfig " + config.wifi.adapter + " mode Managed",
     "Setting wlan mode to managed",
     "Could not set wlan mode to managed");
-}
-
-function setWlanModeToAdHoc(){
-  return pt.exec(
-    "iwconfig " + config.wifi.adapter + " mode ad-hoc",
-    "Setting wlan mode to ad-hoc",
-    "Could not set wlan mode to ad-hoc");
 }
 
 function startAdapter(){
@@ -87,12 +59,6 @@ function setWifiIp(ip, netmask){
     "Could not set wifi ip and netmask");
 }
 
-function getWpaCliStatus(){
-  return pt.exec(
-    "wpa_cli status",
-    "Checking wpa cli status",
-    "Checking wpa cli status failed");
-}
 
 function runIfconfig(ssid){
   return pt.exec(
@@ -108,28 +74,39 @@ function scanForNetworks(){
     "Could not scan for available wifi networks");
 }
 
-function getWpaControlEvents(){
-  return pt.exec(
-    "grep 'CTRL-EVENT' "  + config.wifi.files.wpaLog,
-    "Searching wpa log for control events",
-    "Failed while searching wpa log for control events",
-    true); 
-}
 
 module.exports.shutdownAdapter = shutdownAdapter;
 module.exports.removeDhcpEntry = removeDhcpEntry
-module.exports.terminateWpaSupplicant = terminateWpaSupplicant;
-module.exports.deleteWpaLogfile = deleteWpaLogfile;
-module.exports.startWpaSupplicant = startWpaSupplicant;
 module.exports.setWlanModeToManaged =setWlanModeToManaged; 
-module.exports.setWlanModeToAdHoc = setWlanModeToAdHoc;
 module.exports.startAdapter = startAdapter;
 module.exports.generateDhcpEntry = generateDhcpEntry;
 module.exports.setWifiKey = setWifiKey;
 module.exports.setWifiEssid = setWifiEssid;
 module.exports.setWifiIp = setWifiIp;
-module.exports.getWpaCliStatus = getWpaCliStatus;
 module.exports.runIfconfig = runIfconfig;
 module.exports.scanForNetworks = scanForNetworks;
-module.exports.getWpaControlEvents = getWpaControlEvents;
+
+
+/**
+Troubleshooting:
+
+Etter restart så får man følgende feilmelding ved forsøk på å connecte til ad-hoc:
+{
+  "message": "Could not set wlan mode to ad-hoc",
+  "stdout": "",
+  "stderr": "Error for wireless request \"Set Mode\" (8B06) :\n    SET failed on device wlan0 ; Operation not permitted.\n",
+  "error": {
+    "killed": false,
+    "code": 250,
+    "signal": null,
+    "cmd": "/bin/sh -c iwconfig wlan0 mode ad-hoc"
+  }
+}
+
+Ved å kjøre følgende kommando:
+
+wpa_supplicant -B -Dwext -iwlan0 -c/etc/wpa_supplicant/wpa_supplicant.conf
+
+så løser det seg. Finn ut hvorfor!
+*/
 
