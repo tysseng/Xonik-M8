@@ -1,5 +1,6 @@
-
+var config = require('../synthcore/config.js');
 var knownNets = require('./knownNets.js');
+var display = require('../synthcore/display.js');
 
 function findIP(stdout){
   var promise = new Promise(function(resolve, reject){
@@ -26,6 +27,8 @@ function findIP(stdout){
 
 function acceptConnection(net, addToKnown){
   return new Promise(function(resolve, reject){    
+  console.log("net");
+  console.log(net);
     display.write(0, 0, "I'm at " + net.ip + " on " + net.ssid);   
     connectedNet = net;
     if(addToKnown){

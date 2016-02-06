@@ -1,4 +1,7 @@
 var config = require('../synthcore/config.js');
+var pt = require('../synthcore/promiseTools.js');
+var _ = require('lodash');
+
 
 function generateWpaSupplicantConf(nets){
 

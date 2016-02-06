@@ -1,5 +1,6 @@
 var wc = require('./wifiCommands.js');
 var knownNets = require('./knownNets.js');
+var _ = require('lodash');
 
 var detectedNets = [];
 

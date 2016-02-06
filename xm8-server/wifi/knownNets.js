@@ -1,9 +1,10 @@
 var config = require('../synthcore/config.js');
 var jsonfile = require('jsonfile');
+var _ = require('lodash');
 
 var knownNets = [];
 
-function get(){
+function getAll(){
   return knownNets;
 }
 
@@ -43,7 +44,7 @@ function save(){
 
 function load(success){
   console.log("Going to load persisted networks");
-  jsonfile.readFile(config.wifi.files.persistedNets,, function(err, obj){
+  jsonfile.readFile(config.wifi.files.persistedNets, function(err, obj){
     if(err){
       console.log("Could not load persisted networks");
       console.log(err);
