@@ -1,3 +1,6 @@
+var config = require('../synthcore/config.js');
+var _ = require('lodash');
+
 function getNetworkBySsid(ssid, nets){
   return new Promise(function(resolve, reject){  
     var selectedNet = findNetInList(ssid, nets);
@@ -17,7 +20,6 @@ function findIP(stdout){
       var blockStart = stdout.search(config.wifi.adapter);
       if(blockStart > -1){
         var block = stdout.substr(blockStart);
-
         // find first ip after block start
         var searchResult = /^\s+inet addr:([0-9\.]+).*$/gm.exec(block);
         if(searchResult && searchResult.length > 1){
@@ -39,3 +41,4 @@ function findNetInList(ssid, nets){
 
 module.exports.findNetInList=findNetInList;
 module.exports.getNetworkBySsid=getNetworkBySsid;
+module.exports.findIP=findIP;
