@@ -6,12 +6,12 @@ var wifiUtils = require('./utils.js');
 var detectedNets = [];
 
 // lists all available networks along with their status.
-function list(){
+function list(state){
   if(detectedNets.length == 0){
     console.log("no nets detected, doing a re-scan");    
     return wc.scanForNetworks()
       .then(extractNetworks)
-      .then(mergeDetectedWithKnown)
+      .then(mergeDetectedWithKnown.bind(null, state))
     // todo: merge with stored nets etc    
   } else {
     console.log("Networks already detected")
@@ -107,7 +107,7 @@ function replaceExtractedKey(key){
   }
 }
 
-function mergeDetectedWithKnown(detectedNets){
+function mergeDetectedWithKnown(state, detectedNets){
   return new Promise(function(resolve, reject){
 
     _.forEach(detectedNets, function(detectedNet){
@@ -120,8 +120,8 @@ function mergeDetectedWithKnown(detectedNets){
         detectedNet.isKnown = true;
         _.extend(detectedNet, knownNet);
       } 
-      if(connectedNet && connectedNet.ssid === detectedNet.ssid){
-        _.extend(detectedNet, connectedNet);
+      if(state.connectedNet && state.connectedNet.ssid === detectedNet.ssid){
+        _.extend(detectedNet, state.connectedNet);
         detectedNet.isConnected = true;
       }
     });
