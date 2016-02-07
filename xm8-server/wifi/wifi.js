@@ -7,7 +7,7 @@ var display = require('../synthcore/display.js');
 var _ = require('lodash');
 var wc = require('./wifiCommands.js');
 var adHoc = require('./adHoc.js');
-var wpa = require('./wpaSupplicant.js');
+var wpa = require('./wpa.js');
 var wpaParameters = require('./wpaSupplicantParams.js');
 var knownNets = require('./knownNets.js');
 var availableNets = require('./availableNets.js');
@@ -31,11 +31,11 @@ function resetState(){
 function connectToNet(ssid, success, failure){
   resetState();
 
-  availableNets.list()
-    .then(disconnect)
+  disconnect()
+    .then(availableNets.list.bind(null, state))
     .then(utils.getNetworkBySsid.bind(null, ssid))
     .then(function(net){
-      return wpa.connect(null, ssid, [net], state);
+      return wpa.connect(ssid, [net], state);
     })
     .then(acceptConnection.bind(null, success, true))
     .catch(fallBackToAdHoc.bind(null, success, failure));
@@ -44,8 +44,8 @@ function connectToNet(ssid, success, failure){
 function connectToKnownNets(success, failure){
   resetState();
 
-  availableNets.list()
-    .then(disconnect)
+  disconnect()
+    .then(availableNets.list.bind(null, state))
     .then(wpa.connect.bind(null, null, knownNets.get(), state))
     .then(acceptConnection.bind(null, success, false))
     .catch(fallBackToAdHoc.bind(null, success, failure));
@@ -66,7 +66,8 @@ function fallBackToAdHoc(success, failure, err){
 function connectToAdHoc(success, failure){
   resetState();
 
-  adHoc.connect(state)
+  disconnect()
+    .then(adHoc.connect.bind(null, state))
     .then(acceptConnection.bind(null, success, false))
     .catch(rejectConnection.bind(null, failure));
 }
@@ -87,7 +88,6 @@ function acceptConnection(success, addToKnown, net){
 
 function disconnect(){
   //TODO switch on current connection mode here
-console.log("HERE");
   return wpa.disconnect();
 }
 
@@ -109,9 +109,9 @@ function getLastConnectionError(){
 
 
 function getAvailableNetworks(success, failure){
- availableNets.list()
-   .then(success)
-   .catch(failure); 
+  availableNets.list(state)
+    .then(success)
+    .catch(failure); 
 }
 
 function getWpaParameters(){

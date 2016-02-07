@@ -3,12 +3,13 @@ var utils = require('./utils.js');
 var config = require('../synthcore/config.js');
 var pt = require('../synthcore/promiseTools.js');
 var _ = require('lodash');
+var fs = require('fs');
 
 function connect(ssid, nets, state){
 
   var net = {};
 
-  return wpa.generateConfig(nets)
+  return generateConfig(nets)
     .then(deleteLog)
     .then(start)
     .then(wc.setWlanModeToManaged)
@@ -146,7 +147,7 @@ function waitForConnection(retry){
   // first try doesn't count as retry, initialize with zero
   retry || (retry = 0);
 
-  return wpa.getControlEvents()
+  return getControlEvents()
     .then(checkForConnection)
     .catch(function(controlEvents){
       if (retry >= config.wifi.connectionRetry.max){

@@ -3,6 +3,7 @@ var _ = require('lodash');
 
 function getNetworkBySsid(ssid, nets){
   return new Promise(function(resolve, reject){  
+console.log(nets);
     var selectedNet = findNetInList(ssid, nets);
     if(selectedNet){
       console.log("Found net");
