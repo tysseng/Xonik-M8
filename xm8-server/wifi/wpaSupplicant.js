@@ -35,7 +35,7 @@ function connect(ssid, nets, state){
     });
 }
 
-function disconnectWpa(){
+function disconnect(){
   return wc.shutdownAdapter()
     .then(wc.removeDhcpEntry)
     .then(stop);
@@ -207,6 +207,5 @@ function findSsid(stdout){
   });
 }
 
-module.exports.generateConfig = generateConfig;
-module.exports.getControlEvents = getControlEvents;
 module.exports.connect = connect;
+module.exports.disconnect = disconnect;
