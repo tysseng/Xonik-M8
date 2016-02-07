@@ -9,7 +9,7 @@ function connect(ssid, nets, state){
   var net = {};
 
   return wpa.generateConfig(nets)
-    .then(deleteLog
+    .then(deleteLog)
     .then(start)
     .then(wc.setWlanModeToManaged)
     .then(wc.startAdapter)

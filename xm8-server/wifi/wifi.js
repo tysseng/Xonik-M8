@@ -13,7 +13,6 @@ var knownNets = require('./knownNets.js');
 var availableNets = require('./availableNets.js');
 var utils = require('./utils.js');
 
-
 var state = {
   connectedNet: undefined,
   connectionType: undefined,
@@ -37,7 +36,7 @@ function connectToNet(ssid, success, failure){
     .then(utils.getNetworkBySsid.bind(null, ssid))
     .then(function(net){
       return wpa.connect(null, ssid, [net], state);
-    }
+    })
     .then(acceptConnection.bind(null, success, true))
     .catch(fallBackToAdHoc.bind(null, success, failure));
 }
@@ -57,7 +56,7 @@ function fallBackToAdHoc(success, failure, err){
   display.write(0, 0, "Could not connect to network, trying ad-hoc");
   state.lastConnectionError = err;
   disconnect()
-    .then(adHoc.connect.bind(null, state);  
+    .then(adHoc.connect.bind(null, state))
     .then(acceptConnection.bind(null, success, false))
     .catch(rejectConnection.bind(null, failure));
 }
@@ -99,13 +98,13 @@ function getLastConnectionError(){
 }
 
 
-/*
-root@raspberrypi:~# iwconfig wlan0 mode managed 
-Error for wireless request "Set Mode" (8B06) :
-    SET failed on device wlan0 ; Operation not permitted.
 
-løsning: starte wpa_supplicant, fjernet problemet
-*/
+//root@raspberrypi:~# iwconfig wlan0 mode managed 
+//Error for wireless request "Set Mode" (8B06) :
+//    SET failed on device wlan0 ; Operation not permitted.
+//
+//løsning: starte wpa_supplicant, fjernet problemet
+
 
 function getAvailableNetworks(success, failure){
  availableNets.list()
@@ -206,7 +205,6 @@ function debugExecuteCommand(){
 
 
 debugExecuteCommand();
-
 
 module.exports.getAvailableNetworks = getAvailableNetworks;
 module.exports.connectToNet = connectToNet;
