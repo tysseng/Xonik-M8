@@ -1,6 +1,7 @@
 var config = require('../synthcore/config.js');
 var jsonfile = require('jsonfile');
 var _ = require('lodash');
+var utils = require('./utils.js');
 
 var knownNets = [];
 
@@ -16,7 +17,7 @@ function add(net){
 }
 
 function isInKnownNets(net){
-  return findNetInList(net.ssid, knownNets);
+  return utils.findNetInList(net.ssid, knownNets);
 }
 
 function addNetToKnown(net){

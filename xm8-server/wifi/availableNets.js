@@ -1,6 +1,7 @@
 var wc = require('./wifiCommands.js');
 var knownNets = require('./knownNets.js');
 var _ = require('lodash');
+var wifiUtils = require('./utils.js');
 
 var detectedNets = [];
 
@@ -113,7 +114,7 @@ function mergeDetectedWithKnown(detectedNets){
 
       detectedNet.keysToInclude=['ssid', 'psk'];
 
-      var knownNet = findNetInList(detectedNet.ssid, knownNets.get());
+      var knownNet = wifiUtils.findNetInList(detectedNet.ssid, knownNets.get());
       console.log(detectedNet.ssid);
       if(knownNet){
         detectedNet.isKnown = true;

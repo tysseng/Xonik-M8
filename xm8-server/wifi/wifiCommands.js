@@ -74,7 +74,6 @@ function scanForNetworks(){
     "Could not scan for available wifi networks");
 }
 
-
 module.exports.shutdownAdapter = shutdownAdapter;
 module.exports.removeDhcpEntry = removeDhcpEntry
 module.exports.setWlanModeToManaged =setWlanModeToManaged; 
@@ -85,7 +84,6 @@ module.exports.setWifiEssid = setWifiEssid;
 module.exports.setWifiIp = setWifiIp;
 module.exports.runIfconfig = runIfconfig;
 module.exports.scanForNetworks = scanForNetworks;
-
 
 /**
 Troubleshooting:
