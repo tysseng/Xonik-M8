@@ -59,6 +59,10 @@ Denne kan ha masse ulike ting som protokoll osv. Sjekk hva som er lurt å ha med
 https://wiki.netbsd.org/tutorials/how_to_use_wpa_supplicant/
 -- Hindre heng i boot hvis nett ikke er tilgjengelig.
 
+Finne nettverk:
+1) scan
+2) scan_results
+
 Ser ut til at wpa_cli kan brukes til å endre config:
 1) list_networks - viser lagrede nett
 2) add_network - gir ny id (0 f.eks)
