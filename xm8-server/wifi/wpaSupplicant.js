@@ -1,9 +1,47 @@
+var wc = require('./wifiCommands.js');
+var utils = require('./utils.js');
 var config = require('../synthcore/config.js');
 var pt = require('../synthcore/promiseTools.js');
 var _ = require('lodash');
 
+function connect(ssid, nets, state){
 
-function generateWpaSupplicantConf(nets){
+  var net = {};
+
+  return wpa.generateConfig(nets)
+    .then(deleteLog
+    .then(start)
+    .then(wc.setWlanModeToManaged)
+    .then(wc.startAdapter)
+
+    // The connection check could have been done right after startWpaSupplicant, but 
+    // it seems that connection to the wifi continues even after that command
+    // returns. To save time, we execute the next commands before checing if we 
+    // actually have a valid conncetion.
+    .then(waitForConnection)
+    .then(getStatus)
+    .then(findSsid)
+    .then(function(foundSsid){
+      // store connected ssid for later
+      net.ssid = foundSsid;
+      return wc.generateDhcpEntry();
+    })
+    .then(wc.runIfconfig)
+    .then(utils.findIP)
+    .then(function(foundIp){
+      // store connected ip for later
+      net.ip = foundIp;
+      return net;
+    });
+}
+
+function disconnectWpa(){
+  return wc.shutdownAdapter()
+    .then(wc.removeDhcpEntry)
+    .then(stop);
+}
+
+function generateConfig(nets){
 
   // it is possible to send a single net instead of an array. In that
   // case it must be converted to an array
@@ -66,7 +104,7 @@ function escapeValueIfNecessary(key, value){
 }
 
 
-function startWpaSupplicant(){
+function start(){
   return pt.exec(
     "wpa_supplicant -B -Dwext -i" + config.wifi.adapter + " -c" + config.wifi.files.wpaSupplicant + " -f" + config.wifi.files.wpaLog,
     "Starting wpa_supplicant",
@@ -74,7 +112,7 @@ function startWpaSupplicant(){
 }
 
 
-function stopWpaSupplicant(){
+function stop(){
   return pt.exec(
     "wpa_cli terminate",
     "Terminating old wpa_supplicant instance",    
@@ -82,30 +120,93 @@ function stopWpaSupplicant(){
     true); //ignore errors and continue
 }
 
-function deleteWpaLogfile(){
+function deleteLog(){
   return pt.exec(
     "rm -rf " + config.wifi.files.wpaLog,
     "Deleting wpa log file",    
     "Could not delete wpa log file");
 }
 
-function getWpaCliStatus(){
+function getStatus(){
   return pt.exec(
     "wpa_cli status",
     "Checking wpa cli status",
     "Checking wpa cli status failed");
 }
 
-function getWpaControlEvents(){
+function getControlEvents(){
   return pt.exec(
     "grep 'CTRL-EVENT' "  + config.wifi.files.wpaLog,
     "Searching wpa log for control events",
     "Failed while searching wpa log for control events",
     true); 
 }
-module.exports.generateWpaSupplicantConf = generateWpaSupplicantConf;
-module.exports.getWpaControlEvents = getWpaControlEvents;
-module.exports.getWpaCliStatus = getWpaCliStatus;
-module.exports.stopWpaSupplicant = stopWpaSupplicant;
-module.exports.deleteWpaLogfile = deleteWpaLogfile;
-module.exports.startWpaSupplicant = startWpaSupplicant;
+
+function waitForConnection(retry){  
+  // first try doesn't count as retry, initialize with zero
+  retry || (retry = 0);
+
+  return wpa.getControlEvents()
+    .then(checkForConnection)
+    .catch(function(controlEvents){
+      if (retry >= config.wifi.connectionRetry.max){
+        var reasons = extractReasons(controlEvents);
+        throw {message: 'Connection timed out', reasons: reasons};        
+      }
+      if(controlEvents){       
+        if(hasConnectionFailed(controlEvents)){
+          var reasons = extractReasons(controlEvents);
+          throw {message: 'Connection failed', reasons: reasons};
+        }
+      }
+      // wait some time and try again
+      return pt.delay(config.wifi.connectionRetry.delayMs).then(waitForConnection.bind(null, ++retry));      
+    });
+}
+
+function hasConnectionFailed(controlEvents){
+  return _.find(controlEvents, function(o) { return o.search('CONN_FAILED') > -1 });  
+}
+
+function extractReasons(controlEvents){
+  var tempDisabledEvents = _.find(controlEvents, function(o) { return o.search('SSID-TEMP-DISABLED') > -1 });
+  // TODO: Extract and uniquify reason from here
+  return tempDisabledEvents;
+}
+
+function checkForConnection(controlEvents){
+  if(controlEvents) {
+    controlEvents = controlEvents.split('\n');
+  }
+  return new Promise(function(resolve, reject){    
+    if(isConnected(controlEvents)){
+      resolve();
+    } else {
+      reject(controlEvents);
+    }
+  });
+}
+
+function isConnected(controlEvents){
+  return _.find(controlEvents, function(o) { return o.search('CTRL-EVENT-CONNECTED') > -1 });  
+}
+
+function findSsid(stdout){
+  return new Promise(function(resolve, reject){
+    if(stdout){
+      // find first ip after block start
+      var searchResult = /^ssid=(.*)$/gm.exec(stdout);
+      if(searchResult && searchResult.length > 1){
+        console.log("Found ssid: " + searchResult[1]);
+        resolve(searchResult[1]);
+        return;
+      }
+    }
+    console.log("No ssid found");
+    reject({message: "No ssid found"});
+  });
+}
+
+module.exports.generateConfig = generateConfig;
+module.exports.getControlEvents = getControlEvents;
+module.exports.connect = connect;

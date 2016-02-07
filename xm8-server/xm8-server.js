@@ -131,31 +131,36 @@ app.get('/wifi/wpa/parameters', function(req, res){
 
 app.put('/wifi/connect', function(req, res){
   wifi.connectToKnownNets(
-    function(error, selectedNet){
+    function(state){
       // error is used if an error occurs during normal connecting and 
       // the system reverts to ad-hoc
       var result = {
-        selectedNet: selectedNet,
+        connectedNet: state.connectedNet,
         error: error
       }      
       res.status(200).send(result);
     },
-    function(err){
-      res.status(500).send(err);
+    function(state){
+      console.log("Error");
+      console.log(state.error);      
+      res.status(500).send(state.error);
     });
 });
 
 // not working
 app.put('/wifi/ad-hoc/connect', function(req, res){
   wifi.connectToAdHoc(
-    function(selectedNet){
+    function(state){
       var result = {
-        selectedNet: selectedNet
+        connectedNet: state.connectedNet,
+        error: error
       }      
       res.status(200).send(result);
     },
-    function(err){
-      res.status(500).send(err);
+    function(state){
+      console.log("Error");
+      console.log(state.error);      
+      res.status(500).send(state.error);
     });
 });
 
@@ -173,19 +178,19 @@ app.put('/wifi/:ssid', function(req, res){
 
 app.put('/wifi/:ssid/connect', function(req, res){
   wifi.connectToNet(req.params.ssid, 
-    function(error, selectedNet){
+    function(state){
       // error is used if an error occurs during normal connecting and 
       // the system reverts to ad-hoc
       var result = {
-        selectedNet: selectedNet,
+        connectedNet: state.connectedNet,
         error: error
       }      
       res.status(200).send(result);
     },
-    function(err){
+    function(state){
       console.log("Error");
-      console.log(err);
-      res.status(500).send(err);
+      console.log(state.error);
+      res.status(500).send(state.error);
     });
 });
 
