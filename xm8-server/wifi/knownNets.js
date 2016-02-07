@@ -5,7 +5,7 @@ var utils = require('./utils.js');
 
 var knownNets = [];
 
-function getAll(){
+function get(){
   return knownNets;
 }
 
@@ -62,4 +62,4 @@ function load(success){
 load();
 
 module.exports.add = add;
-module.exports.getAll = getAll;
+module.exports.get = get;

@@ -53,6 +53,7 @@ function connectToKnownNets(success, failure){
 
 // connect to ad hoc as a fallback for normal service
 function fallBackToAdHoc(success, failure, err){
+  console.log(err);
   display.write(0, 0, "Could not connect to network, trying ad-hoc");
   state.lastConnectionError = err;
   disconnect()
@@ -81,12 +82,13 @@ function acceptConnection(success, addToKnown, net){
   if(addToKnown){
     knownNets.add(net);
   }
-  success(net);
+  success(state);
 }
 
 function disconnect(){
   //TODO switch on current connection mode here
-  return wpa.disconnect;
+console.log("HERE");
+  return wpa.disconnect();
 }
 
 function getConnectedNet(){
