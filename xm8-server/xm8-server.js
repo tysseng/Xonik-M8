@@ -136,7 +136,7 @@ app.put('/wifi/connect', function(req, res){
       // the system reverts to ad-hoc
       var result = {
         connectedNet: state.connectedNet,
-        error: state.error
+        lastConnectionError: state.lastConnectionError
       }      
       res.status(200).send(result);
     },
@@ -153,7 +153,7 @@ app.put('/wifi/ad-hoc/connect', function(req, res){
     function(state){
       var result = {
         connectedNet: state.connectedNet,
-        error: state.error
+        lastConnectionError: state.lastConnectionError
       }      
       res.status(200).send(result);
     },
@@ -183,7 +183,7 @@ app.put('/wifi/:ssid/connect', function(req, res){
       // the system reverts to ad-hoc
       var result = {
         connectedNet: state.connectedNet,
-        error: state.error
+        lastConnectionError: state.lastConnectionError
       }      
       res.status(200).send(result);
     },
