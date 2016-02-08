@@ -21,14 +21,17 @@ function connect(state){
     .then(stopHostapd)       
     .then(wc.startAdapter)    
     .then(generateHostapdConf)
-    .then(generateDnsmasqConf)
-    .then(startDnsmasq)
     .then(startHostapd)
     .then(wc.runIfconfig)
     .then(utils.findIP)
     .then(function(foundIp){
       // store connected ip for later
       net.ip = foundIp;
+      return foundIp;
+    })
+    .then(generateDnsmasqConf)
+    .then(startDnsmasq)
+    .then(function(){
       return net;
     });
 }
@@ -68,11 +71,12 @@ function generateHostapdConf(){
   return promise;    
 }
 
-function generateDnsmasqConf(){
+function generateDnsmasqConf(ip){
 
   var promise = new Promise(function(resolve, reject){
     var fileContent = 
       "interface=" + config.wifi.adapter + "\n" +
+      "address=/#/" + ip + "\n" + 
       "dhcp-range=" + config.wifi.dhcp.range;
 
     fs.writeFile(config.wifi.files.dnsmasqConf, fileContent, function(err) {
@@ -112,7 +116,7 @@ function startDnsmasq(){
 
 function stopDnsmasq(){
   return pt.exec(
-    "/etc/init.d/dnsmasq start",
+    "/etc/init.d/dnsmasq stop",
     "Stoppint dhcp/dns (dnsmasq)",
     "Could not stop dhcp/dns");  
 }
