@@ -209,5 +209,5 @@ app.put('/wifi/:ssid/connect', function(req, res){
     });
 });
 
-app.listen(3000);
+app.listen(80);
 listenToControllerChanges();
