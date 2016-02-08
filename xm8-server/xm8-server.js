@@ -54,12 +54,17 @@ function sendController(message){
 }
 
 app.use(function (req, res, next) {
-  //console.log('middleware accessed through ' + req);
+  console.log('middleware accessed through ' + req);
   req.testing = 'testing';
   return next();
 });
 
 app.use(express.static('static'));
+
+app.get('/library/test/success.html', function (req, res) {
+  console.log("Redirecting to start page");
+  res.redirect("/xm8-gui.html");
+});
 
 app.get('/', function (req, res) {
   console.log("Redirecting to start page");
@@ -207,6 +212,12 @@ app.put('/wifi/:ssid/connect', function(req, res){
       console.log(state.error);
       res.status(500).send(state.error);
     });
+});
+
+app.use(function(req, res, next){
+  console.log("User requested " + req.originalUrl);
+  console.log("Redirecting to first page");
+  res.redirect("/xm8-captive-portal.html");
 });
 
 app.listen(80);
