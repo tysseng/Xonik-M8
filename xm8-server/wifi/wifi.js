@@ -3,6 +3,10 @@
 // TODO: Merge multiple nets with same SSID, add mac to supplicant config
 // TODO: Add "connected", ip etc to connected net
 
+
+// TODO: Feilmelding ved fallback kommer ikke ut
+// test conenctednet, lasterror osv.
+
 var display = require('../synthcore/display.js');
 var _ = require('lodash');
 var wc = require('./wifiCommands.js');
