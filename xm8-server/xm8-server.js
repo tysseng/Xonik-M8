@@ -147,9 +147,24 @@ app.put('/wifi/connect', function(req, res){
     });
 });
 
-// not working
 app.put('/wifi/ad-hoc/connect', function(req, res){
   wifi.connectToAdHoc(
+    function(state){
+      var result = {
+        connectedNet: state.connectedNet,
+        lastConnectionError: state.lastConnectionError
+      }      
+      res.status(200).send(result);
+    },
+    function(state){
+      console.log("Error");
+      console.log(state.error);      
+      res.status(500).send(state.error);
+    });
+});
+
+app.put('/wifi/access-point/connect', function(req, res){
+  wifi.connectToAccessPoint(
     function(state){
       var result = {
         connectedNet: state.connectedNet,

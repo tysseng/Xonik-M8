@@ -3,14 +3,15 @@ var wc = require('./wifiCommands.js');
 var pt = require('../synthcore/promiseTools.js');
 var common = require('./wifiCommon.js');
 
-function startAccessPoint(){
-  return wc.shutdownAdapter()
-    .then(wc.removeDhcpEntry)
-    .then(wc.terminateWpaSupplicant)
-    .then(wc.setWifiIp.bind(null, config.wifi.accessPoint.ip, config.wifi.accessPoint.netmask))
+function connect(state){
+  state.connectedNet = undefined;
+
+  var net = {ssid: config.wifi.accessPoint.ssid};
+
+  return wc.setWifiIp(config.wifi.accessPoint.ip, config.wifi.accessPoint.netmask)
     .then(pt.delay.bind(null, 500))
     .then(wc.startAdapter)    
-    .then(generateHostapdConf
+    .then(generateHostapdConf)
     .then(generateDnsmasqConf)
     .then(startDnsmasq)
     .then(startHostapd)
@@ -18,36 +19,9 @@ function startAccessPoint(){
     .then(function(foundIp){
       // store connected ip for later
       net.ip = foundIp;
-      return acceptConnection(net, false);
-    })
-    .then(success)
-    .catch(function(err){
-      lastConnectionError = err;
-      failure(err);
-    });    
-}
-
-wc.shutdownAdapter()
-    .then(wc.removeDhcpEntry)
-    .then(wc.terminateWpaSupplicant)
-    .then(wc.setWlanModeToAdHoc)
-    .then(wc.setWifiKey.bind(null, config.wifi.adHoc.key))
-    .then(wc.setWifiEssid.bind(null, config.wifi.adHoc.ssid))
-    .then(wc.setWifiIp.bind(null, config.wifi.adHoc.ip, config.wifi.adHoc.netmask))
-    .then(pt.delay.bind(null, 500))
-    .then(wc.startAdapter)
-    .then(wc.runIfconfig)
-    .then(findIP)
-    .then(function(foundIp){
-      // store connected ip for later
-      net.ip = foundIp;
-      return acceptConnection(net, false);
-    })
-    .then(success)
-    .catch(function(err){
-      lastConnectionError = err;
-      failure(err);
+      return net;
     });
+}
 
 function generateHostapdConf(){
 
@@ -126,3 +100,5 @@ function stopDnsmasq(){
     "Stoppint dhcp/dns (dnsmasq)",
     "Could not stop dhcp/dns");  
 }
+
+module.exports.connect = connect;

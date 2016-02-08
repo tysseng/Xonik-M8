@@ -6,12 +6,13 @@
 
 
 // TODO: Feilmelding ved fallback kommer ikke ut
-// test conenctednet, lasterror osv.
+// TODO: Disconnect for ad-hoc, accessPoint
 
 var display = require('../synthcore/display.js');
 var _ = require('lodash');
 var wc = require('./wifiCommands.js');
 var adHoc = require('./adHoc.js');
+var accessPoint = require('./accessPoint.js');
 var wpa = require('./wpa.js');
 var wpaParameters = require('./wpaSupplicantParams.js');
 var knownNets = require('./knownNets.js');
@@ -43,7 +44,7 @@ function connectToNet(ssid, success, failure){
       return wpa.connect(ssid, [net], state);
     })
     .then(acceptConnection.bind(null, success, true))
-    .catch(fallBackToAdHoc.bind(null, success, failure));
+    .catch(fallBack.bind(null, success, failure));
 }
 
 function connectToKnownNets(success, failure){
@@ -53,26 +54,39 @@ function connectToKnownNets(success, failure){
     .then(availableNets.list.bind(null, state))
     .then(wpa.connect.bind(null, null, knownNets.get(), state))
     .then(acceptConnection.bind(null, success, false))
-    .catch(fallBackToAdHoc.bind(null, success, failure));
+    .catch(fallBack.bind(null, success, failure));
 }
 
-// connect to ad hoc as a fallback for normal service
-function fallBackToAdHoc(success, failure, err){
+// set up ad hoc network or access point as a fallback for normal service
+function fallBack(success, failure, err){
   console.log(err);
-  display.write(0, 0, "Could not connect to network, trying ad-hoc");
+  display.write(0, 0, "Could not connect to network, trying fallback");
   state.lastConnectionError = err;
+
+  var fallback = config.wifi.fallback === "adHoc" ? adHoc : accessPoint;
+
+  disconnect()
+    .then(fallback.connect.bind(null, state))
+    .then(acceptConnection.bind(null, success, false))
+    .catch(rejectConnection.bind(null, failure));
+}
+
+// start ad hoc network as requested by user
+function connectToAdHoc(success, failure){
+  resetState();
+
   disconnect()
     .then(adHoc.connect.bind(null, state))
     .then(acceptConnection.bind(null, success, false))
     .catch(rejectConnection.bind(null, failure));
 }
 
-// connect to ad hoc as requested by user
-function connectToAdHoc(success, failure){
+// start access point as requested by user
+function connectToAccessPoint(success, failure){
   resetState();
 
   disconnect()
-    .then(adHoc.connect.bind(null, state))
+    .then(accessPoint.connect.bind(null, state))
     .then(acceptConnection.bind(null, success, false))
     .catch(rejectConnection.bind(null, failure));
 }
@@ -216,6 +230,7 @@ debugExecuteCommand();
 module.exports.getAvailableNetworks = getAvailableNetworks;
 module.exports.connectToNet = connectToNet;
 module.exports.connectToAdHoc = connectToAdHoc;
+module.exports.connectToAccessPoint = connectToAccessPoint;
 module.exports.connectToKnownNets = connectToKnownNets;
 module.exports.getLastConnectionError = getLastConnectionError;
 module.exports.getConnectedNet = getConnectedNet;
