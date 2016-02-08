@@ -106,8 +106,16 @@ function acceptConnection(success, addToKnown, net){
 }
 
 function disconnect(){
-  //TODO switch on current connection mode here
-  return wpa.disconnect();
+  switch(state.connectionType){
+    case "wpa":
+      return wpa.disconnect();
+    case "accessPoint":
+      return accessPoint.disconnect();
+    default:
+      return new Promise(function(resolve, reject) {
+        resolve();
+      });
+  }
 }
 
 function getConnectedNet(){

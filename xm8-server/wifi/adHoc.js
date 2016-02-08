@@ -10,6 +10,9 @@ function connect(state){
   var net = {ssid: config.wifi.adHoc.ssid};
   
   return setWlanModeToAdHoc()
+    .then(function(){
+      state.connectionType = "adHoc";
+    })  
     .then(wc.setWifiKey.bind(null, config.wifi.adHoc.key))
     .then(wc.setWifiEssid.bind(null, config.wifi.adHoc.ssid))
     .then(wc.setWifiIp.bind(null, config.wifi.adHoc.ip, config.wifi.adHoc.netmask))

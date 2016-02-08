@@ -1,3 +1,5 @@
+// TODO: Check if hostapd is running before starting. Kill any running processes.
+
 var config = require('../synthcore/config.js');
 var wc = require('./wifiCommands.js');
 var pt = require('../synthcore/promiseTools.js');
@@ -10,7 +12,13 @@ function connect(state){
   var net = {ssid: config.wifi.accessPoint.ssid};
 
   return wc.setWifiIp(config.wifi.accessPoint.ip, config.wifi.accessPoint.netmask)
+    .then(function(){
+      state.connectionType = "accessPoint";
+    })  
     .then(pt.delay.bind(null, 500))
+    // we have to do this just in case, if hostapd is already running, several processes
+    // will be started.
+    .then(stopHostapd)       
     .then(wc.startAdapter)    
     .then(generateHostapdConf)
     .then(generateDnsmasqConf)
@@ -23,6 +31,12 @@ function connect(state){
       net.ip = foundIp;
       return net;
     });
+}
+
+function disconnect(){
+  console.log("Disconnecting access point");
+  return stopHostapd()
+    .then(stopDnsmasq);
 }
 
 function generateHostapdConf(){
@@ -77,14 +91,14 @@ function generateDnsmasqConf(){
 
 function startHostapd(){
   return pt.exec(
-    "hostapd -B -P " + config.wifi.files.hostapdPid + " -d " + config.wifi.files.hostapdConf,
+    "hostapd -B -d " + config.wifi.files.hostapdConf,
     "Starting access point (hostapd)",
     "Could not start access point");
 }
 
 function stopHostapd(){
   return pt.exec(
-    "kill -9 $(cat " + config.wifi.files.hostapdPid + ")",
+    "pkill hostapd",
     "Stopping access point (hostapd)",
     "Could not stop access point, maybe it wasn't running",
     true);

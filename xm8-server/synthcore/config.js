@@ -10,9 +10,9 @@ var config = {
   },
   wifi: {
     adapter: "wlan0",
-
-                // increase these if connection to network fails and you want to let wpa supplicant
-                // try for a longer duration before we abort it.
+    fallback: "accessPoint",
+    // increase these if connection to network fails and you want to let wpa supplicant
+    // try for a longer duration before we abort it.
     connectionRetry: {
       max: 16,
       delayMs: 250
@@ -23,14 +23,6 @@ var config = {
       ip: "10.0.0.200",
       netmask: "255.255.255.0"
     },
-    files: {
-        persistedNets: 'wifi/persisted_nets.json',
-        wpaSupplicant: '/etc/wpa_supplicant/wpa_supplicant.conf',
-        wpaLog: '/tmp/wpa_supplicant.log',
-        hostapdConf: '/etc/hostapd/hostapd.conf',
-        hostapdPid: '/tmp/hostapd.pid',
-        dnsmasqConf: '/etc/dnsmasq.conf'
-    },
     accessPoint: {
       ssid: "XM8",
       key: "abcdef123456",
@@ -40,7 +32,14 @@ var config = {
     },
     dhcp: {
       range: '10.0.0.50,10.0.0.199,12h'
-    }
+    },
+    files: {
+      persistedNets: 'wifi/persisted_nets.json',
+      wpaSupplicant: '/etc/wpa_supplicant/wpa_supplicant.conf',
+      wpaLog: '/tmp/wpa_supplicant.log',
+      hostapdConf: '/etc/hostapd/hostapd.conf',
+      dnsmasqConf: '/etc/dnsmasq.conf'
+    }    
   }
 }
 

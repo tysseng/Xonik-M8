@@ -10,6 +10,9 @@ function connect(ssid, nets, state){
   var net = {};
 
   return generateConfig(nets)
+    .then(function(){
+      state.connectionType = "wpa";
+    })
     .then(deleteLog)
     .then(start)
     .then(wc.setWlanModeToManaged)
@@ -37,6 +40,7 @@ function connect(ssid, nets, state){
 }
 
 function disconnect(){
+  console.log("Disconnecting wpa");
   return wc.shutdownAdapter()
     .then(wc.removeDhcpEntry)
     .then(stop);
