@@ -44,7 +44,6 @@ function generateHostapdConf(){
   var promise = new Promise(function(resolve, reject){
     var fileContent = 
       "interface=" + config.wifi.adapter + "\n" +
-      "bridge=br0\n" +
       "ssid=" + config.wifi.accessPoint.ssid + "\n" +
       "channel=" + config.wifi.accessPoint.channel + "\n" + 
       "wpa=2\n" + 
@@ -119,3 +118,4 @@ function stopDnsmasq(){
 }
 
 module.exports.connect = connect;
+module.exports.disconnect = disconnect;

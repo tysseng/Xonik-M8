@@ -6,7 +6,6 @@
 
 
 // TODO: Feilmelding ved fallback kommer ikke ut
-// TODO: Disconnect for ad-hoc, accessPoint
 
 var display = require('../synthcore/display.js');
 var _ = require('lodash');
@@ -18,6 +17,7 @@ var wpaParameters = require('./wpaSupplicantParams.js');
 var knownNets = require('./knownNets.js');
 var availableNets = require('./availableNets.js');
 var utils = require('./utils.js');
+var config = require('../synthcore/config.js');
 
 var state = {
   connectedNet: undefined,
@@ -63,10 +63,16 @@ function fallBack(success, failure, err){
   display.write(0, 0, "Could not connect to network, trying fallback");
   state.lastConnectionError = err;
 
-  var fallback = config.wifi.fallback === "adHoc" ? adHoc : accessPoint;
+  var fallback;
+  if(config.wifi.fallback === "adHoc"){
+    fallback = adHoc.connect;
+  } else {
+    fallback = accessPoint.connect;
+  }
+
 
   disconnect()
-    .then(fallback.connect.bind(null, state))
+    .then(fallback.bind(null, state))
     .then(acceptConnection.bind(null, success, false))
     .catch(rejectConnection.bind(null, failure));
 }
@@ -106,16 +112,9 @@ function acceptConnection(success, addToKnown, net){
 }
 
 function disconnect(){
-  switch(state.connectionType){
-    case "wpa":
-      return wpa.disconnect();
-    case "accessPoint":
-      return accessPoint.disconnect();
-    default:
-      return new Promise(function(resolve, reject) {
-        resolve();
-      });
-  }
+  // To prevent problems if in an unknown state, run all disconnect functions
+  return wpa.disconnect()
+    .then(accessPoint.disconnect());
 }
 
 function getConnectedNet(){
