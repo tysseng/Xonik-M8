@@ -103,7 +103,13 @@ function rejectConnection(failure, err){
 }
 
 function acceptConnection(success, addToKnown, net){
-  display.write(0, 0, "I'm at " + net.ip + " on " + net.ssid);   
+  var address = net.domain ? net.domain : net.ip;
+
+  display.write(0, 0, "I'm at " + address + " on network " + net.ssid);   
+  if(net.password){
+    display.write(1, 0, "Password is " + net.password);       
+  }
+
   state.connectedNet = net;
   if(addToKnown){
     knownNets.add(net);

@@ -9,7 +9,11 @@ var fs = require('fs');
 function connect(state){
   state.connectedNet = undefined;
 
-  var net = {ssid: config.wifi.accessPoint.ssid};
+  var net = {
+    ssid: config.wifi.accessPoint.ssid,
+    password: config.wifi.accessPoint.key,
+    domain: "xm8.net" // all IPs and valid domain names are redirected to this machine by dnsmasq
+  };
 
   return wc.setWifiIp(config.wifi.accessPoint.ip, config.wifi.accessPoint.netmask)
     .then(function(){
