@@ -2,6 +2,7 @@
 // TODO: Get additional config from gui
 // TODO: Merge multiple nets with same SSID, add mac to supplicant config
 // TODO: Add "connected", ip etc to connected net
+// TODO: Hente signalstyrke/status
 
 
 // TODO: Feilmelding ved fallback kommer ikke ut
@@ -135,7 +136,7 @@ function setWpaParameters(ssid, wpaParameters, success, failure){
     };
   });
 
-  var knownNet = findNetInList(ssid, knownNets.get());
+  var knownNet = utils.findNetInList(ssid, knownNets.get());
   if(knownNet){
     // TODO: update through function in knownNets
     knownNet.wpaParameters.extend(wpaParameters);
