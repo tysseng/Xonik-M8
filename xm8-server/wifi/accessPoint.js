@@ -1,7 +1,8 @@
 var config = require('../synthcore/config.js');
 var wc = require('./wifiCommands.js');
 var pt = require('../synthcore/promiseTools.js');
-var common = require('./wifiCommon.js');
+var utils = require('./utils.js');
+var fs = require('fs');
 
 function connect(state){
   state.connectedNet = undefined;
@@ -15,7 +16,8 @@ function connect(state){
     .then(generateDnsmasqConf)
     .then(startDnsmasq)
     .then(startHostapd)
-    .then(common.findIP)
+    .then(wc.runIfconfig)
+    .then(utils.findIP)
     .then(function(foundIp){
       // store connected ip for later
       net.ip = foundIp;
@@ -31,13 +33,14 @@ function generateHostapdConf(){
       "bridge=br0\n" +
       "ssid=" + config.wifi.accessPoint.ssid + "\n" +
       "channel=" + config.wifi.accessPoint.channel + "\n" + 
-      "wpa=1\n" + 
+      "wpa=2\n" + 
       "wpa_passphrase=" + config.wifi.accessPoint.key + "\n" +
       "wpa_key_mgmt=WPA-PSK\n" + 
       "wpa_pairwise=TKIP\n" + 
       "rsn_pairwise=CCMP\n" + 
-      "auth_algs=1\n" +
-      "macaddr_acl=0"
+      "auth_algs=3\n" +
+      "wmm_enabled=1\n" +
+      "macaddr_acl=0";
 
     fs.writeFile(config.wifi.files.hostapdConf, fileContent, function(err) {
       if(err) {
@@ -52,14 +55,14 @@ function generateHostapdConf(){
   return promise;    
 }
 
-function generateDnsmasqConf()){
+function generateDnsmasqConf(){
 
   var promise = new Promise(function(resolve, reject){
     var fileContent = 
       "interface=" + config.wifi.adapter + "\n" +
-      "dhcp-range=" + config.wifi.dhcp.range
+      "dhcp-range=" + config.wifi.dhcp.range;
 
-    fs.writeFile(config.wifi.files.dnsmasq.conf, fileContent, function(err) {
+    fs.writeFile(config.wifi.files.dnsmasqConf, fileContent, function(err) {
       if(err) {
         console.log(err);
         reject({message: "Could not generate dnsmasq.conf"});
