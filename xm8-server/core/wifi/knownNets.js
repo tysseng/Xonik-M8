@@ -76,7 +76,7 @@ function load(success){
     if(err){
       console.log("Could not load persisted networks");
       console.log(err);
-      knownNets = {};
+      knownNets = [];
     } else {
       knownNets = obj;
       console.log("Loaded persisted networks");

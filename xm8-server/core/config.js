@@ -36,7 +36,7 @@ var config = {
       range: '10.0.0.50,10.0.0.199,12h'
     },
     files: {
-      persistedNets: 'wifi/persisted_nets.json',
+      persistedNets: 'persistentStorage/persisted_nets.json',
       wpaSupplicant: '/etc/wpa_supplicant/wpa_supplicant.conf',
       wpaLog: '/tmp/wpa_supplicant.log',
       hostapdConf: '/etc/hostapd/hostapd.conf',

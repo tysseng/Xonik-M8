@@ -17,8 +17,7 @@ var eventbus = require('./core/eventbus.js');
 var controllers = require('./core/controllers.js');
 var ctrlSetup = require('./shared/controllerSetup.js');
 var spiRepository = require('./core/spiRepository.js');
-
-var wifi = require('./wifi/wifi.js');
+var bodyParser = require('body-parser');
 
 function publishControllerChange(message){
   var msgParts = message.split(',');
