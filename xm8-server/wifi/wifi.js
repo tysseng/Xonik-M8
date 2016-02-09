@@ -5,8 +5,6 @@
 // TODO: Hente signalstyrke/status
 
 
-// TODO: Feilmelding ved fallback kommer ikke ut
-
 var display = require('../synthcore/display.js');
 var _ = require('lodash');
 var wc = require('./wifiCommands.js');
