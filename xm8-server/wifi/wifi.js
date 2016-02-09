@@ -230,4 +230,4 @@ module.exports.connectToKnownNets = connectToKnownNets;
 module.exports.getLastConnectionError = getLastConnectionError;
 module.exports.getConnectedNet = getConnectedNet;
 module.exports.getWpaParameters = getWpaParameters;
-module.exports.addNetwork = addNetwork;
+module.exports.updateNetwork = updateNetwork;

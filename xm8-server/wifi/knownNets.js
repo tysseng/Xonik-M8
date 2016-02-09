@@ -24,7 +24,7 @@ function add(net){
 
 function replace(net){
   for(var i = 0; i < knownNets.length; i++){
-    if(knownNets[i].ssid === ssid){
+    if(knownNets[i].ssid === net.ssid){
       knownNets[i] = net;
       console.log("Replaced network " + net.ssid + " at position " + i);      
     }
