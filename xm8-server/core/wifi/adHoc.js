@@ -1,7 +1,7 @@
-var config = require('../synthcore/config.js');
+var config = require('../config.js');
 var wc = require('./wifiCommands.js');
 var utils = require('./utils.js');
-var pt = require('../synthcore/promiseTools.js');
+var pt = require('../promiseTools.js');
 
 
 function connect(state){

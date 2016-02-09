@@ -9,12 +9,14 @@ TODO: Sanitize inputs
 var express = require('express');
 var app = express();
 var expressWs = require('express-ws')(app);
-var bodyParser = require('body-parser');
-var eventbus = require('./synthcore/eventbus.js');
 
-var controllers = require('./synthcore/controllers.js');
+var wifiRoutes = require('./routes/wifi');
+
+var eventbus = require('./core/eventbus.js');
+
+var controllers = require('./core/controllers.js');
 var ctrlSetup = require('./shared/controllerSetup.js');
-var spiRepository = require('./synthcore/spiRepository.js');
+var spiRepository = require('./core/spiRepository.js');
 
 var wifi = require('./wifi/wifi.js');
 
@@ -54,21 +56,13 @@ function sendController(message){
   });   
 }
 
-app.use(bodyParser.json()); // for parsing application/json
+// for parsing application/json
+app.use(bodyParser.json()); 
 
-app.use(function (req, res, next) {
-  console.log('middleware accessed through ' + req);
-  req.testing = 'testing';
-  return next();
-});
-
+// static files location
 app.use(express.static('static'));
 
-app.get('/library/test/success.html', function (req, res) {
-  console.log("Redirecting to start page");
-  res.redirect("/xm8-gui.html");
-});
-
+// start page
 app.get('/', function (req, res) {
   console.log("Redirecting to start page");
   res.redirect("/xm8-gui.html");
@@ -101,138 +95,12 @@ app.ws('/controller', function(ws, req) {
   });
 });
 
-// WIFI control
-app.get('/wifi', function(req, res){
-  wifi.getAvailableNetworks(
-    function(networks){
-      res.status(200).send(networks);
-    },
-    function(err){
-      res.status(500).send(err);
-    });
-});
+app.use('/wifi', wifiRoutes);
 
-// WIFI control
-app.get('/wifi/connectedok', function(req, res){
-  var lastConnectionError = wifi.getLastConnectionError();
-  if(lastConnectionError){
-    console.log("Last connect failed: " + lastConnectionError);
-    res.status(500).send(lastConnectionError);
-  } else {
-    res.status(200).send();    
-  }
-});
-
-app.get('/wifi/connected', function(req, res){
-  var connectedNet = wifi.getConnectedNet();
-  if(connectedNet){
-    res.status(200).send(connectedNet);
-  } else {
-    console.log("Not connected to any net");
-    res.status(500).send();
-  }
-});
-
-app.get('/wifi/wpa/parameters', function(req, res){
-  res.status(200).send(wifi.getWpaParameters());
-});
-
-app.put('/wifi/connect', function(req, res){
-  wifi.connectToKnownNets(
-    function(state){
-      // error is used if an error occurs during normal connecting and 
-      // the system reverts to ad-hoc
-      var result = {
-        connectedNet: state.connectedNet,
-        lastConnectionError: state.lastConnectionError
-      }      
-      res.status(200).send(result);
-    },
-    function(state){
-      console.log("Error");
-      console.log(state.error);      
-      res.status(500).send(state.error);
-    });
-});
-
-app.put('/wifi/ad-hoc/connect', function(req, res){
-  wifi.connectToAdHoc(
-    function(state){
-      var result = {
-        connectedNet: state.connectedNet,
-        lastConnectionError: state.lastConnectionError
-      }      
-      res.status(200).send(result);
-    },
-    function(state){
-      console.log("Error");
-      console.log(state.error);      
-      res.status(500).send(state.error);
-    });
-});
-
-app.put('/wifi/access-point/connect', function(req, res){
-  wifi.connectToAccessPoint(
-    function(state){
-      var result = {
-        connectedNet: state.connectedNet,
-        lastConnectionError: state.lastConnectionError
-      }      
-      res.status(200).send(result);
-    },
-    function(state){
-      console.log("Error");
-      console.log(state.error);      
-      res.status(500).send(state.error);
-    });
-});
-
-app.put('/wifi/:ssid', function(req, res){
-  wifi.updateNetwork(req.body, 
-    function(){
-      res.status(200).send();
-    },
-    function(err){
-      console.log("Error");
-      console.log(err);
-      res.status(500).send(err);
-    });
-});
-
-
-app.delete('/wifi/:ssid', function(req, res){
-  wifi.forgetNetwork(req.params.ssid, 
-    function(){
-      res.status(200).send();
-    },
-    function(err){
-      console.log("Error");
-      console.log(err);
-      res.status(500).send(err);
-    });
-});
-
-app.put('/wifi/:ssid/connect', function(req, res){
-  wifi.connectToNet(req.params.ssid, 
-    function(state){
-      // error is used if an error occurs during normal connecting and 
-      // the system reverts to ad-hoc
-      var result = {
-        connectedNet: state.connectedNet,
-        lastConnectionError: state.lastConnectionError
-      }      
-      res.status(200).send(result);
-    },
-    function(state){
-      console.log("Error");
-      console.log(state.error);
-      res.status(500).send(state.error);
-    });
-});
-
+// Capture all requests not yet handled and redirect them to the captive portal
+// page as they may origin from wifi logon.
 app.use(function(req, res, next){
-  console.log("User requested " + req.originalUrl);
-  console.log("Redirecting to first page");
+  console.log("User requested " + req.originalUrl + ", redirecting to captive portal page");
   res.redirect("/xm8-captive-portal.html");
 });
 

@@ -1,9 +1,8 @@
-var config = require('../synthcore/config.js');
+var config = require('../config.js');
 var _ = require('lodash');
 
 function getNetworkBySsid(ssid, nets){
   return new Promise(function(resolve, reject){  
-console.log(nets);
     var selectedNet = findNetInList(ssid, nets);
     if(selectedNet){
       console.log("Found net");

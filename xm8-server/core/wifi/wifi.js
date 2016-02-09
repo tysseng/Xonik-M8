@@ -5,7 +5,7 @@
 // TODO: Hente signalstyrke/status
 
 
-var display = require('../synthcore/display.js');
+var display = require('../display.js');
 var _ = require('lodash');
 var wc = require('./wifiCommands.js');
 var adHoc = require('./adHoc.js');
@@ -15,7 +15,7 @@ var wpaParameters = require('./wpaSupplicantParams.js');
 var knownNets = require('./knownNets.js');
 var availableNets = require('./availableNets.js');
 var utils = require('./utils.js');
-var config = require('../synthcore/config.js');
+var config = require('../config.js');
 
 var state = {
   connectedNet: undefined,

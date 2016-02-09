@@ -1,5 +1,5 @@
-var config = require('../synthcore/config.js');
-var pt = require('../synthcore/promiseTools.js');
+var config = require('../config.js');
+var pt = require('../promiseTools.js');
 
 function shutdownAdapter(){
   return pt.exec(

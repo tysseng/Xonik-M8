@@ -1,8 +1,8 @@
 // TODO: Check if hostapd is running before starting. Kill any running processes.
 
-var config = require('../synthcore/config.js');
+var config = require('../config.js');
 var wc = require('./wifiCommands.js');
-var pt = require('../synthcore/promiseTools.js');
+var pt = require('../promiseTools.js');
 var utils = require('./utils.js');
 var fs = require('fs');
 
