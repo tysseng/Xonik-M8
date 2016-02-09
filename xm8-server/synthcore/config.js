@@ -21,13 +21,15 @@ var config = {
       ssid: "XM8",
       key: "abcdef123456",
       ip: "10.0.0.200",
-      netmask: "255.255.255.0"
+      netmask: "255.255.255.0",
+      fakeDomain: "xm8.net"
     },
     accessPoint: {
       ssid: "XM8",
       key: "abcdef123456",
       ip: "10.0.0.200",
       netmask: "255.255.255.0",
+      fakeDomain: "xm8.net",
       channel: 1      
     },
     dhcp: {

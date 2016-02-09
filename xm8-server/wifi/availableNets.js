@@ -114,7 +114,7 @@ function mergeDetectedWithKnown(state, detectedNets){
 
       detectedNet.keysToInclude=['ssid', 'psk'];
 
-      var knownNet = wifiUtils.findNetInList(detectedNet.ssid, knownNets.get());
+      var knownNet = knownNets.get(detectedNet.ssid);
       console.log(detectedNet.ssid);
       if(knownNet){
         detectedNet.isKnown = true;

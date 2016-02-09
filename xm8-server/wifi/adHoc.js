@@ -7,7 +7,11 @@ var pt = require('../synthcore/promiseTools.js');
 function connect(state){
   state.connectedNet = undefined;
 
-  var net = {ssid: config.wifi.adHoc.ssid};
+  var net = {
+    ssid: config.wifi.adHoc.ssid,
+    password: config.wifi.adHoc.key,
+    domain: config.wifi.adHoc.fakeDomain // all IPs and valid domain names are redirected to this machine by dnsmasq
+  };
   
   return setWlanModeToAdHoc()
     .then(function(){

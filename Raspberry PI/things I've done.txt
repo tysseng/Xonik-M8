@@ -73,6 +73,11 @@ deb http://mirror.ox.ac.uk/sites/archive.raspbian.org/archive/raspbian jessie ma
 apt-get update
 apt-get install dnsmasq
 
+Fjerne oppstartsskript:
+update-rc.d -f dnsmasq remove
+edit /etc/default/dnsmasq and change "ENABLED=1" to "ENABLED=0"
+
+
 Installere access point sw (for å opptre som accesspoint istedenfor ad-hoc)
 ----
 apt-get install hostapd

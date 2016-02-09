@@ -52,7 +52,7 @@ function connectToKnownNets(success, failure){
 
   disconnect()
     .then(availableNets.list.bind(null, state))
-    .then(wpa.connect.bind(null, null, knownNets.get(), state))
+    .then(wpa.connect.bind(null, null, knownNets.list(), state))
     .then(acceptConnection.bind(null, success, false))
     .catch(fallBack.bind(null, success, failure));
 }
@@ -146,40 +146,21 @@ function getAvailableNetworks(success, failure){
     .catch(failure); 
 }
 
-function getWpaParameters(){
-  return wpaParameters.parameters;
+function forgetNetwork(ssid, success, failure){
+  knownNets.remove(ssid);
+  availableNets.list(state)
+    .then(success)
+    .catch(failure); 
 }
 
-function setWpaParameters(ssid, wpaParameters, success, failure){
-  _.each(wpaParameters, function(parameter){
-    if(!wpa.parameters[parameter.key]){
-      failure({message: "No such wpa parameter exists"});
-      return;
-    }
-
-    if(!typeof parameter.value === "string"){
-      failure({message: "Input parameter " + parameter.key + "must be a string"}); 
-      return;
-    };
-  });
-
-  var knownNet = utils.findNetInList(ssid, knownNets.get());
-  if(knownNet){
-    // TODO: update through function in knownNets
-    knownNet.wpaParameters.extend(wpaParameters);
-  } else {
-    knownNets.add({
-      ssid: ssid,
-      wpaParameters: wpaParameters
-    });
-  }
-
-  // TODO: update through function in knownNets
-  persistNets();
-  console.log("Updated known nets");
-  console.log(knownNets);
-
+function updateNetwork(net, success, failure){
+  wpa.validateWpaParameters(net.wpaParameters);
+  knownNets.update(net);
   success();  
+}
+
+function getWpaParameters(){
+  return wpaParameters.parameters;
 }
 
 function debugCreateNetworks(){
@@ -241,6 +222,7 @@ function debugExecuteCommand(){
 debugExecuteCommand();
 
 module.exports.getAvailableNetworks = getAvailableNetworks;
+module.exports.forgetNetwork = forgetNetwork;
 module.exports.connectToNet = connectToNet;
 module.exports.connectToAdHoc = connectToAdHoc;
 module.exports.connectToAccessPoint = connectToAccessPoint;
@@ -248,4 +230,4 @@ module.exports.connectToKnownNets = connectToKnownNets;
 module.exports.getLastConnectionError = getLastConnectionError;
 module.exports.getConnectedNet = getConnectedNet;
 module.exports.getWpaParameters = getWpaParameters;
-module.exports.setWpaParameters = setWpaParameters;
+module.exports.addNetwork = addNetwork;
