@@ -213,19 +213,19 @@ function findSsid(stdout){
   });
 }
 
-function validateWpaParameters(parameters, failure){
+function validateWpaParameters(parameters){
   _.each(parameters, function(parameter){
-    if(!wpaParameters.parameters[parameter.key]){
-      failure({message: "No such wpa parameter exists"});
+    if("ssid" === parameter){
       return;
+    }
+    if(!wpaParameters.parameters[parameter.key]){
+      throw {message: "No such wpa parameter exists"};
     }
 
     if(!typeof parameter.value === "string"){
-      failure({message: "Input parameter " + parameter.key + "must be a string"}); 
-      return;
-    };
+      throw {message: "Input parameter " + parameter.key + "must be a string"}; 
+    }
   });
-
 }
 
 module.exports.connect = connect;
