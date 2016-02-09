@@ -4,6 +4,7 @@ var config = require('../synthcore/config.js');
 var pt = require('../synthcore/promiseTools.js');
 var _ = require('lodash');
 var fs = require('fs');
+var wpaParameters = require('./wpaSupplicantParams.js');
 
 function connect(ssid, nets, state){
 
@@ -210,6 +211,21 @@ function findSsid(stdout){
     console.log("No ssid found");
     reject({message: "No ssid found"});
   });
+}
+
+function validateWpaParameters(parameters){
+  _.each(parameters, function(parameter){
+    if(!wpaParameters.parameter[parameter.key]){
+      failure({message: "No such wpa parameter exists"});
+      return;
+    }
+
+    if(!typeof parameter.value === "string"){
+      failure({message: "Input parameter " + parameter.key + "must be a string"}); 
+      return;
+    };
+  });
+
 }
 
 module.exports.connect = connect;

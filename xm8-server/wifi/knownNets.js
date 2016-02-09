@@ -5,14 +5,38 @@ var utils = require('./utils.js');
 
 var knownNets = [];
 
-function get(){
+function get(ssid){
+  return utils.findNetInList(ssid, knownNets);
+}
+
+function list(){
   return knownNets;
 }
 
 function add(net){
-  if(!isInKnownNets(net)){
+  if(isInKnownNets(net)){
+    replace(net);
+  } else {
     console.log("Network " +net.ssid + " is not in list of known networks, adding it");
     addNetToKnown(net);
+  }
+}
+
+function replace(net){
+  for(var i = 0; i < knownNets.length; i++){
+    if(knownNets[i].ssid === ssid){
+      knownNets[i] = net;
+      console.log("Replaced network " + net.ssid + " at position " + i);      
+    }
+  }  
+}
+
+function remove(ssid){
+  for(var i = 0; i < knownNets.length; i++){
+    if(knownNets[i].ssid === ssid){
+      knownNets = knownNets.splice(i, 1);
+      save();
+    }
   }
 }
 
@@ -63,3 +87,5 @@ load();
 
 module.exports.add = add;
 module.exports.get = get;
+module.exports.remove = remove;
+module.exports.list = list;

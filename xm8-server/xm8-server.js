@@ -180,7 +180,20 @@ app.put('/wifi/access-point/connect', function(req, res){
 });
 
 app.put('/wifi/:ssid', function(req, res){
-  wifi.setWpaParameters(req.params.ssid, req.wpaParameters, 
+  wifi.updateNetwork(req.net, 
+    function(){
+      res.status(200).send();
+    },
+    function(err){
+      console.log("Error");
+      console.log(err);
+      res.status(500).send(err);
+    });
+});
+
+
+app.delete('/wifi/:ssid', function(req, res){
+  wifi.forgetNetwork(req.params.ssid, 
     function(){
       res.status(200).send();
     },
