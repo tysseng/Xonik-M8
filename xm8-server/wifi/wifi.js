@@ -154,8 +154,15 @@ function forgetNetwork(ssid, success, failure){
 }
 
 function updateNetwork(net, success, failure){
-  wpa.validateWpaParameters(net.wpaParameters);
-  knownNets.update(net);
+  if(net.wpaParameters){
+    try{
+      wpa.validateWpaParameters(net.wpaParameters);
+    } catch(err){
+      failure(err);
+      return;
+    }
+  }
+  knownNets.add(net);
   success();  
 }
 

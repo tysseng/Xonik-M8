@@ -213,9 +213,9 @@ function findSsid(stdout){
   });
 }
 
-function validateWpaParameters(parameters){
+function validateWpaParameters(parameters, failure){
   _.each(parameters, function(parameter){
-    if(!wpaParameters.parameter[parameter.key]){
+    if(!wpaParameters.parameters[parameter.key]){
       failure({message: "No such wpa parameter exists"});
       return;
     }
@@ -230,3 +230,4 @@ function validateWpaParameters(parameters){
 
 module.exports.connect = connect;
 module.exports.disconnect = disconnect;
+module.exports.validateWpaParameters = validateWpaParameters;

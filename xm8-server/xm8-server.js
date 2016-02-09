@@ -9,6 +9,7 @@ TODO: Sanitize inputs
 var express = require('express');
 var app = express();
 var expressWs = require('express-ws')(app);
+var bodyParser = require('body-parser');
 var eventbus = require('./synthcore/eventbus.js');
 
 var controllers = require('./synthcore/controllers.js');
@@ -52,6 +53,8 @@ function sendController(message){
     }
   });   
 }
+
+app.use(bodyParser.json()); // for parsing application/json
 
 app.use(function (req, res, next) {
   console.log('middleware accessed through ' + req);
@@ -185,7 +188,7 @@ app.put('/wifi/access-point/connect', function(req, res){
 });
 
 app.put('/wifi/:ssid', function(req, res){
-  wifi.updateNetwork(req.net, 
+  wifi.updateNetwork(req.body, 
     function(){
       res.status(200).send();
     },
