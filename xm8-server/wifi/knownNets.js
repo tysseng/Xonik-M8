@@ -27,6 +27,8 @@ function replace(net){
     if(knownNets[i].ssid === net.ssid){
       knownNets[i] = net;
       console.log("Replaced network " + net.ssid + " at position " + i);      
+      save();
+      return;
     }
   }  
 }
@@ -34,8 +36,9 @@ function replace(net){
 function remove(ssid){
   for(var i = 0; i < knownNets.length; i++){
     if(knownNets[i].ssid === ssid){
-      knownNets = knownNets.splice(i, 1);
+      knownNets.splice(i, 1);
       save();
+      return;
     }
   }
 }

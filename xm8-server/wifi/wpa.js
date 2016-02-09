@@ -215,11 +215,11 @@ function findSsid(stdout){
 
 function validateWpaParameters(parameters){
   _.each(parameters, function(parameter){
-    if("ssid" === parameter){
+    if("ssid" === parameter.key){
       return;
     }
     if(!wpaParameters.parameters[parameter.key]){
-      throw {message: "No such wpa parameter exists"};
+      throw {message: "No such wpa parameter exists: " + encodeURIComponent(parameter.key)};
     }
 
     if(!typeof parameter.value === "string"){

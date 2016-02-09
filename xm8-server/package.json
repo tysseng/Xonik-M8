@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.14.2",
     "express": "^4.13.3",
     "express-ws": "^0.2.6",
     "jsonfile": "^2.2.3",
