@@ -1,5 +1,3 @@
-//TODO: Change data format to send length as first byte.
-
 // the spi repository serializes, sends and receives data through the SPI bus. 
 // It communicates through events and exports nothing.
 
