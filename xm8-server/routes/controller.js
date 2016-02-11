@@ -1,4 +1,6 @@
-var spiController = require('../core/spiController');
+
+// TODO: Find better name, controller makes it hard to read.
+var controller = require('../core/controller');
 var tools = require('./routeTools');
 
 module.exports = function(app, ws){
@@ -9,7 +11,7 @@ module.exports = function(app, ws){
 	  console.log("Something connected to controller");
 
 	  ws.on('message', function(msg) {
-	    spiController.publishControllerChange(msg);
+	    controller.publishControllerChange(msg);
 	  });
 	});
 
@@ -35,6 +37,4 @@ module.exports = function(app, ws){
 	    });    
 	  });
 	});*/
-
-
 }
