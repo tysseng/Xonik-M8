@@ -7,7 +7,7 @@ module.exports = function(app, ws){
 
   var root = "/controller";
 
-	app.ws(root, function(ws, req) {
+	app.ws("/controller", function(ws, req) {
 	  console.log("Something connected to controller");
 
 	  ws.on('message', function(msg) {
@@ -17,7 +17,7 @@ module.exports = function(app, ws){
 
 	// register web socket return function
 	var controllerWss = ws.getWss(root);
-	spiController.onControllerChange(tools.sendToAllClients.bind(null, controllerWss));
+	controller.onControllerChange = tools.sendToAllClients.bind(null, controllerWss);
 
 	/*
 	app.ws('/echo', function(ws, req) {

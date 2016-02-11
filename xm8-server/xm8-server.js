@@ -30,9 +30,10 @@ app.use('/wifi', wifiRoutes);
 
 // Capture all requests not yet handled and redirect them to the captive portal
 // page as they may origin from wifi logon.
-app.use(function(req, res, next){
+// TODO: Seems to capture all ws calls too
+/*app.use(function(req, res, next){
   console.log("User requested " + req.originalUrl + ", redirecting to captive portal page");
   res.redirect("/xm8-captive-portal.html");
-});
+});*/
 
 app.listen(80);
