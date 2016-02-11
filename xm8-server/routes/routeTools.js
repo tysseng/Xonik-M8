@@ -1,5 +1,6 @@
 function sendToAllClients(wss, message){
   wss.clients.forEach(function (client) {
+    console.log(client);
     try{
       console.log("Sending message " + message + " to gui " + client);
       client.send(message);
