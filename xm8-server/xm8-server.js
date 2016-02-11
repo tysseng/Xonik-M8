@@ -9,6 +9,7 @@ TODO: Sanitize inputs
 var express = require('express');
 var app = express();
 var ws = require('express-ws')(app);
+var bodyParser = require('body-parser');
 
 var wifiRoutes = require('./routes/wifi');
 require('./routes/controller')(app, ws);
@@ -35,4 +36,3 @@ app.use(function(req, res, next){
 });
 
 app.listen(80);
-listenToControllerChanges();
