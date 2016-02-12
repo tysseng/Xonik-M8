@@ -7,15 +7,16 @@ module.exports = function(app, ws){
 
   var root = "/controller";
 
-  app.ws("/controller", function(ws, req) {
+  app.ws(root, function(ws, req) {
     console.log("Something connected to controller");
 
     ws.on('message', function(msg) {
-      controller.publishControllerChange(msg);
+      controller.publishControllerChange(msg, ws);
     });
   });
 
   // register web socket return function
+  // TODO:  if from gui, only resend to other clients than the one the event came from.
   var controllerWss = ws.getWss(root);
   controller.onControllerChange = function(data){
     tools.sendToAllClients.bind(controllerWss, data); 
