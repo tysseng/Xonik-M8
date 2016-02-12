@@ -20,8 +20,8 @@ function publishControllerChange(message, source){
 function listenToControllerChanges(){
   eventbus.controls.on("controller",function(event){
 //    if(event.source !== "gui"){
-      console.log("Received event from " + event.sourceType + " in core controller");
-      if(onControllerChangeCallback) onControllerChangeCallback("" + event.id + "," + event.value);
+        console.log("Received event from " + event.sourceType + " in core controller");
+        if(onControllerChangeCallback) onControllerChangeCallback(event.source, "" + event.id + "," + event.value);
 //    }
   });
 }

@@ -1,10 +1,8 @@
-function sendToAllClients(wss, message){
+function sendToAllClients(wss, source, message){
 
-  //TODO: Sjekk om client === message.source!
   wss.clients.forEach(function (client) {
-    console.log(client);
     try{
-      if(client === message.source){
+      if(client === source){
         console.log("Not sending message back to its origin");
       } else {
         console.log("Sending message " + message + " to gui " + client);    
