@@ -2,6 +2,7 @@ function sendToAllClients(wss, message){
 
   //TODO: Sjekk om client === message.source!
   wss.clients.forEach(function (client) {
+    console.log(client);
     try{
       if(client !== message.source){
         console.log("Sending message " + message + " to gui " + client);    

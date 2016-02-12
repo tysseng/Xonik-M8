@@ -4,7 +4,7 @@ var ctrlSetup = require('../shared/controllerSetup.js');
 var eventbus = require('./eventbus.js');
 var controllers = require('./controllers.js');
 
-var onControllerChange;
+var onControllerChangeCallback;
 
 function publishControllerChange(message, source){
   var msgParts = message.split(',');
@@ -19,11 +19,15 @@ function publishControllerChange(message, source){
 
 function listenToControllerChanges(){
   eventbus.controls.on("controller",function(event){
-    //if(event.source !== "gui"){
-      console.log("Received event from " + event.source);
-      if(onControllerChange) onControllerChange("" + event.id + "," + event.value);
-    //}
+//    if(event.source !== "gui"){
+      console.log("Received event from " + event.sourceType + " in core controller");
+      if(onControllerChangeCallback) onControllerChangeCallback("" + event.id + "," + event.value);
+//    }
   });
+}
+
+function onControllerChange(callback){
+  onControllerChangeCallback = callback;
 }
 
 // start listening

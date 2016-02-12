@@ -18,9 +18,7 @@ module.exports = function(app, ws){
   // register web socket return function
   // TODO:  if from gui, only resend to other clients than the one the event came from.
   var controllerWss = ws.getWss(root);
-  controller.onControllerChange = function(data){
-    tools.sendToAllClients.bind(controllerWss, data); 
-  }
+  controller.onControllerChange(tools.sendToAllClients.bind(null, controllerWss));
 
   /*
   app.ws('/echo', function(ws, req) {
