@@ -37,6 +37,7 @@ function wsConnect(){
       if(!receiveOn){
         return;
       }
+
       var message = parseMessage(event.data);  
 
       console.log("received message through ws. id=" + message.id + ", value=" + message.value);  

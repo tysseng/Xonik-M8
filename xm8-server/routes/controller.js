@@ -15,8 +15,7 @@ module.exports = function(app, ws){
     });
   });
 
-  // register web socket return function
-  // TODO:  if from gui, only resend to other clients than the one the event came from.
+  // register controller web socket return function
   var controllerWss = ws.getWss(root);
   controller.onControllerChange(tools.sendToAllClients.bind(null, controllerWss));
 
