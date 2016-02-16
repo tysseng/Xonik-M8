@@ -8,7 +8,33 @@
 // Look at numbering etc (DACA/B to make a more logical output order) - probably
 // solved by fixing S&H IO_AN connector.
 
+// Project settings:
+// -----------------
+// PLL Input Divider: 2x
+// PLL Multiplier: 20x
+// Oscillator Selection Bits: Primary Osc w/PLL
+// Primary Oscillator Configuration: XT osc mode
+
+// Test board setup:
+// ------------------
+// D0-D7: PORTA/L
+// D8-D15: PORTB/L
+// DAC control: PORTD/L
+// SH control: PORTD/H with the following mapping:
+// EasyPIC: DAC-board
+//  0: N/C
+//  1: 0 and 1 (SH_EN0 and SH_EN1)
+//  2: 2 - SH_A0
+//  3: N/C
+//  4: 3 - SH_A1
+//  5: 4 - SH_A2
+//  6: 5 - SH_A3
+//  7: N/C
+//  VCC: VCC
+//  GND: GND, AGND (on psu)
+
 #include "built_in.h"
+#include "DacTest.h"
 #define TX_INTERRUPT_TRIS TRISB1_bit
 
 // PCB:
@@ -59,33 +85,29 @@ char output = 0;
 // values to be output, set by main loop
 unsigned int outputVals[OUTPUTS];
 
+void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
+
+  // Timer automatically resets to 0 when it matches PR1, no
+  // need to reset timer.
+  T1IF_bit = 0;
+
+  if(output == 0){
+    if(outputVals[0] != 0){
+      fillOutputs(0);
+    } else {
+      fillOutputs(0xFFFF);
+    }
+  }
+
+  writeValuesToSH(output);
+
+  output = (output + 1) % SR_OUTPUTS;
+}
+
 void fillOutputs(unsigned int value){
   for(i = 0; i<OUTPUTS; i++){
     outputVals[i] = value;
   }
-}
-
-void initDac(){
-  unsigned short i;
-  // select DAC A
-  A0 = 0;
-  A1 = 0;
-
-  // set
-  _WR = 1;
-  LDAC = 0;
-  _RS = 1;
-
-  // select DAC B
-  A0 = 1;
-  A1 = 1;
-
-  // set
-  _WR = 1;
-  LDAC = 0;
-  _RS = 1;
-
-  fillOutputs(0);
 }
 
 void loadDac(unsigned int value){
@@ -126,10 +148,10 @@ void writeValuesToSH(char sr_output){
   // set SH address
   // TODO: Improve efficiency here in real program by using consecutive bits
   // of a single 8 bit port.
-  SH_A0 = output.b0;
-  SH_A1 = output.b1;
-  SH_A2 = output.b2;
-  SH_A3 = output.b3;
+  SH_A0 = sr_output.b0;
+  SH_A1 = sr_output.b1;
+  SH_A2 = sr_output.b2;
+  SH_A3 = sr_output.b3;
 
   // let values settle
   delay_cyc(20);
@@ -139,6 +161,29 @@ void writeValuesToSH(char sr_output){
   SH_EN1 = 1;
 
   // now go away and let the S&H sample untill the next SH should be loaded
+}
+
+void initDac(){
+  unsigned short i;
+  // select DAC A
+  A0 = 0;
+  A1 = 0;
+
+  // set
+  _WR = 1;
+  LDAC = 0;
+  _RS = 1;
+
+  // select DAC B
+  A0 = 1;
+  A1 = 1;
+
+  // set
+  _WR = 1;
+  LDAC = 0;
+  _RS = 1;
+
+  fillOutputs(0);
 }
 
 void initPorts(){
@@ -158,23 +203,36 @@ void initPorts(){
   TRISG  = 0;
 }
 
+void initTimer1(){
+  //Prescaler 1:1; PR1 Preload = 2; Actual Interrupt Time = 25 ns
+
+  // enable and clear interrupt
+  T1IE_bit         = 1;
+  T1IF_bit         = 0;
+  
+  // set interrupt priority
+  T1IP0_bit         = 1;
+  T1IP1_bit         = 1;
+  T1IP2_bit         = 1;
+  
+  // set period = 25uS
+  PR1                 = 2000;
+  
+  // clear timer
+  TMR1 = 0;
+  
+  // start timer
+  T1CON         = 0x8000;
+}
+
 void main() {
   initPorts();
   initDac();
+  initTimer1();
+  EnableInterrupts();
 
   while(1){
-    if(output == 0){
-      if(outputVals[0] != 0){
-        fillOutputs(0);
-      } else {
-        fillOutputs(0xFFFF);
-      }
-    }
+  // do nothing
 
-    writeValuesToSH(output);
-
-    delay_us(25);
-
-    output = (output + 1) % SR_OUTPUTS;
   }
 }
