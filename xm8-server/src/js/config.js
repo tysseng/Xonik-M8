@@ -1,5 +1,5 @@
 var config = {
-  serverAddr: 'ws://10.0.1.119:3000',
+  serverAddr: 'ws://10.0.1.123',
   endpoints: {
   	controllers: '/controller'
   }

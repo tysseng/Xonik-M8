@@ -62,3 +62,37 @@ http://www.andrewconnell.com/blog/setup-node-js-on-raspberry-pi-2-b
 - apt-get upgrade
 - wget http://node-arm.herokuapp.com/node_latest_armhf.deb
 - dpkg -i node_latest_armhf.deb
+
+Installere dhcp-server:
+M�tte oppdatere mirror for apt fordi pakka ikke fantes korrekt. Editere /etc/apt/sources.list
+Endre til:
+# not working for dnsmasq
+#deb http://mirrordirector.raspbian.org/raspbian jessie main non-free rpi
+deb http://mirror.ox.ac.uk/sites/archive.raspbian.org/archive/raspbian jessie main non-free rpi
+
+apt-get update
+apt-get install dnsmasq
+
+Fjerne oppstartsskript:
+update-rc.d -f dnsmasq remove
+edit /etc/default/dnsmasq and change "ENABLED=1" to "ENABLED=0"
+
+
+Installere access point sw (for å opptre som accesspoint istedenfor ad-hoc)
+----
+apt-get install hostapd
+Last ned edimax-versjon av hostapd:
+(http://www.daveconroy.com/turn-your-raspberry-pi-into-a-wifi-hotspot-with-edimax-nano-usb-ew-7811un-rtl8188cus-chipset/)
+wget http://www.daveconroy.com/wp3/wp-content/uploads/2013/07/hostapd.zip
+unzip hostapd.zip 
+sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.bak
+sudo mv hostapd /usr/sbin/hostapd.edimax 
+sudo ln -sf /usr/sbin/hostapd.edimax /usr/sbin/hostapd 
+sudo chown root.root /usr/sbin/hostapd 
+sudo chmod 755 /usr/sbin/hostapd
+
+For at dette skal fungere så må wlan0 ha en IP. Den setter vi manuelt med:
+ifconfig wlan0 10.0.0.200 netmask 255.255.255.0 (må gjøres hver gang)
+
+
+

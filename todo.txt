@@ -13,6 +13,7 @@ PicoUPS
 MikroC
 - Vente med å sende data til rpi har sagt at den er klar, dvs. rpi må sette/holde en pinne høy for å indikere at server kjører.
 - Sending låser seg noen ganger, men jeg mistenker at det er fordi man kommer borti RB1 (som er ved siden av analog input)
+- "Clear buffers"-kommando for å resette alt?
 
 Annet
 - Log rotation
@@ -30,4 +31,4 @@ Til presentasjon
 - Ulemper
 	- PI: Oppstart/shutdown-tid. Kun SPI master. Ikke realtime
 - Reboot: 18 sek fra reboot til webapp er oppe igjen.
-- Ikke midi fordi det er ment å være INNI synthen
+- Ikke midi fordi det er ment å være INNI synthen	

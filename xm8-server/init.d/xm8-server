@@ -2,7 +2,7 @@
 
 USER="root"
 NODE_ENV="production"
-PORT="3000"
+PORT="80"
 APP_DIR="/root/git/Xonik-M8/xm8-server"
 NODE_APP="xm8-server.js"
 CONFIG_DIR="$APP_DIR"

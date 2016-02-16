@@ -1,5 +1,3 @@
-//TODO: Change data format to send length as first byte.
-
 // the spi repository serializes, sends and receives data through the SPI bus. 
 // It communicates through events and exports nothing.
 
@@ -20,7 +18,7 @@ function publishControllerChange(buffer){
 
 function listenToControllerChanges(){
   eventbus.controls.on("controller",function(event){
-    if(event.source !== "spi"){
+    if(event.sourceType !== "spi"){
       sendController(toSpiBuffer(event));
     }
   });
@@ -33,9 +31,9 @@ function fromSpiBuffer(buffer){
     var id = controller.srvId;
     var value = getValueFromSpi(type, buffer);
     console.log("Converted spi buffer - type: " + type + ", id: " + id + ", value: " + value);
-    return {source: "spi", type: type, id: id, value: value};
+    return {source: this, sourceType: "spi", type: type, id: id, value: value};
   } else {
-    return {source: "spi", type: types.UNKNOWN, id: -1, value: -1}
+    return {source: this, Type: "spi", type: types.UNKNOWN, id: -1, value: -1}
   }
 }
 

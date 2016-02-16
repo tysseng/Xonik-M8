@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.14.2",
     "express": "^4.13.3",
     "express-ws": "^0.2.6",
+    "jsonfile": "^2.2.3",
     "react": "^0.14.5",
     "react-dom": "^0.14.5",
     "rpi-gpio": "^0.7.0",
