@@ -17,6 +17,7 @@
 //  GND: GND, AGND (on psu)
 
 #include "built_in.h"
+#include "Dac.h"
 #include "Dac.internal.h"
 #define TX_INTERRUPT_TRIS TRISB1_bit
 
@@ -46,16 +47,14 @@
 #define DATA_LO LATA // porta/l - D0-D7
 #define DATA_HI LATB // portb/l - D8-D15
 
-// there are two DACs in use, each one has 16 SH circuits connected to it by
-// means of a 1-to-16 mux
-const unsigned int SR_OUTPUTS = 16; // shift register outputs
-const unsigned int OUTPUTS = SR_OUTPUTS * 2;
+
 
 // the current output, loops from timer interrupt.
 char output = 0;
+unsigned int outputVals[OUTPUTS];
 
 // values to be output, set by main loop
-unsigned int outputVals[OUTPUTS];
+//unsigned int outputVals[OUTPUTS];
 
 void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
 
@@ -63,13 +62,14 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
   // need to reset timer.
   T1IF_bit = 0;
 
+  /*
   if(output == 0){
     if(outputVals[0] != 0){
       fillOutputs(0);
     } else {
       fillOutputs(0xFFFF);
     }
-  }
+  } */
 
   writeValuesToSH(output);
 
@@ -168,7 +168,7 @@ void initDacPorts(){
   JTAGEN_bit = 0;
 
   //Set ports as output
-  TRISB = 0;
+  TRISB = 0xFF00; // let PORTB be inputs to read analog.
   LATB = 0;
 
   TRISD = 0;
