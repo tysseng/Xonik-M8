@@ -168,7 +168,7 @@ void initDacPorts(){
   JTAGEN_bit = 0;
 
   //Set ports as output
-  TRISB = 0xFF00; // let PORTB be inputs to read analog.
+  TRISB = TRISB & 0xFF00;
   LATB = 0;
 
   TRISD = 0;
