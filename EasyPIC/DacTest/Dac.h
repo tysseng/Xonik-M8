@@ -7,7 +7,7 @@
 #define OUTPUTS SR_OUTPUTS * 2
 
 extern unsigned int outputVals[OUTPUTS];
-void fillOutputs(unsigned int value);
-void initDac();
+void DAC_fillOutputs(unsigned int value);
+void DAC_init();
 
 #endif

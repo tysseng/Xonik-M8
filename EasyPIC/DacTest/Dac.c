@@ -1,3 +1,7 @@
+// BUG: If timer1 is started, but no interrupt routine exists to catch the interrupt,
+// no other interrupts (?), at least not SPI interrupt, will work. The symptom is that
+// the raspberry pi spi receives bogus data back when it tries to send data itself!
+
 // Test board setup:
 // ------------------
 // D0-D7: PORTA/L
@@ -19,7 +23,6 @@
 #include "built_in.h"
 #include "Dac.h"
 #include "Dac.internal.h"
-#define TX_INTERRUPT_TRIS TRISB1_bit
 
 // PCB:
 
@@ -51,32 +54,30 @@
 
 // the current output, loops from timer interrupt.
 char output = 0;
-unsigned int outputVals[OUTPUTS];
 
 // values to be output, set by main loop
-//unsigned int outputVals[OUTPUTS];
+unsigned int outputVals[OUTPUTS];
 
 void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
 
   // Timer automatically resets to 0 when it matches PR1, no
   // need to reset timer.
   T1IF_bit = 0;
-
-  /*
+   /*
   if(output == 0){
     if(outputVals[0] != 0){
-      fillOutputs(0);
+      DAC_fillOutputs(0);
     } else {
-      fillOutputs(0xFFFF);
+      DAC_fillOutputs(0xFFFF);
     }
-  } */
+  }*/
 
   writeValuesToSH(output);
 
   output = (output + 1) % SR_OUTPUTS;
 }
 
-void fillOutputs(unsigned int value){
+void DAC_fillOutputs(unsigned int value){
   char i;
   for(i = 0; i<OUTPUTS; i++){
     outputVals[i] = value;
@@ -136,33 +137,6 @@ void writeValuesToSH(char sr_output){
   // now go away and let the S&H sample untill the next SH should be loaded
 }
 
-void initDac(){
-
-  initDacPorts();
-  
-  // select DAC A
-  A0 = 0;
-  A1 = 0;
-
-  // set
-  _WR = 1;
-  LDAC = 0;
-  _RS = 1;
-
-  // select DAC B
-  A0 = 1;
-  A1 = 1;
-
-  // set
-  _WR = 1;
-  LDAC = 0;
-  _RS = 1;
-
-  fillOutputs(0xFFFF);
-  
-  initDacTimer();
-}
-
 void initDacPorts(){
   // disable JTAG to get control of all pins on PORTA/L
   JTAGEN_bit = 0;
@@ -190,6 +164,7 @@ void initDacTimer(){
   T1IP1_bit         = 1;
   T1IP2_bit         = 1;
 
+
   // set period = 25uS
   PR1                 = 2000;
 
@@ -198,4 +173,31 @@ void initDacTimer(){
 
   // start timer
   T1CON         = 0x8000;
+}
+
+void DAC_init(){
+
+  initDacPorts();
+
+  // select DAC A
+  A0 = 0;
+  A1 = 0;
+
+  // set
+  _WR = 1;
+  LDAC = 0;
+  _RS = 1;
+
+  // select DAC B
+  A0 = 1;
+  A1 = 1;
+
+  // set
+  _WR = 1;
+  LDAC = 0;
+  _RS = 1;
+
+  DAC_fillOutputs(0xFFFF);
+
+  initDacTimer();
 }

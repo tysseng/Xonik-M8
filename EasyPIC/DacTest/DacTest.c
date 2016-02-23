@@ -17,15 +17,17 @@
 
 #include "Dac.h"
 #include "Adc.h"
+#include "Spi.h"
 #include "built_in.h"
 
 void main() {
-  TRISA = 0;
-  initADC();
-  initDac();
+  //ADC_init();
+  DAC_init();
+  SPI_init();
   EnableInterrupts();
 
   while(1){
-    readPotmeters();
+    SPI_checkForReceivedData();
+//    readPotmeters();
   }
 }
