@@ -25,6 +25,7 @@
  */
 
 #include "Dac.h"
+#include "Config.h"
 #include <built_in.h>
 
 #define TX_INTERRUPT_TRIS TRISG1_bit

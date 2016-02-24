@@ -23,6 +23,8 @@
 #include "built_in.h"
 #include "Dac.h"
 #include "Dac.internal.h"
+#include "Matrix.h"
+#include "Output.h"
 
 // PCB:
 
@@ -51,12 +53,18 @@
 #define DATA_HI LATB // portb/l - D8-D15
 
 
+// The number of dac updates finished since last time the matrix were run.
+// This is checked before a new runMatrix is called as timing is done through
+// a timer interrupt that increments what dac to update.
+// NB: As dacs may have been updated multiple times since the matrix run started,
+// any ramp increments should be multiplied by this number to get correct timing.
+// This is done by using intervalMultiplier, which is a copy of dacUpdatesFinished
+// that stays constant through a whole run of the matrix.
+unsigned short DAC_dacUpdatesFinished;
+unsigned short DAC_intervalMultiplier;  //TODO: set og reset denne
 
 // the current output, loops from timer interrupt.
 char output = 0;
-
-// values to be output, set by main loop
-unsigned int outputVals[OUTPUTS];
 
 void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
 
@@ -72,6 +80,24 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
     }
   }*/
 
+  // First output of a cycle. Store whatever is in the output buffer to
+  // prepare calculation of the next dac cycle while the dac works its way
+  // on the current cycle.
+  if(output == 0){
+
+    // Don't swap buffers if the current buffer has not been fully calculated
+    // yet.
+    if(MX_matrixCalculationCompleted){
+      OUT_swapBuffers();
+      MX_matrixCalculationCompleted = 0;
+    }
+
+    // TODO: This comment is somewhat fishy
+    // signal that data has been copied and that next matrix calculation
+    // may start.
+    DAC_dacUpdatesFinished++;
+  }
+
   writeValuesToSH(output);
 
   output = (output + 1) % SR_OUTPUTS;
@@ -80,7 +106,7 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
 void DAC_fillOutputs(unsigned int value){
   char i;
   for(i = 0; i<OUTPUTS; i++){
-    outputVals[i] = value;
+    OUT_dacBuffer[i] = value;
   }
 }
 
@@ -112,12 +138,14 @@ void writeValuesToSH(char sr_output){
   // select and load DAC A
   A0 = 0;
   A1 = 0;
-  loadDac(outputVals[sr_output]);
+  
+  //TODO: Convert from signed to unsigned here!!!
+  loadDac(OUT_dacBuffer[sr_output] + 0x8000);
 
   // select and load DAC B
   A0 = 1;
   A1 = 1;
-  loadDac(outputVals[SR_OUTPUTS + sr_output]);
+  loadDac(OUT_dacBuffer[SR_OUTPUTS + sr_output] + 0x8000);
 
   // set SH address
   // TODO: Improve efficiency here in real program by using consecutive bits
@@ -152,7 +180,7 @@ void initDacPorts(){
   LATA = 0;
 }
 
-void initDacTimer(){
+void DAC_startTimer(){
   //Prescaler 1:1; PR1 Preload = 2; Actual Interrupt Time = 25 ns
 
   // enable and clear interrupt
@@ -178,7 +206,10 @@ void initDacTimer(){
 void DAC_init(){
 
   initDacPorts();
-
+  
+  //necessary to start runMatrix.
+  DAC_dacUpdatesFinished = 0;
+    
   // select DAC A
   A0 = 0;
   A1 = 0;
@@ -198,6 +229,4 @@ void DAC_init(){
   _RS = 1;
 
   DAC_fillOutputs(0xFFFF);
-
-  initDacTimer();
 }

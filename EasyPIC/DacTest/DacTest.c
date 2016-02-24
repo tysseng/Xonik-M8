@@ -18,16 +18,52 @@
 #include "Dac.h"
 #include "Adc.h"
 #include "Spi.h"
+#include "Matrix.h"
+#include "Output.h"
 #include "built_in.h"
 
 void main() {
-  //ADC_init();
   DAC_init();
   SPI_init();
   EnableInterrupts();
 
+  // calculate initial state. dacUpdatesFinished will be 0, so any ramps
+  // will not be incremented.
+  MX_runMatrix();
+
+  // start the dac
+  DAC_startTimer();
+    
   while(1){
     SPI_checkForReceivedData();
-//    readPotmeters();
+    if(DAC_dacUpdatesFinished){
+      DAC_dacUpdatesFinished = 0;
+      DAC_intervalMultiplier = 0;
+      MX_runMatrix();
+    }
   }
 }
+
+/*
+TODO:
+- tuning lookup
+- exponential lookup
+- SPI input
+- distance-in-samples-per-cents
+- multi stage envelopes (inc looping?)
+- LFOs
+- quantizer - quantize to semitone or other unit
+- glide/slide/resistance
+- Trigger (sends trigger pulse if input is high)
+- set og reset denne intervalMultiplier
+
+Mathematical expressions
+- divide
+- average
+
+Outputs
+- CV
+- trigger pulse (for analog envelope)
+- gate (for analog envelope)
+- other binary pins (controlling switches etc)
+*/
