@@ -15,9 +15,10 @@ matrixint MX_inputBuffer[8];
 // the dac buffer before the next dac cycle.
 unsigned short MX_matrixCalculationCompleted;
 
+// TODO: Create constant lookup table for exponential conversion
 // lookup table for linear to exponential conversion that only converts positive
 // values (and eases of to 0 to allow maximum offness
-matrixint lookupTablePositiveExponential[matrixintrange];
+//const matrixint lookupTablePositiveExponential[matrixintrange];
 
 
 // params can be pointers to the result of the previous Node in the matrix or
@@ -383,18 +384,22 @@ void nodeFuncQuantize(Node *aNode){
 // Convert linear value to exponential. Only positive values are converted,
 // all others are 0, to allow maximum offness.
 void nodeFuncPositiveExp(Node *aNode){
+// TODO: MAKE CONST LOOKUP TABLE
+/*
     matrixint input = getParam(aNode,0);
     if(input > 0){
         aNode->result = lookupTablePositiveExponential[input];
     } else {
         aNode->result = 0;
     }
+    */
 }
 
 // do nothing
 void nodeFuncNoop(Node *aNode){}
 
 // precalculate a 70dB exponential curve for positive input values.
+// TODO: NOT POSSIBLE TO CALCULATE DYNAMICALLY; MAKE CONST LOOKUP TABLE
 void precalcPositiveExponentialLookup(){
 
     // dB calculation
@@ -408,11 +413,12 @@ void precalcPositiveExponentialLookup(){
     // f(0) = 0.000316
     // f(max) = 1;
     //
+    /*
     unsigned matrixint i;
     lookupTablePositiveExponential[0] = 0;
     for(i=1; i<=matrixintmax; i++){
         lookupTablePositiveExponential[i] = 0;
-    }
+    } */
 }
 
 // add Node to the matrix.
@@ -442,8 +448,10 @@ void MX_resetMatrix(){
     }
     nodesInUse = 0;
 }
-/*
+
 nodeFunction MX_getFunctionPointer(unsigned short function){
+            return nodeFuncSum;
+
     switch(function){
         case NODE_SUM:
             return &nodeFuncSum;
@@ -500,4 +508,4 @@ nodeFunction MX_getFunctionPointer(unsigned short function){
         default:
             return &nodeFuncNoop;
     }
-}*/
+}

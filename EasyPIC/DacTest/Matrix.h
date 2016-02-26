@@ -8,6 +8,6 @@ extern unsigned short MX_matrixCalculationCompleted;
 extern void MX_addNode(Node *aNode);
 extern void MX_runMatrix();
 extern void MX_resetMatrix();
-//nodeFunction MX_getFunctionPointer(unsigned short function);
+extern nodeFunction MX_getFunctionPointer(unsigned short function);
 
 #endif

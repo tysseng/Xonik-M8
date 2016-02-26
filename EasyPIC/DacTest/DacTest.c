@@ -21,7 +21,18 @@
 #include "Matrix.h"
 #include "Output.h"
 #include "built_in.h"
+#include "DacTest.test.h"
 
+//#define RUNTESTS
+#define DACTESTS
+
+#ifdef RUNTESTS
+void main() {
+    runMatrixTests();
+}
+#endif
+
+#ifndef RUNTESTS
 void main() {
   DAC_init();
   SPI_init();
@@ -43,6 +54,7 @@ void main() {
     }
   }
 }
+#endif
 
 /*
 TODO:

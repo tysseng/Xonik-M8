@@ -13,13 +13,12 @@
 #define matrixlongintmin -2147483648
 #define matrixlongintmax 2147483647
 
-//function pointer to a matrix node function
-typedef void (*nodeFunction)(struct matrixNode *);
-
 //node in matrix
 typedef struct matrixNode{
-    // function to run when this Node is accessed
-    nodeFunction func;
+    // function to run when this Node is accessed.
+    // Equals typedef nodeFunction, but that type cannot be declared before
+    // this struct and cannot be used before it is declared.
+    void (*func)(struct matrixNode *);
 
     // parameters passed to this node
     matrixint params[8];
@@ -34,7 +33,7 @@ typedef struct matrixNode{
 
     // high res status variable for ramps etc, to reduce effects of rounding
     // errors.
-    int highResState;
+    long highResState;
 
     // state, holds flags for
     short state;
@@ -43,5 +42,12 @@ typedef struct matrixNode{
     matrixint result;
 
 } Node;
+
+// Function pointer to a matrix node function. In MikroC for PIC32, it does
+// not work to have this typedef BEFORE the declaration of matrixNode when
+// the parameter is a pointer (it works in MikroC for PIC though).
+// This means that the type nodeFunction cannot be used in the matrixNode
+// struct definition, instead we have to use the full pointer signature
+typedef void (*nodeFunction)(Node *);
 
 #endif
