@@ -14,29 +14,44 @@
 // PLL Multiplier: 20x
 // Oscillator Selection Bits: Primary Osc w/PLL
 // Primary Oscillator Configuration: XT osc mode
+#define RUNTESTS
+//#define DACTESTS
 
 #include "Dac.h"
 #include "Adc.h"
 #include "Spi.h"
 #include "Matrix.h"
+#include "TestMatrix.h"
 #include "Output.h"
 #include "built_in.h"
 #include "DacTest.test.h"
 
-//#define RUNTESTS
-#define DACTESTS
+#ifdef RUNTESTS
+  #include "Spi.test.h"
+#endif
+
 
 #ifdef RUNTESTS
 void main() {
-    runMatrixTests();
+  MX_resetMatrix();
+  OUT_init();
+  
+  setupTestMatrix();
+  updateControllerFromSpi(0, 100);
+  MX_runMatrix();
+ // runMatrixTests();
 }
 #endif
 
 #ifndef RUNTESTS
 void main() {
+
+    
   DAC_init();
   SPI_init();
   EnableInterrupts();
+  MX_resetMatrix();
+  OUT_init();
 
   // calculate initial state. dacUpdatesFinished will be 0, so any ramps
   // will not be incremented.
@@ -44,6 +59,11 @@ void main() {
 
   // start the dac
   DAC_startTimer();
+
+//  setupTestMatrix();
+
+
+
     
   while(1){
     SPI_checkForReceivedData();

@@ -25,6 +25,7 @@
  */
 
 #include "Dac.h"
+#include "Matrix.h"
 #include "Config.h"
 #include <built_in.h>
 
@@ -194,8 +195,9 @@ void updateControllerFromSpi(unsigned short id, unsigned short value){
   val = val * 256;
 
   //TODO: Check if 8 or 16 bit value!
-  if(id < OUTPUTS){
-    DAC_fillOutputs(val);
+  if(id < INPUTS){
+    MX_inputBuffer[id] = val;
+//    DAC_fillOutputs(val);
 //    outputVals[id] = value << 8;
   }
 

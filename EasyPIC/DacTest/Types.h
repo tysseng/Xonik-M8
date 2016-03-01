@@ -13,7 +13,27 @@
 #define matrixlongintmin -2147483648
 #define matrixlongintmax 2147483647
 
-//node in matrix
+// placements in Node data array when creating Node through spi
+#define NODE_FUNC 0
+#define NODE_PARAM_0_LO 1
+#define NODE_PARAM_0_HI 2
+#define NODE_PARAM_1_LO 3
+#define NODE_PARAM_1_HI 4
+#define NODE_PARAM_2_LO 5
+#define NODE_PARAM_2_HI 6
+#define NODE_PARAM_3_LO 7
+#define NODE_PARAM_3_HI 8
+#define NODE_PARAM_4_LO 9
+#define NODE_PARAM_4_HI 10
+#define NODE_PARAM_5_LO 11
+#define NODE_PARAM_5_HI 12
+#define NODE_PARAM_6_LO 13
+#define NODE_PARAM_6_HI 14
+#define NODE_PARAM_7_LO 15
+#define NODE_PARAM_7_HI 16
+#define NODE_PARAM_IS_CONSTANT 17
+#define NODE_PARAMS_IN_USE 18
+
 typedef struct matrixNode{
     // function to run when this Node is accessed.
     // Equals typedef nodeFunction, but that type cannot be declared before
@@ -43,11 +63,14 @@ typedef struct matrixNode{
 
 } Node;
 
+
 // Function pointer to a matrix node function. In MikroC for PIC32, it does
 // not work to have this typedef BEFORE the declaration of matrixNode when
 // the parameter is a pointer (it works in MikroC for PIC though).
 // This means that the type nodeFunction cannot be used in the matrixNode
 // struct definition, instead we have to use the full pointer signature
-typedef void (*nodeFunction)(Node *);
 
+// This is a confirmed bug in mC for PIC32:
+// http://www.mikroe.com/forum/viewtopic.php?f=164&t=67056&p=268549#p268549
+typedef void (*nodeFunction)(Node *);
 #endif

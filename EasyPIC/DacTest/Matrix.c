@@ -3,13 +3,15 @@
 #include "Definitions.h"
 #include "Nodetypes.h"
 #include "Output.h"
+#include "Matrix.internal.h"
+#include "Matrix.h"
 
 // matrix nodes
-Node *nodes[MAX_OPERATIONS];
+volatile Node nodes[MAX_OPERATIONS];
 unsigned short nodesInUse = 0;
 
 // place where matrix reads inputs from
-matrixint MX_inputBuffer[8];
+matrixint MX_inputBuffer[INPUTS];
 
 // true if a matrix run has been completed and data is ready to be copied to
 // the dac buffer before the next dac cycle.
@@ -32,7 +34,7 @@ matrixint getParam(Node *aNode, unsigned short paramId){
         return aNode->params[paramId];
     } else {
         //TODO will this work with a 16 bit param?
-        return nodes[aNode->params[paramId]]->result;
+        return nodes[aNode->params[paramId]].result;
     }
 }
 
@@ -341,13 +343,15 @@ void nodeFuncBinaryNot(Node *aNode){
     }
 }
 
-// fetch  input from inputBuffer and add it as the result of a Node to be used
+// fetch input from inputBuffer and add it as the result of a Node to be used
 // in the matrix
 void nodeFuncInput(Node *aNode){
     aNode->result = MX_inputBuffer[getParam(aNode, 0)];
 }
 
 // write output to outputBuffer
+// Param 0: output buffer position
+// Param 1: index of Node to fetch result from
 void nodeFuncOutput(Node *aNode){
     OUT_outputBuffer[getParam(aNode, 0)] = getParam(aNode, 1);
 }
@@ -422,18 +426,24 @@ void precalcPositiveExponentialLookup(){
 }
 
 // add Node to the matrix.
-void MX_addNode(Node *aNode){
-    nodes[nodesInUse] = aNode;
+void MX_addNode(unsigned short *bytes){
+    unsigned short i;
+    nodes[nodesInUse].func = MX_getFunctionPointer(bytes[0]);
+    for(i=0; i<8; i++){
+      nodes[nodesInUse].params[i] = (bytes[i*2 + 2] << 8) + bytes[i*2 + 1];
+    }
+    nodes[nodesInUse].paramIsConstant = bytes[17];
+    nodes[nodesInUse].paramsInUse = bytes[18];
+    
     nodesInUse++;
 }
     
 // loop over the matrix array once and calculate all results
 void MX_runMatrix(){
     unsigned short i;
-    Node *aNode;
+    
     for(i = 0; i<nodesInUse; i++){
-      aNode = nodes[i];
-      aNode->func(aNode);
+      nodes[i].func(&nodes[i]);
     }
 
     // all nodes have written their data to the output buffer, tell
@@ -443,14 +453,15 @@ void MX_runMatrix(){
 
 void MX_resetMatrix(){
     unsigned short i;
+    /*
     for(i=0; i<MAX_OPERATIONS; i++){
         nodes[i] = 0;
     }
+    */
     nodesInUse = 0;
 }
 
 nodeFunction MX_getFunctionPointer(unsigned short function){
-            return nodeFuncSum;
 
     switch(function){
         case NODE_SUM:
