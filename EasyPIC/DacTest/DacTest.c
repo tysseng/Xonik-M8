@@ -15,7 +15,6 @@
 // Oscillator Selection Bits: Primary Osc w/PLL
 // Primary Oscillator Configuration: XT osc mode
 #define RUNTESTS
-//#define DACTESTS
 
 #include "Dac.h"
 #include "Adc.h"
@@ -33,13 +32,28 @@
 
 #ifdef RUNTESTS
 void main() {
+  char i = 0;
+  char dacIncrements = 0;
   MX_resetMatrix();
+  DAC_dacUpdatesFinished = 1;
   OUT_init();
   
-  setupTestMatrix();
-  updateControllerFromSpi(0, 100);
-  MX_runMatrix();
- // runMatrixTests();
+  TM_setupTestMatrix();
+
+  while(1){
+    if(DAC_dacUpdatesFinished){
+      updateControllerFromSpi(0, i++);
+      DAC_dacUpdatesFinished = 0;
+      MX_runMatrix();
+    }
+
+    // only increment dac every two cycles, tests that matrix is not recalculated
+    // while dac is writing.
+    if(dacIncrements % 2 == 0){
+      DAC_step();
+    }
+    dacIncrements++;
+  }
 }
 #endif
 
@@ -51,6 +65,8 @@ void main() {
   SPI_init();
   EnableInterrupts();
   MX_resetMatrix();
+  TM_setupTestMatrix();
+  
   OUT_init();
 
   // calculate initial state. dacUpdatesFinished will be 0, so any ramps
@@ -60,16 +76,12 @@ void main() {
   // start the dac
   DAC_startTimer();
 
-//  setupTestMatrix();
-
-
-
-    
   while(1){
     SPI_checkForReceivedData();
     if(DAC_dacUpdatesFinished){
+      // todo: for testing only
+      updateControllerFromSpi(0, i++);
       DAC_dacUpdatesFinished = 0;
-      DAC_intervalMultiplier = 0;
       MX_runMatrix();
     }
   }
@@ -88,6 +100,9 @@ TODO:
 - glide/slide/resistance
 - Trigger (sends trigger pulse if input is high)
 - set og reset denne intervalMultiplier
+- At start: prepare everything, then wait for start signal on pin with interrupt
+- Sync dac clock by using pin with interrupt instead of timer? will give
+  synchronizable LFOs.
 
 Mathematical expressions
 - divide

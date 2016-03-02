@@ -2,7 +2,7 @@
 #include "Nodetypes.h"
 #include "Types.h"
 
-void setupTestMatrix(){
+void TM_setupTestMatrix(){
     char aNode0[18], aNode1[18];
     
     aNode0[NODE_FUNC] = NODE_INPUT;

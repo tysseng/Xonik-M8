@@ -1,3 +1,5 @@
+#define FAKE_DAC
+
 // BUG: If timer1 is started, but no interrupt routine exists to catch the interrupt,
 // no other interrupts (?), at least not SPI interrupt, will work. The symptom is that
 // the raspberry pi spi receives bogus data back when it tries to send data itself!
@@ -66,6 +68,7 @@ unsigned short DAC_intervalMultiplier;  //TODO: set og reset denne
 // the current output, loops from timer interrupt.
 char output = 0;
 
+#ifndef RUNTESTS
 void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
 
   // Timer automatically resets to 0 when it matches PR1, no
@@ -89,6 +92,12 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
     // yet.
     if(MX_matrixCalculationCompleted){
       OUT_swapBuffers();
+      
+      // store the number of updates the dac did during the previous matrix
+      // calculation. This will be used as a multiplier for ramp/timers in the
+      // next cycle to correct any skewing due to matrix calculation taking more 
+      // than 1 DAC update (as DAC update frequency is our timer)
+      DAC_intervalMultiplier = DAC_dacUpdatesFinished;
       MX_matrixCalculationCompleted = 0;
     }
 
@@ -102,6 +111,17 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
 
   output = (output + 1) % SR_OUTPUTS;
 }
+#endif
+
+#ifdef FAKE_DAC
+// for testing purposes only
+void DAC_step(){
+  OUT_swapBuffers();
+  MX_matrixCalculationCompleted = 0;
+  DAC_dacUpdatesFinished++;
+}
+#endif
+
 
 void DAC_fillOutputs(unsigned int value){
   char i;

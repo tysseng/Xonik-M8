@@ -154,7 +154,7 @@ void nodeFuncLfoPulse(Node *aNode){
     matrixint pulsewidth = getParam(aNode, 1);
     matrixint trigger = getParam(aNode, 2);
 
-    //may be set to any value to limit amplitude and save using a scale shape.
+    //may be set to any value to limit amplitude and save using a scale node.
     matrixint positive = getParam(aNode, 3);
     matrixint negative = getParam(aNode, 4);
 
@@ -430,7 +430,7 @@ void MX_addNode(unsigned short *bytes){
     unsigned short i;
     nodes[nodesInUse].func = MX_getFunctionPointer(bytes[0]);
     for(i=0; i<8; i++){
-      nodes[nodesInUse].params[i] = (bytes[i*2 + 2] << 8) + bytes[i*2 + 1];
+      nodes[nodesInUse].params[i] = (bytes[i*2 + 2] << 8) | bytes[i*2 + 1];
     }
     nodes[nodesInUse].paramIsConstant = bytes[17];
     nodes[nodesInUse].paramsInUse = bytes[18];

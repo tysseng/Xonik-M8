@@ -1,1 +1,1 @@
-extern void setupTestMatrix();
+extern void TM_setupTestMatrix();
