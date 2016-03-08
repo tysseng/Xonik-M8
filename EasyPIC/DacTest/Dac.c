@@ -74,14 +74,6 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
   // Timer automatically resets to 0 when it matches PR1, no
   // need to reset timer.
   T1IF_bit = 0;
-   /*
-  if(output == 0){
-    if(outputVals[0] != 0){
-      DAC_fillOutputs(0);
-    } else {
-      DAC_fillOutputs(0xFFFF);
-    }
-  }*/
 
   // First output of a cycle. Store whatever is in the output buffer to
   // prepare calculation of the next dac cycle while the dac works its way
@@ -118,6 +110,7 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
 void DAC_step(){
   OUT_swapBuffers();
   MX_matrixCalculationCompleted = 0;
+  writeValuesToSH(2);
   DAC_dacUpdatesFinished++;
 }
 #endif
@@ -151,6 +144,7 @@ void loadDac(unsigned int value){
 }
 
 void writeValuesToSH(char sr_output){
+
   // put s&h into hold mode
   SH_EN0 = 0;
   SH_EN1 = 0;
@@ -158,13 +152,13 @@ void writeValuesToSH(char sr_output){
   // select and load DAC A
   A0 = 0;
   A1 = 0;
-  
-  //TODO: Convert from signed to unsigned here!!!
+
   loadDac(OUT_dacBuffer[sr_output] + 0x8000);
 
   // select and load DAC B
   A0 = 1;
   A1 = 1;
+  
   loadDac(OUT_dacBuffer[SR_OUTPUTS + sr_output] + 0x8000);
 
   // set SH address

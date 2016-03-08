@@ -14,7 +14,9 @@
 // PLL Multiplier: 20x
 // Oscillator Selection Bits: Primary Osc w/PLL
 // Primary Oscillator Configuration: XT osc mode
-#define RUNTESTS
+//#define RUNTESTS
+//#define UNIT_TEST_SPI
+//#define MOCK_SPI
 
 #include "Dac.h"
 #include "Adc.h"
@@ -39,21 +41,28 @@ void main() {
   OUT_init();
   
   TM_setupTestMatrix();
+  MX_runMatrix();
 
+  #ifdef UNIT_TEST_SPI
+  runSpiTests();
+  #endif
+
+  #ifdef MOCK_SPI
   while(1){
+    // only increment dac every two cycles, tests that matrix is not recalculated
+    // while dac is writing.
+    if(dacIncrements % 1 == 0){
+      DAC_step();
+    }
+    dacIncrements++;
+    
     if(DAC_dacUpdatesFinished){
       updateControllerFromSpi(0, i++);
       DAC_dacUpdatesFinished = 0;
       MX_runMatrix();
     }
-
-    // only increment dac every two cycles, tests that matrix is not recalculated
-    // while dac is writing.
-    if(dacIncrements % 2 == 0){
-      DAC_step();
-    }
-    dacIncrements++;
   }
+  #endif
 }
 #endif
 
@@ -80,7 +89,7 @@ void main() {
     SPI_checkForReceivedData();
     if(DAC_dacUpdatesFinished){
       // todo: for testing only
-      updateControllerFromSpi(0, i++);
+ //     updateControllerFromSpi(0, i++);
       DAC_dacUpdatesFinished = 0;
       MX_runMatrix();
     }

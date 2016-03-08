@@ -168,6 +168,8 @@ void nodeFuncLfoPulse(Node *aNode){
             aNode->result = negative;
         }
         aNode->highResState = 0;
+        //TODO: For testing
+        aNode->params[2] = 0;
     } else {
         aNode->highResState++;
         if(aNode->highResState == pulsewidth || aNode->highResState == cyclelength){

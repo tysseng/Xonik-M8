@@ -24,34 +24,42 @@
  *    PIC18F and a PIC32.
  */
 
+//#define UNIT_TEST_SPI
+#ifdef UNIT_TEST_SPI
+  #include "Spi.test.h"
+#endif
+
 #include "Dac.h"
 #include "Matrix.h"
 #include "Config.h"
+#include "Spi.internal.h"
 #include <built_in.h>
 
 #define TX_INTERRUPT_TRIS TRISG1_bit
 #define TX_INTERRUPT LATG1_bit
 
 unsigned int i = 0;
-
-enum packageTypes {
-  CTRL_8_BIT = 0,
-  CTRL_16_BIT
-};
-
 unsigned short spiPackageLengths[2];
 
-unsigned short rxbytecounter = 0;
-unsigned short rxlength = 0;
-unsigned short rxbuffer[256];
+// Receive buffer state
+char rxWritePos = 0;
+char rxReadPos = 0;
+char bytesInRxBuffer = 0;
+char rxbuffer[256];
 
+// State of the package currently being received.
+// The expected number of bytes for the current package
+char rxlength = 0;
+// The number of bytes of a package that has been received
+char rxbytecounter = 0;
+
+// Transmit buffer
 unsigned short txbytecounter = 0;
 unsigned short txlength = 0;
 unsigned short txbuffer[256];
-
 unsigned short dataToSend = 0;
-unsigned short dataReady = 0;
 
+// TODO: Just for debugging
 unsigned short controller[8];
 unsigned short potmeter[8]; // last registered potmeter value
 
@@ -86,6 +94,13 @@ void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
     SPI4BUF = 0;
   }
   
+  receiveByte(rxbyte);
+  
+  //reset interrupt
+  SPI4RXIF_bit = 0;
+}
+
+void receiveByte(char rxbyte){
   // Detect the length of the incoming message
   if(rxbytecounter == 0){
     rxlength = rxbyte;
@@ -95,20 +110,21 @@ void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
   // received bytes will be zero and the detected length is thus zero.
   // In this case, no data is written to the receive buffer
   if(rxlength > 0){
-    rxbuffer[rxbytecounter++] = rxbyte;
+    rxbytecounter++;
+    bytesInRxBuffer++;
 
-    // signal to the main program that a whole package has been received.
+    rxbuffer[rxWritePos++] = rxbyte;
+
+    // TODO: if bytesInRxBuffer == 256 then buffer is full! Signal back to
+    // master that last message failed?
+
+    // reset bytecounter if reception is completed (to get the correct rxlength
+    // for the next package to receive)
     if(rxbytecounter == rxlength){
-      dataReady = 1;
       rxbytecounter = 0;
     }
   }
-
-  //reset interrupt
-  SPI4RXIF_bit = 0;
 }
-
-
 
 void initSPI4Interrupts(){
 
@@ -185,8 +201,9 @@ void showAsBarOnPortD(unsigned short value){
   }
 }
 
+// TODO: Convert to signed
+// TODO: Create 16 bit version
 void updateControllerFromSpi(unsigned short id, unsigned short value){
-
 
   unsigned int val;
   if(value > 255) value = 255;
@@ -200,9 +217,9 @@ void updateControllerFromSpi(unsigned short id, unsigned short value){
 //    DAC_fillOutputs(val);
 //    outputVals[id] = value << 8;
   }
-
 }
 
+// TODO: For debug only
 void updateControllerAndSendThroughSpi(unsigned short id, unsigned short value){
   potmeter[id] = value;
   controller[id] = value;
@@ -226,13 +243,33 @@ void updateControllerAndSendThroughSpi(unsigned short id, unsigned short value){
   }
 }
 
-
 void SPI_checkForReceivedData(){
 
-  if(dataReady){
-    // TODO: QUEUE
-    updateControllerFromSpi(rxbuffer[1], rxbuffer[2]);
-    dataReady = 0;
+  char pos;
+  char package[20];
+  char packageSize;
+
+  while(bytesInRxBuffer > 0){
+    packageSize = rxbuffer[rxReadPos];
+    if(bytesInRxBuffer >= packageSize){
+      for(pos = 0; pos < packageSize; pos++){
+        package[pos] = rxbuffer[rxReadPos++];
+      }
+      bytesInRxBuffer -= packageSize;
+
+      switch(package[1]){
+        case CTRL_8_BIT:
+          updateControllerFromSpi(package[1], package[2]);
+          break;
+        #ifdef UNIT_TEST_SPI
+        case PT_TEST:
+          storePackage(package);
+          break;
+        #endif
+      }
+    } else {
+      break; // return control to main while waiting for missing bytes
+    }
   }
 }
 
