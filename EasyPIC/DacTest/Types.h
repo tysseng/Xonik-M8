@@ -14,25 +14,26 @@
 #define matrixlongintmax 2147483647
 
 // placements in Node data array when creating Node through spi
-#define NODE_FUNC 0
-#define NODE_PARAM_0_LO 1
-#define NODE_PARAM_0_HI 2
-#define NODE_PARAM_1_LO 3
-#define NODE_PARAM_1_HI 4
-#define NODE_PARAM_2_LO 5
-#define NODE_PARAM_2_HI 6
-#define NODE_PARAM_3_LO 7
-#define NODE_PARAM_3_HI 8
-#define NODE_PARAM_4_LO 9
-#define NODE_PARAM_4_HI 10
-#define NODE_PARAM_5_LO 11
-#define NODE_PARAM_5_HI 12
-#define NODE_PARAM_6_LO 13
-#define NODE_PARAM_6_HI 14
-#define NODE_PARAM_7_LO 15
-#define NODE_PARAM_7_HI 16
-#define NODE_PARAM_IS_CONSTANT 17
-#define NODE_PARAMS_IN_USE 18
+#define NODE_POSITION 2
+#define NODE_FUNC 3
+#define NODE_PARAM_0_LO 4
+#define NODE_PARAM_0_HI 5
+#define NODE_PARAM_1_LO 6
+#define NODE_PARAM_1_HI 7
+#define NODE_PARAM_2_LO 8
+#define NODE_PARAM_2_HI 9
+#define NODE_PARAM_3_LO 10
+#define NODE_PARAM_3_HI 11
+#define NODE_PARAM_4_LO 12
+#define NODE_PARAM_4_HI 13
+#define NODE_PARAM_5_LO 14
+#define NODE_PARAM_5_HI 15
+#define NODE_PARAM_6_LO 16
+#define NODE_PARAM_6_HI 17
+#define NODE_PARAM_7_LO 18
+#define NODE_PARAM_7_HI 19
+#define NODE_PARAM_IS_CONSTANT 21
+#define NODE_PARAMS_IN_USE 21
 
 typedef struct matrixNode{
     // function to run when this Node is accessed.

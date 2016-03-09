@@ -24,7 +24,7 @@
  *    PIC18F and a PIC32.
  */
 
-//#define UNIT_TEST_SPI
+#define UNIT_TEST_SPI
 #ifdef UNIT_TEST_SPI
   #include "Spi.test.h"
 #endif
@@ -175,7 +175,62 @@ void initSlaveInterrupt(){
   TX_INTERRUPT = 0;
 }
 
+void updateControllerFromSpi8bit(char* package){
+  MX_inputBuffer[package[2]] = package[3] << 8;
+}
 
+void updateControllerFromSpi16bit(char* package){
+  MX_inputBuffer[package[2]] = package[3] << 8 | package[4];
+}
+
+void SPI_checkForReceivedData(){
+
+  char pos;
+  char package[MAX_PACKAGE_SIZE];
+  char packageSize;
+
+  while(bytesInRxBuffer > 0){
+    packageSize = rxbuffer[rxReadPos];
+    if(bytesInRxBuffer >= packageSize){
+      for(pos = 0; pos < packageSize; pos++){
+        package[pos] = rxbuffer[rxReadPos++];
+      }
+      bytesInRxBuffer -= packageSize;
+
+      switch(package[1]){
+        case CTRL_16_BIT:
+          updateControllerFromSpi16bit(package);
+          break;
+        case CTRL_8_BIT:
+          updateControllerFromSpi8bit(package);
+          break;
+        case MATRIX_COMMAND:
+          MX_command(package);
+          break;
+        case NODE:
+          MX_updateNode(package);
+          break;
+        case MATRIX_SIZE:
+          MX_setMatrixSize(package[2]);
+          break;
+        case PT_TEST:
+          storePackage(package);
+          break;
+      }
+    } else {
+      break; // return control to main while waiting for missing bytes
+    }
+  }
+}
+
+void SPI_init() {
+  initPackageTypes();
+  initSPI4();
+  initSlaveInterrupt();
+}
+
+// TODO: For debug only
+/*
 #define barport LATb
 
 void showAsBarOnPortD(unsigned short value){
@@ -201,25 +256,6 @@ void showAsBarOnPortD(unsigned short value){
   }
 }
 
-// TODO: Convert to signed
-// TODO: Create 16 bit version
-void updateControllerFromSpi(unsigned short id, unsigned short value){
-
-  unsigned int val;
-  if(value > 255) value = 255;
-
-  val = value;
-  val = val * 256;
-
-  //TODO: Check if 8 or 16 bit value!
-  if(id < INPUTS){
-    MX_inputBuffer[id] = val;
-//    DAC_fillOutputs(val);
-//    outputVals[id] = value << 8;
-  }
-}
-
-// TODO: For debug only
 void updateControllerAndSendThroughSpi(unsigned short id, unsigned short value){
   potmeter[id] = value;
   controller[id] = value;
@@ -242,39 +278,4 @@ void updateControllerAndSendThroughSpi(unsigned short id, unsigned short value){
     TX_INTERRUPT = 1;
   }
 }
-
-void SPI_checkForReceivedData(){
-
-  char pos;
-  char package[20];
-  char packageSize;
-
-  while(bytesInRxBuffer > 0){
-    packageSize = rxbuffer[rxReadPos];
-    if(bytesInRxBuffer >= packageSize){
-      for(pos = 0; pos < packageSize; pos++){
-        package[pos] = rxbuffer[rxReadPos++];
-      }
-      bytesInRxBuffer -= packageSize;
-
-      switch(package[1]){
-        case CTRL_8_BIT:
-          updateControllerFromSpi(package[1], package[2]);
-          break;
-        #ifdef UNIT_TEST_SPI
-        case PT_TEST:
-          storePackage(package);
-          break;
-        #endif
-      }
-    } else {
-      break; // return control to main while waiting for missing bytes
-    }
-  }
-}
-
-void SPI_init() {
-  initPackageTypes();
-  initSPI4();
-  initSlaveInterrupt();
-}
+*/

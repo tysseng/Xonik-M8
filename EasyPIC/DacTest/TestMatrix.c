@@ -3,7 +3,7 @@
 #include "Types.h"
 
 void TM_setupTestMatrix(){
-    char aNode0[18], aNode1[18], aNode2[18], aNode3[18];
+    char aNode0[21], aNode1[21], aNode2[21], aNode3[21];
     
     aNode0[NODE_FUNC] = NODE_INPUT;
     aNode0[NODE_PARAM_0_LO] = 0;

@@ -8,7 +8,7 @@
 
 // matrix nodes
 volatile Node nodes[MAX_OPERATIONS];
-unsigned short nodesInUse = 0;
+char nodesInUse = 0;
 
 // place where matrix reads inputs from
 matrixint MX_inputBuffer[INPUTS];
@@ -429,15 +429,32 @@ void precalcPositiveExponentialLookup(){
 
 // add Node to the matrix.
 void MX_addNode(unsigned short *bytes){
-    unsigned short i;
-    nodes[nodesInUse].func = MX_getFunctionPointer(bytes[0]);
-    for(i=0; i<8; i++){
-      nodes[nodesInUse].params[i] = (bytes[i*2 + 2] << 8) | bytes[i*2 + 1];
-    }
-    nodes[nodesInUse].paramIsConstant = bytes[17];
-    nodes[nodesInUse].paramsInUse = bytes[18];
+  unsigned short i;
+  nodes[nodesInUse].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
+  for(i=0; i<8; i++){
+    nodes[nodesInUse].params[i] = (bytes[i*2 + NODE_PARAM_0_HI] << 8) | bytes[i*2 + NODE_PARAM_0_LO];
+  }
+  nodes[nodesInUse].paramIsConstant = bytes[NODE_PARAM_IS_CONSTANT];
+  nodes[nodesInUse].paramsInUse = bytes[NODE_PARAMS_IN_USE];
     
-    nodesInUse++;
+  nodesInUse++;
+}
+
+// add Node to the matrix.
+void MX_updateNode(unsigned short *bytes){
+
+  unsigned short i;
+  unsigned short position = bytes[NODE_POSITION];
+  nodes[position].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
+  for(i=0; i<8; i++){
+    nodes[position].params[i] = (bytes[i*2 + NODE_PARAM_0_HI] << 8) | bytes[i*2 + NODE_PARAM_0_LO];
+  }
+  nodes[position].paramIsConstant = bytes[NODE_PARAM_IS_CONSTANT];
+  nodes[position].paramsInUse = bytes[NODE_PARAMS_IN_USE];
+}
+    
+void MX_setMatrixSize(char size){
+  nodesInUse = size;
 }
     
 // loop over the matrix array once and calculate all results
@@ -451,6 +468,12 @@ void MX_runMatrix(){
     // all nodes have written their data to the output buffer, tell
     // dac loop that new data can be loaded when dac cycle restarts
     MX_matrixCalculationCompleted = 1;
+}
+
+void MX_command(char* package){
+  // Start, stop matrix, possibly in conjunction with an interrupt
+  
+  // TODO: Turn down output volume on stop, requires knowledge of
 }
 
 void MX_resetMatrix(){

@@ -7,7 +7,7 @@ extern char rxlength;
 extern char rxbytecounter;
 extern enum packageTypes;
 
-extern void storePackage(char* package);
+//extern void storePackage(char* package);
 
 extern void updateControllerFromSpi(unsigned short id, unsigned short value);
 extern void receiveByte(char rxbyte);

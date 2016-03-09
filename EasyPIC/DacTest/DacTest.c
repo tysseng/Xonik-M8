@@ -19,7 +19,6 @@
 //#define MOCK_SPI
 
 #include "Dac.h"
-#include "Adc.h"
 #include "Spi.h"
 #include "Matrix.h"
 #include "TestMatrix.h"
@@ -88,8 +87,6 @@ void main() {
   while(1){
     SPI_checkForReceivedData();
     if(DAC_dacUpdatesFinished){
-      // todo: for testing only
- //     updateControllerFromSpi(0, i++);
       DAC_dacUpdatesFinished = 0;
       MX_runMatrix();
     }
