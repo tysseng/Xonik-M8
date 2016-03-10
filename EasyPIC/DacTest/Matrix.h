@@ -4,7 +4,7 @@
 #include "Types.h"
 #include "Config.h"
 
-extern volatile Node nodes[MAX_OPERATIONS];
+extern volatile Node nodes[MAX_NODES];
 extern unsigned short nodesInUse;
 extern matrixint MX_inputBuffer[INPUTS];
 extern unsigned short MX_matrixCalculationCompleted;

@@ -1,3 +1,18 @@
+// For all automatically changing functions such as ramps/envelopes and LFOs,
+// the value is incremented one every 400uS (16 DAC outputs * 25uS per update).
+// This means the sample rate is 2.5kHz
+
+// TODO:
+// - Counter node with settable increments
+// - Random node
+
+// Consider rethinking the getParam call as it is expensive and called often.
+// For example, have separate constant nodes that are not recalculated and that
+// are put at the start of the Node list, then matrix calculation can start at
+// the first Node that is not constant. If we choose to NOT make pointers dynamic,
+// then we can precalculate the pointers tho previous nodes instead of looking them
+// up every time we want their value.
+
 #include "Types.h"
 #include "Config.h"
 #include "Definitions.h"
@@ -7,7 +22,7 @@
 #include "Matrix.h"
 
 // matrix nodes
-volatile Node nodes[MAX_OPERATIONS];
+volatile Node nodes[MAX_NODES];
 char nodesInUse = 0;
 
 // place where matrix reads inputs from
@@ -148,7 +163,11 @@ void nodeFuncRamp(Node *aNode){
 
 
 // A square/pulse wave LFO with settable speed, pulse width, positive and
-// negative amplitude, retrigger and start position
+// negative amplitude, retrigger and start position.
+
+// TODO: Switch to something that is compatible with 96ppqm?
+// As the sample rate is 2.5kHz/400uS per sample, the desired period in seconds
+// must be multiplied by 2500 to get the correct cycle length.
 void nodeFuncLfoPulse(Node *aNode){
     matrixint cyclelength = getParam(aNode, 0);
     matrixint pulsewidth = getParam(aNode, 1);
@@ -276,7 +295,7 @@ void nodeFuncScale(Node *aNode){
 
     //This leads to a slight error - the correct way to do it would be
     //dividing the input by MAX_POSITIVE, but that is an expensive operation.
-    //Instead, we shift by 7, which is equal to dividing by MAX_POSITIV+1.
+    //Instead, we shift by 7, which is equal to dividing by MAX_POSITIVE+1.
     temp = temp >> 7;
 
     aNode->result = temp;
@@ -404,29 +423,6 @@ void nodeFuncPositiveExp(Node *aNode){
 // do nothing
 void nodeFuncNoop(Node *aNode){}
 
-// precalculate a 70dB exponential curve for positive input values.
-// TODO: NOT POSSIBLE TO CALCULATE DYNAMICALLY; MAKE CONST LOOKUP TABLE
-void precalcPositiveExponentialLookup(){
-
-    // dB calculation
-    // The maximum attenuation is found like this:
-    //  * Change in dB = 20 * log(Output/Input)
-    //  * Output = Input * 10^(Change in dB / 20)
-    // For -70dB:
-    //  * Output = Input * 10^(-70 / 20) = Input * 0.000316
-    //
-    // To calculate the curve we have that:
-    // f(0) = 0.000316
-    // f(max) = 1;
-    //
-    /*
-    unsigned matrixint i;
-    lookupTablePositiveExponential[0] = 0;
-    for(i=1; i<=matrixintmax; i++){
-        lookupTablePositiveExponential[i] = 0;
-    } */
-}
-
 // add Node to the matrix.
 void MX_addNode(unsigned short *bytes){
   unsigned short i;
@@ -459,15 +455,15 @@ void MX_setMatrixSize(char size){
     
 // loop over the matrix array once and calculate all results
 void MX_runMatrix(){
-    unsigned short i;
-    
-    for(i = 0; i<nodesInUse; i++){
-      nodes[i].func(&nodes[i]);
-    }
+  unsigned short i;
+  
+  for(i = 0; i<nodesInUse; i++){
+    nodes[i].func(&nodes[i]);
+  }
 
-    // all nodes have written their data to the output buffer, tell
-    // dac loop that new data can be loaded when dac cycle restarts
-    MX_matrixCalculationCompleted = 1;
+  // all nodes have written their data to the output buffer, tell
+  // dac loop that new data can be loaded when dac cycle restarts
+  MX_matrixCalculationCompleted = 1;
 }
 
 void MX_command(char* package){
@@ -477,13 +473,7 @@ void MX_command(char* package){
 }
 
 void MX_resetMatrix(){
-    unsigned short i;
-    /*
-    for(i=0; i<MAX_OPERATIONS; i++){
-        nodes[i] = 0;
-    }
-    */
-    nodesInUse = 0;
+  nodesInUse = 0;
 }
 
 nodeFunction MX_getFunctionPointer(unsigned short function){

@@ -1,4 +1,4 @@
-#define FAKE_DAC
+//#define FAKE_DAC
 
 // BUG: If timer1 is started, but no interrupt routine exists to catch the interrupt,
 // no other interrupts (?), at least not SPI interrupt, will work. The symptom is that
@@ -66,7 +66,7 @@ unsigned short DAC_dacUpdatesFinished;
 unsigned short DAC_intervalMultiplier;  //TODO: set og reset denne
 
 // the current output, loops from timer interrupt.
-char output = 0;
+char output = 1;
 
 #ifndef RUNTESTS
 void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
@@ -100,7 +100,6 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
   }
 
   writeValuesToSH(output);
-
   output = (output + 1) % SR_OUTPUTS;
 }
 #endif
@@ -114,14 +113,6 @@ void DAC_step(){
   DAC_dacUpdatesFinished++;
 }
 #endif
-
-
-void DAC_fillOutputs(unsigned int value){
-  char i;
-  for(i = 0; i<OUTPUTS; i++){
-    OUT_dacBuffer[i] = value;
-  }
-}
 
 void loadDac(unsigned int value){
 
@@ -143,31 +134,48 @@ void loadDac(unsigned int value){
   LDAC=0;
 }
 
+//TODO:
+// The connections between the DAC and SH boards are reversed. To fix this,
+// shift register address bits and dac ordering are reversed here. Reset this
+// once the hardware is corrected.
+
 void writeValuesToSH(char sr_output){
 
   // put s&h into hold mode
   SH_EN0 = 0;
   SH_EN1 = 0;
 
-  // select and load DAC A
-  A0 = 0;
-  A1 = 0;
-
-  loadDac(OUT_dacBuffer[sr_output] + 0x8000);
-
+  //TODO: Switch DAC A/B outputs later.
   // select and load DAC B
   A0 = 1;
   A1 = 1;
+
+  loadDac(OUT_dacBuffer[sr_output] + 0x8000);
+
+  //TODO: Switch DAC A/B outputs later.
+  // select and load DAC A
+  A0 = 0;
+  A1 = 0;
   
   loadDac(OUT_dacBuffer[SR_OUTPUTS + sr_output] + 0x8000);
+
+
 
   // set SH address
   // TODO: Improve efficiency here in real program by using consecutive bits
   // of a single 8 bit port.
-  SH_A0 = sr_output.b0;
-  SH_A1 = sr_output.b1;
-  SH_A2 = sr_output.b2;
-  SH_A3 = sr_output.b3;
+
+  // TODO: The S&H is miswired so the bit order here is a work around while
+  // waiting for the corrected PCB
+  //SH_A0 = sr_output.b0;
+  //SH_A1 = sr_output.b1;
+  //SH_A2 = sr_output.b2;
+  //SH_A3 = sr_output.b3;
+
+  SH_A0 = sr_output.b1;
+  SH_A1 = sr_output.b0;
+  SH_A2 = sr_output.b3;
+  SH_A3 = sr_output.b2;
 
   // let values settle
   delay_cyc(20);
@@ -220,7 +228,7 @@ void DAC_startTimer(){
 void DAC_init(){
 
   initDacPorts();
-  
+
   //necessary to start runMatrix.
   DAC_dacUpdatesFinished = 0;
     
@@ -241,6 +249,4 @@ void DAC_init(){
   _WR = 1;
   LDAC = 0;
   _RS = 1;
-
-  DAC_fillOutputs(0xFFFF);
 }

@@ -7,6 +7,6 @@
 #define SR_OUTPUTS 16 // shift register outputs
 #define OUTPUTS SR_OUTPUTS * 2
 
-#define MAX_OPERATIONS 20
+#define MAX_NODES 20
 
 #endif
