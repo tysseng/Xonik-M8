@@ -24,6 +24,7 @@
 // matrix nodes
 volatile Node nodes[MAX_NODES];
 char nodesInUse = 0;
+char constants = 0;
 
 // place where matrix reads inputs from
 matrixint MX_inputBuffer[INPUTS];
@@ -42,15 +43,8 @@ unsigned short MX_matrixCalculationCompleted;
 // they can be constants. This function figures out which one and returns its
 // value.
 matrixint getParam(Node *aNode, unsigned short paramId){
-    unsigned short type;
-
-    type = (aNode->paramIsConstant >> paramId) & 0b00000001;
-    if(type == 1){
-        return aNode->params[paramId];
-    } else {
-        //TODO will this work with a 16 bit param?
-        return nodes[aNode->params[paramId]].result;
-    }
+    //TODO will this work with a 16 bit param?
+    return nodes[aNode->params[paramId]].result;
 }
 
 // sum an arbitrary number of inputs.
@@ -169,16 +163,16 @@ void nodeFuncRamp(Node *aNode){
 // As the sample rate is 2.5kHz/400uS per sample, the desired period in seconds
 // must be multiplied by 2500 to get the correct cycle length.
 void nodeFuncLfoPulse(Node *aNode){
-    matrixint cyclelength = getParam(aNode, 0);
-    matrixint pulsewidth = getParam(aNode, 1);
-    matrixint trigger = getParam(aNode, 2);
+    matrixint cyclelength = nodes[aNode->params[0]].result;
+    matrixint pulsewidth = nodes[aNode->params[1]].result;
+    matrixint trigger = nodes[aNode->params[2]].result;
 
     //may be set to any value to limit amplitude and save using a scale node.
-    matrixint positive = getParam(aNode, 3);
-    matrixint negative = getParam(aNode, 4);
+    matrixint positive = nodes[aNode->params[3]].result;
+    matrixint negative = nodes[aNode->params[4]].result;
 
     bit startPosition;
-    startPosition = aNode->params[5].B0; // 0 = bottom, 1 = top;
+    startPosition = nodes[aNode->params[5]].result.B0; // 0 = bottom, 1 = top;
 
     if(trigger){
         if(startPosition){
@@ -367,14 +361,14 @@ void nodeFuncBinaryNot(Node *aNode){
 // fetch input from inputBuffer and add it as the result of a Node to be used
 // in the matrix
 void nodeFuncInput(Node *aNode){
-    aNode->result = MX_inputBuffer[getParam(aNode, 0)];
+    aNode->result = MX_inputBuffer[nodes[aNode->params[0]].result];
 }
 
 // write output to outputBuffer
 // Param 0: output buffer position
 // Param 1: index of Node to fetch result from
 void nodeFuncOutput(Node *aNode){
-    OUT_outputBuffer[getParam(aNode, 0)] = getParam(aNode, 1);
+    OUT_outputBuffer[nodes[aNode->params[0]].result] = nodes[aNode->params[1]].result;
 }
 
 //glide any output. resists change.
@@ -430,10 +424,16 @@ void MX_addNode(unsigned short *bytes){
   for(i=0; i<8; i++){
     nodes[nodesInUse].params[i] = (bytes[i*2 + NODE_PARAM_0_HI] << 8) | bytes[i*2 + NODE_PARAM_0_LO];
   }
-  nodes[nodesInUse].paramIsConstant = bytes[NODE_PARAM_IS_CONSTANT];
   nodes[nodesInUse].paramsInUse = bytes[NODE_PARAMS_IN_USE];
     
   nodesInUse++;
+}
+
+void MX_addConstant(int constant){
+  nodes[nodesInUse].result = constant;
+  
+  nodesInUse++;
+  constants++;
 }
 
 // add Node to the matrix.
@@ -457,7 +457,7 @@ void MX_setMatrixSize(char size){
 void MX_runMatrix(){
   unsigned short i;
   
-  for(i = 0; i<nodesInUse; i++){
+  for(i = constants; i<nodesInUse; i++){
     nodes[i].func(&nodes[i]);
   }
 

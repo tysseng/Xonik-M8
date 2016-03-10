@@ -1,3 +1,7 @@
+// Speed, 4 nodes:
+// Pointers: 32,51 - 27,79 = 4,72 uS.
+// Array lookups without getParam(): 31,94 - 28,98 = 2,96 uS
+
 // Hardware improvements:
 // ----------------------
 // A0 and A1 may be connected as long as we only want to set one at the time
@@ -78,6 +82,7 @@ void main() {
   
   OUT_init();
 
+  MX_inputBuffer[0] = 1000;
   // calculate initial state. dacUpdatesFinished will be 0, so any ramps
   // will not be incremented.
   MX_runMatrix();

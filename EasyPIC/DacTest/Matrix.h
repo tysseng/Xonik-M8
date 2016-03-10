@@ -10,6 +10,7 @@ extern matrixint MX_inputBuffer[INPUTS];
 extern unsigned short MX_matrixCalculationCompleted;
 extern void MX_addNode(unsigned short *bytes);
 extern void MX_updateNode(unsigned short *bytes);
+extern void MX_addConstant(int constant);
 extern void MX_setMatrixSize(char size);
 extern void MX_runMatrix();
 extern void MX_command(char* package);
