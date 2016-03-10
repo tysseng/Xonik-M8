@@ -66,7 +66,7 @@ unsigned short DAC_dacUpdatesFinished;
 unsigned short DAC_intervalMultiplier;  //TODO: set og reset denne
 
 // the current output, loops from timer interrupt.
-char output = 1;
+char output = 0;
 
 #ifndef RUNTESTS
 void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
