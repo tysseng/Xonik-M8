@@ -42,7 +42,12 @@ typedef struct matrixNode{
     void (*func)(struct matrixNode *);
 
     // parameters passed to this node
-    matrixint params[8];
+    matrixint* params[8];
+
+    // Looping over nodes is faster if the Node size is a multiple of 2 (as
+    // getting the address is then only a matter of shifting left instead
+    // of multiplying/summing.
+    short arrayToMakeStruct64Bytes[12];
 
     // Bitwise variable that indicates usage of params:
     // 1 signifies that param is a constant
@@ -60,7 +65,7 @@ typedef struct matrixNode{
     short state;
 
     // placeholder for result from Node function
-    matrixint result;
+    matrixint* result;
 
 } Node;
 
