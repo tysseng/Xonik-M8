@@ -176,11 +176,15 @@ void initSlaveInterrupt(){
 }
 
 void updateControllerFromSpi8bit(char* package){
-  MX_inputBuffer[package[2]] = package[3] << 8;
+  // Controllers are written directly into the matrix's result array to
+  // prevent having to fetch them during matrix calculation.
+  MX_nodeResults[package[2]] = package[3] << 8;
 }
 
 void updateControllerFromSpi16bit(char* package){
-  MX_inputBuffer[package[2]] = package[3] << 8 | package[4];
+  // Controllers are written directly into the matrix's result array to
+  // prevent having to fetch them during matrix calculation.
+  MX_nodeResults[package[2]] = package[3] << 8 | package[4];
 }
 
 void SPI_checkForReceivedData(){
@@ -210,8 +214,14 @@ void SPI_checkForReceivedData(){
         case NODE:
           MX_updateNode(package);
           break;
-        case MATRIX_SIZE:
-          MX_setMatrixSize(package[2]);
+        case NODE_COUNT:
+          MX_setNodeCount(package[2]);
+          break;
+        case CONSTANT:
+          MX_updateConstant(package);
+          break;
+        case CONSTANTS_COUNT:
+          MX_setConstantsCount(package[2]);
           break;
         case PT_TEST:
           storePackage(package);

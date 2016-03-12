@@ -4,7 +4,8 @@
 
 // TODO:
 // - Counter node with settable increments
-// - Random node
+// - Random Node
+// - Direct connections from input to output (not via matrix)
 
 #include "Types.h"
 #include "Config.h"
@@ -16,17 +17,13 @@
 
 // matrix nodes
 volatile Node nodes[MAX_NODES];
-
-// result of matrix Node calculations for each Node. In addition, input
-// constants are stored as results and must be placed at the start of the
-// results array.
-matrixint nodeResults[MAX_NODES * 4]; // maximum 3 consts per Node on average
-
 char nodesInUse = 0;
-char constants = 0;
 
-// place where matrix reads inputs from
-matrixint MX_inputBuffer[INPUTS];
+// result of matrix Node calculations for each Node. In addition, input values
+// received over spi and input constants are stored as results and must be 
+// placed at the start of the results array.
+matrixint MX_nodeResults[INPUTS + MAX_CONSTANTS + MAX_NODES];
+char constantsInUse = 0;
 
 // true if a matrix run has been completed and data is ready to be copied to
 // the dac buffer before the next dac cycle.
@@ -349,10 +346,11 @@ void nodeFuncBinaryNot(Node *aNode){
     }
 }
 
-// fetch input from inputBuffer and add it as the result of a Node to be used
-// in the matrix
-void nodeFuncInput(Node *aNode){
-    *aNode->result = MX_inputBuffer[*aNode->params[0]];
+// fetch an input from the corresponding position in the Node results. This
+// buffers the input in case the input changes during the matrix calculation and 
+// can be used to get a constant value for all later nodes if that is important.
+void nodeFuncBufferInput(Node *aNode){
+    *aNode->result = MX_nodeResults[*aNode->params[0]];
 }
 
 // write output to outputBuffer
@@ -401,7 +399,6 @@ void nodeFuncPositiveExp(Node *aNode){
     } else {
         *aNode->result = 0;
     }
-
 }
 
 // do nothing
@@ -412,11 +409,11 @@ void MX_addConstant(int constant){
   // reasons, as they contain no input or function, only the result value which
   // never changes. Instead, they are placed first in the separate results
   // array.
-  nodeResults[constants++] = constant;
+  MX_nodeResults[INPUTS + constantsInUse++] = constant;
 }
 
-void MX_setConstant(int position, int constant){
-  nodeResults[position] = constant;
+void MX_updateConstant(unsigned short *bytes){
+  MX_nodeResults[bytes[CONST_POSITION]] = (bytes[CONST_VALUE_HI] << 8) | bytes[CONST_VALUE_LO];
 }
 
 void MX_addNode(unsigned short *bytes){
@@ -425,16 +422,16 @@ void MX_addNode(unsigned short *bytes){
   // stored as real nodes, when in fact they are stored only as results in the
   // results array. To compensate for this, we update the Node position by
   // subtracting the number of constants in use.
-  unsigned short resultPosition = nodesInUse + constants;
+  unsigned short resultPosition = nodesInUse + constantsInUse + INPUTS;
   unsigned short position = nodesInUse;
   unsigned short i;
   
   nodes[position].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
   for(i=0; i<8; i++){
-    nodes[position].params[i] = &nodeResults[(bytes[i*2 + NODE_PARAM_0_HI] << 8) | bytes[i*2 + NODE_PARAM_0_LO]];
+    nodes[position].params[i] = &MX_nodeResults[(bytes[i*2 + NODE_PARAM_0_HI] << 8) | bytes[i*2 + NODE_PARAM_0_LO]];
   }
   nodes[position].paramsInUse = bytes[NODE_PARAMS_IN_USE];
-  nodes[position].result = &nodeResults[resultPosition];
+  nodes[position].result = &MX_nodeResults[resultPosition];
   nodesInUse++;
 }
 
@@ -445,25 +442,25 @@ void MX_updateNode(unsigned short *bytes){
   // results array. To compensate for this, we update the Node position by
   // subtracting the number of constants in use.
   unsigned short resultPosition = bytes[NODE_POSITION];
-  unsigned short position = bytes[NODE_POSITION] - constants;
+  unsigned short position = bytes[NODE_POSITION] - constantsInUse - INPUTS;
   unsigned short i;
 
   nodes[position].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
   for(i=0; i<8; i++){
-    nodes[position].params[i] = &nodeResults[(bytes[i*2 + NODE_PARAM_0_HI] << 8) | bytes[i*2 + NODE_PARAM_0_LO]];
+    nodes[position].params[i] = &MX_nodeResults[(bytes[i*2 + NODE_PARAM_0_HI] << 8) | bytes[i*2 + NODE_PARAM_0_LO]];
   }
   nodes[position].paramsInUse = bytes[NODE_PARAMS_IN_USE];
-  nodes[position].result = &nodeResults[position + constants];
+  nodes[position].result = &MX_nodeResults[position + constantsInUse];
 }
     
-void MX_setMatrixSize(char size){
-  nodesInUse = size;
+void MX_setNodeCount(char count){
+  nodesInUse = count;
 }
 
-void MX_setMatrixConstantsSize(char size){
-  constants = size;
+void MX_setConstantsCount(char count){
+  constantsInUse = count;
 }
-    
+
 // loop over the matrix array once and calculate all results
 void MX_runMatrix(){
   unsigned short i;
@@ -500,10 +497,6 @@ nodeFunction MX_getFunctionPointer(unsigned short function){
             return &nodeFuncRamp;
         case NODE_DELAY_LINE:
             return &nodeFuncDelayLine;
-        case NODE_INPUT:
-            return &nodeFuncInput;
-        case NODE_OUTPUT:
-            return &nodeFuncOutput;
         case NODE_MULTIPLY:
             return &nodeFuncMultiply;
         case NODE_MEMORY:
@@ -530,8 +523,8 @@ nodeFunction MX_getFunctionPointer(unsigned short function){
             return &nodeFuncBinaryXor;
         case NODE_BINARY_NOT:
             return &nodeFuncBinaryNot;
-        case NODE_INPUT:
-            return &nodeFuncInput;
+        case NODE_BUFFER_INPUT:
+            return &nodeFuncBufferInput;
         case NODE_OUTPUT:
             return &nodeFuncOutput;
         case NODE_GLIDE:

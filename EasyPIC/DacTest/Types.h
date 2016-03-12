@@ -35,6 +35,11 @@
 #define NODE_PARAM_IS_CONSTANT 21
 #define NODE_PARAMS_IN_USE 21
 
+// placements in constants array when creating a constant through spi
+#define CONST_POSITION 2
+#define CONST_VALUE_LO 3
+#define CONST_VALUE_HI 4
+
 typedef struct matrixNode{
     // function to run when this Node is accessed.
     // Equals typedef nodeFunction, but that type cannot be declared before

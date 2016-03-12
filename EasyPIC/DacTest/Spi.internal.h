@@ -7,7 +7,9 @@ enum packageTypes {
   CTRL_8_BIT = 0,
   CTRL_16_BIT,
   NODE,
-  MATRIX_SIZE,
+  CONSTANT,
+  NODE_COUNT,
+  CONSTANTS_COUNT,
   MATRIX_COMMAND,
   PT_TEST
 };

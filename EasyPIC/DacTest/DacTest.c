@@ -87,7 +87,8 @@ void main() {
   
   OUT_init();
 
-  MX_inputBuffer[0] = 1000;
+  MX_nodeResults[0] = 1000;
+  
   // calculate initial state. dacUpdatesFinished will be 0, so any ramps
   // will not be incremented.
   MX_runMatrix();

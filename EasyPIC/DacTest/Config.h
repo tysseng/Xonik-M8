@@ -8,5 +8,10 @@
 #define OUTPUTS SR_OUTPUTS * 2
 
 #define MAX_NODES 20
+#define MAX_CONSTANTS MAX_NODES * 3
+
+// The number of inputs put directly into the
+// nodeResult array instead of requiring a input node.
+#define MAX_DIRECT_INPUTS 64
 
 #endif

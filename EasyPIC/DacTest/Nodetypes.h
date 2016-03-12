@@ -7,7 +7,7 @@
 #define NODE_INVERT_EACH_SIDE 2
 #define NODE_RAMP 3
 #define NODE_DELAY_LINE 4
-#define NODE_INPUT 5
+#define NODE_BUFFER_INPUT 5
 #define NODE_OUTPUT 6
 #define NODE_MULTIPLY 7
 #define NODE_MEMORY 8
