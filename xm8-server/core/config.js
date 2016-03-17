@@ -8,6 +8,9 @@ var config = {
     interruptPin: 3,
     minBufferSize: 16 
   },
+  matrix: {
+    numberOfInputs: 64
+  },
   wifi: {
     adapter: "wlan0",
     fallback: "accessPoint",

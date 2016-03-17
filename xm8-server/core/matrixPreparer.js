@@ -1,0 +1,5 @@
+- Trekk ut alle konstanter og marker med pos
+- Trekk ut alle inputs og marker med pos
+- Traversere baklengs og markere som reachable, start med alle output og delay nodes
+- Finn alle noder uten parents
+- Loop over disse og rekursivt legg til barn, skip delay
