@@ -1,0 +1,77 @@
+#ifndef _TYPES_H
+#define _TYPES_H
+
+// datatype to use for matrix, makes it easier to switch between 8 and 16 bit
+// operations later.
+#define matrixint int
+#define matrixintrange 65535
+#define matrixintmin -32768
+#define matrixintmax 32767
+
+#define matrixlongint long
+#define matrixlongintrange 4294967295
+#define matrixlongintmin -2147483648
+#define matrixlongintmax 2147483647
+
+// placements in Node data array when creating Node through spi
+#define NODE_POSITION 2
+#define NODE_FUNC 3
+#define NODE_PARAM_0_LO 4
+#define NODE_PARAM_0_HI 5
+#define NODE_PARAM_1_LO 6
+#define NODE_PARAM_1_HI 7
+#define NODE_PARAM_2_LO 8
+#define NODE_PARAM_2_HI 9
+#define NODE_PARAM_3_LO 10
+#define NODE_PARAM_3_HI 11
+#define NODE_PARAM_4_LO 12
+#define NODE_PARAM_4_HI 13
+#define NODE_PARAM_5_LO 14
+#define NODE_PARAM_5_HI 15
+#define NODE_PARAM_6_LO 16
+#define NODE_PARAM_6_HI 17
+#define NODE_PARAM_7_LO 18
+#define NODE_PARAM_7_HI 19
+#define NODE_PARAM_IS_CONSTANT 21
+#define NODE_PARAMS_IN_USE 21
+
+typedef struct matrixNode{
+    // function to run when this Node is accessed.
+    // Equals typedef nodeFunction, but that type cannot be declared before
+    // this struct and cannot be used before it is declared.
+    void (*func)(struct matrixNode *);
+
+    // parameters passed to this node
+    matrixint params[8];
+
+    // Bitwise variable that indicates usage of params:
+    // 1 signifies that param is a constant
+    // 0 that it is the index of the Node to get result from
+    unsigned short paramIsConstant;
+
+    // How many of the input params are used
+    unsigned short paramsInUse;
+
+    // high res status variable for ramps etc, to reduce effects of rounding
+    // errors.
+    long highResState;
+
+    // state, holds flags for
+    short state;
+
+    // placeholder for result from Node function
+    matrixint result;
+
+} Node;
+
+
+// Function pointer to a matrix node function. In MikroC for PIC32, it does
+// not work to have this typedef BEFORE the declaration of matrixNode when
+// the parameter is a pointer (it works in MikroC for PIC though).
+// This means that the type nodeFunction cannot be used in the matrixNode
+// struct definition, instead we have to use the full pointer signature
+
+// This is a confirmed bug in mC for PIC32:
+// http://www.mikroe.com/forum/viewtopic.php?f=164&t=67056&p=268549#p268549
+typedef void (*nodeFunction)(Node *);
+#endif
