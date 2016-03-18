@@ -4,11 +4,11 @@ var _ = require('lodash');
 
 function getNodeTypeStr(type){
   switch(type){
-    case nodeType.NODE_LFO_PULSE:
+    case nodeType.LFO_PULSE:
       return "NODE_LFO_PULSE";
-    case nodeType.NODE_OUTPUT:
+    case nodeType.OUTPUT:
       return "NODE_OUTPUT";
-    case nodeType.NODE_INVERT:
+    case nodeType.INVERT:
       return "NODE_INVERT";
     default:
       return "UNKNOWN (" + type + ")";
@@ -42,7 +42,7 @@ function printNode(node){
 
   var type = getNodeTypeStr(node.type);
   var incomplete = !isComplete(node) ? ", incomplete)" : "";
-  var reachable = node.tmp.reachable ? ", reachable" : ", unreachable";
+  var reachable = node.reachable ? ", reachable" : ", unreachable";
   var pos = ", pos " + node.nodePos;
 
   console.log("Node: " + type + reachable + incomplete + pos);

@@ -10,14 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "binstruct": "^0.2.0",
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
     "express-ws": "^0.2.6",
     "jsonfile": "^2.2.3",
+    "lodash": "^4.3.0",
     "react": "^0.14.5",
     "react-dom": "^0.14.5",
-    "rpi-gpio": "^0.7.0",
-    "spi": "^0.2.0"
+    "react-rangeslider": "^1.0.0",
+    "rpi-gpio": "^0.7.0"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.3.13",

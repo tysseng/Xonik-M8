@@ -3,7 +3,7 @@ var nodeType = require('./nodeType.js');
 
 function output(source, outputNum){
   var node = {
-    type: nodeType.NODE_OUTPUT,
+    type: nodeType.OUTPUT,
     params: [
       {
         value: (source ? source[0] : 0),
@@ -16,15 +16,14 @@ function output(source, outputNum){
         label: "Output number"
       }
     ],
-    consumers: [], // all nodes that use the output of this node
-    tmp: {}
+    consumers: [] // all nodes that use the output of this node
   }
   return node;
 }
 
 function invert(source){
   var node = {
-    type: nodeType.NODE_INVERT,
+    type: nodeType.INVERT,
     params: [
       {
         value: (source ? source[0] : 0),
@@ -32,8 +31,7 @@ function invert(source){
         label: "Source"
       }
     ],
-    consumers: [], // all nodes that use the output of this node
-    tmp: {}
+    consumers: [] // all nodes that use the output of this node
   }
   return node;
 }
@@ -41,7 +39,7 @@ function invert(source){
 
 function lfoPulse(cyclelength, pulsewidth, trigger, positive, negative){
   var node = {
-    type: nodeType.NODE_LFO_PULSE,
+    type: nodeType.LFO_PULSE,
     params: [
       {
         value: (cyclelength ? cyclelength[0] : 0),
@@ -69,8 +67,7 @@ function lfoPulse(cyclelength, pulsewidth, trigger, positive, negative){
         label: "negative"
       }
     ],
-    consumers: [], // all nodes that use the output of this node
-    tmp: {} // data used during matrix serialization calculation
+    consumers: [] // all nodes that use the output of this node
   }
   return node;
 }
