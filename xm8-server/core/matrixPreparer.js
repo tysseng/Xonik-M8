@@ -92,7 +92,7 @@ function prepareNetForSerialization(){
 
   var independentNodes = getReachableIndependentNodes(nodes);
   var sortedNodes = sortNodes(independentNodes, config.matrix.numberOfInputs + constants.length);
-console.log(sortedNodes);
+
   return {
     constants: constants,
     nodes: sortedNodes

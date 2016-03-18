@@ -2,9 +2,6 @@ var paramType = require('./paramType.js');
 
 var nodes = [];
 
-
-
-
 function add(node){
   nodes.push(node);
 }

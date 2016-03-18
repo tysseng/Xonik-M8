@@ -24,6 +24,16 @@ function test(){
 
   var net = matrixPreparer.prepareNetForSerialization();
   matrixPrinter.printNet(net);
+
+  for(var i = 0; i<net.constants.length; i++){
+    var serializedConstant = matrixSerializer.serializeConstant(i, net.constants[i]);
+    console.log(serializedConstant);
+  }
+
+  _.each(net.nodes, function(node){
+    var serializedNode = matrixSerializer.serializeNode(node);
+    console.log(serializedNode);
+  });
 }
 
 test();

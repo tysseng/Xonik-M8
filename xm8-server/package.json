@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "binstruct": "^0.2.0",
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
     "express-ws": "^0.2.6",

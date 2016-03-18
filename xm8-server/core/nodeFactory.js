@@ -16,6 +16,7 @@ function output(source, outputNum){
         label: "Output number"
       }
     ],
+    paramsInUse: 2,
     consumers: [] // all nodes that use the output of this node
   }
   return node;
@@ -31,6 +32,7 @@ function invert(source){
         label: "Source"
       }
     ],
+    paramsInUse: 1,
     consumers: [] // all nodes that use the output of this node
   }
   return node;
@@ -67,6 +69,7 @@ function lfoPulse(cyclelength, pulsewidth, trigger, positive, negative){
         label: "negative"
       }
     ],
+    paramsInUse: 5,
     consumers: [] // all nodes that use the output of this node
   }
   return node;
