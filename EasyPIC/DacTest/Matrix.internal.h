@@ -3,7 +3,6 @@
 
 #include "Types.h"
 
-matrixint getParam(Node *aNode, unsigned short paramId);
 void nodeFuncSum(Node *aNode);
 void nodeFuncMultiply(Node *aNode);
 void nodeFuncInvert(Node *aNode);

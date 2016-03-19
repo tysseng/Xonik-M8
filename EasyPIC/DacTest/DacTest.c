@@ -1,3 +1,12 @@
+// Speed, 4 nodes:
+// Pointers: 32,51 - 27,79 = 4,72 uS.
+// Array lookups without getParam(): 31,94 - 28,98 = 2,96 uS
+// Pointers with 64bit struct: 33.30 - 31.18 = 2,12uS!
+// Separate results array: 33,38 - 31,48 = 1,90uS
+
+// NB: We get a penalty of 40uS in the runMatrix for-loop for each Node if the
+// Node struct size is not on a binary number border - 32bytes, 64bytes etc.
+
 // Hardware improvements:
 // ----------------------
 // A0 and A1 may be connected as long as we only want to set one at the time
@@ -78,6 +87,8 @@ void main() {
   
   OUT_init();
 
+  MX_nodeResults[0] = 1000;
+  
   // calculate initial state. dacUpdatesFinished will be 0, so any ramps
   // will not be incremented.
   MX_runMatrix();

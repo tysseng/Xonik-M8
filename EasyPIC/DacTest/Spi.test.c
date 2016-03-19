@@ -113,7 +113,7 @@ void test_that_positive_8bit_controllers_are_converted_correctly(){
 
   updateControllerFromSpi8bit(package);
 
-  assertEquals(32512, MX_inputBuffer[0], "Wrong conversion of positive 8 bit num");
+  assertEquals(32512, MX_nodeResults[0], "Wrong conversion of positive 8 bit num");
 }
 
 void test_that_negative_8bit_controllers_are_converted_correctly(){
@@ -121,7 +121,7 @@ void test_that_negative_8bit_controllers_are_converted_correctly(){
 
   updateControllerFromSpi8bit(package);
 
-  assertEquals(-32768, MX_inputBuffer[0], "Wrong conversion of negative 8 bit num");
+  assertEquals(-32768, MX_nodeResults[0], "Wrong conversion of negative 8 bit num");
 }
 
 
@@ -130,7 +130,7 @@ void test_that_positive_16bit_controllers_are_converted_correctly(){
 
   updateControllerFromSpi16bit(package);
 
-  assertEquals(32767, MX_inputBuffer[0], "Wrong conversion of positive 16 bit num");
+  assertEquals(32767, MX_nodeResults[0], "Wrong conversion of positive 16 bit num");
 }
 
 void test_that_negative_16bit_controllers_are_converted_correctly(){
@@ -138,7 +138,7 @@ void test_that_negative_16bit_controllers_are_converted_correctly(){
 
   updateControllerFromSpi16bit(package);
 
-  assertEquals(-32768, MX_inputBuffer[0], "Wrong conversion of negative 16 bit num");
+  assertEquals(-32768, MX_nodeResults[0], "Wrong conversion of negative 16 bit num");
 }
 
 
