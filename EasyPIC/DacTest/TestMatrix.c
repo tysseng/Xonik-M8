@@ -21,6 +21,7 @@ void TM_setupTestMatrix(){
     // Node to get output from
     aNode1[NODE_PARAM_1_LO] = 0; // = input 0
     aNode1[NODE_PARAM_1_HI] = 0;
+    aNode1[NODE_PARAMS_IN_USE] = 2;
     MX_addNode(aNode1);
 
     aNode2[NODE_FUNC] = NODE_LFO_PULSE;
@@ -41,6 +42,7 @@ void TM_setupTestMatrix(){
     aNode2[NODE_PARAM_4_HI] = 0;
     aNode2[NODE_PARAM_5_LO] = 0;
     aNode2[NODE_PARAM_5_HI] = 0;
+    aNode2[NODE_PARAMS_IN_USE] = 6;
     MX_addNode(aNode2);
     
     aNode3[NODE_FUNC] = NODE_OUTPUT;
@@ -50,6 +52,7 @@ void TM_setupTestMatrix(){
     // Node to get output from
     aNode3[NODE_PARAM_1_LO] = 9 + INPUTS;
     aNode3[NODE_PARAM_1_HI] = 0;
+    aNode2[NODE_PARAMS_IN_USE] = 2;
     MX_addNode(aNode3);
 
 }
