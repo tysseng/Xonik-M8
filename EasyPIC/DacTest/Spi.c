@@ -215,13 +215,13 @@ void SPI_checkForReceivedData(){
           MX_updateNode(package);
           break;
         case NODE_COUNT:
-          MX_setNodeCount(package[2]);
+          MX_setNodeCount(package);
           break;
         case CONSTANT:
           MX_updateConstant(package);
           break;
         case CONSTANTS_COUNT:
-          MX_setConstantsCount(package[2]);
+          MX_setConstantsCount(package);
           break;
         case PT_TEST:
           storePackage(package);
@@ -231,6 +231,14 @@ void SPI_checkForReceivedData(){
       break; // return control to main while waiting for missing bytes
     }
   }
+}
+
+int SPI_getAsInt(unsigned short *bytes, char position){
+  return bytes[position] << 8 | bytes[position + 1];
+}
+
+unsigned int SPI_getAsUInt(unsigned short *bytes, char position){
+  return bytes[position] << 8 | bytes[position + 1];
 }
 
 void SPI_init() {
