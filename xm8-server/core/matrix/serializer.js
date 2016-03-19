@@ -31,9 +31,31 @@ function serializeConstant(position, value){
   return constantBuffer;
 }
 
+function serializeConstantsCount(constants){
+  var countBuffer = new Buffer(spiType.CONSTANTS_COUNT.size);
+  countBuffer.writeUInt8(spiType.CONSTANTS_COUNT.size, 0);
+  countBuffer.writeUInt8(spiType.CONSTANTS_COUNT.id, 1);
+  countBuffer.writeUInt16BE(constants.length, 2);
+
+  return countBuffer;
+}
+
+function serializeNodeCount(nodes){
+  var countBuffer = new Buffer(spiType.NODE_COUNT.size);
+  countBuffer.writeUInt8(spiType.NODE_COUNT.size, 0);
+  countBuffer.writeUInt8(spiType.NODE_COUNT.id, 1);
+  countBuffer.writeUInt16BE(nodes.length, 2);
+
+  return countBuffer;
+}
+
+
+
 
 //console.log(constantBuffer.toString('hex'));
 
 module.exports.serializeNode = serializeNode;
 module.exports.serializeConstant = serializeConstant;
+module.exports.serializeConstantsCount = serializeConstantsCount;
+module.exports.serializeNodeCount = serializeNodeCount;
 
