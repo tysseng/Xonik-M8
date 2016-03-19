@@ -14,7 +14,7 @@
 #include "Output.h"
 #include "Matrix.internal.h"
 #include "Matrix.h"
-#include "Spi.h"
+#include "ByteArrayTools.h"
 
 // matrix nodes
 volatile Node nodes[MAX_NODES];
@@ -414,7 +414,7 @@ void MX_addConstant(int constant){
 }
 
 void MX_updateConstant(unsigned short *bytes){
-  MX_nodeResults[bytes[CONST_POSITION]] = SPI_getAsInt(bytes, CONST_VALUE_HI);
+  MX_nodeResults[bytes[CONST_POSITION]] = BAT_getAsInt(bytes, CONST_VALUE_HI);
 }
 
 void MX_addNode(unsigned short *bytes){
@@ -429,11 +429,11 @@ void MX_addNode(unsigned short *bytes){
   
   nodes[position].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
   for(i=0; i<8; i++){
-    nodes[position].params[i] = &MX_nodeResults[SPI_getAsUInt(bytes, i*2 + NODE_PARAM_0_HI)];
+    nodes[position].params[i] = &MX_nodeResults[BAT_getAsUInt(bytes, i*2 + NODE_PARAM_0_HI)];
   }
   nodes[position].paramsInUse = bytes[NODE_PARAMS_IN_USE];
   
-  MX_nodeResults[resultPosition] = SPI_getAsInt(bytes, NODE_RESULT_HI);
+  MX_nodeResults[resultPosition] = BAT_getAsInt(bytes, NODE_RESULT_HI);
   nodes[position].result = &MX_nodeResults[resultPosition];
   nodesInUse++;
 }
@@ -444,26 +444,26 @@ void MX_updateNode(unsigned short *bytes){
   // stored as real nodes, when in fact they are stored only as results in the
   // results array. To compensate for this, we update the Node position by
   // subtracting the number of constants in use.
-  unsigned int resultPosition = SPI_getAsUInt(bytes, NODE_POSITION_HI);
+  unsigned int resultPosition = BAT_getAsUInt(bytes, NODE_POSITION_HI);
   unsigned int position = resultPosition - constantsInUse - INPUTS;
   unsigned short i;
 
   nodes[position].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
   for(i=0; i<8; i++){
-    nodes[position].params[i] = &MX_nodeResults[SPI_getAsUInt(bytes, i*2 + NODE_PARAM_0_HI)];
+    nodes[position].params[i] = &MX_nodeResults[BAT_getAsUInt(bytes, i*2 + NODE_PARAM_0_HI)];
   }
   nodes[position].paramsInUse = bytes[NODE_PARAMS_IN_USE];
   
-  MX_nodeResults[resultPosition] = SPI_getAsInt(bytes, NODE_RESULT_HI);
+  MX_nodeResults[resultPosition] = BAT_getAsInt(bytes, NODE_RESULT_HI);
   nodes[position].result = &MX_nodeResults[position + constantsInUse];
 }
     
 void MX_setNodeCount(unsigned short *bytes){
-  nodesInUse = SPI_getAsUInt(bytes, NODES_COUNT_HI);
+  nodesInUse = BAT_getAsUInt(bytes, NODES_COUNT_HI);
 }
 
 void MX_setConstantsCount(unsigned short *bytes){
-  constantsInUse = SPI_getAsUInt(bytes, CONSTS_COUNT_HI);
+  constantsInUse = BAT_getAsUInt(bytes, CONSTS_COUNT_HI);
 }
 
 // loop over the matrix array once and calculate all results
