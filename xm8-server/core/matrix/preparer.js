@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var paramType = require('./paramType.js');
 var nodeType = require('./nodeType.js');
-var config = require('./config.js');
+var config = require('../config.js');
 var matrix = require('./matrix.js');
 
 function resetNodes(nodes){

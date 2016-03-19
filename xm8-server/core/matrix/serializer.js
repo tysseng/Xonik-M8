@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var spiType = require('./spiType.js');
+var spiType = require('../spiType.js');
 
 function serializeNode(node){
 

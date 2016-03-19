@@ -1,11 +1,11 @@
 var binstruct = require('binstruct');
 var _ = require('lodash');
-var matrix = require('./core/matrix.js');
-var matrixPreparer = require('./core/matrixPreparer.js');
-var matrixSerializer = require('./core/matrixSerializer.js');
-var matrixPrinter = require('./core/matrixPrinter.js');
-var paramType = require('./core/paramType.js');
-var nodes = require('./core/nodeFactory.js');
+var matrix = require('./core/matrix/matrix.js');
+var matrixPreparer = require('./core/matrix/preparer.js');
+var matrixSerializer = require('./core/matrix/serializer.js');
+var matrixPrinter = require('./core/matrix/printer.js');
+var paramType = require('./core/matrix/paramType.js');
+var nodes = require('./core/matrix/nodeFactory.js');
 
 function test(){
   var output2 = nodes.output(undefined, [5, paramType.CONSTANT]);
