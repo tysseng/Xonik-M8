@@ -9,7 +9,13 @@ function serializeController(event){
       var buffer = new Buffer(spiType.CTRL_8_BIT.size);
       buffer.writeUInt8(spiType.CTRL_8_BIT.size, 0);
       buffer.writeUInt8(spiType.CTRL_8_BIT.id, 1);
-      buffer.writeInt8(event.value);
+
+
+      //TODO: Temporary protection from overruns
+      var value = event.value;
+      if(value > 255) value = 255;
+      return new Buffer([3, id, value]);       
+      buffer.writeInt8(value);
       return buffer;
     case spiType.CTRL_16_BIT.id:
       var buffer = new Buffer(spiType.CTRL_16_BIT.size);
