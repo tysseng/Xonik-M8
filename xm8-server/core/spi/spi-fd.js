@@ -23,13 +23,13 @@
 // the callbacks are called before control is released back to the system, so no other events
 // may intermingle with the process.
 
-var eventbus = require('./eventbus.js');
-var config = require('./config.js');
+var eventbus = require('../eventbus.js');
+var config = require('../config.js');
 var gpio = require('rpi-gpio');
 var SPI = require('spi');
-var types = require('../shared/datatypes.js');
-var ctrlConfig = require('../shared/controllerSetup.js');
-var exit = require('./exit.js');
+var types = require('../../shared/datatypes.js');
+var ctrlConfig = require('../../shared/controllerSetup.js');
+var exit = require('../exit.js');
 
 var spi;
 var readCallback;
