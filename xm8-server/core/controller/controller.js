@@ -1,7 +1,7 @@
-// kickstarts the spi repo.
-var spiRepository = require('./spiRepository.js');
-var ctrlSetup = require('../shared/controllerSetup.js');
-var eventbus = require('./eventbus.js');
+// kickstarts the controller repo.
+var controllerRepository = require('./controllerRepository.js');
+var ctrlSetup = require('../../shared/controllerSetup.js');
+var eventbus = require('../eventbus.js');
 var controllers = require('./controllers.js');
 
 var onControllerChangeCallback;

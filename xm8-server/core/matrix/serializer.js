@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var spiType = require('../spiType.js');
+var spiType = require('../spi/spiType.js');
 
 function serializeNode(node){
 
@@ -11,7 +11,7 @@ function serializeNode(node){
 
   for(var i = 0; i<8; i++){
     var paramVal = (i < node.paramsInUse ? node.params[i].nodePos : 0);
-    nodeBuffer.writeInt16BE(paramVal, i * 2 + 5);
+    nodeBuffer.writeUInt16BE(paramVal, i * 2 + 5);
   }
 
   nodeBuffer.writeUInt8(node.paramsInUse, 21);
