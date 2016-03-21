@@ -12,6 +12,7 @@ var ws = require('express-ws')(app);
 var bodyParser = require('body-parser');
 
 var wifiRoutes = require('./routes/wifi');
+var matrixRoutes = require('./routes/matrix');
 require('./routes/controller')(app, ws);
 
 // for parsing application/json
@@ -27,6 +28,7 @@ app.get('/', function (req, res) {
 });
 
 app.use('/wifi', wifiRoutes);
+app.use('/matrix', matrixRoutes);
 
 // Capture all requests not yet handled and redirect them to the captive portal
 // page as they may origin from wifi logon.

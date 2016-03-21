@@ -1,9 +1,10 @@
-var binstruct = require('binstruct');
+
 var _ = require('lodash');
 var matrix = require('./core/matrix/matrix.js');
 var matrixPreparer = require('./core/matrix/preparer.js');
 var matrixSerializer = require('./core/matrix/serializer.js');
 var matrixPrinter = require('./core/matrix/printer.js');
+var matrixRepository = require('./core/matrix/matrixRepository.js');
 var paramType = require('./core/matrix/paramType.js');
 var nodes = require('./core/matrix/nodeFactory.js');
 
@@ -21,11 +22,7 @@ function test(){
   matrix.link(lfo, invert, 0);
   var link = matrix.link(invert, output2, 0);
 
-
-  var buffers = matrix.serialize();
-  _.each(buffers, function(buffer){
-    console.log(buffer);
-  });
+  matrixRepository.sendMatrix();
 }
 
 test();

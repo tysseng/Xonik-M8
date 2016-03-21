@@ -1,7 +1,4 @@
 var paramType = require('./paramType.js');
-var serializer = require('./serializer.js');
-var preparer = require('./preparer.js');
-var printer = require('./printer.js');
 var _ = require('lodash');
 
 var nodes = [];
@@ -62,29 +59,6 @@ function setParamInput(node, param, input){
   node.params[param].type = paramType.INPUT;
 }
 
-function serialize(){
-  var net = preparer.prepareNetForSerialization();
-  printer.printNet(net);
-
-  var buffers = []
-
-  // add all constants and constant lengths
-  for(var i = 0; i<net.constants.length; i++){
-    var serializedConstant = serializer.serializeConstant(i, net.constants[i]);
-    buffers.push(serializedConstant);
-  }
-  buffers.push(serializer.serializeConstantsCount(net.constants));
-
-  // add all nodes and node array length
-  _.each(net.nodes, function(node){
-    var serializedNode = serializer.serializeNode(node);
-    buffers.push(serializedNode);
-  });
-  buffers.push(serializer.serializeNodeCount(net.nodes));
-
-  return buffers;
-}
-
 module.exports.add = add;
 module.exports.remove = remove;
 module.exports.link = link;
@@ -93,7 +67,6 @@ module.exports.setParamConstant = setParamConstant;
 module.exports.setParamInput = setParamInput;
 module.exports.clearParam = clearParam;
 module.exports.nodes = nodes;
-module.exports.serialize = serialize;
 
 
 
