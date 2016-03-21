@@ -7,10 +7,10 @@ var spi = require('../spi/spi-fd.js');
 
 function sendMatrix(){
   var buffers = serialize();
-  _.each(buffers, function(buffer)){
+  _.each(buffers, function(buffer){
     spi.write(buffer);
     console.log(buffer);
-  }
+  });
 }
 
 function save(){

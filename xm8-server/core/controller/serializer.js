@@ -37,7 +37,7 @@ function deserializeController(buffer, source){
   controller.type = buffer.readUInt8(1);
 
   var controllerConfig = ctrlConfig.hw[controller.type]; 
-  if(controllerConfig)
+  if(controllerConfig){
     controller.id = controllerConfig.srvId;
 
     switch(controller.type){
@@ -56,3 +56,6 @@ function deserializeController(buffer, source){
 
   return controller;
 }
+
+module.exports.serializeController = serializeController;
+module.exports.deserializeController = deserializeController;

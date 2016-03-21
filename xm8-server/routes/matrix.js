@@ -1,30 +1,30 @@
 var express = require('express');
-var matrix = require('./core/matrix/matrix.js');
-var matrix = require('./core/matrix/matrixRepositoryt.js');
+var matrix = require('../core/matrix/matrix.js');
+var matrix = require('../core/matrix/matrixRepository.js');
 var router = express.Router();
 
 
 router.put('/node/:id', function(req, res){
-  matrix.add(req.body));
+  matrix.add(req.body);
   res.status(200).send(matrix.nodes);
 });
 
 
 router.delete('/node/:id', function(req, res){
-  matrix.deleteById(req.params.id));
+  matrix.deleteById(req.params.id);
   
   //TODO Different return if not found?
   res.status(200).send(matrix.nodes);
 });
 
 router.put('/link/:id', function(req, res){
-  matrix.linkById(req.body));
+  matrix.linkById(req.body);
   res.status(200).send(matrix.nodes);
 });
 
 
 router.delete('/link/:id', function(req, res){
-  matrix.deleteById(req.params.id));
+  matrix.deleteById(req.params.id);
   
   //TODO Different return if not found?
   res.status(200).send(matrix.nodes);

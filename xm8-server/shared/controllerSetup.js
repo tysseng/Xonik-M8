@@ -1,4 +1,4 @@
-var types = require('../core/spi/spiTypes.js');
+var types = require('../core/spi/spiType.js');
 
 // controller config, mapping internal/gui controllers to hardware controller ids etc.
 var controllers = [
