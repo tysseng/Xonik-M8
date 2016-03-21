@@ -14,26 +14,40 @@
 #define matrixlongintmax 2147483647
 
 // placements in Node data array when creating Node through spi
-#define NODE_POSITION 2
-#define NODE_FUNC 3
-#define NODE_PARAM_0_LO 4
+#define NODE_POSITION_HI 2
+#define NODE_POSITION_LO 3
+#define NODE_FUNC 4
 #define NODE_PARAM_0_HI 5
-#define NODE_PARAM_1_LO 6
+#define NODE_PARAM_0_LO 6
 #define NODE_PARAM_1_HI 7
-#define NODE_PARAM_2_LO 8
+#define NODE_PARAM_1_LO 8
 #define NODE_PARAM_2_HI 9
-#define NODE_PARAM_3_LO 10
+#define NODE_PARAM_2_LO 10
 #define NODE_PARAM_3_HI 11
-#define NODE_PARAM_4_LO 12
+#define NODE_PARAM_3_LO 12
 #define NODE_PARAM_4_HI 13
-#define NODE_PARAM_5_LO 14
+#define NODE_PARAM_4_LO 14
 #define NODE_PARAM_5_HI 15
-#define NODE_PARAM_6_LO 16
+#define NODE_PARAM_5_LO 16
 #define NODE_PARAM_6_HI 17
-#define NODE_PARAM_7_LO 18
+#define NODE_PARAM_6_LO 18
 #define NODE_PARAM_7_HI 19
-#define NODE_PARAM_IS_CONSTANT 21
+#define NODE_PARAM_7_LO 20
 #define NODE_PARAMS_IN_USE 21
+#define NODE_RESULT_HI 22
+#define NODE_RESULT_LO 23
+
+// placements in constants array when creating a constant through spi
+#define CONST_POSITION 2
+#define CONST_VALUE_HI 3
+#define CONST_VALUE_LO 4
+
+// array lengths
+#define CONSTS_COUNT_HI 2
+#define CONSTS_COUNT_LO 3
+#define NODES_COUNT_HI 2
+#define NODES_COUNT_LO 3
+
 
 typedef struct matrixNode{
     // function to run when this Node is accessed.
@@ -42,7 +56,12 @@ typedef struct matrixNode{
     void (*func)(struct matrixNode *);
 
     // parameters passed to this node
-    matrixint params[8];
+    matrixint* params[8];
+
+    // Looping over nodes is faster if the Node size is a multiple of 2 (as
+    // getting the address is then only a matter of shifting left instead
+    // of multiplying/summing.
+    short arrayToMakeStruct64Bytes[12];
 
     // Bitwise variable that indicates usage of params:
     // 1 signifies that param is a constant
@@ -60,7 +79,7 @@ typedef struct matrixNode{
     short state;
 
     // placeholder for result from Node function
-    matrixint result;
+    matrixint* result;
 
 } Node;
 
