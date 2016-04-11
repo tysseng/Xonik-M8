@@ -20,6 +20,8 @@
 volatile Node nodes[MAX_NODES];
 char nodesInUse = 0;
 
+// TODO: Keep input constant during calculation?
+
 // result of matrix Node calculations for each Node. In addition, input values
 // received over spi and input constants are stored as results and must be 
 // placed at the start of the results array.

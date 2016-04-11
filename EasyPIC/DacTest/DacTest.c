@@ -26,8 +26,10 @@
 // Oscillator Selection Bits: Primary Osc w/PLL
 // Primary Oscillator Configuration: XT osc mode
 
-//#define RUNTESTS
+#define RUNTESTS
 //#define UNIT_TEST_SPI
+//#define UNIT_TEST_MIDI
+#define UNIT_TEST_MIDI_CORE
 //#define MOCK_SPI
 
 #include "Dac.h"
@@ -35,11 +37,15 @@
 #include "Matrix.h"
 #include "TestMatrix.h"
 #include "Output.h"
+#include "MidiCore.h"
+#include "Midi.h"
 #include "built_in.h"
 #include "DacTest.test.h"
 
 #ifdef RUNTESTS
   #include "Spi.test.h"
+  #include "Midi.test.h"
+  #include "MidiCore.test.h"
 #endif
 
 
@@ -50,6 +56,8 @@ void main() {
   MX_resetMatrix();
   DAC_dacUpdatesFinished = 1;
   OUT_init();
+  MIDI_init();
+  MIDI_CORE_init();
   
   TM_setupTestMatrix();
   MX_runMatrix();
@@ -57,7 +65,15 @@ void main() {
   #ifdef UNIT_TEST_SPI
   runSpiTests();
   #endif
-  
+
+  #ifdef UNIT_TEST_MIDI
+  runMidiTests();
+  #endif
+
+  #ifdef UNIT_TEST_MIDI_CORE
+  runMidiCoreTests();
+  #endif
+
   #ifdef MOCK_SPI
   while(1){
     // only increment dac every two cycles, tests that matrix is not recalculated
@@ -81,6 +97,8 @@ void main() {
 void main() {
   DAC_init();
   SPI_init();
+  MIDI_init();
+  MIDI_CORE_init();
   EnableInterrupts();
   MX_resetMatrix();
   TM_setupTestMatrix();
@@ -97,6 +115,7 @@ void main() {
   DAC_startTimer();
 
   while(1){
+    MIDI_CORE_readFromRxBuffer();
     SPI_checkForReceivedData();
 
     if(DAC_dacUpdatesFinished){

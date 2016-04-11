@@ -111,7 +111,7 @@ void DAC_step(){
   MX_matrixCalculationCompleted = 0;
   writeValuesToSH(2);
   DAC_dacUpdatesFinished++;
-}
+  }
 #endif
 
 void loadDac(unsigned int value){

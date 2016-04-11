@@ -48,6 +48,10 @@
 #define NODES_COUNT_HI 2
 #define NODES_COUNT_LO 3
 
+// input positions
+#define MATRIX_INPUT_PITCH 0
+#define MATRIX_INPUT_VELOCITY 1
+#define MATRIX_INPUT_GATE 2
 
 typedef struct matrixNode{
     // function to run when this Node is accessed.
