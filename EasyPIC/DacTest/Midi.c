@@ -24,7 +24,7 @@ void MIDI_HOOK_treatThreeByteMessage(char channel, char status, char param1, cha
 void MIDI_HOOK_treatTuneRequest(){
 }
 
-void MIDI_HOOK_treatRealtimeStatus(){
+void MIDI_HOOK_treatRealtimeStatus(char status){
 }
 
 void MIDI_HOOK_treatSysexByte(char midiByte, char bytePosition){

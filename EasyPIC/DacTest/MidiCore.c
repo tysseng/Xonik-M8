@@ -55,20 +55,23 @@ char sysexAddress[] = {0, 43, 92}; //randomly chosen but must start with 0
 
 char activeMidiChannels[16];
 
-void interrupt(){
+void MidiRxInterrupt() iv IVT_UART_1 ilevel 5 ics ICS_AUTO {
   char midiByte;
   char midiStatus;
-  char i;
+  
+  if (U1RXIF_bit){
+    midiByte = U1RXREG;
 
-/*  if (PIR1.RCIF){
-    midiByte = RCREG;
+    //TODO: May have to use a while loop, checking UR1DA_bit for data as 
+    // U1RXREG is an 8 byte FIFO queue
     
     if(midiByte > 0xF7){
       MIDI_HOOK_treatRealtimeStatus(midiByte);
     } else {
       writeToRxBuffer(midiByte);
     }
-  }*/
+    U1RXIF_bit = 0;
+  }
 }
 
 // ******* [start midi input ring buffer] *******
@@ -266,16 +269,23 @@ void setupRxBuffer(){
 }
 
 void setupInterrupts(){
-  //enable interrupts. NB: PEIE/GIE also affects timer0/1
-  /*
-  PEIE_bit = 1;
-  GIE_bit = 1;
-  RCIE_bit = 1;            // enable USART RX interrupt
-  */
+  URXISEL0_bit = 0; //interrupt on first received byte
+  URXISEL1_bit = 0;
+
+  // interrupt priority 5
+  U1IP0_bit = 1;
+  U1IP1_bit = 0;
+  U1IP2_bit = 1;
+
+  // interrupt sub priority 3
+  U1IS0_bit = 1;
+  U1IS1_bit = 1;
+  
+  U1RXIE_bit = 1;            // enable USART RX interrupt
 }
 
 void setupUsart(){
-  //UART1_Init(31250);        // initialize USART module
+  UART1_Init(31250);        // initialize USART module
   Delay_ms(100);            // Wait for UART module to stabilize
 }
 
