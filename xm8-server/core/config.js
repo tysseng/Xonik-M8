@@ -4,7 +4,11 @@ var config = {
     device: '/dev/spidev0.0',
     mode: 'MODE_1',     // clock idle low, clock phase active to idle.
     chipSelect: 'none', // 'none', 'high' - defaults to low
-    maxSpeed: 250000, 
+    //100k works fine
+    //200k seems to work too
+    //250k makes pic32 fail at times
+    //1000000 fails all the time
+    maxSpeed: 200000, 
     interruptPin: 3,
     minBufferSize: 16 
   },

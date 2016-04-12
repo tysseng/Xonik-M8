@@ -1,6 +1,6 @@
 
 // TODO: Find better name, controller makes it hard to read.
-var controller = require('../core/controller');
+var controller = require('../core/controller/controller.js');
 var tools = require('./routeTools');
 
 module.exports = function(app, ws){

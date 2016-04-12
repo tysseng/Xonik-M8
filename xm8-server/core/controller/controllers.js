@@ -2,7 +2,7 @@
  Holds current state for all controllers. Not sure what it will be used for yet, perhaps save/load patch
 */
 
-var eventbus = require('./eventbus.js');
+var eventbus = require('../eventbus.js');
 
 var controllers = {};
 

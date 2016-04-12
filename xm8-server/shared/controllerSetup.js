@@ -1,4 +1,4 @@
-var types = require('./datatypes.js');
+var types = require('../core/spi/spiType.js');
 
 // controller config, mapping internal/gui controllers to hardware controller ids etc.
 var controllers = [
@@ -7,14 +7,14 @@ var controllers = [
 		srvId: 2,
 		hwId: 0,
 		name: "Volume",
-		type: types.CTRL_16_BIT
+		type: types.CTRL_16_BIT.id
 	},
 	{
 		guiId: "frequency",
 		srvId: 3,
 		hwId: 1,
 		name: "Frequency",
-		type: types.CTRL_8_BIT
+		type: types.CTRL_8_BIT.id
 	},
 ];
 
