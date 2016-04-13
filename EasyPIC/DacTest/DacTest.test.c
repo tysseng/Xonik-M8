@@ -27,7 +27,7 @@ void runMatrixTests(){
     add(&testBinaryXor);
 
 
-    run(MX_resetMatrix);
+    run(resetMatrix);
 }
 
 // TODO void nodeFuncRamp(Node *aNode){

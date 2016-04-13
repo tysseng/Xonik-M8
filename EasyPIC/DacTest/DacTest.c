@@ -28,8 +28,8 @@
 
 #define RUNTESTS
 //#define UNIT_TEST_SPI
-//#define UNIT_TEST_MIDI
-#define UNIT_TEST_MIDI_CORE
+#define UNIT_TEST_MIDI
+//#define UNIT_TEST_MIDI_CORE
 //#define MOCK_SPI
 
 #include "Dac.h"
@@ -53,7 +53,7 @@
 void main() {
   char i = 0;
   char dacIncrements = 0;
-  MX_resetMatrix();
+  MX_init();
   DAC_dacUpdatesFinished = 1;
   OUT_init();
   MIDI_init();
@@ -98,9 +98,9 @@ void main() {
   DAC_init();
   SPI_init();
   MIDI_init();
+  MX_init();
   MIDI_CORE_init();
   EnableInterrupts();
-  MX_resetMatrix();
   TM_setupTestMatrix();
   
   OUT_init();

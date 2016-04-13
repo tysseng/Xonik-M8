@@ -32,7 +32,9 @@
 #include "Dac.h"
 #include "Matrix.h"
 #include "Config.h"
+#include "Types.h"
 #include "Spi.internal.h"
+#include "ByteArrayTools.h"
 #include <built_in.h>
 
 #define TX_INTERRUPT_TRIS TRISG1_bit
@@ -202,6 +204,12 @@ void SPI_checkForReceivedData(){
       bytesInRxBuffer -= packageSize;
 
       switch(package[1]){
+        case NOTE_ON:
+          MX_noteOn(NOTE_POS_PITCH, NOTE_POS_VELOCITY);
+          break;
+        case NOTE_OFF:
+          MX_noteOff();
+          break;
         case CTRL_16_BIT:
           updateControllerFromSpi16bit(package);
           break;
@@ -232,6 +240,15 @@ void SPI_checkForReceivedData(){
     }
   }
 }
+
+void SPI_SEND_noteOn(char voice, char pitch, char velocity){
+  //6, NOTE_ON, pitch, velocity
+}
+
+void SPI_SEND_noteOff(char voice){
+  //2, NOTE_OFF
+}
+
 
 void SPI_init() {
   initPackageTypes();

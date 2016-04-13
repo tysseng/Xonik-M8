@@ -15,8 +15,10 @@ extern void MX_updateConstant(unsigned short *bytes);
 extern void MX_setNodeCount(unsigned short *bytes);
 extern void MX_setConstantsCount(unsigned short *bytes);
 extern void MX_runMatrix();
+extern void MX_noteOn(int pitch, int velocity);
+extern void MX_noteOff();
 extern void MX_command(char* package);
-extern void MX_resetMatrix();
+extern void MX_init();
 extern nodeFunction MX_getFunctionPointer(unsigned short function);
 
 #endif

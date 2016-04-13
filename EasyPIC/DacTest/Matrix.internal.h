@@ -27,5 +27,6 @@ void nodeFuncOutput(Node *aNode);
 void nodeFuncNoop(Node *aNode);
 void addNode(Node *aNode);
 void runMatrix();
+void resetMatrix();
 
 #endif

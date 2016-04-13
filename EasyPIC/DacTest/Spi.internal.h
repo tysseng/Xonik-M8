@@ -11,7 +11,9 @@ enum packageTypes {
   NODE_COUNT,
   CONSTANTS_COUNT,
   MATRIX_COMMAND,
-  PT_TEST
+  PT_TEST,
+  NOTE_ON,
+  NOTE_OFF
 };
 
 void receiveByte(char rxbyte);

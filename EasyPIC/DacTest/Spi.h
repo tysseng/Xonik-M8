@@ -1,4 +1,10 @@
+#ifndef _SPI_H
+#define _SPI_H
+
 void SPI_init();
 void SPI_checkForReceivedData();
-int SPI_getAsInt(unsigned short *bytes, char position);
-unsigned int SPI_getAsUInt(unsigned short *bytes, char position);
+
+void SPI_SEND_noteOn(char voice, char pitch, char velocity);
+void SPI_SEND_noteOff(char voice);
+
+#endif

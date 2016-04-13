@@ -20,6 +20,9 @@
 volatile Node nodes[MAX_NODES];
 char nodesInUse = 0;
 
+// maps key (pitch) to matrix 1v/oct representation.
+int keyToMatrixMapper[127];
+
 // TODO: Keep input constant during calculation?
 
 // result of matrix Node calculations for each Node. In addition, input values
@@ -468,6 +471,17 @@ void MX_setConstantsCount(unsigned short *bytes){
   constantsInUse = BAT_getAsUInt(bytes, CONSTS_COUNT_HI);
 }
 
+void MX_noteOn(int pitch, int velocity){
+  MX_nodeResults[MATRIX_INPUT_PITCH] = keyToMatrixMapper[pitch];
+  MX_nodeResults[MATRIX_INPUT_VELOCITY] = velocity << 8;
+  MX_nodeResults[MATRIX_INPUT_GATE] = 0x7FFF;
+}
+
+void MX_noteOff(){
+  MX_nodeResults[MATRIX_INPUT_VELOCITY] = 0;
+  MX_nodeResults[MATRIX_INPUT_GATE] = 0;
+}
+
 // loop over the matrix array once and calculate all results
 void MX_runMatrix(){
   unsigned short i;
@@ -487,8 +501,33 @@ void MX_command(char* package){
   // TODO: Turn down output volume on stop, requires knowledge of
 }
 
-void MX_resetMatrix(){
+void resetMatrix(){
   nodesInUse = 0;
+}
+
+void initKeyToMatrixValue(){
+
+  // With 1V/oct: max range = -5 to +5V = 10 octaves = 120 semitones.
+  // Midi represents a maximum of 128 semitones.
+
+  // We'll choose C4 as midi key number 60, this gives 21 = A0 and 108 = C8.
+  // We'll place C4 at 0V.
+
+  // To represent 1/12V: 32768 / 60 = 546,1333...
+
+  char i;
+
+  long semitone = 32768000 / 60;
+
+  for(i = 0; i < 121; i++){
+    keyToMatrixMapper[i] = ((i - 60) * semitone) / 1000;
+  }
+
+  // we are not able to represent 121 to 127 correctly but must
+  // at least make sure nothing breaks if the values are received.
+  for(i=121; i<127; i++){
+    keyToMatrixMapper[i] = keyToMatrixMapper[120];
+  }
 }
 
 nodeFunction MX_getFunctionPointer(unsigned short function){
@@ -545,4 +584,9 @@ nodeFunction MX_getFunctionPointer(unsigned short function){
         default:
             return &nodeFuncNoop;
     }
+}
+
+void MX_init(){
+  initKeyToMatrixValue();
+  resetMatrix();
 }

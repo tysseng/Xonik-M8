@@ -1,6 +1,8 @@
 #include "test/munit.h"
 #include "test/asserts.h"
 #include "Midi.internal.h"
+#include "MidiCore.h"
+#include "MidiStatusMessages.h"
 #include "Matrix.h"
 
 void resetMidi(){
@@ -10,7 +12,7 @@ void resetMidi(){
 }
 
 void test_that_note_on_writes_to_matrix(){
-  sendNoteOnToMatrix(61, 64);
+  MIDI_HOOK_treatThreeByteMessage(0, SM_NOTE_ON, 61, 64);
   
   assertEquals(546, MX_nodeResults[MATRIX_INPUT_PITCH], "pitch not set");
   assertEquals(16384, MX_nodeResults[MATRIX_INPUT_VELOCITY], "velocity not set");
@@ -18,8 +20,8 @@ void test_that_note_on_writes_to_matrix(){
 }
 
 void test_that_note_off_writes_to_matrix(){
-  sendNoteOnToMatrix(61, 64);
-  sendNoteOffToMatrix();
+  MIDI_HOOK_treatThreeByteMessage(0, SM_NOTE_ON, 61, 64);
+  MIDI_HOOK_treatThreeByteMessage(0, SM_NOTE_OFF, 61, 0);
 
   assertEquals(0, MX_nodeResults[MATRIX_INPUT_VELOCITY], "velocity not reset");
   assertEquals(0, MX_nodeResults[MATRIX_INPUT_GATE], "gate not reset");

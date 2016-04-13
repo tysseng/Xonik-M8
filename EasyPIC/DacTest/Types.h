@@ -13,6 +13,10 @@
 #define matrixlongintmin -2147483648
 #define matrixlongintmax 2147483647
 
+// placements in note on/off message
+#define NOTE_POS_PITCH 2
+#define NOTE_POS_VELOCITY 3
+
 // placements in Node data array when creating Node through spi
 #define NODE_POSITION_HI 2
 #define NODE_POSITION_LO 3
