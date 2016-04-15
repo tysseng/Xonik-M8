@@ -28,11 +28,13 @@
 
 #define RUNTESTS
 //#define UNIT_TEST_SPI
-#define UNIT_TEST_MIDI
+//#define UNIT_TEST_MIDI
+#define UNIT_TEST_ANALOG_INPUT
 //#define UNIT_TEST_MIDI_CORE
 //#define MOCK_SPI
 
 #include "Dac.h"
+#include "AnalogInputs.h"
 #include "Spi.h"
 #include "Matrix.h"
 #include "TestMatrix.h"
@@ -46,6 +48,7 @@
   #include "Spi.test.h"
   #include "Midi.test.h"
   #include "MidiCore.test.h"
+  #include "AnalogInputs.test.h"
 #endif
 
 
@@ -74,6 +77,10 @@ void main() {
   runMidiCoreTests();
   #endif
 
+  #ifdef UNIT_TEST_ANALOG_INPUT
+  runAnalogInputsTests();
+  #endif
+  
   #ifdef MOCK_SPI
   while(1){
     // only increment dac every two cycles, tests that matrix is not recalculated
@@ -95,6 +102,7 @@ void main() {
 
 #ifndef RUNTESTS
 void main() {
+  AI_init();
   DAC_init();
   SPI_init();
   MIDI_init();
@@ -116,6 +124,7 @@ void main() {
 
   while(1){
     MIDI_CORE_readFromRxBuffer();
+    AI_readPotmeters();
     SPI_checkForReceivedData();
 
     if(DAC_dacUpdatesFinished){
