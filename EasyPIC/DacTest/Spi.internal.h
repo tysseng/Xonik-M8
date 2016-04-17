@@ -13,7 +13,8 @@ enum packageTypes {
   MATRIX_COMMAND,
   PT_TEST,
   NOTE_ON,
-  NOTE_OFF
+  NOTE_OFF,
+  CONF_MIDI_CC_INPUT
 };
 
 void receiveByte(char rxbyte);

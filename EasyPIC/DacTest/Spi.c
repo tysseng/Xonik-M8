@@ -234,6 +234,12 @@ void SPI_checkForReceivedData(){
         case PT_TEST:
           storePackage(package);
           break;
+        case CONF_MIDI_CC_INPUT:
+          MIDI_controllerToInputMap[package[MIDI_INPUT_CC]] = package[MIDI_INPUT_CC_INPUT_NUM];
+          if(package[2] < 32){
+            MIDI_controllerHiRes[package[MIDI_INPUT_CC]] = package[MIDI_INPUT_CC_HI_RES];
+          }
+          break;
       }
     } else {
       break; // return control to main while waiting for missing bytes

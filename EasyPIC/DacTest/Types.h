@@ -57,6 +57,11 @@
 #define MATRIX_INPUT_VELOCITY 1
 #define MATRIX_INPUT_GATE 2
 
+// midi input cc positions
+#define MIDI_INPUT_CC 2
+#define MIDI_INPUT_CC_INPUT_NUM 3
+#define MIDI_INPUT_CC_HI_RES 4
+
 typedef struct matrixNode{
     // function to run when this Node is accessed.
     // Equals typedef nodeFunction, but that type cannot be declared before

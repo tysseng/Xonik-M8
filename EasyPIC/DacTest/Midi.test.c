@@ -4,11 +4,13 @@
 #include "MidiCore.h"
 #include "MidiStatusMessages.h"
 #include "Matrix.h"
+#include "Config.h"
 
 void resetMidi(){
-  MX_nodeResults[MATRIX_INPUT_PITCH] = 0;
-  MX_nodeResults[MATRIX_INPUT_VELOCITY] = 0;
-  MX_nodeResults[MATRIX_INPUT_GATE] = 0;
+  char i;
+  for(i = 0; i<INPUTS + MAX_CONSTANTS + MAX_NODES; i++){
+    MX_nodeResults[i] = 0;
+  }
 }
 
 void test_that_note_on_writes_to_matrix(){
@@ -35,6 +37,31 @@ void test_that_pitches_are_rounded_correctly(){
   assertEquals(13107, keyToMatrixMapper[84], "C6 incorrect");
 }
 
+void test_that_7_bit_cc_is_set_correctly(){
+  MIDI_controllerToInputMap[2] = 4; // input position 4
+  MIDI_controllerHiRes[2] = 0; // low res
+  MIDI_HOOK_treatThreeByteMessage(0, SM_CC, 2, 64);
+  assertEquals(16384, MX_nodeResults[4], "controller not set correctly");
+}
+
+void test_that_14_bit_cc_is_set_correctly_low_res_first(){
+  MIDI_controllerToInputMap[2] = 4; // input position 4
+  MIDI_controllerHiRes[2] = 1; // high res
+  MIDI_HOOK_treatThreeByteMessage(0, SM_CC, 2, 64);
+  assertEquals(0, MX_nodeResults[4], "controller should not be set before second byte arrives");
+  MIDI_HOOK_treatThreeByteMessage(0, SM_CC, 34, 64);
+  assertEquals(16512, MX_nodeResults[4], "controller not set correctly");
+}
+
+void test_that_14_bit_cc_is_set_correctly_high_res_first(){
+  MIDI_controllerToInputMap[2] = 4; // input position 4
+  MIDI_controllerHiRes[2] = 1; // high res
+  MIDI_HOOK_treatThreeByteMessage(0, SM_CC, 34, 64);
+  assertEquals(0, MX_nodeResults[4], "controller should not be set before second byte arrives");
+  MIDI_HOOK_treatThreeByteMessage(0, SM_CC, 2, 64);
+  assertEquals(16512, MX_nodeResults[4], "controller not set correctly");
+}
+
 // setup and run test suite
 void runMidiTests(){
   resetTests();
@@ -42,5 +69,8 @@ void runMidiTests(){
   add(&test_that_note_on_writes_to_matrix);
   add(&test_that_note_off_writes_to_matrix);
   add(&test_that_pitches_are_rounded_correctly);
+  add(&test_that_7_bit_cc_is_set_correctly);
+  add(&test_that_14_bit_cc_is_set_correctly_low_res_first);
+  add(&test_that_14_bit_cc_is_set_correctly_high_res_first);
   run(resetMidi);
 }

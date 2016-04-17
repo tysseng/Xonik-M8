@@ -10,4 +10,11 @@
 #define MAX_NODES 20
 #define MAX_CONSTANTS MAX_NODES * 3
 
+// maps midi controllers to input positions in the matrix
+extern char MIDI_controllerToInputMap[127];
+
+// configures controller resolution, if set to 1 CC will only be written when
+// fine-res arrives.
+extern char MIDI_controllerHiRes[32];
+
 #endif
