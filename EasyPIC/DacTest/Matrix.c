@@ -15,6 +15,7 @@
 #include "Matrix.internal.h"
 #include "Matrix.h"
 #include "ByteArrayTools.h"
+#include "LinToExpTable.h"
 
 // matrix nodes
 volatile Node nodes[MAX_NODES];
@@ -22,6 +23,8 @@ char nodesInUse = 0;
 
 // maps key (pitch) to matrix 1v/oct representation.
 int keyToMatrixMapper[127];
+
+char MX_outputAsLog[32];
 
 // TODO: Keep input constant during calculation?
 
@@ -34,12 +37,6 @@ char constantsInUse = 0;
 // true if a matrix run has been completed and data is ready to be copied to
 // the dac buffer before the next dac cycle.
 unsigned short MX_matrixCalculationCompleted;
-
-// TODO: Create constant lookup table for exponential conversion
-// lookup table for linear to exponential conversion that only converts positive
-// values (and eases of to 0 to allow maximum offness
-//const matrixint lookupTablePositiveExponential[matrixintrange];
-
 
 // sum an arbitrary number of inputs.
 void nodeFuncSum(Node *aNode){
@@ -363,7 +360,19 @@ void nodeFuncBufferInput(Node *aNode){
 // Param 0: output buffer position
 // Param 1: index of Node to fetch result from
 void nodeFuncOutput(Node *aNode){
-    OUT_outputBuffer[*aNode->params[0]] = *aNode->params[1];
+  char output = *aNode->params[0];
+  matrixint value = *aNode->params[1];
+  if(MX_outputAsLog[output]){
+    if(value >= 0){
+      // the real value is heavily rounded off to save space in the lookup
+      // table.
+      OUT_outputBuffer[output] = linToExp[value >> 3];
+    } else {
+      OUT_outputBuffer[output] = 0;
+    }
+  } else {
+    OUT_outputBuffer[output] = value;
+  }
 }
 
 //glide any output. resists change.
@@ -587,6 +596,12 @@ nodeFunction MX_getFunctionPointer(unsigned short function){
 }
 
 void MX_init(){
+  char i;
+
   initKeyToMatrixValue();
   resetMatrix();
+  
+  for(i=0; i<OUTPUTS; i++){
+    MX_outputAsLog[i] = 0;
+  }
 }

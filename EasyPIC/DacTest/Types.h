@@ -62,6 +62,10 @@
 #define MIDI_INPUT_CC_INPUT_NUM 3
 #define MIDI_INPUT_CC_HI_RES 4
 
+// output config
+#define SPI_POS_OUTPUT_NUM 2
+#define SPI_POS_OUTPUT_AS_LOG 3
+
 typedef struct matrixNode{
     // function to run when this Node is accessed.
     // Equals typedef nodeFunction, but that type cannot be declared before

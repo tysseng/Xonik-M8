@@ -200,6 +200,10 @@ void setNoteOn(char* package){
   MX_noteOn(package[NOTE_POS_PITCH], package[NOTE_POS_VELOCITY]);
 }
 
+void setOutputSlopeConfig(char* package){
+  MX_outputAsLog[package[SPI_POS_OUTPUT_NUM]] = package[SPI_POS_OUTPUT_AS_LOG];
+}
+
 void SPI_checkForReceivedData(){
 
   char pos;
@@ -242,11 +246,14 @@ void SPI_checkForReceivedData(){
         case CONSTANTS_COUNT:
           MX_setConstantsCount(package);
           break;
-        case PT_TEST:
-          storePackage(package);
-          break;
         case CONF_MIDI_CC_INPUT:
           setInputConfigForCC(package);
+          break;
+        case CONF_MX_OUTPUT_LOG:
+          setOutputSlopeConfig(package);
+          break;
+        case PT_TEST:
+          storePackage(package);
           break;
       }
     } else {

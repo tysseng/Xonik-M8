@@ -17,4 +17,8 @@ extern char MIDI_controllerToInputMap[127];
 // fine-res arrives.
 extern char MIDI_controllerHiRes[32];
 
+// selects what outputs should be converted from linear to logarithmic
+// before being sent to the DAC
+extern char MX_outputAsLog[32];
+
 #endif
