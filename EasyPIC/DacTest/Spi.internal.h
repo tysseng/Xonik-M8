@@ -20,5 +20,7 @@ enum packageTypes {
 void receiveByte(char rxbyte);
 extern void updateControllerFromSpi8bit(char* package);
 extern void updateControllerFromSpi16bit(char* package);
+extern void setInputConfigForCC(char* package);
+extern void setNoteOn(char* package);
 extern void storePackage(char* package);
 #endif

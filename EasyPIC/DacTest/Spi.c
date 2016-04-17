@@ -189,6 +189,17 @@ void updateControllerFromSpi16bit(char* package){
   MX_nodeResults[package[2]] = package[3] << 8 | package[4];
 }
 
+void setInputConfigForCC(char* package){
+  MIDI_controllerToInputMap[package[MIDI_INPUT_CC]] = package[MIDI_INPUT_CC_INPUT_NUM];
+  if(package[2] < 32){
+    MIDI_controllerHiRes[package[MIDI_INPUT_CC]] = package[MIDI_INPUT_CC_HI_RES];
+  }
+}
+
+void setNoteOn(char* package){
+  MX_noteOn(package[NOTE_POS_PITCH], package[NOTE_POS_VELOCITY]);
+}
+
 void SPI_checkForReceivedData(){
 
   char pos;
@@ -205,7 +216,7 @@ void SPI_checkForReceivedData(){
 
       switch(package[1]){
         case NOTE_ON:
-          MX_noteOn(NOTE_POS_PITCH, NOTE_POS_VELOCITY);
+          setNoteOn(package);
           break;
         case NOTE_OFF:
           MX_noteOff();
@@ -235,10 +246,7 @@ void SPI_checkForReceivedData(){
           storePackage(package);
           break;
         case CONF_MIDI_CC_INPUT:
-          MIDI_controllerToInputMap[package[MIDI_INPUT_CC]] = package[MIDI_INPUT_CC_INPUT_NUM];
-          if(package[2] < 32){
-            MIDI_controllerHiRes[package[MIDI_INPUT_CC]] = package[MIDI_INPUT_CC_HI_RES];
-          }
+          setInputConfigForCC(package);
           break;
       }
     } else {

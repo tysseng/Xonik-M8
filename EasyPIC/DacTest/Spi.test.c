@@ -141,6 +141,27 @@ void test_that_negative_16bit_controllers_are_converted_correctly(){
   assertEquals(-32768, MX_nodeResults[0], "Wrong conversion of negative 16 bit num");
 }
 
+void test_that_cc_to_input_mapping_is_set_correctly(){
+  char packageLoRes[] = {5, CONF_MIDI_CC_INPUT, 3, 10, 0};
+  char packageHiRes[] = {5, CONF_MIDI_CC_INPUT, 4, 11, 1};
+  
+  setInputConfigForCC(packageLoRes);
+  assertEquals(10, MIDI_controllerToInputMap[3], "Wrong input for CC 3");
+  assertEquals(0, MIDI_controllerHiRes[3], "Wrong resolution for CC 3");
+  
+  setInputConfigForCC(packageHiRes);
+  assertEquals(11, MIDI_controllerToInputMap[4], "Wrong input for CC 4");
+  assertEquals(1, MIDI_controllerHiRes[4], "Wrong resolution for CC 4");
+}
+
+void test_that_note_on_is_set_correctly(){
+  char package[] = {4, NOTE_ON, 61, 64};
+  setNoteOn(package);
+
+  assertEquals(546, MX_nodeResults[MATRIX_INPUT_PITCH], "pitch not set");
+  assertEquals(16384, MX_nodeResults[MATRIX_INPUT_VELOCITY], "velocity not set");
+  assertEquals(32767, MX_nodeResults[MATRIX_INPUT_GATE], "gate not set");
+}
 
 // setup and run test suite
 void runSpiTests(){
@@ -158,5 +179,7 @@ void runSpiTests(){
   add(&test_that_negative_8bit_controllers_are_converted_correctly);
   add(&test_that_positive_16bit_controllers_are_converted_correctly);
   add(&test_that_negative_16bit_controllers_are_converted_correctly);
+  add(&test_that_cc_to_input_mapping_is_set_correctly);
+  add(&test_that_note_on_is_set_correctly);
   run(resetSpi);
 }
