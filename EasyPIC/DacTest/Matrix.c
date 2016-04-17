@@ -24,7 +24,7 @@ char nodesInUse = 0;
 // maps key (pitch) to matrix 1v/oct representation.
 int keyToMatrixMapper[127];
 
-char MX_outputAsLog[32];
+char MX_outputAsExp[32];
 
 // TODO: Keep input constant during calculation?
 
@@ -362,7 +362,7 @@ void nodeFuncBufferInput(Node *aNode){
 void nodeFuncOutput(Node *aNode){
   char output = *aNode->params[0];
   matrixint value = *aNode->params[1];
-  if(MX_outputAsLog[output]){
+  if(MX_outputAsExp[output]){
     if(value >= 0){
       // the real value is heavily rounded off to save space in the lookup
       // table.
@@ -602,6 +602,6 @@ void MX_init(){
   resetMatrix();
   
   for(i=0; i<OUTPUTS; i++){
-    MX_outputAsLog[i] = 0;
+    MX_outputAsExp[i] = 0;
   }
 }

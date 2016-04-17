@@ -32,7 +32,7 @@ void resetSpi(){
   }
   
   for(i = 0; i<OUTPUTS; i++){
-    MX_outputAsLog[i] = 0;
+    MX_outputAsExp[i] = 0;
   }
 }
 
@@ -168,14 +168,14 @@ void test_that_note_on_is_set_correctly(){
 }
 
 void test_that_output_log_config_is_set_correctly(){
-  char packageLog[] = {4, CONF_MX_OUTPUT_LOG, 0, 1};
-  char packageLin[] = {4, CONF_MX_OUTPUT_LOG, 2, 0};
+  char packageExp[] = {4, CONF_MX_OUTPUT_EXP, 0, 1};
+  char packageLin[] = {4, CONF_MX_OUTPUT_EXP, 2, 0};
 
-  setOutputSlopeConfig(packageLog);
+  setOutputSlopeConfig(packageExp);
   setOutputSlopeConfig(packageLin);
   
-  assertEquals(1, MX_outputAsLog[0], "Wrong log conversion setting for output 0");
-  assertEquals(0, MX_outputAsLog[2], "Wrong log conversion setting for output 2");
+  assertEquals(1, MX_outputAsExp[0], "Wrong log conversion setting for output 0");
+  assertEquals(0, MX_outputAsExp[2], "Wrong log conversion setting for output 2");
 }
 
 // setup and run test suite

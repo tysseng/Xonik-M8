@@ -201,7 +201,7 @@ void setNoteOn(char* package){
 }
 
 void setOutputSlopeConfig(char* package){
-  MX_outputAsLog[package[SPI_POS_OUTPUT_NUM]] = package[SPI_POS_OUTPUT_AS_LOG];
+  MX_outputAsExp[package[SPI_POS_OUTPUT_NUM]] = package[SPI_POS_OUTPUT_AS_LOG];
 }
 
 void SPI_checkForReceivedData(){
@@ -249,7 +249,7 @@ void SPI_checkForReceivedData(){
         case CONF_MIDI_CC_INPUT:
           setInputConfigForCC(package);
           break;
-        case CONF_MX_OUTPUT_LOG:
+        case CONF_MX_OUTPUT_EXP:
           setOutputSlopeConfig(package);
           break;
         case PT_TEST:
