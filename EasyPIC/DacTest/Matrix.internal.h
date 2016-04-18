@@ -24,6 +24,7 @@ void nodeFuncBinaryXor(Node *aNode);
 void nodeFuncBinaryNot(Node *aNode);
 void nodeFuncInput(Node *aNode);
 void nodeFuncOutput(Node *aNode);
+void nodeFuncOutputTuned(Node *aNode);
 void nodeFuncNoop(Node *aNode);
 void addNode(Node *aNode);
 void runMatrix();

@@ -30,11 +30,11 @@ void test_that_note_off_writes_to_matrix(){
 }
 
 void test_that_pitches_are_rounded_correctly(){
-  assertEquals(-13107, keyToMatrixMapper[36], "C2 incorrect");
-  assertEquals(-6553, keyToMatrixMapper[48], "C3 incorrect");
-  assertEquals(0, keyToMatrixMapper[60], "C4 incorrect");
-  assertEquals(6553, keyToMatrixMapper[72], "C5 incorrect");
-  assertEquals(13107, keyToMatrixMapper[84], "C6 incorrect");
+  assertEquals(-13107, MX_keyToMatrixMapper[36], "C2 incorrect");
+  assertEquals(-6553, MX_keyToMatrixMapper[48], "C3 incorrect");
+  assertEquals(0, MX_keyToMatrixMapper[60], "C4 incorrect");
+  assertEquals(6553, MX_keyToMatrixMapper[72], "C5 incorrect");
+  assertEquals(13107, MX_keyToMatrixMapper[84], "C6 incorrect");
 }
 
 void test_that_7_bit_cc_is_set_correctly(){

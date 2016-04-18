@@ -4,6 +4,11 @@
 #include "Types.h"
 #include "Config.h"
 
+// Allthough we only allow a limited number of semitones, it is easier to
+// have maps of 127
+extern int MX_keyToMatrixMapper[127];
+extern int MX_vcoTuning[3][127];
+
 extern volatile Node nodes[MAX_NODES];
 extern unsigned short nodesInUse;
 extern matrixint MX_nodeResults[INPUTS + MAX_CONSTANTS + MAX_NODES];

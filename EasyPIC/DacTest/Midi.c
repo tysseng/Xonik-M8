@@ -20,9 +20,15 @@ void MIDI_HOOK_treatThreeByteMessage(char channel, char status, char param1, cha
   
   switch(status){
     case SM_NOTE_ON:
+      if(param1 < CONF_SEMITONE_LOWEST || param1 > CONF_SEMITONE_HIGHEST){
+        break;
+      }
       MX_noteOn(param1, param2);
       break;
     case SM_NOTE_OFF:
+      if(param1 < CONF_SEMITONE_LOWEST || param1 > CONF_SEMITONE_HIGHEST){
+        break;
+      }
       MX_noteOff();
       break;
     case SM_CC:

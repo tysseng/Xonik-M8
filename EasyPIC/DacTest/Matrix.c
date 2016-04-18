@@ -22,7 +22,10 @@ volatile Node nodes[MAX_NODES];
 char nodesInUse = 0;
 
 // maps key (pitch) to matrix 1v/oct representation.
-int keyToMatrixMapper[127];
+int MX_keyToMatrixMapper[127];
+
+// The sum of compuTune and global tuning
+int MX_vcoTuning[3][127];
 
 char MX_outputAsExp[32];
 
@@ -360,19 +363,35 @@ void nodeFuncBufferInput(Node *aNode){
 // Param 0: output buffer position
 // Param 1: index of Node to fetch result from
 void nodeFuncOutput(Node *aNode){
-  char output = *aNode->params[0];
-  matrixint value = *aNode->params[1];
-  if(MX_outputAsExp[output]){
-    if(value >= 0){
-      // the real value is heavily rounded off to save space in the lookup
-      // table.
-      OUT_outputBuffer[output] = linToExp[value >> 3];
-    } else {
-      OUT_outputBuffer[output] = 0;
-    }
+  OUT_outputBuffer[*aNode->params[0]] = *aNode->params[1];
+}
+
+// Convert linear value to exponential. Only positive values are converted,
+// all others are 0, to allow maximum offness.
+void nodeFuncPositiveExp(Node *aNode){
+  matrixint input = *aNode->params[0];
+
+  if(input >= 0){
+    // the real value is heavily rounded off to save space in the lookup
+    // table.
+    *aNode->result = linToExp[input >> 3];
   } else {
-    OUT_outputBuffer[output] = value;
+    *aNode->result = 0;
   }
+}
+
+// write output to outputBuffer and correct for vco tuning.
+// Param 0: output buffer position
+// Param 1: index of Node to fetch result from
+void nodeFuncOutputTuned(Node *aNode){
+  char vco = *aNode->params[0]; // must be 0,1,2
+  matrixint value = *aNode->params[1];
+  
+  // convert value to 7 bit (between -64 and +63)
+  int tuneIndex = 64 + (value >> 9);
+
+  // TODO: Check if in range?
+  OUT_outputBuffer[vco] = value + MX_vcoTuning[vco][tuneIndex];
 }
 
 //glide any output. resists change.
@@ -402,18 +421,6 @@ void nodeFuncGlide(Node *aNode){
 
 void nodeFuncQuantize(Node *aNode){
      //TODO
-}
-
-// Convert linear value to exponential. Only positive values are converted,
-// all others are 0, to allow maximum offness.
-void nodeFuncPositiveExp(Node *aNode){
-    matrixint input = *aNode->params[0];
-    if(input > 0){
-    // TODO: MAKE CONST LOOKUP TABLE
-    //    *aNode->result = lookupTablePositiveExponential[input];
-    } else {
-        *aNode->result = 0;
-    }
 }
 
 // do nothing
@@ -481,7 +488,7 @@ void MX_setConstantsCount(unsigned short *bytes){
 }
 
 void MX_noteOn(int pitch, int velocity){
-  MX_nodeResults[MATRIX_INPUT_PITCH] = keyToMatrixMapper[pitch];
+  MX_nodeResults[MATRIX_INPUT_PITCH] = MX_keyToMatrixMapper[pitch];
   MX_nodeResults[MATRIX_INPUT_VELOCITY] = velocity << 8;
   MX_nodeResults[MATRIX_INPUT_GATE] = 0x7FFF;
 }
@@ -524,18 +531,21 @@ void initKeyToMatrixValue(){
 
   // To represent 1/12V: 32768 / 60 = 546,1333...
 
+  // TODO: Change so that we can represent 108 semitones (9 octaves) - 5 +/- 2
+  // leaving 19 semitones for tuning.
+
   char i;
 
   long semitone = 32768000 / 60;
 
   for(i = 0; i < 121; i++){
-    keyToMatrixMapper[i] = ((i - 60) * semitone) / 1000;
+    MX_keyToMatrixMapper[i] = ((i - 60) * semitone) / 1000;
   }
 
   // we are not able to represent 121 to 127 correctly but must
   // at least make sure nothing breaks if the values are received.
   for(i=121; i<127; i++){
-    keyToMatrixMapper[i] = keyToMatrixMapper[120];
+    MX_keyToMatrixMapper[i] = MX_keyToMatrixMapper[120];
   }
 }
 
@@ -582,6 +592,8 @@ nodeFunction MX_getFunctionPointer(unsigned short function){
             return &nodeFuncBufferInput;
         case NODE_OUTPUT:
             return &nodeFuncOutput;
+        case NODE_OUTPUT_TUNED:
+            return &nodeFuncOutputTuned;
         case NODE_GLIDE:
             return &nodeFuncGlide;
         case NODE_QUANTIZE:

@@ -10,6 +10,11 @@
 #define MAX_NODES 20
 #define MAX_CONSTANTS MAX_NODES * 3
 
+// Semitones covered by the synth
+#define CONF_SEMITONE_COUNT 108
+#define CONF_SEMITONE_LOWEST 9
+#define CONF_SEMITONE_HIGHEST 117
+
 // maps midi controllers to input positions in the matrix
 extern char MIDI_controllerToInputMap[127];
 

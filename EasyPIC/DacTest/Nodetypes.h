@@ -26,4 +26,5 @@
 #define NODE_GLIDE 23
 #define NODE_TUNE 24
 #define NODE_POSITIVE_EXP 25
+#define NODE_OUTPUT_TUNED 26
 #endif
