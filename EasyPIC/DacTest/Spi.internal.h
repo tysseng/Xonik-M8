@@ -14,8 +14,7 @@ enum packageTypes {
   PT_TEST,
   NOTE_ON,
   NOTE_OFF,
-  CONF_MIDI_CC_INPUT,
-  CONF_MX_OUTPUT_EXP
+  CONF_MIDI_CC_INPUT
 };
 
 void receiveByte(char rxbyte);

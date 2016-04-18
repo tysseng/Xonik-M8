@@ -30,10 +30,6 @@ void resetSpi(){
   for(i = 0; i<MAX_PACKAGE_SIZE; i++){
     lastPackage[i] = 0;
   }
-  
-  for(i = 0; i<OUTPUTS; i++){
-    MX_outputAsExp[i] = 0;
-  }
 }
 
 void test_that_received_byte_is_placed_in_rxbuffer(){
@@ -167,17 +163,6 @@ void test_that_note_on_is_set_correctly(){
   assertEquals(32767, MX_nodeResults[MATRIX_INPUT_GATE], "gate not set");
 }
 
-void test_that_output_log_config_is_set_correctly(){
-  char packageExp[] = {4, CONF_MX_OUTPUT_EXP, 0, 1};
-  char packageLin[] = {4, CONF_MX_OUTPUT_EXP, 2, 0};
-
-  setOutputSlopeConfig(packageExp);
-  setOutputSlopeConfig(packageLin);
-  
-  assertEquals(1, MX_outputAsExp[0], "Wrong log conversion setting for output 0");
-  assertEquals(0, MX_outputAsExp[2], "Wrong log conversion setting for output 2");
-}
-
 // setup and run test suite
 void runSpiTests(){
   resetTests();
@@ -196,6 +181,5 @@ void runSpiTests(){
   add(&test_that_negative_16bit_controllers_are_converted_correctly);
   add(&test_that_cc_to_input_mapping_is_set_correctly);
   add(&test_that_note_on_is_set_correctly);
-  add(&test_that_output_log_config_is_set_correctly);
   run(resetSpi);
 }

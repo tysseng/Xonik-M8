@@ -27,8 +27,6 @@ int MX_keyToMatrixMapper[127];
 // The sum of compuTune and global tuning
 int MX_vcoTuning[3][127];
 
-char MX_outputAsExp[32];
-
 // TODO: Keep input constant during calculation?
 
 // result of matrix Node calculations for each Node. In addition, input values
@@ -612,8 +610,4 @@ void MX_init(){
 
   initKeyToMatrixValue();
   resetMatrix();
-  
-  for(i=0; i<OUTPUTS; i++){
-    MX_outputAsExp[i] = 0;
-  }
 }
