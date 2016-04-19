@@ -1,8 +1,12 @@
 #include "Config.h"
+#include "Config.test.h"
 #include "Matrix.h"
+#include "Tune.internal.h"
+#ifdef UNIT_TEST_TUNE
+  #include "Tune.test.h"
+#endif
 
 // TODO: Flash led next to tune pot/button if tuning fails (not all are tuneable)
-// TODO: Add tests
 
 // Current global tuning, for recalculation if compu tuning changes.
 int globalTuning;
@@ -15,7 +19,7 @@ char TUNE_isTuneable[3][127];
 // changes.
 int TUNE_compuTuneCorrections[3][127];
 
-TUNE_init(){
+void TUNE_init(){
   char semitone;
   char vco;
   TUNE_allAreTuneable = 1;
@@ -30,17 +34,21 @@ TUNE_init(){
 }
 
 char TUNE_updateGlobalTuning(int updatedGlobalTuning){
+  TUNE_allAreTuneable = 1;
+  updateGlobalTuning(updatedGlobalTuning);
+}
+
+char updateGlobalTuning(int updatedGlobalTuning){
   long correction;
   long newPitch;
 
   char vco;
   char semitone;
 
-  TUNE_allAreTuneable = 1;
-  
   for(vco=0; vco<3; vco++){
     for(semitone=CONF_SEMITONE_LOWEST; semitone<=CONF_SEMITONE_HIGHEST; semitone++){
       if(!TUNE_isTuneable[vco][semitone]){
+        TUNE_allAreTuneable = 0;
         continue;
       }
       
@@ -61,8 +69,12 @@ char TUNE_updateGlobalTuning(int updatedGlobalTuning){
 }
 
 // TODO: Implement tuning
-char tune(char vco, char semitone){
+long tune(char vco, char semitone){
+  #ifdef UNIT_TEST_TUNE
+  return tuneResult;
+  #else
   return 0;
+  #endif
 }
 
 // Each semitone is tuned. As semitones are hopefully not far apart tuning wise,
@@ -88,14 +100,21 @@ char TUNE_retune(){
           TUNE_isTuneable[vco][semitone] = 1;
           TUNE_compuTuneCorrections[vco][semitone] = correction;
         } else {
-          TUNE_isTuneable[vco][semitone] = 0;
-          TUNE_compuTuneCorrections[vco][semitone] = 0;
-          TUNE_allAreTuneable = 0;
+          setUntunable(vco, semitone);
         }
+      } else {
+        setUntunable(vco, semitone);
       }
     }
   }
-  return TUNE_updateGlobalTuning(globalTuning);
+  return updateGlobalTuning(globalTuning);
   
   // TODO: Start matrix
+}
+
+void setUntunable(char vco, char semitone){
+  MX_vcoTuning[vco][semitone] = 0;
+  TUNE_isTuneable[vco][semitone] = 0;
+  TUNE_compuTuneCorrections[vco][semitone] = 0;
+  TUNE_allAreTuneable = 0;
 }

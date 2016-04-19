@@ -26,12 +26,7 @@
 // Oscillator Selection Bits: Primary Osc w/PLL
 // Primary Oscillator Configuration: XT osc mode
 
-#define RUNTESTS
-#define UNIT_TEST_SPI
-//#define UNIT_TEST_MIDI
-//#define UNIT_TEST_ANALOG_INPUT
-//#define UNIT_TEST_MIDI_CORE
-//#define MOCK_SPI
+
 
 #include "Dac.h"
 #include "AnalogInputs.h"
@@ -43,12 +38,14 @@
 #include "Midi.h"
 #include "built_in.h"
 #include "DacTest.test.h"
+#include "Config.test.h"
 
 #ifdef RUNTESTS
   #include "Spi.test.h"
   #include "Midi.test.h"
   #include "MidiCore.test.h"
   #include "AnalogInputs.test.h"
+  #include "Tune.test.h"
 #endif
 
 
@@ -79,6 +76,10 @@ void main() {
 
   #ifdef UNIT_TEST_ANALOG_INPUT
   runAnalogInputsTests();
+  #endif
+
+  #ifdef UNIT_TEST_TUNE
+  runTuneTests();
   #endif
   
   #ifdef MOCK_SPI
