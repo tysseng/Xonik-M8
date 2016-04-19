@@ -66,6 +66,10 @@ char updateGlobalTuning(int updatedGlobalTuning){
       }
     }
   }
+  
+  // restart matrix if paused
+  MX_isSuspended = 0;
+  
   return TUNE_allAreTuneable;
 }
 
@@ -89,7 +93,8 @@ char TUNE_retune(){
   
   TUNE_allAreTuneable = 1;
 
-  // TODO: Stop matrix
+  // pause matrix calculations, restarted after updating global tuning
+  MX_isSuspended = 1;
   
   for(vco=0; vco<3; vco++){
     for(semitone=CONF_SEMITONE_LOWEST; semitone<=CONF_SEMITONE_HIGHEST; semitone++){
@@ -109,8 +114,6 @@ char TUNE_retune(){
     }
   }
   return updateGlobalTuning(globalTuning);
-  
-  // TODO: Start matrix
 }
 
 void setUntunable(char vco, char semitone){

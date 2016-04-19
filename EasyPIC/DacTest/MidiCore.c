@@ -3,6 +3,8 @@
 #include "MidiControllerNumbers.h"
 #include "MidiStatusMessages.h"
 
+//TODO: Treat time code messages in interrupt?
+
 //RX ring buffer length. Must not exceed 256 bytes...
 #define RX_LEN 256
 
@@ -27,12 +29,6 @@ char lastMidiParam1 = 0;
 char statusMessageLength[255];
 
 /**** SYSEX input ****/
-
-//possible sysex operations:
-//#define SYSEX_OP_NONE 0
-//#define SYSEX_OP_WRITE_SETTINGS_TO_EE 1
-//#define SYSEX_OP_CLEAR_SETTINGS_FROM_EE 2
-//#define SYSEX_OP_CHANGE_SETTING 3
 
 // status of current sysex reception, what was the last operation and parameters
 // received.

@@ -61,19 +61,19 @@ void test_that_rxbytecounter_is_reset_when_last_byte_is_received(){
 
 void test_that_package_is_received_by_spi(){
   receiveByte(3); // length = 3
-  receiveByte(PT_TEST); // type that triggers test function on receive
+  receiveByte(SPI_CMD_PT_TEST); // type that triggers test function on receive
   receiveByte(2);
   
   SPI_checkForReceivedData();
   
   assertEquals(3, lastPackage[0], "Incorrect package value 0");
-  assertEquals(PT_TEST, lastPackage[1], "Incorrect package value 0");
+  assertEquals(SPI_CMD_PT_TEST, lastPackage[1], "Incorrect package value 0");
   assertEquals(2, lastPackage[2], "Incorrect package value 0");
 }
 
 void test_that_command_is_not_called_when_not_all_bytes_are_ready(){
   receiveByte(3); // length = 3
-  receiveByte(PT_TEST); // type that triggers test function on receive
+  receiveByte(SPI_CMD_PT_TEST); // type that triggers test function on receive
 
   SPI_checkForReceivedData();
 
@@ -82,11 +82,11 @@ void test_that_command_is_not_called_when_not_all_bytes_are_ready(){
 
 void test_that_multiple_commands_may_be_treated(){
   receiveByte(3); // length = 3
-  receiveByte(PT_TEST); // type that triggers test function on receive
+  receiveByte(SPI_CMD_PT_TEST); // type that triggers test function on receive
   receiveByte(4);
 
   receiveByte(4); // length = 3
-  receiveByte(PT_TEST); // type that triggers test function on receive
+  receiveByte(SPI_CMD_PT_TEST); // type that triggers test function on receive
   receiveByte(2);
   receiveByte(2);
 
@@ -97,11 +97,11 @@ void test_that_multiple_commands_may_be_treated(){
 
 void test_that_only_first_command_is_treated_if_second_is_incomplete(){
   receiveByte(3); // length = 3
-  receiveByte(PT_TEST); // type that triggers test function on receive
+  receiveByte(SPI_CMD_PT_TEST); // type that triggers test function on receive
   receiveByte(4);
 
   receiveByte(4); // length = 3
-  receiveByte(PT_TEST); // type that triggers test function on receive
+  receiveByte(SPI_CMD_PT_TEST); // type that triggers test function on receive
 
   SPI_checkForReceivedData();
 
@@ -109,7 +109,7 @@ void test_that_only_first_command_is_treated_if_second_is_incomplete(){
 }
 
 void test_that_positive_8bit_controllers_are_converted_correctly(){
-  char package[] = {4, CTRL_8_BIT, 0, 0b01111111}; // +127 signed
+  char package[] = {4, SPI_CMD_CTRL_8_BIT, 0, 0b01111111}; // +127 signed
 
   updateControllerFromSpi8bit(package);
 
@@ -117,7 +117,7 @@ void test_that_positive_8bit_controllers_are_converted_correctly(){
 }
 
 void test_that_negative_8bit_controllers_are_converted_correctly(){
-  char package[] = {4, CTRL_8_BIT, 0, 0b10000000}; // -128 signed
+  char package[] = {4, SPI_CMD_CTRL_8_BIT, 0, 0b10000000}; // -128 signed
 
   updateControllerFromSpi8bit(package);
 
@@ -126,7 +126,7 @@ void test_that_negative_8bit_controllers_are_converted_correctly(){
 
 
 void test_that_positive_16bit_controllers_are_converted_correctly(){
-  char package[] = {5, CTRL_16_BIT, 0, 0b01111111, 0b11111111}; // +32767 signed
+  char package[] = {5, SPI_CMD_CTRL_16_BIT, 0, 0b01111111, 0b11111111}; // +32767 signed
 
   updateControllerFromSpi16bit(package);
 
@@ -134,7 +134,7 @@ void test_that_positive_16bit_controllers_are_converted_correctly(){
 }
 
 void test_that_negative_16bit_controllers_are_converted_correctly(){
-  char package[] = {5, CTRL_16_BIT, 0, 0b10000000, 0b00000000}; // -32768 signed
+  char package[] = {5, SPI_CMD_CTRL_16_BIT, 0, 0b10000000, 0b00000000}; // -32768 signed
 
   updateControllerFromSpi16bit(package);
 
@@ -142,8 +142,8 @@ void test_that_negative_16bit_controllers_are_converted_correctly(){
 }
 
 void test_that_cc_to_input_mapping_is_set_correctly(){
-  char packageLoRes[] = {5, CONF_MIDI_CC_INPUT, 3, 10, 0};
-  char packageHiRes[] = {5, CONF_MIDI_CC_INPUT, 4, 11, 1};
+  char packageLoRes[] = {5, SPI_CMD_CONF_MIDI_CC_INPUT, 3, 10, 0};
+  char packageHiRes[] = {5, SPI_CMD_CONF_MIDI_CC_INPUT, 4, 11, 1};
   
   setInputConfigForCC(packageLoRes);
   assertEquals(10, MIDI_controllerToInputMap[3], "Wrong input for CC 3");
@@ -155,7 +155,7 @@ void test_that_cc_to_input_mapping_is_set_correctly(){
 }
 
 void test_that_note_on_is_set_correctly(){
-  char package[] = {4, NOTE_ON, 61, 64};
+  char package[] = {4, SPI_CMD_NOTE_ON, 61, 64};
   setNoteOn(package);
 
   assertEquals(546, MX_nodeResults[MATRIX_INPUT_PITCH], "pitch not set");

@@ -31,6 +31,7 @@
 
 #include "Dac.h"
 #include "Matrix.h"
+#include "Tune.h"
 #include "Config.h"
 #include "Types.h"
 #include "Spi.internal.h"
@@ -41,7 +42,6 @@
 #define TX_INTERRUPT LATG1_bit
 
 unsigned int i = 0;
-unsigned short spiPackageLengths[2];
 
 // Receive buffer state
 char rxWritePos = 0;
@@ -166,12 +166,6 @@ void initSPI4(){
   initSPI4Interrupts();
 }
 
-void initPackageTypes(){
-  // lengths: byte 1 is type, byte 2 is id. The rest is data.
-  spiPackageLengths[CTRL_8_BIT] = 3;
-  spiPackageLengths[CTRL_16_BIT] = 4;
-}
-
 void initSlaveInterrupt(){
   TX_INTERRUPT_TRIS = 0; //Interrupt pin as output
   TX_INTERRUPT = 0;
@@ -200,6 +194,10 @@ void setNoteOn(char* package){
   MX_noteOn(package[NOTE_POS_PITCH], package[NOTE_POS_VELOCITY]);
 }
 
+void setGlobalTuning(char* package){
+  TUNE_updateGlobalTuning(BAT_getAsInt(package, SPI_POS_GLOBAL_TUNING_HI));
+}
+
 void SPI_checkForReceivedData(){
 
   char pos;
@@ -215,37 +213,43 @@ void SPI_checkForReceivedData(){
       bytesInRxBuffer -= packageSize;
 
       switch(package[1]){
-        case NOTE_ON:
+        case SPI_CMD_NOTE_ON:
           setNoteOn(package);
           break;
-        case NOTE_OFF:
+        case SPI_CMD_NOTE_OFF:
           MX_noteOff();
           break;
-        case CTRL_16_BIT:
+        case SPI_CMD_CTRL_16_BIT:
           updateControllerFromSpi16bit(package);
           break;
-        case CTRL_8_BIT:
+        case SPI_CMD_CTRL_8_BIT:
           updateControllerFromSpi8bit(package);
           break;
-        case MATRIX_COMMAND:
+        case SPI_CMD_MATRIX_COMMAND:
           MX_command(package);
           break;
-        case NODE:
+        case SPI_CMD_NODE:
           MX_updateNode(package);
           break;
-        case NODE_COUNT:
+        case SPI_CMD_NODE_COUNT:
           MX_setNodeCount(package);
           break;
-        case CONSTANT:
+        case SPI_CMD_CONSTANT:
           MX_updateConstant(package);
           break;
-        case CONSTANTS_COUNT:
+        case SPI_CMD_CONSTANTS_COUNT:
           MX_setConstantsCount(package);
           break;
-        case CONF_MIDI_CC_INPUT:
+        case SPI_CMD_CONF_MIDI_CC_INPUT:
           setInputConfigForCC(package);
           break;
-        case PT_TEST:
+        case SPI_CMD_TUNE:
+          TUNE_retune();
+          break;
+        case SPI_CMD_GLOBAL_TUNE:
+          setGlobalTuning(package);
+          break;
+        case SPI_CMD_PT_TEST:
           storePackage(package);
           break;
       }
@@ -263,9 +267,7 @@ void SPI_SEND_noteOff(char voice){
   //2, NOTE_OFF
 }
 
-
 void SPI_init() {
-  initPackageTypes();
   initSPI4();
   initSlaveInterrupt();
 }

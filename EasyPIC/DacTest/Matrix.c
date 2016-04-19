@@ -27,6 +27,9 @@ int MX_keyToMatrixMapper[127];
 // The sum of compuTune and global tuning
 int MX_vcoTuning[3][127];
 
+// Variable that suspends matrix calculations, can be used during tuning etc
+char MX_isSuspended = 0;
+
 // TODO: Keep input constant during calculation?
 
 // result of matrix Node calculations for each Node. In addition, input values
@@ -499,6 +502,8 @@ void MX_noteOff(){
 // loop over the matrix array once and calculate all results
 void MX_runMatrix(){
   unsigned short i;
+
+  if(MX_isSuspended) return;
   
   for(i = 0; i<nodesInUse; i++){
     nodes[i].func(&nodes[i]);

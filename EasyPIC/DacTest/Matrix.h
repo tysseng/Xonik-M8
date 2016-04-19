@@ -8,6 +8,7 @@
 // have maps of 127
 extern int MX_keyToMatrixMapper[127];
 extern int MX_vcoTuning[3][127];
+extern char MX_isSuspended;
 
 extern volatile Node nodes[MAX_NODES];
 extern unsigned short nodesInUse;

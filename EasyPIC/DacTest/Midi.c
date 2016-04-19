@@ -2,6 +2,7 @@
 #include "MidiCore.h"
 #include "MidiStatusMessages.h"
 #include "Types.h"
+#include "Tune.h"
 #include "Matrix.h"
 #include "Config.h"
 
@@ -58,6 +59,7 @@ void MIDI_HOOK_treatThreeByteMessage(char channel, char status, char param1, cha
 }
 
 void MIDI_HOOK_treatTuneRequest(){
+  TUNE_retune();
 }
 
 void MIDI_HOOK_treatRealtimeStatus(char status){

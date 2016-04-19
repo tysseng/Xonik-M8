@@ -142,10 +142,6 @@ void main() {
 
 /*
 TODO:
-- tuning lookup
-- exponential lookup
-- SPI input
-- distance-in-samples-per-cents
 - multi stage envelopes (inc looping?)
 - LFOs
 - quantizer - quantize to semitone or other unit
