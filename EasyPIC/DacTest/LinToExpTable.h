@@ -4145,5 +4145,5 @@ const int linToExp[] = {
 31359,
 31714,
 32072,
-32440
+32767 // slightly high, added max to make sure multiple iterations do not lower the total
 };

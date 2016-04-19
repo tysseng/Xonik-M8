@@ -516,8 +516,14 @@ void MX_command(char* package){
 }
 
 void resetMatrix(){
+  char i;
+  
   nodesInUse = 0;
   constantsInUse = 0;
+
+  for(i=0; i<INPUTS + MAX_CONSTANTS + MAX_NODES; i++){
+    MX_nodeResults[i] = 0;
+  }
 }
 
 void MX_resetTuning(){

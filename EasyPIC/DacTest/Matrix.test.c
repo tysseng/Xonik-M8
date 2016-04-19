@@ -11,6 +11,7 @@ void resetMatrixTests(){
   resetMatrix();
   MX_resetTuning();
   OUT_init();
+
 }
 
 /*
@@ -557,11 +558,10 @@ void addOutputTunedNode(int pitch){
 void testOutputTunedOnSemitone(){
   // real pitch value, pitch exactly C4
   addOutputTunedNode(0);
-                             //TODO: Something weird about position
+
   // add tuning offset
   MX_vcoTuning[0][64] = 100;
 
-  //should be false if both are 0
   MX_runMatrix();
 
   assertEquals(100, OUT_outputBuffer[0], "Pitch not corrected");
@@ -576,7 +576,6 @@ void testOutputTunedPitchRoundingLower(){
   // as we do not tune the lowest and highest tones, but it is ok for testing
   MX_vcoTuning[0][0] = 100;
 
-  //should be false if both are 0
   MX_runMatrix();
 
   assertEquals(-32668, OUT_outputBuffer[0], "Pitch not corrected");
@@ -591,7 +590,6 @@ void testOutputTunedPitchRoundingHigher(){
   // as we do not tune the lowest and highest tones, but it is ok for testing
   MX_vcoTuning[0][127] = -100;
 
-  //should be false if both are 0
   MX_runMatrix();
 
   assertEquals(32667, OUT_outputBuffer[0], "Pitch not corrected");
@@ -604,10 +602,63 @@ void testOutputTunedPitchRounding(){
 
   MX_vcoTuning[0][87] = -100;
 
-  //should be false if both are 0
   MX_runMatrix();
 
   assertEquals(12124, OUT_outputBuffer[0], "Pitch not corrected");
+}
+
+void testPositiveExpPositiveEdge(){
+  char aNode[21];
+
+  MX_nodeResults[0] = 32767;
+
+  aNode[NODE_FUNC] = NODE_POSITIVE_EXP;
+
+  // input
+  aNode[NODE_PARAM_0_LO] = 0;
+  aNode[NODE_PARAM_0_HI] = 0;
+
+  MX_addNode(aNode);
+
+  MX_runMatrix();
+  
+  assertEquals(32767, MX_nodeResults[64], "Wrong edge conversion");
+}
+
+void testPositiveExpPositive(){
+  char aNode[21];
+
+  MX_nodeResults[0] = 26900;
+
+  aNode[NODE_FUNC] = NODE_POSITIVE_EXP;
+
+  // input
+  aNode[NODE_PARAM_0_LO] = 0;
+  aNode[NODE_PARAM_0_HI] = 0;
+
+  MX_addNode(aNode);
+  
+  MX_runMatrix();
+
+  assertEquals(400, MX_nodeResults[64], "Wrong positive conversion");
+}
+
+void testPositiveExpNegative(){
+  char aNode[21];
+
+  MX_nodeResults[0] = -100;
+
+  aNode[NODE_FUNC] = NODE_POSITIVE_EXP;
+
+  // input
+  aNode[NODE_PARAM_0_LO] = 0;
+  aNode[NODE_PARAM_0_HI] = 0;
+
+  MX_addNode(aNode);
+  
+  MX_runMatrix();
+
+  assertEquals(0, MX_nodeResults[64], "Wrong negative conversion");
 }
 
 // setup and run test suite
@@ -617,6 +668,13 @@ void runMatrixTests(){
     add(&testOutputTunedPitchRoundingLower);
     add(&testOutputTunedPitchRoundingHigher);
     add(&testOutputTunedPitchRounding);
+    
+    add(&testPositiveExpPositiveEdge);
+    add(&testPositiveExpPositive);
+    add(&testPositiveExpNegative);
+    
+    //TODO: Add exp conv tests
+    
     /*
     add(&testSum);
     add(&testMultiply);
