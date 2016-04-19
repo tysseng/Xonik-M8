@@ -1,5 +1,6 @@
 #define RUNTESTS
-#define UNIT_TEST_TUNE
+#define UNIT_TEST_MATRIX
+//#define UNIT_TEST_TUNE
 //#define UNIT_TEST_SPI
 //#define UNIT_TEST_MIDI
 //#define UNIT_TEST_ANALOG_INPUT

@@ -24,6 +24,7 @@ extern void MX_noteOn(int pitch, int velocity);
 extern void MX_noteOff();
 extern void MX_command(char* package);
 extern void MX_init();
+extern void MX_resetTuning();
 extern nodeFunction MX_getFunctionPointer(unsigned short function);
 
 #endif

@@ -27,10 +27,11 @@ void TUNE_init(){
   for(vco=0; vco<3; vco++){
     for(semitone=0; semitone<127; semitone++){
       TUNE_isTuneable[vco][semitone] = 1;
-      MX_vcoTuning[vco][semitone] = 0;
       TUNE_compuTuneCorrections[vco][semitone] = 0;
     }
   }
+  
+  MX_resetTuning();
 }
 
 char TUNE_updateGlobalTuning(int updatedGlobalTuning){

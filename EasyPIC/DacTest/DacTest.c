@@ -37,7 +37,6 @@
 #include "MidiCore.h"
 #include "Midi.h"
 #include "built_in.h"
-#include "DacTest.test.h"
 #include "Config.test.h"
 
 #ifdef RUNTESTS
@@ -46,6 +45,7 @@
   #include "MidiCore.test.h"
   #include "AnalogInputs.test.h"
   #include "Tune.test.h"
+  #include "Matrix.test.h"
 #endif
 
 
@@ -80,6 +80,10 @@ void main() {
 
   #ifdef UNIT_TEST_TUNE
   runTuneTests();
+  #endif
+  
+  #ifdef UNIT_TEST_MATRIX
+  runMatrixTests();
   #endif
   
   #ifdef MOCK_SPI

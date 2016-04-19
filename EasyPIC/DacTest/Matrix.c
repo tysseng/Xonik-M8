@@ -517,6 +517,18 @@ void MX_command(char* package){
 
 void resetMatrix(){
   nodesInUse = 0;
+  constantsInUse = 0;
+}
+
+void MX_resetTuning(){
+  char semitone;
+  char vco;
+
+  for(vco=0; vco<3; vco++){
+    for(semitone=0; semitone<127; semitone++){
+      MX_vcoTuning[vco][semitone] = 0;
+    }
+  }
 }
 
 void initKeyToMatrixValue(){
