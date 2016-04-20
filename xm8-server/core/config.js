@@ -15,6 +15,10 @@ var config = {
   matrix: {
     numberOfInputs: 64
   },
+  voices: {
+    numberOfVoices: 8,
+    numberOfGroups: 8
+  },
   wifi: {
     adapter: "wlan0",
     fallback: "accessPoint",

@@ -13,6 +13,7 @@ var bodyParser = require('body-parser');
 
 var wifiRoutes = require('./routes/wifi');
 var matrixRoutes = require('./routes/matrix');
+var voiceRoutes = require('./routes/voice');
 require('./routes/controller')(app, ws);
 
 // for parsing application/json
@@ -29,6 +30,7 @@ app.get('/', function (req, res) {
 
 app.use('/wifi', wifiRoutes);
 app.use('/matrix', matrixRoutes);
+app.use('/voice', voiceRouters);
 
 // Capture all requests not yet handled and redirect them to the captive portal
 // page as they may origin from wifi logon.
