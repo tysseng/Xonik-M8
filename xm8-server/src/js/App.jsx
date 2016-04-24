@@ -30,11 +30,17 @@ var wsclient = require('./wsclient.js');
 require('./eventDebug.js');
 
 var Knob = require('./components/Knob.jsx');
+var VoiceGroupForm = require('./components/voice/VoiceGroupForm.jsx');
+var NodeForm = require('./components/matrix/NodeForm.jsx');
+
+
+//    <Knob controllerId="volume"/>
+//    <Knob controllerId="frequency"/>
+
 
 ReactDOM.render(
-  <div class="none">
-  	<Knob controllerId="volume"/>
-	  <Knob controllerId="frequency"/>
+  <div>
+    <NodeForm/>
   </div>
   ,
   document.getElementById('content')

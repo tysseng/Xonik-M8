@@ -25,7 +25,7 @@ function createGroup(id){
 
       // this allows multiple groups to be affected by these common controllers
       affectedByPitchBend: true, // midi pitch bend will still work independently of this setting
-      affectedByModWheel: true  // midi modulation will still work independently of this setting
+      affectedByModWheel: true,  // midi modulation will still work independently of this setting
       affectedByFootController: true  // midi foot controller will still work independently of this setting
     },
     midi: {
