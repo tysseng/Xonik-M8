@@ -1,6 +1,12 @@
 var React = require('react');
 
 var NodeInputTypeDropdown = require('./NodeInputTypeDropdown.jsx');
+var NodeLinkDropdown = require('./NodeLinkDropdown.jsx');
+var InputLinkDropdown = require('./InputLinkDropdown.jsx');
+var OutputLinkDropdown = require('./OutputLinkDropdown.jsx');
+var InputUnitDropdown = require('./InputUnitDropdown.jsx');
+
+
 
 var NodeInputForm = React.createClass({
 
@@ -11,18 +17,21 @@ var NodeInputForm = React.createClass({
   render: function(){
     var body;
 
-    switch(this.props.value){
+    switch(this.props.inputSettings.type){
       case "unused":
         body = "";
         break;
       case "input":
-        body = "Input dropdown";
+        body = <InputLinkDropdown/>;
+        break;
+      case "output":
+        body = <OutputLinkDropdown/>;
         break;
       case "result":
-        body = "Node result";
+        body = <NodeLinkDropdown/>;
         break;
       case "constant":
-        body = "Constant";
+        body = <span><input type="text"/><InputUnitDropdown/></span>;
         break;
     }
 

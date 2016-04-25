@@ -1,0 +1,21 @@
+var React = require('react');
+var outputs = require('./Outputs.js');
+
+var OutputLinkDropdown = React.createClass({
+
+  handleChange: function(e){
+    this.props.onOutputLinkChange(this.refs.outputLinkDropdown.value);
+  },
+
+  render: function(){
+    return (
+      <select value={this.props.outputLinkId} ref="outputLinkDropdown" onChange={this.handleChange}>
+        {outputs.map(function(output){
+          return <option key={output.id} value={output.id}>{output.name}</option>
+        })}
+      </select>
+    );
+  }
+});
+
+module.exports = OutputLinkDropdown;

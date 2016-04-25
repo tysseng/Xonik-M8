@@ -6,9 +6,11 @@ module.exports = [
   {
     id: 1, 
     name: "Invert", 
+    description: "Invert around 0",
     inputs: [{
       id: 0,
       name: "To invert",
+      validator: function(value){},
       optional: false
     }]
   },
@@ -23,44 +25,53 @@ module.exports = [
   {
     id: 10, 
     name: "Max",
+    description: "Maximum of input 1 to input 8"
     inputs: [{
       id: 0,
       name: "Input 1",
+      validator: function(value){},
       optional: false
     },
     {
       id: 1,
       name: "Input 2",
+      validator: function(value){},
       optional: true
     },
     {
       id: 2,
       name: "Input 3",
+      validator: function(value){},
       optional: true
     },
     {
       id: 3,
       name: "Input 4",
+      validator: function(value){},
       optional: true
     },
     {
       id: 4,
       name: "Input 5",
+      validator: function(value){},
       optional: true
     },
     {
       id: 5,
       name: "Input 6",
+      validator: function(value){},
       optional: true
     },
     {
       id: 6,
       name: "Input 7",
+      validator: function(value){},
       optional: true
     },
     {
       id: 7,
       name: "Input 8",
+      validator: function(value){},
       optional: true
     }
     ]

@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-var nodeTypes = require('./NodeTypes.js');
+var inputTypes = require('./InputTypes.js');
 
 var NodeInputTypeDropdown = React.createClass({
 
@@ -13,10 +13,9 @@ var NodeInputTypeDropdown = React.createClass({
   render: function(){
     return (
       <select id={this.props.id} value={this.props.value} ref="nodeInputType" onChange={this.handleChange}>
-        <option value="unused">Unused</option>
-        <option value="input">Input from</option>
-        <option value="result">Result of</option>
-        <option value="constant">Constant</option>        
+        {inputTypes.map(function(inputType){
+          return <option key={inputType.id} value={inputType.id}>{inputType.name}</option>
+        })}       
       </select>
     );
   }

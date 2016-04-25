@@ -1,4 +1,6 @@
 var React = require('react');
+var update = require('react-addons-update');
+
 var _ = require('lodash');
 
 var NodeTypeDropdown = require('./NodeTypeDropdown.jsx');
@@ -10,12 +12,20 @@ var NodeForm = React.createClass({
 
 
   getInitialState: function() {
-    return {
+
+
+    var initialNodeState = {
       type: nodeTypes[2],
-      inputs: [
-        {}
-      ]
-    };
+      inputs: []
+    }
+
+    for(var i=0; i<8; i++){
+      initialNodeState.inputs.push({
+        type: "undefined"
+      })
+    }
+
+    return initialNodeState;
   },
 
   handleTypeChange: function(typeId){
@@ -23,14 +33,20 @@ var NodeForm = React.createClass({
     var nodeType = _.find(nodeTypes, function(type) { 
       return type.id == typeId; 
     });
-    // find node type
-    console.log(nodeType.inputs);
-    this.setState({type: nodeType});
+
+    this.setState({
+      type: nodeType
+    });
   },
 
-  handleInputTypeChange: function(inputId, inputType){
-    console.log("input id: " + inputId + ", inputType: " + inputType);
-    // TODO: Set state on array. How?
+  handleInputTypeChange: function(inputId, inputType){ 
+    var inputs = update(this.state.inputs, {
+      [inputId]: {
+        type: {$set: inputType}
+      }
+    })
+
+    this.setState({inputs: inputs});
   },
 
   handleSubmit: function(e){
@@ -46,7 +62,7 @@ var NodeForm = React.createClass({
         <p>          
           <label htmlFor="nodeType">Node type</label><NodeTypeDropdown id="nodeType" nodeTypeId={this.state.type.id} onNodeTypeChange={this.handleTypeChange}/>
         </p>
-        <h3>Inputs</h3>                  
+        <h3>Parameters</h3>                  
         <p>             
           {this.state.type.inputs.map(function(input){
             return <NodeInputForm key={input.id} inputDefinition={input} inputSettings={that.state.inputs[input.id]} onInputTypeChange={that.handleInputTypeChange}/> 

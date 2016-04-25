@@ -15,8 +15,10 @@
     "express-ws": "^0.2.6",
     "jsonfile": "^2.2.3",
     "lodash": "^4.3.0",
-    "react": "^0.14.5",
-    "react-dom": "^0.14.5",
+    "react": "^15.0.1",
+    "react-addons-pure-render-mixin": "^15.0.1",
+    "react-addons-update": "^15.0.1",
+    "react-dom": "^15.0.1",
     "react-rangeslider": "^1.0.0",
     "rpi-gpio": "^0.7.0"
   },
