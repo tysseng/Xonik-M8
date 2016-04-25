@@ -1,23 +1,23 @@
 var React = require('react');
 
-var NodeInputTypeDropdown = require('./NodeInputTypeDropdown.jsx');
+var NodeParameterTypeDropdown = require('./NodeParameterTypeDropdown.jsx');
 var NodeLinkDropdown = require('./NodeLinkDropdown.jsx');
 var InputLinkDropdown = require('./InputLinkDropdown.jsx');
 var OutputLinkDropdown = require('./OutputLinkDropdown.jsx');
-var InputUnitDropdown = require('./InputUnitDropdown.jsx');
+var ParameterUnitDropdown = require('./ParameterUnitDropdown.jsx');
 
 
 
-var NodeInputForm = React.createClass({
+var NodeParameterForm = React.createClass({
 
-  handleInputTypeChange: function(inputType){
-    this.props.onInputTypeChange(this.props.inputDefinition.id, inputType);
+  handleParameterTypeChange: function(parameterType){
+    this.props.onParameterTypeChange(this.props.parameterDefinition.id, parameterType);
   },
 
   render: function(){
     var body;
 
-    switch(this.props.inputSettings.type){
+    switch(this.props.parameterSettings.type){
       case "unused":
         body = "";
         break;
@@ -31,16 +31,16 @@ var NodeInputForm = React.createClass({
         body = <NodeLinkDropdown/>;
         break;
       case "constant":
-        body = <span><input type="text"/><InputUnitDropdown/></span>;
+        body = <span><input type="text"/><ParameterUnitDropdown/></span>;
         break;
     }
 
     return (
       <span>
-        {this.props.inputDefinition.name}: <NodeInputTypeDropdown onInputTypeChange={this.handleInputTypeChange}/> {body}<br/>
+        {this.props.parameterDefinition.name}: <NodeParameterTypeDropdown onParameterTypeChange={this.handleParameterTypeChange}/> {body}<br/>
       </span>
     );
   }
 });
 
-module.exports = NodeInputForm;
+module.exports = NodeParameterForm;

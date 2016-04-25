@@ -1,92 +1,92 @@
 // TODO: Move to shared and add hw ids
 
 module.exports = [
-  {id: 0, name: "-------", inputs: []},
-  {id: 24, name: "Sum", inputs: []},
+  {id: 0, name: "-------", parameters: []},
+  {id: 24, name: "Sum", parameters: []},
   {
     id: 1, 
     name: "Invert", 
     description: "Invert around 0",
-    inputs: [{
+    parameters: [{
       id: 0,
       name: "To invert",
       validator: function(value){},
       optional: false
     }]
   },
-  {id: 2, name: "Invert each side", inputs: []},
-  {id: 3, name: "Ramp", inputs: []},
-  {id: 4, name: "Delay line", inputs: []},
-  {id: 5, name: "Multiply", inputs: []},
-  {id: 6, name: "Memory", inputs: []},
-  {id: 7, name: "Lfo - pulse", inputs: []},
-  {id: 8, name: "Switch", inputs: []},
-  {id: 9, name: "Compare", inputs: []},
+  {id: 2, name: "Invert each side", parameters: []},
+  {id: 3, name: "Ramp", parameters: []},
+  {id: 4, name: "Delay line", parameters: []},
+  {id: 5, name: "Multiply", parameters: []},
+  {id: 6, name: "Memory", parameters: []},
+  {id: 7, name: "Lfo - pulse", parameters: []},
+  {id: 8, name: "Switch", parameters: []},
+  {id: 9, name: "Compare", parameters: []},
   {
     id: 10, 
     name: "Max",
-    description: "Maximum of input 1 to input 8"
-    inputs: [{
+    description: "Maximum of parameter 1 to parameter 8",
+    parameters: [{
       id: 0,
-      name: "Input 1",
+      name: "Parameter 1",
       validator: function(value){},
       optional: false
     },
     {
       id: 1,
-      name: "Input 2",
+      name: "Parameter 2",
       validator: function(value){},
       optional: true
     },
     {
       id: 2,
-      name: "Input 3",
+      name: "Parameter 3",
       validator: function(value){},
       optional: true
     },
     {
       id: 3,
-      name: "Input 4",
+      name: "Parameter 4",
       validator: function(value){},
       optional: true
     },
     {
       id: 4,
-      name: "Input 5",
+      name: "Parameter 5",
       validator: function(value){},
       optional: true
     },
     {
       id: 5,
-      name: "Input 6",
+      name: "Parameter 6",
       validator: function(value){},
       optional: true
     },
     {
       id: 6,
-      name: "Input 7",
+      name: "Parameter 7",
       validator: function(value){},
       optional: true
     },
     {
       id: 7,
-      name: "Input 8",
+      name: "Parameter 8",
       validator: function(value){},
       optional: true
     }
     ]
   },
-  {id: 11, name: "Min", inputs: []},
-  {id: 12, name: "Scale", inputs: []},
-  {id: 13, name: "Trigger", inputs: []},
-  {id: 14, name: "Binary and", inputs: []},
-  {id: 15, name: "Binary or", inputs: []},
-  {id: 16, name: "Binary xor", inputs: []},
-  {id: 17, name: "Binary not", inputs: []},
-  {id: 18, name: "Buffer input", inputs: []},
-  {id: 19, name: "Output", inputs: []}, 
-  {id: 20, name: "Output tuned", inputs: []},
-  {id: 21, name: "Glide", inputs: []},  
-  {id: 22, name: "Quantize", inputs: []},  
-  {id: 23, name: "Positive exponential", inputs: []}
+  {id: 11, name: "Min", parameters: []},
+  {id: 12, name: "Scale", parameters: []},
+  {id: 13, name: "Trigger", parameters: []},
+  {id: 14, name: "Binary and", parameters: []},
+  {id: 15, name: "Binary or", parameters: []},
+  {id: 16, name: "Binary xor", parameters: []},
+  {id: 17, name: "Binary not", parameters: []},
+  {id: 18, name: "Buffer parameter", parameters: []},
+  {id: 19, name: "Output", parameters: []}, 
+  {id: 20, name: "Output tuned", parameters: []},
+  {id: 21, name: "Glide", parameters: []},  
+  {id: 22, name: "Quantize", parameters: []},  
+  {id: 23, name: "Positive exponential", parameters: []}
 ];
