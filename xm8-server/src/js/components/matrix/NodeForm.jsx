@@ -40,9 +40,12 @@ var NodeForm = React.createClass({
   },
 
   handleParameterTypeChange: function(parameterId, parameterType){ 
+    console.log("Param type change: " + parameterId + ", " + parameterType);    
     var parameters = update(this.state.parameters, {
       [parameterId]: {
-        type: {$set: parameterType}
+        type: {$set: parameterType},
+        value: {$set: ""},
+        unit: {$set: ""},
       }
     })
 
@@ -50,6 +53,7 @@ var NodeForm = React.createClass({
   },
 
   handleParameterUnitChange: function(parameterId, parameterUnit){ 
+    console.log("Unit change: " + parameterId + ", " + parameterUnit);    
     var parameters = update(this.state.parameters, {
       [parameterId]: {
         unit: {$set: parameterUnit}
@@ -60,6 +64,7 @@ var NodeForm = React.createClass({
   },
 
   handleParameterValueChange: function(parameterId, parameterValue){ 
+    console.log("Value change: " + parameterId + ", " + parameterValue);
     var parameters = update(this.state.parameters, {
       [parameterId]: {
         value: {$set: parameterValue}
@@ -80,12 +85,19 @@ var NodeForm = React.createClass({
 
         <h3>General</h3>
         <p>          
-          <label htmlFor="nodeType">Node type</label><NodeTypeDropdown id="nodeType" nodeTypeId={this.state.type.id} onNodeTypeChange={this.handleTypeChange}/>
+          <label htmlFor="nodeType">Node type</label>
+          <NodeTypeDropdown id="nodeType" nodeTypeId={this.state.type.id} onNodeTypeChange={this.handleTypeChange}/>
         </p>
         <h3>Parameters</h3>                  
         <p>             
           {this.state.type.parameters.map(function(parameter){
-            return <NodeParameterForm key={parameter.id} parameterDefinition={parameter} parameterSettings={that.state.parameters[parameter.id]} onParameterTypeChange={that.handleParameterTypeChange}/> 
+            return <NodeParameterForm 
+                      key={parameter.id} 
+                      parameterDefinition={parameter} 
+                      parameterSettings={that.state.parameters[parameter.id]} 
+                      onParameterTypeChange={that.handleParameterTypeChange}
+                      onParameterUnitChange={that.handleParameterUnitChange}
+                      onParameterValueChange={that.handleParameterValueChange}/> 
           })}
         </p>        
         <input type="submit" value="Save"/>

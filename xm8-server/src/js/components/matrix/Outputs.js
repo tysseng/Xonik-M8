@@ -30,7 +30,7 @@ module.exports = [
     name: "Filter 1 slope" //12/24 dB
   },
   {
-    id: 5, 
+    id: 6, 
     hwId: 6,    
     name: "Filter 1 mode" //hp, bp, lp
   } 

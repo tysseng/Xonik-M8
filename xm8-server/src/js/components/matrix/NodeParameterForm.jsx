@@ -14,6 +14,19 @@ var NodeParameterForm = React.createClass({
     this.props.onParameterTypeChange(this.props.parameterDefinition.id, parameterType);
   },
 
+  handleParameterValueChange: function(parameterType){
+    this.props.onParameterValueChange(this.props.parameterDefinition.id, parameterType);
+  }, 
+
+  handleInputFieldParameterValueChange: function(event){
+    this.props.onParameterValueChange(this.props.parameterDefinition.id, event.target.value);
+  }, 
+
+  handleParameterUnitChange: function(unit){
+    this.props.onParameterUnitChange(this.props.parameterDefinition.id, unit);
+  },  
+
+
   render: function(){
     var body;
 
@@ -22,22 +35,24 @@ var NodeParameterForm = React.createClass({
         body = "";
         break;
       case "input":
-        body = <InputLinkDropdown/>;
+        body = <InputLinkDropdown onInputLinkChange={this.handleParameterValueChange} value={this.props.parameterSettings.value}/>;
         break;
       case "output":
-        body = <OutputLinkDropdown/>;
+        body = <OutputLinkDropdown onOutputLinkChange={this.handleParameterValueChange} value={this.props.parameterSettings.value}/>;
         break;
       case "result":
-        body = <NodeLinkDropdown/>;
+        body = <NodeLinkDropdown onNodeLinkChange={this.handleParameterValueChange} value={this.props.parameterSettings.value}/>;
         break;
       case "constant":
-        body = <span><input type="text"/><ParameterUnitDropdown/></span>;
+        body = <span><input type="text" onChange={this.handleInputFieldParameterValueChange} value={this.props.parameterSettings.value}/><ParameterUnitDropdown onUnitChange={this.handleParameterUnitChange}/></span>;
         break;
     }
 
     return (
       <span>
-        {this.props.parameterDefinition.name}: <NodeParameterTypeDropdown onParameterTypeChange={this.handleParameterTypeChange}/> {body}<br/>
+        {this.props.parameterDefinition.name}: 
+        <NodeParameterTypeDropdown onParameterTypeChange={this.handleParameterTypeChange}/> 
+        {body}<br/>
       </span>
     );
   }
