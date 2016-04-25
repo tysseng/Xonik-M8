@@ -10,6 +10,7 @@ var OutputLinkDropdown = React.createClass({
   render: function(){
     return (
       <select value={this.props.outputLinkId} ref="outputLinkDropdown" onChange={this.handleChange}>
+        <option key={-1} value="">Not selected</option>
         {outputs.map(function(output){
           return <option key={output.id} value={output.id}>{output.name}</option>
         })}

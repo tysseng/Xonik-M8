@@ -11,7 +11,14 @@ var ParameterUnitDropdown = require('./ParameterUnitDropdown.jsx');
 var NodeParameterForm = React.createClass({
 
   handleParameterTypeChange: function(parameterType){
-    this.props.onParameterTypeChange(this.props.parameterDefinition.id, parameterType);
+
+    var value = "";
+    var unit = "";
+
+    if(parameterType === "constant"){
+      unit = "0";
+  }
+    this.props.onParameterTypeChange(this.props.parameterDefinition.id, parameterType, unit);
   },
 
   handleParameterValueChange: function(parameterType){
@@ -44,14 +51,18 @@ var NodeParameterForm = React.createClass({
         body = <NodeLinkDropdown onNodeLinkChange={this.handleParameterValueChange} value={this.props.parameterSettings.value}/>;
         break;
       case "constant":
-        body = <span><input type="text" onChange={this.handleInputFieldParameterValueChange} value={this.props.parameterSettings.value}/><ParameterUnitDropdown onUnitChange={this.handleParameterUnitChange}/></span>;
+        body = 
+          <span>
+            <input type="text" onChange={this.handleInputFieldParameterValueChange} value={this.props.parameterSettings.value}/>
+            <ParameterUnitDropdown onUnitChange={this.handleParameterUnitChange} value={this.props.parameterSettings.unit}/>
+          </span>;
         break;
     }
 
     return (
       <span>
-        {this.props.parameterDefinition.name}: 
-        <NodeParameterTypeDropdown onParameterTypeChange={this.handleParameterTypeChange}/> 
+        {this.props.parameterDefinition.name}:
+        <NodeParameterTypeDropdown value={this.props.parameterSettings.type} onParameterTypeChange={this.handleParameterTypeChange}/> 
         {body}<br/>
       </span>
     );

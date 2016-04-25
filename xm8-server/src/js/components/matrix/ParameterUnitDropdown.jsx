@@ -10,7 +10,7 @@ var ParameterUnitDropdown = React.createClass({
 
   render: function(){
     return (
-      <select value={this.props.unitId} ref="unitDropdown" onChange={this.handleChange}>
+      <select value={this.props.value} ref="unitDropdown" onChange={this.handleChange}>
         {parameterUnits.map(function(parameterUnit){
           return <option key={parameterUnit.id} value={parameterUnit.id}>{parameterUnit.name}</option>
         })}

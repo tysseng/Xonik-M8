@@ -9,6 +9,7 @@ var InputLinkDropdown = React.createClass({
   render: function(){
     return (
       <select value={this.props.inputLinkId} ref="inputLinkDropdown" onChange={this.handleChange}>
+        <option value="">Not selected</option>
         <option value="0">Input 0</option>
         <option value="1">Input 1</option>
         <option value="2">Input 2</option>

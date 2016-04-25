@@ -1,3 +1,5 @@
+// TODO: REset value, unit and input type. Currently the reset does not clear type and unit.
+
 var React = require('react');
 var update = require('react-addons-update');
 
@@ -10,19 +12,22 @@ var nodeTypes = require('./NodeTypes.js');
 
 var NodeForm = React.createClass({
 
+  getEmptyParams: function() {
+    var parameters = [];
+    for(var i=0; i<8; i++){
+      parameters.push({
+        type: "undefined",
+        value: "",
+        unit: ""
+      })
+    }
+    return parameters;    
+  },
 
   getInitialState: function() {
-
-
     var initialNodeState = {
       type: nodeTypes[2],
-      parameters: []
-    }
-
-    for(var i=0; i<8; i++){
-      initialNodeState.parameters.push({
-        type: "undefined"
-      })
+      parameters: this.getEmptyParams()
     }
 
     return initialNodeState;
@@ -35,17 +40,19 @@ var NodeForm = React.createClass({
     });
 
     this.setState({
-      type: nodeType
+      type: nodeType,
+      parameters: this.getEmptyParams()
     });
+
   },
 
-  handleParameterTypeChange: function(parameterId, parameterType){ 
+  handleParameterTypeChange: function(parameterId, parameterType, parameterUnit){ 
     console.log("Param type change: " + parameterId + ", " + parameterType);    
     var parameters = update(this.state.parameters, {
       [parameterId]: {
         type: {$set: parameterType},
         value: {$set: ""},
-        unit: {$set: ""},
+        unit: {$set: parameterUnit},
       }
     })
 
