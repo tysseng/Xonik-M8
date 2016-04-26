@@ -1,14 +1,14 @@
-var paramType = require('./paramType.js');
+var paramType = require('../../shared/matrix/ParameterTypes.js');
 var nodeType = require('./nodeType.js');
 var _ = require('lodash');
 
 function getNodeTypeStr(type){
   switch(type){
-    case nodeType.LFO_PULSE:
+    case nodeType.LFO_PULSE.id:
       return "NODE_LFO_PULSE";
-    case nodeType.OUTPUT:
+    case nodeType.OUTPUT.id:
       return "NODE_OUTPUT";
-    case nodeType.INVERT:
+    case nodeType.INVERT.id:
       return "NODE_INVERT";
     default:
       return "UNKNOWN (" + type + ")";
@@ -17,13 +17,13 @@ function getNodeTypeStr(type){
 
 function getParamTypeStr(type){
   switch(type){
-    case paramType.CONSTANT:
+    case paramType.CONSTANT.id:
       return "CONSTANT";
-    case paramType.LINK:
+    case paramType.LINK.id:
       return "LINK";
-    case paramType.INPUT:
+    case paramType.INPUT.id:
       return "INPUT";
-    case paramType.EMPTY:
+    case paramType.UNUSED.id:
       return "EMPTY";
     default:
       return "UNKNOWN (" + type + ")";
@@ -33,7 +33,7 @@ function getParamTypeStr(type){
 function isComplete(node){
   var isComplete = true;
   _.each(node.params, function(param){
-    if(param.type === paramType.EMPTY) isComplete = false;
+    if(param.type === paramType.UNUSED.id) isComplete = false;
   });
   return isComplete;
 }

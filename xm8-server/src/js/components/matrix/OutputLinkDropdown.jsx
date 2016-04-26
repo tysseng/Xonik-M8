@@ -1,5 +1,5 @@
 var React = require('react');
-var outputs = require('./Outputs.js');
+var outputs = require('../../../../shared/matrix/Outputs.js');
 
 var OutputLinkDropdown = React.createClass({
 

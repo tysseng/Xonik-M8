@@ -1,6 +1,6 @@
 var React = require('react');
 
-var parameterUnits = require('./ParameterUnits.js');
+var parameterUnits = require('../../../../shared/matrix/ParameterUnits.js');
 
 var ParameterUnitDropdown = React.createClass({
 

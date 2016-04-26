@@ -1,10 +1,20 @@
 var express = require('express');
 var matrix = require('../core/matrix/matrix.js');
-var matrix = require('../core/matrix/matrixRepository.js');
 var router = express.Router();
 
+router.get('/', function(req, res){
+
+  res.status(200).send(matrix.nodes);  
+});
 
 router.put('/node/:id', function(req, res){
+
+  // map to a usable matrix node:
+  matrix.add({
+    name: "Node 1",
+    type: {name: "LFO"}
+        })
+
   matrix.add(req.body);
   res.status(200).send(matrix.nodes);
 });

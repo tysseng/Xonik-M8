@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-var parameterTypes = require('./ParameterTypes.js');
+var parameterTypes = require('../../../../shared/matrix/ParameterTypes.js');
 
 var NodeParameterTypeDropdown = React.createClass({
 
@@ -13,7 +13,7 @@ var NodeParameterTypeDropdown = React.createClass({
   render: function(){
     return (
       <select id={this.props.id} value={this.props.value} ref="nodeParameterType" onChange={this.handleChange}>
-        {parameterTypes.map(function(parameterType){
+        {parameterTypes.list.map(function(parameterType){
           return <option key={parameterType.id} value={parameterType.id}>{parameterType.name}</option>
         })}       
       </select>

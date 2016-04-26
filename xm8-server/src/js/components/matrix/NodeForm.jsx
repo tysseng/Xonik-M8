@@ -8,7 +8,7 @@ var _ = require('lodash');
 var NodeTypeDropdown = require('./NodeTypeDropdown.jsx');
 var NodeParameterForm = require('./NodeParameterForm.jsx');
 
-var nodeTypes = require('./NodeTypes.js');
+var nodeTypes = require('../../../../shared/matrix/NodeTypes.js');
 
 var NodeForm = React.createClass({
 
@@ -26,7 +26,7 @@ var NodeForm = React.createClass({
 
   getInitialState: function() {
     var initialNodeState = {
-      type: nodeTypes[2],
+      type: nodeTypes.map.INVERT,
       parameters: this.getEmptyParams()
     }
 
@@ -35,7 +35,8 @@ var NodeForm = React.createClass({
 
   handleTypeChange: function(typeId){
 
-    var nodeType = _.find(nodeTypes, function(type) { 
+    // TODO: Use key instead.
+    var nodeType = _.find(nodeTypes.list, function(type) { 
       return type.id == typeId; 
     });
 

@@ -1,4 +1,4 @@
-var paramType = require('./paramType.js');
+var paramType = require('../../shared/matrix/ParameterTypes.js');
 var _ = require('lodash');
 
 var nodes = [];
@@ -13,7 +13,7 @@ function remove(node){
   });
 
   _.each(node.params, function(param){
-    if(param.type === paramType.LINK){
+    if(param.type === paramType.LINK.id){
       unlink(param.value);
     }
   });
@@ -31,7 +31,7 @@ function link(from, to, toParam){
 
   from.consumers.push(link);
   to.params[toParam].value = link;
-  to.params[toParam].type = paramType.LINK;
+  to.params[toParam].type = paramType.LINK.id;
   return link;
 }
 
@@ -46,17 +46,17 @@ function removeFromArray(array, element){
 
 function clearParam(node, param){
   node.params[param].value = undefined;
-  node.params[param].type = paramType.EMPTY;    
+  node.params[param].type = paramType.UNUSED.id;    
 }
 
 function setParamConstant(node, param, value){
   node.params[param].value = value;
-  node.params[param].type = paramType.CONSTANT;
+  node.params[param].type = paramType.CONSTANT.id;
 }
 
 function setParamInput(node, param, input){
   node.params[param].value = input;
-  node.params[param].type = paramType.INPUT;
+  node.params[param].type = paramType.INPUT.id;
 }
 
 module.exports.add = add;

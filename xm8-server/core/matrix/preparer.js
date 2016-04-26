@@ -1,6 +1,6 @@
 var _ = require('lodash');
-var paramType = require('./paramType.js');
-var nodeType = require('./nodeType.js');
+var paramType = require('../../shared/matrix/ParameterTypes.js').map;
+var nodeType = require('../../shared/matrix/NodeTypes.js').map;
 var config = require('../config.js');
 var matrix = require('./matrix.js');
 
@@ -16,7 +16,7 @@ function resetNodes(nodes){
 
 function markReachable(nodes){
   _.each(nodes, function(node){
-    if(node.type === nodeType.OUTPUT || node.type === nodeType.DELAY_LINE){
+    if(node.type === nodeType.OUTPUT.id || node.type === nodeType.DELAY_LINE.id){
       markAsReachable(node);
     }
   });
@@ -25,7 +25,7 @@ function markReachable(nodes){
 function markAsReachable(node){
   node.reachable = true;
   _.each(node.params, function(param){
-    if(param.type === paramType.LINK && !param.value.from.reachable && param.value.from.type !== nodeType.DELAY_LINE){
+    if(param.type === paramType.LINK.id && !param.value.from.reachable && param.value.from.type !== nodeType.DELAY_LINE.id){
       markAsReachable(param.value.from);
     }
   });
@@ -36,10 +36,10 @@ function setParamNodePosAndExtractConstants(nodes){
   _.each(nodes, function(node){
     if(node.reachable){
       _.each(node.params, function(param){
-        if(param.type === paramType.CONSTANT){
+        if(param.type === paramType.CONSTANT.id){
           param.nodePos = constants.length + config.matrix.numberOfInputs;
           constants.push(param.value);
-        } else if(param.type === paramType.INPUT){
+        } else if(param.type === paramType.INPUT.id){
           param.nodePos = param.value;
         }
       });
@@ -54,7 +54,7 @@ function getReachableIndependentNodes(nodes){
     var independent = true;
     if(node.reachable){
       _.each(node.params, function(param){
-        if(param.type === paramType.LINK) independent = false;
+        if(param.type === paramType.LINK.id) independent = false;
       });
     }
     if(independent) independentNodes.push(node);

@@ -1,5 +1,5 @@
 var React = require('react');
-var nodeTypes = require('./NodeTypes.js');
+var nodeTypes = require('../../../../shared/matrix/NodeTypes.js');
 
 var NodeTypeDropdown = React.createClass({
 
@@ -10,7 +10,7 @@ var NodeTypeDropdown = React.createClass({
   render: function(){
     return (
       <select id="nodeType" value={this.props.nodeTypeId} ref="nodeType" onChange={this.handleChange}>
-        {nodeTypes.map(function(nodeType){
+        {nodeTypes.list.map(function(nodeType){
           return <option key={nodeType.id} value={nodeType.id}>{nodeType.name}</option>
         })}
       </select>
