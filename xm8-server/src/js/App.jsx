@@ -32,6 +32,7 @@ require('./eventDebug.js');
 var Knob = require('./components/Knob.jsx');
 var VoiceGroupForm = require('./components/voice/VoiceGroupForm.jsx');
 var NodeForm = require('./components/matrix/NodeForm.jsx');
+var NodeList = require('./components/matrix/NodeList.jsx');
 
 
 //    <Knob controllerId="volume"/>
@@ -40,7 +41,8 @@ var NodeForm = require('./components/matrix/NodeForm.jsx');
 
 ReactDOM.render(
   <div>
-    <NodeForm/>
+    <NodeList url='/matrix'/>
+    <NodeForm url='/matrix/node'/>
   </div>
   ,
   document.getElementById('content')

@@ -4,6 +4,7 @@ var React = require('react');
 var update = require('react-addons-update');
 
 var _ = require('lodash');
+var $ = require('jquery');
 
 var NodeTypeDropdown = require('./NodeTypeDropdown.jsx');
 var NodeParameterForm = require('./NodeParameterForm.jsx');
@@ -13,43 +14,38 @@ var nodeTypes = require('../../../../shared/matrix/NodeTypes.js');
 var NodeForm = React.createClass({
 
   getEmptyParams: function() {
-    var parameters = [];
+    var params = [];
     for(var i=0; i<8; i++){
-      parameters.push({
-        type: "undefined",
+      params.push({
+        id: i,
+        type: "unused",
         value: "",
         unit: ""
       })
     }
-    return parameters;    
+    return params;    
   },
 
   getInitialState: function() {
     var initialNodeState = {
-      type: nodeTypes.map.INVERT,
-      parameters: this.getEmptyParams()
+      type: nodeTypes.map.INVERT.id,
+      params: this.getEmptyParams()
     }
-
     return initialNodeState;
   },
 
   handleTypeChange: function(typeId){
 
-    // TODO: Use key instead.
-    var nodeType = _.find(nodeTypes.list, function(type) { 
-      return type.id == typeId; 
-    });
-
     this.setState({
-      type: nodeType,
-      parameters: this.getEmptyParams()
+      type: typeId,
+      params: this.getEmptyParams()
     });
 
   },
 
   handleParameterTypeChange: function(parameterId, parameterType, parameterUnit){ 
     console.log("Param type change: " + parameterId + ", " + parameterType);    
-    var parameters = update(this.state.parameters, {
+    var params = update(this.state.params, {
       [parameterId]: {
         type: {$set: parameterType},
         value: {$set: ""},
@@ -57,52 +53,72 @@ var NodeForm = React.createClass({
       }
     })
 
-    this.setState({parameters: parameters});
+    this.setState({params: params});
   },
 
   handleParameterUnitChange: function(parameterId, parameterUnit){ 
     console.log("Unit change: " + parameterId + ", " + parameterUnit);    
-    var parameters = update(this.state.parameters, {
+    var params = update(this.state.params, {
       [parameterId]: {
         unit: {$set: parameterUnit}
       }
     })
 
-    this.setState({parameters: parameters});
+    this.setState({params: params});
   },
 
   handleParameterValueChange: function(parameterId, parameterValue){ 
     console.log("Value change: " + parameterId + ", " + parameterValue);
-    var parameters = update(this.state.parameters, {
+    var params = update(this.state.params, {
       [parameterId]: {
         value: {$set: parameterValue}
       }
     })
 
-    this.setState({parameters: parameters});
+    this.setState({params: params});
   },
 
   handleSubmit: function(e){
+
+    var type = this.state.hasOwnProperty('id') ? 'PUT' : 'POST';
+    var url = this.state.hasOwnProperty('id') ? this.props.url + '/' + this.state.id : this.props.url; 
+
     e.preventDefault(); 
-  },
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      contentType: 'application/json',
+      type: type,
+      data: JSON.stringify(this.state),
+      success: function(data) {
+        this.setState(data, function(){console.log(this.state)});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },  
 
   render: function(){
     var that = this;
+    var nodeType = nodeTypes.idMap[this.state.type];    
+
     return (
       <form className="voiceGroupForm" onSubmit={this.handleSubmit}>
 
         <h3>General</h3>
         <p>          
           <label htmlFor="nodeType">Node type</label>
-          <NodeTypeDropdown id="nodeType" nodeTypeId={this.state.type.id} onNodeTypeChange={this.handleTypeChange}/>
+          <NodeTypeDropdown id="nodeType" nodeTypeId={this.state.type} onNodeTypeChange={this.handleTypeChange}/>
         </p>
         <h3>Parameters</h3>                  
         <p>             
-          {this.state.type.parameters.map(function(parameter){
+          {
+            nodeType.params.map(function(parameter){
             return <NodeParameterForm 
                       key={parameter.id} 
                       parameterDefinition={parameter} 
-                      parameterSettings={that.state.parameters[parameter.id]} 
+                      parameterSettings={that.state.params[parameter.id]} 
                       onParameterTypeChange={that.handleParameterTypeChange}
                       onParameterUnitChange={that.handleParameterUnitChange}
                       onParameterValueChange={that.handleParameterValueChange}/> 

@@ -1,22 +1,28 @@
 var express = require('express');
 var matrix = require('../core/matrix/matrix.js');
 var router = express.Router();
+var paramType = require('../shared/matrix/ParameterTypes.js').map;
 
+//POST = create
+//PUT = update
 router.get('/', function(req, res){
 
   res.status(200).send(matrix.nodes);  
 });
 
+// Create a new node
+router.post('/node', function(req, res){
+
+  var node = matrix.add(req.body);
+  res.status(201).send(node);
+});
+
+// Change an existing node
 router.put('/node/:id', function(req, res){
 
   // map to a usable matrix node:
-  matrix.add({
-    name: "Node 1",
-    type: {name: "LFO"}
-        })
-
-  matrix.add(req.body);
-  res.status(200).send(matrix.nodes);
+  var node = matrix.update(req.body);
+  res.status(200).send(node);
 });
 
 

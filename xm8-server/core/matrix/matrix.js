@@ -1,10 +1,39 @@
-var paramType = require('../../shared/matrix/ParameterTypes.js');
+var paramType = require('../../shared/matrix/ParameterTypes.js').map;
 var _ = require('lodash');
 
 var nodes = [];
+var nodeIdCounter = 0;
+
+function getNodeById(nodeId){
+  return _.find(nodes, function(node) { return node.id === nodeId });
+}
 
 function add(node){
+  node.id = nodeIdCounter++;
   nodes.push(node);
+
+/*
+  for(var i = 0; i<node.params.length; i++){
+    var param = node.params[i];
+    if(param.type === paramType.LINK.id){
+      this.linkById(param.value, id, i);
+    }
+  }*/
+
+  console.log("Added node");
+  console.log(node);
+
+  return node;
+}
+
+function update(node){
+  remove(getNodeById(node.id));
+  nodes.push(node);
+
+  console.log("Updated node");
+  console.log(node);
+
+  return node;
 }
 
 function remove(node){
@@ -60,6 +89,7 @@ function setParamInput(node, param, input){
 }
 
 module.exports.add = add;
+module.exports.update = update;
 module.exports.remove = remove;
 module.exports.link = link;
 module.exports.unlink = unlink;
