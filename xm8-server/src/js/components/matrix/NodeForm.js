@@ -1,62 +1,47 @@
-// TODO: REset value, unit and input type. Currently the reset does not clear type and unit.
+import React from 'react'
+import _ from 'lodash';
 
-import React from 'react';
-import { connect } from 'react-redux';
+import NodeTypeDropdown from './NodeTypeDropdown'
+import NodeParameterForm from './NodeParameterForm'
 
 import nodeTypes from '../../../../shared/matrix/NodeTypes.js';
-import NodeFormComponent from './NodeFormComponent'
 
-const mapStateToProps = (state, ownProps) => {
-  let node = state.nodes[ownProps.nodeId]; 
-  let nodeType = nodeTypes.idMap[node.type];  
+const NodeFormComponent = ({ node, nodeType, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange }) => {
 
-  return {
-    node: node,
-    nodeType: nodeType
-  }
+
+  return <form>
+    <h3>General</h3>
+    <p>
+      <label htmlFor="nodeType">Node type</label>          
+      <NodeTypeDropdown id="nodeType" nodeTypeId={nodeType.id} 
+        onNodeTypeChange={
+          (typeId) => { 
+            onNodeTypeChange(node.id, typeId);
+          }
+      }/>
+    </p>
+
+    <h3>Parameters</h3>
+    <p>             
+      {        
+        nodeType.params.map((parameterDefinition) => {
+          
+        let paramId = parameterDefinition.id;
+        let parameter = node.params[paramId];
+
+        return <NodeParameterForm 
+          key={paramId} 
+          name={parameterDefinition.name}
+          value={parameter.value} 
+          type={parameter.type}
+          unit={parameter.unit}
+          onTypeChange={(typeId) => onParameterTypeChange(node.id, paramId, typeId)}
+          onValueChange={(value) => onParameterValueChange(node.id, paramId, value)}
+          onUnitChange={(unit) => onParameterUnitChange(node.id, paramId, unit)}/> 
+      })}
+    </p>     
+  </form>
+
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    onNodeTypeChange: (nodeId, typeId) => {
-      console.log(nodeId, typeId)
-      dispatch({
-        type: 'CHANGE_NODE_TYPE',
-        nodeId: nodeId,
-        typeId: typeId
-      });
-    },
-    onParameterTypeChange: (nodeId, paramId, paramType) => { 
-      dispatch({
-        type: 'CHANGE_NODE_PARAM_TYPE',      
-        nodeId: nodeId,
-        paramId: paramId,
-        paramType: paramType
-      });
-    },
-    onParameterValueChange: (nodeId, paramId, paramValue) => { 
-
-      dispatch({
-        type: 'CHANGE_NODE_PARAM_VALUE',      
-        nodeId: nodeId,
-        paramId: paramId,
-        paramValue: paramValue
-      });  
-    },
-    onParameterUnitChange: (nodeId, paramId, paramUnit) => {
-      dispatch({
-        type: 'CHANGE_NODE_PARAM_UNIT',      
-        nodeId: nodeId,
-        paramId: paramId,
-        paramUnit: paramUnit
-      });   
-    }
-  }
-}
-
-const NodeForm = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NodeFormComponent);
-
-export default NodeForm;
+export default NodeFormComponent;
