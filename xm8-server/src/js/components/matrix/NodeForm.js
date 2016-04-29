@@ -8,8 +8,9 @@ import nodeTypes from '../../../../shared/matrix/NodeTypes.js';
 
 const NodeFormComponent = ({ node, nodeType, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange }) => {
 
-
+  console.log(node)
   return <form>
+    <h2>Node {node.id}</h2>
     <h3>General</h3>
     <p>
       <label htmlFor="nodeType">Node type</label>          

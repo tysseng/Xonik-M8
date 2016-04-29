@@ -9,7 +9,7 @@ import nodeTypes from '../../../../shared/matrix/NodeTypes.js';
 
 const mapStateToProps = (state, ownProps) => {
   let node = state.nodes[ownProps.nodeId]; 
-  let nodeType = nodeTypes.idMap[node.type];  
+  let nodeType = node.type !== "-1" ? nodeTypes.idMap[node.type] : {id: "-1", params: []};  
 
   return {
     node: node,

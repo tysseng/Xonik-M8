@@ -1,24 +1,36 @@
 import React from 'react'
+import { connect } from 'react-redux';
+
 import NodeFormContainer from './matrix/NodeFormContainer.js'
 import NodeList from './matrix/NodeList.js'
+import { selectNode, createNewNode } from '../actions';
 
-let nodes = [{
-  type: 2,
-  id: 0,
-}];
-
-const onNodeClick = (id) => {
-  console.log("Someone clicked on node " + id);
+const mapStateToProps = (state, ownProps) => {
+  let nodes = state.nodes; 
+  let selectedNode = state.matrix.selectedNode;
+  return {
+    nodes,
+    selectedNode
+  }
 }
 
-
-const App = (props) => {
-
+let App = ({ selectedNode, nodes, dispatch }) => {
   return(
   <div>
-    {NodeList(nodes, onNodeClick)}
-    <NodeFormContainer url='/matrix/node'  nodeId="0" store={props.store}/>
+    <NodeList nodes={nodes} onNodeClick={(id) => dispatch(selectNode(id))}/>
+    <a href="#" onClick={(e) => { 
+      e.preventDefault(); 
+      dispatch(createNewNode());
+    }}>Add node</a><br/>
+    {(() => {
+      if(selectedNode !== ""){
+        return <NodeFormContainer url='/matrix/node'  nodeId={selectedNode}/>
+      } 
+      return "";
+    })()}
   </div>
 )}
+
+App = connect(mapStateToProps)(App);
 
 export default App

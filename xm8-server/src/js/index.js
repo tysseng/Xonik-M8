@@ -9,7 +9,7 @@ import App from './components/App'
 let store = createStore(xm8App);
 render(
   <Provider store={store}>
-    <App store={store} fish="234"/>
+    <App/>
   </Provider>,
   document.getElementById('content')
 );

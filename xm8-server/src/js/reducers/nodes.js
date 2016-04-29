@@ -22,6 +22,11 @@ const getEmptyParams = (typeId) => {
   return params; 
 }
 
+const getEmptyNode = (nodeId) => ({
+  id: nodeId,
+  type: "-1"  
+})
+
 const param = (state, action) => {
   switch(action.type){
     case 'CHANGE_NODE_PARAM_TYPE':
@@ -44,6 +49,8 @@ const param = (state, action) => {
 
 const node = (state, action) => {
   switch (action.type){
+    case 'NEW_NODE':
+      return getEmptyNode(action.nodeId);
     case 'CHANGE_NODE_TYPE':
       // do nothing if not the node we're looking for.
       if(state.id !== action.nodeId) {
@@ -61,7 +68,6 @@ const node = (state, action) => {
     case 'CHANGE_NODE_PARAM_TYPE':
     case 'CHANGE_NODE_PARAM_VALUE':
     case 'CHANGE_NODE_PARAM_UNIT':
-    {      
       // do nothing if not the node we're looking for.
       if(state.id !== action.nodeId) {
         return state;
@@ -70,7 +76,7 @@ const node = (state, action) => {
       return merge(state, {
         params: state.params.map(n => param(n, action))
       });
-    }
+
     default: 
       return state;
   }
@@ -83,6 +89,11 @@ const nodes = (
   }], 
   action) => {
   switch (action.type){
+    case 'NEW_NODE': 
+      return [
+        ...state,
+        node(undefined, action)
+      ]
     case 'CHANGE_NODE_TYPE':
     case 'CHANGE_NODE_PARAM_TYPE':
     case 'CHANGE_NODE_PARAM_VALUE':
