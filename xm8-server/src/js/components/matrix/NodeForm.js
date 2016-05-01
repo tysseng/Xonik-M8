@@ -6,14 +6,15 @@ import NodeParameterForm from './NodeParameterForm'
 
 import nodeTypes from '../../../../shared/matrix/NodeTypes.js';
 
-const NodeFormComponent = ({ node, nodeType, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange }) => {
+const NodeFormComponent = ({ node, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange }) => {
+  let nodeType = nodeTypes.idMap[node.type];  
 
   return <form>
     <h2>Node {node.id}</h2>
     <h3>General</h3>
     <p>
       <label htmlFor="nodeType">Node type</label>          
-      <NodeTypeDropdown id="nodeType" value={nodeType.id} 
+      <NodeTypeDropdown id="nodeType" value={node.type} 
         onNodeTypeChange={
           (typeId) => { 
             onNodeTypeChange(node.id, typeId);
