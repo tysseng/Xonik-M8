@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import NodeFormContainer from './matrix/NodeFormContainer.js'
 import NodeList from './matrix/NodeList.js'
-import { selectNode, createNewNode } from '../../../shared/state/actions';
+import { selectNode, createNewNode, deleteNode } from '../../../shared/state/actions';
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.nodes.toJS(); 
+  let nodes = state.nodes.toIndexedSeq().toJS();
   let selectedNode = state.matrix.selectedNode;
   return {
     nodes,
@@ -17,7 +17,7 @@ const mapStateToProps = (state, ownProps) => {
 let App = ({ selectedNode, nodes, dispatch }) => {
   return(
   <div>
-    <NodeList nodes={nodes} onNodeClick={(id) => dispatch(selectNode(id))}/>
+    <NodeList nodes={nodes} onNodeClick={(id) => dispatch(selectNode(id))} onDeleteClick={(id) => dispatch(deleteNode(id))}/>
     <a href="#" onClick={(e) => { 
       e.preventDefault(); 
       dispatch(createNewNode());

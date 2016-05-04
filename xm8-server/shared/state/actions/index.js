@@ -21,6 +21,14 @@ export const createNewNode = () => {
   }
 }
 
+export const deleteNode = (nodeId) => {
+  return {
+    type: 'DELETE_NODE',
+    nodeId: nodeId,
+    target: 'SERVER'
+  }
+}
+
 export const changeNodeType = (nodeId, typeId) => {
   return {
     type: 'CHANGE_NODE_TYPE',

@@ -1,8 +1,10 @@
 import nodeTypes from '../shared/matrix/NodeTypes.js';
-import {List, Map} from 'immutable';
+import {List, Map, OrderedMap} from 'immutable';
 import _ from 'lodash';
 
 let nextAvailableNodeId = 1;
+
+
 
 const getEmptyParam = (id, type) => Map({
   id: id,
@@ -60,16 +62,19 @@ const node = (state, action) => {
 }
 
 const nodes = (
-  state = List.of(
+  state = OrderedMap({"0":
     Map({
       id: "0",
       type: "2"
     })
-  ), 
+  }), 
   action) => {
   switch (action.type){
     case 'NEW_NODE': 
-      return state.push(node(undefined, action))
+      let nodeId = '' + nextAvailableNodeId;
+      return state.set(nodeId, node(undefined, action));
+    case 'DELETE_NODE':
+      return state.delete(action.nodeId);      
     case 'CHANGE_NODE_TYPE':
     case 'CHANGE_NODE_PARAM_TYPE':
     case 'CHANGE_NODE_PARAM_VALUE':
