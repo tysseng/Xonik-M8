@@ -1,5 +1,13 @@
 let nextAvailableNodeId = 1;
 
+export const setState = (state) => {
+  return {
+    type: 'SET_STATE',
+    target: 'GUI',
+    state
+  };
+}
+
 export const selectNode = (nodeId) => {
   return {
     type: 'SELECT_NODE',
@@ -10,7 +18,7 @@ export const selectNode = (nodeId) => {
 export const createNewNode = () => {
   return {
     type: 'NEW_NODE',
-    nodeId: nextAvailableNodeId++
+    nodeId: '' + nextAvailableNodeId++
   }
 }
 

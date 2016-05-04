@@ -3,6 +3,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
+import { setState } from './actions';
 import remoteActionMiddleware from './remoteActionMiddleware';
 import initWsclientForState from './wsclient-state.js';
 import xm8App from './reducers';
@@ -15,7 +16,7 @@ ws.onmessage = (msg) => {
   console.log('received state through ws');  
   console.log(state);
 
-  //store.dispatch(setState(state));
+  store.dispatch(setState(state));
 };
 
 const createStoreWithMiddleware = applyMiddleware(
