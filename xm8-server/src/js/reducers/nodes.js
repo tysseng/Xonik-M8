@@ -16,8 +16,6 @@ const getEmptyParams = (typeId) => {
     params = params.push(getEmptyParam(param.id, ""));
   });
 
-  console.log(definition)
-
   return params; 
 }
 
@@ -44,27 +42,14 @@ const node = (state, action) => {
     case 'NEW_NODE':
       return getEmptyNode(action.nodeId);
     case 'CHANGE_NODE_TYPE':
-      // do nothing if not the node we're looking for.
-      if(state.get('id') !== action.nodeId) {
-        return state;
-      }
-
-      // reset parameters
-      let params = getEmptyParams(action.typeId);
-
-      // copy all state and change single property
+      // change type and reset parameters
       return state.merge({
         type: action.typeId,
-        params: params
+        params: getEmptyParams(action.typeId)
       });
     case 'CHANGE_NODE_PARAM_TYPE':
     case 'CHANGE_NODE_PARAM_VALUE':
     case 'CHANGE_NODE_PARAM_UNIT':
-      // do nothing if not the node we're looking for.
-      if(state.get('id') !== action.nodeId) {
-        return state;
-      }
-      // copy all state and change single property
       return state.updateIn(['params', action.paramId], (aParam) => param(aParam, action));
     default: 
       return state;
@@ -81,7 +66,7 @@ const nodes = (
   action) => {
   switch (action.type){
     case 'NEW_NODE': 
-      return state.push(node(undefined, action)) // immutable, push returns a new list
+      return state.push(node(undefined, action))
     case 'CHANGE_NODE_TYPE':
     case 'CHANGE_NODE_PARAM_TYPE':
     case 'CHANGE_NODE_PARAM_VALUE':
