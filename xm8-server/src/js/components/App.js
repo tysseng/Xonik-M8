@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import NodeFormContainer from './matrix/NodeFormContainer.js'
 import NodeList from './matrix/NodeList.js'
-import { selectNode, createNewNode } from '../actions';
+import { selectNode, createNewNode } from '../../../shared/state/actions';
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.nodes; 
+  let nodes = state.nodes.toJS(); 
   let selectedNode = state.matrix.selectedNode;
   return {
     nodes,

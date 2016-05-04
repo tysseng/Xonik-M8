@@ -1,5 +1,3 @@
-let nextAvailableNodeId = 1;
-
 export const setState = (state) => {
   return {
     type: 'SET_STATE',
@@ -11,6 +9,7 @@ export const setState = (state) => {
 export const selectNode = (nodeId) => {
   return {
     type: 'SELECT_NODE',
+    target: 'GUI',    
     nodeId: nodeId
   }  
 }
@@ -18,7 +17,7 @@ export const selectNode = (nodeId) => {
 export const createNewNode = () => {
   return {
     type: 'NEW_NODE',
-    nodeId: '' + nextAvailableNodeId++
+    target: 'SERVER'
   }
 }
 
@@ -26,7 +25,8 @@ export const changeNodeType = (nodeId, typeId) => {
   return {
     type: 'CHANGE_NODE_TYPE',
     nodeId: nodeId,
-    typeId: typeId
+    typeId: typeId,
+    target: 'SERVER'
   }
 }
 
@@ -35,7 +35,8 @@ export const changeNodeParamType = (nodeId, paramId, paramType) => {
     type: 'CHANGE_NODE_PARAM_TYPE',      
     nodeId: nodeId,
     paramId: paramId,
-    paramType: paramType
+    paramType: paramType,
+    target: 'SERVER'
   }
 }
 
@@ -44,7 +45,8 @@ export const changeNodeParamValue  = (nodeId, paramId, paramValue) => {
     type: 'CHANGE_NODE_PARAM_VALUE',      
     nodeId: nodeId,
     paramId: paramId,
-    paramValue: paramValue
+    paramValue: paramValue,
+    target: 'SERVER'
   }
 }
 
@@ -53,6 +55,7 @@ export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
     type: 'CHANGE_NODE_PARAM_UNIT',      
     nodeId: nodeId,
     paramId: paramId,
-    paramUnit: paramUnit
+    paramUnit: paramUnit,
+    target: 'SERVER'
   }
 }

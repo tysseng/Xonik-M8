@@ -1,7 +1,10 @@
-import {createStore} from 'redux';
-import reducer from './reducer';
+import {createStore, combineReducers} from 'redux';
+import nodes from './nodes';
 
+const serverReducers = combineReducers({
+  nodes
+});
 
-let store = createStore(reducer);
+let store = createStore(serverReducers);
 
 export default store;

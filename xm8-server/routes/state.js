@@ -9,18 +9,23 @@ export default (app, ws) => {
   app.ws(root, function(ws, req) {
     console.log("Something connected to the state websocket service");
 
+    // Send current state to connecting client
+    ws.send(JSON.stringify(store.getState()));
+
+    // Setup action reception
     ws.on('message', (msg) => {
       let action = JSON.parse(msg);
-      console.log("Received action from client");
-      console.log(action);
+      //console.log("Received action from client");
+      //console.log(action);
       store.dispatch(action);
     });
   });
 
+  // Send state updates to all clients whenever state changes.
   store.subscribe(
     () => {
-      console.log("Sending updated state to clients");
-      console.log(JSON.stringify(store.getState()));
+      //console.log("Sending updated state to clients");
+      //console.log(JSON.stringify(store.getState()));
 
       tools.sendToAllClients(ws.getWss(root), null, JSON.stringify(store.getState()));      
     }

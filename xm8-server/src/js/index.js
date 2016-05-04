@@ -3,19 +3,16 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { setState } from './actions';
+import { setState } from '../../shared/state/actions';
 import remoteActionMiddleware from './remoteActionMiddleware';
 import initWsclientForState from './wsclient-state.js';
-import xm8App from './reducers';
-import App from './components/App';
+import guiReducers from './reducers';
 
+import App from './components/App';
 import ws from './wsclient-state.js';
 
 ws.onmessage = (msg) => { 
   let state = JSON.parse(msg.data);
-  console.log('received state through ws');  
-  console.log(state);
-
   store.dispatch(setState(state));
 };
 
@@ -23,7 +20,7 @@ const createStoreWithMiddleware = applyMiddleware(
   remoteActionMiddleware(ws)
 )(createStore);
 
-const store = createStoreWithMiddleware(xm8App);
+const store = createStoreWithMiddleware(guiReducers);
 
 render(
   <Provider store={store}>
