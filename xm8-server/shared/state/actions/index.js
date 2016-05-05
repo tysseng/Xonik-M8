@@ -1,3 +1,14 @@
+
+// If on, all changes to the matrix are sent to the synth core immediately
+export const toggleAutoUpdate = (shouldAutoUpdate) => {
+  console.log(shouldAutoUpdate)
+  return {
+    type: 'TOGGLE_AUTO_UPDATE',
+    target: 'SERVER',
+    shouldAutoUpdate
+  };
+}
+
 export const setState = (state) => {
   return {
     type: 'SET_STATE',
