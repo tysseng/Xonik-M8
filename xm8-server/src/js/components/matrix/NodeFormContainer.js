@@ -23,8 +23,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onParameterTypeChange: (nodeId, paramId, paramType) => { 
       dispatch(changeNodeParamType(nodeId, paramId, paramType));
     },
-    onParameterValueChange: (nodeId, paramId, paramValue) => { 
-      dispatch(changeNodeParamValue(nodeId, paramId, paramValue));
+    onParameterValueChange: (nodeId, paramId, paramType, paramValue) => { 
+      dispatch(changeNodeParamValue(nodeId, paramId, paramType, paramValue));
     },
     onParameterUnitChange: (nodeId, paramId, paramUnit) => {
       dispatch(changeNodeParamUnit(nodeId, paramId, paramUnit));  

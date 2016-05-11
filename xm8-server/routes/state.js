@@ -1,5 +1,6 @@
 import store from '../state/store.js';
 import tools from './routeTools';
+import matrixRepository from '../core/matrix/matrixRepository';
 
 // receive actions and send state
 export default (app, ws) => {
@@ -27,7 +28,10 @@ export default (app, ws) => {
       //console.log("Sending updated state to clients");
       //console.log(JSON.stringify(store.getState()));
 
-      tools.sendToAllClients(ws.getWss(root), null, JSON.stringify(store.getState()));      
+      tools.sendToAllClients(ws.getWss(root), null, JSON.stringify(store.getState()));
+      matrixRepository.sendMatrix();
     }
   );
+
+
 };

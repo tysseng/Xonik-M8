@@ -59,11 +59,12 @@ export const changeNodeParamType = (nodeId, paramId, paramType) => {
   }
 }
 
-export const changeNodeParamValue  = (nodeId, paramId, paramValue) => { 
+export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue) => { 
   return {
     type: 'CHANGE_NODE_PARAM_VALUE',      
     nodeId: nodeId,
     paramId: paramId,
+    paramType: paramType,
     paramValue: paramValue,
     target: 'SERVER'
   }

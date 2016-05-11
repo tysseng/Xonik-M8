@@ -123,7 +123,15 @@ var nodeTypes = {
     id: "18", name: "Buffer parameter", params: []
   },
   OUTPUT: {
-    id: "19", name: "Output", params: []
+    id: "19", 
+    name: "Output",     
+    description: "Output to voice",
+    params: [{
+      id: "0",
+      name: "To output",
+      validator: function(value){},
+      optional: false
+    }]    
   }, 
   OUTPUT_TUNED: {
     id: "20", name: "Output tuned", params: []

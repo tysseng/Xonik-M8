@@ -37,7 +37,7 @@ const NodeFormComponent = ({ node, onNodeTypeChange, onParameterTypeChange, onPa
           type={parameter.type}
           unit={parameter.unit}
           onTypeChange={(typeId) => onParameterTypeChange(node.id, paramId, typeId)}
-          onValueChange={(value) => onParameterValueChange(node.id, paramId, value)}
+          onValueChange={(value) => onParameterValueChange(node.id, paramId, parameter.type, value)}
           onUnitChange={(unit) => onParameterUnitChange(node.id, paramId, unit)}/> 
       })}
     </p>     

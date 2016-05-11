@@ -3,14 +3,15 @@ var matrix = require('./matrix.js');
 var serializer = require('./serializer.js');
 var preparer = require('./preparer.js');
 var printer = require('./printer.js');
-var spi = require('../spi/spi-fd.js');
+//var spi = require('../spi/spi-fd.js');
+
 
 function sendMatrix(){
-  var buffers = serialize();
+  var buffers = serialize();/*
   _.each(buffers, function(buffer){
     spi.write(buffer);
     console.log(buffer);
-  });
+  });*/
 }
 
 function save(){
@@ -25,6 +26,7 @@ function serialize(){
   var net = preparer.prepareNetForSerialization();
   printer.printNet(net);
 
+  /*
   var buffers = []
 
   // add all constants and constant lengths
@@ -41,7 +43,7 @@ function serialize(){
   });
   buffers.push(serializer.serializeNodeCount(net.nodes));
 
-  return buffers;
+  return buffers;*/
 }
 
 module.exports.sendMatrix = sendMatrix;

@@ -1,6 +1,9 @@
-var paramType = require('../../shared/matrix/ParameterTypes.js');
-var nodeType = require('./nodeType.js');
+var paramTypes = require('../../shared/matrix/ParameterTypes.js');
+var nodeTypes = require('../../shared/matrix/NodeTypes.js');
 var _ = require('lodash');
+
+let nodeType = nodeTypes.map;
+let paramType = paramTypes.map;
 
 function getNodeTypeStr(type){
   switch(type){
@@ -49,8 +52,9 @@ function printNode(node){
   
   _.each(node.params, function(param){
     var parType = getParamTypeStr(param.type);
-    var parValue = (param.type === paramType.LINK ?  "from " + getNodeTypeStr(param.value.from.type) : param.value);
-    console.log("Param: " + parType + ' ' + parValue + " (" + param.label + ")" + ", pos " + param.nodePos);
+    var parValue = (param.type === paramType.LINK.id ?  "from " + getNodeTypeStr(param.value.from.type) : param.value);
+    var parLabel = param.label ? " (" + param.label + ")" : "";
+    console.log("Param: " + parType + ' ' + parValue + parLabel + ", pos " + param.nodePos);
   });
   
   _.each(node.consumers, function(consumer){
