@@ -177,7 +177,7 @@ void nodeFuncLfoPulse(Node *aNode){
         }
         aNode->highResState = 0;
         //TODO: For testing
-        aNode->params[2] = 0;
+        *aNode->params[2] = 0;
     } else {
         aNode->highResState++;
         if(aNode->highResState == pulsewidth || aNode->highResState == cyclelength){
@@ -505,7 +505,7 @@ void MX_runMatrix(){
 
   if(MX_isSuspended) return;
   
-  for(i = 0; i<nodesInUse; i++){
+  for(i = 0; i<2; i++){
     nodes[i].func(&nodes[i]);
   }
 
