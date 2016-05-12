@@ -1,5 +1,7 @@
 import paramTypes from '../shared/matrix/ParameterTypes.js';
+import nodeTypes from '../shared/matrix/NodeTypes.js';
 import {Map, OrderedMap} from 'immutable';
+import _ from 'lodash';
 
 const isLink = (type) => {
   console.log(type, paramTypes.map.LINK.id)
@@ -7,11 +9,34 @@ const isLink = (type) => {
 }
 
 const getLinkId = (action) => {
-  return action.nodeId + '-' + action.paramId;
+  return '' + action.nodeId + '-' + action.paramId;
 }
 
 const links = (state = OrderedMap(), action) => {
+  if(state.toList().length > 0) console.log(state.toList()[0])
   switch (action.type){
+    case 'DELETE_NODE':
+      let updatedState = state;
+      _.each(state.toIndexedSeq().toArray(), (link) => {
+        if(link.get('from') === action.nodeId || link.get('to') === action.nodeId){
+          console.log("deleted link " + link.get('id'));
+          updatedState = updatedState.delete(link.get('id'));
+        }
+      });
+      return updatedState;
+    case 'CHANGE_NODE_TYPE':
+      if(action.typeId === nodeTypes.map.OUTPUT.id){
+        let updatedState = state;
+        _.each(state.toIndexedSeq().toArray(), (link) => {
+          if(link.get('from') === action.nodeId){
+            console.log("deleted link " + link.get('id') + " because output nodes have no result");
+            updatedState = updatedState.delete(link.get('id'));
+          }
+        });
+        return updatedState;          
+      }
+      
+      return state;
     case 'CHANGE_NODE_PARAM_VALUE':
       if(isLink(action.paramType)){    
         if(action.paramValue === ""){

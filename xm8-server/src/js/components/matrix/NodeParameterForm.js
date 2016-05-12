@@ -10,6 +10,8 @@ import ParameterUnitDropdown from './ParameterUnitDropdown.js';
 const NodeParameterForm = ({
   name,
   parameter,
+  currentnode,
+  nodes,
   onValueChange, 
   onTypeChange,
   onUnitChange
@@ -32,7 +34,7 @@ const NodeParameterForm = ({
       body = <OutputLinkDropdown onOutputLinkChange={(value) => onValueChange(value)} value={value}/>;
       break;
     case "result":
-      body = <NodeLinkDropdown onNodeLinkChange={(value) => onValueChange(value)} value={value}/>;
+      body = <NodeLinkDropdown nodes={nodes} currentnode={currentnode} onNodeLinkChange={(value) => onValueChange(value)} value={value}/>;
       break;
     case "constant":
       body = 

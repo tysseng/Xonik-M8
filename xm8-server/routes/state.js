@@ -29,7 +29,6 @@ export default (app, ws) => {
       //console.log(JSON.stringify(store.getState()));
 
       tools.sendToAllClients(ws.getWss(root), null, JSON.stringify(store.getState()));
-      matrixRepository.sendMatrix();
     }
   );
 

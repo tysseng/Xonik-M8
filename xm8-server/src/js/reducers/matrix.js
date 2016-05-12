@@ -9,6 +9,12 @@ const matrix = (
   }), 
   action) => {
   switch (action.type){
+    case 'DELETE_NODE':
+      if(state.get('selectedNode') === action.nodeId){
+        console.log(state)
+        return state.set('selectedNode', '');
+      }
+      return state;    
     case 'SELECT_NODE': 
       return state.set("selectedNode", action.nodeId);
     case 'SET_STATE':

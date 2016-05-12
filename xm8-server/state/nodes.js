@@ -3,6 +3,8 @@ import paramTypes from '../shared/matrix/ParameterTypes.js';
 import {List, Map, OrderedMap} from 'immutable';
 import _ from 'lodash';
 
+// TODO: Too much bookkeeping related to links. rethink link concept.
+
 let nextAvailableNodeId = 1;
 
 const getEmptyParam = (id, type) => Map({
@@ -100,6 +102,7 @@ const nodes = (
       let nodeId = '' + nextAvailableNodeId;
       return state.set(nodeId, node(undefined, action));
     case 'DELETE_NODE':
+      // TODO: Find all nodes linking to this one and reset their value.
       return state.delete(action.nodeId);      
     case 'CHANGE_NODE_PARAM_VALUE':
     case 'CHANGE_NODE_PARAM_TYPE':

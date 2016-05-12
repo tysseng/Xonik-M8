@@ -36,7 +36,7 @@ export const deleteNode = (nodeId) => {
   return {
     type: 'DELETE_NODE',
     nodeId: nodeId,
-    target: 'SERVER'
+    target: 'BOTH'
   }
 }
 

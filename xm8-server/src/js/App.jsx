@@ -35,14 +35,13 @@ var NodeForm = require('./components/matrix/NodeForm.jsx');
 var NodeList = require('./components/matrix/NodeList.jsx');
 
 
-//    <Knob controllerId="volume"/>
-//    <Knob controllerId="frequency"/>
+//    
 
 
 ReactDOM.render(
   <div>
-    <NodeList url='/matrix'/>
-    <NodeForm url='/matrix/node'/>
+    <<Knob controllerId="volume"/>
+    <Knob controllerId="frequency"/>
   </div>
   ,
   document.getElementById('content')

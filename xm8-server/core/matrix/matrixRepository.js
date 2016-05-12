@@ -1,21 +1,32 @@
 var _ = require('lodash');
-var matrix = require('./matrix.js');
+import store from '../../state/store.js';
 var serializer = require('./serializer.js');
 var preparer = require('./preparer.js');
 var printer = require('./printer.js');
 //var spi = require('../spi/spi-fd.js');
 
+// auto-update voices whenever state changes
+// TODO: listen to only matrix changes!
+store.subscribe(
+  () => {
+    if(store.getState().matrix.get('shouldAutoUpdate')){
+      sendMatrix(); 
+    }
+  }
+);
 
 function sendMatrix(){
   if(!preparer.isNetValid()){
     console.log("Matrix has validation errors, synth voices not updated");
-    return;
+    return {updated: false, message: "Matrix has validation errors, synth voices not updated"};
   }
-  var buffers = serialize();/*
+  var buffers = serialize();
   _.each(buffers, function(buffer){
-    spi.write(buffer);
+    //spi.write(buffer);
     console.log(buffer);
-  });*/
+  });
+
+  return {updated: true, message: "Synth voices updated"};  
 }
 
 function save(){

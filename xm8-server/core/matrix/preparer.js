@@ -2,7 +2,6 @@ import _ from 'lodash';
 import paramTypes from '../../shared/matrix/ParameterTypes.js';
 import nodeTypes from '../../shared/matrix/NodeTypes.js';
 import config from '../config.js';
-import matrix from './matrix.js';
 import store from '../../state/store.js';
 
 let paramType = paramTypes.map;
@@ -65,8 +64,6 @@ const mergeWithLinks = (nodes, links) => {
 
 const markReachable = (nodes) => {
   _.each(nodes, function(node){
-    console.log("node");
-    console.log(node)
     if(node.type === nodeType.OUTPUT.id || node.type === nodeType.DELAY_LINE.id){
       markAsReachable(node);
     }
@@ -177,7 +174,6 @@ function prepareNetForSerialization(){
   }
 
   var constants = setParamNodePosAndExtractConstants(nodes);
-
   var independentNodes = getReachableIndependentNodes(nodes);
   var sortedNodes = sortNodes(independentNodes, config.matrix.numberOfInputs + constants.length);
 

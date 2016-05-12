@@ -1,13 +1,22 @@
 import React from 'react'
+import _ from 'lodash'
+import nodeTypes from '../../../../shared/matrix/NodeTypes.js';
 
-const NodeLinkDropdown = ({value, onNodeLinkChange}) => (
-  <select value={value} onChange={(e) => {onNodeLinkChange(e.target.value)}}>
+let nodeTypeMap = nodeTypes.map;
+
+const NodeLinkDropdown = ({currentnode, nodes, value, onNodeLinkChange}) => {
+  let linkableNodes = _.filter(nodes, node => {
+    if(node.id !== currentnode.id && node.type !== nodeTypeMap.OUTPUT.id){
+      return true;
+    }
+  });
+
+  return (<select value={value} onChange={(e) => {onNodeLinkChange(e.target.value)}}>
     <option value="">Not selected</option>
-    <option value="0">Node 0</option>
-    <option value="1">Node 1</option>
-    <option value="2">Node 2</option>
-    <option value="3">Node 3</option>  
-  </select>
-)
+    {linkableNodes.map(linkableNode => {
+      return <option key={linkableNode.id} value={linkableNode.id}>Node {linkableNode.id}</option>
+    })}
+  </select>)
+}
 
 export default NodeLinkDropdown;

@@ -6,7 +6,7 @@ import NodeParameterForm from './NodeParameterForm'
 
 import nodeTypes from '../../../../shared/matrix/NodeTypes.js';
 
-const NodeFormComponent = ({ node, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange }) => {
+const NodeFormComponent = ({ node, nodes, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange }) => {
   let nodeType = nodeTypes.idMap[node.type];  
 
   return <form>
@@ -34,6 +34,8 @@ const NodeFormComponent = ({ node, onNodeTypeChange, onParameterTypeChange, onPa
           key={paramId} 
           name={parameterDefinition.name}
           parameter={parameter}
+          currentnode={node}
+          nodes={nodes}
           onTypeChange={(typeId) => onParameterTypeChange(node.id, paramId, typeId)}
           onValueChange={(value) => onParameterValueChange(node.id, paramId, parameter.type, value)}
           onUnitChange={(unit) => onParameterUnitChange(node.id, paramId, unit)}/> 

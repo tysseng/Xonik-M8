@@ -1,4 +1,4 @@
-// TODO: validate constant value, max 65535
+// TODO: validate constant value, max 32767 etc.
 
 var parameterTypes = {
   UNUSED: {
