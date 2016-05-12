@@ -40,6 +40,16 @@ export const deleteNode = (nodeId) => {
   }
 }
 
+
+export const changeNodeName = (nodeId, name) => {
+  return {
+    type: 'CHANGE_NODE_NAME',
+    nodeId,
+    name,
+    target: 'SERVER'
+  }
+}
+
 export const changeNodeType = (nodeId, typeId) => {
   return {
     type: 'CHANGE_NODE_TYPE',

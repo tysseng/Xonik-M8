@@ -25,6 +25,7 @@ const links = (state = OrderedMap(), action) => {
       });
       return updatedState;
     case 'CHANGE_NODE_TYPE':
+      // TODO: A similar action is necessary in the nodes reducer to remove the value from the parameter.
       if(action.typeId === nodeTypes.map.OUTPUT.id){
         let updatedState = state;
         _.each(state.toIndexedSeq().toArray(), (link) => {
@@ -35,7 +36,7 @@ const links = (state = OrderedMap(), action) => {
         });
         return updatedState;          
       }
-      
+
       return state;
     case 'CHANGE_NODE_PARAM_VALUE':
       if(isLink(action.paramType)){    

@@ -14,7 +14,7 @@ const NodeLinkDropdown = ({currentnode, nodes, value, onNodeLinkChange}) => {
   return (<select value={value} onChange={(e) => {onNodeLinkChange(e.target.value)}}>
     <option value="">Not selected</option>
     {linkableNodes.map(linkableNode => {
-      return <option key={linkableNode.id} value={linkableNode.id}>Node {linkableNode.id}</option>
+      return <option key={linkableNode.id} value={linkableNode.id}>{linkableNode.name}</option>
     })}
   </select>)
 }

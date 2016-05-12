@@ -27,6 +27,7 @@ const getEmptyParams = (typeId) => {
 
 const getEmptyNode = (nodeId) => Map({
   id: nodeId,
+  name: "Node " + nodeId,  
   type: "-1"  
 })
 
@@ -83,19 +84,15 @@ const node = (state, action) => {
     case 'CHANGE_NODE_PARAM_VALUE':
     case 'CHANGE_NODE_PARAM_UNIT':
       return validateNode(state.updateIn(['params', action.paramId], (aParam) => param(aParam, action)));
+    case 'CHANGE_NODE_NAME':
+      return state.set('name', action.name);
     default: 
       return state;
   }
 }
   
 const nodes = (
-  state = OrderedMap({"0":
-    Map({
-      id: "0",
-      type: "2",
-      valid: false
-    })
-  }), 
+  state = OrderedMap(), 
   action) => {
   switch (action.type){
     case 'NEW_NODE': 
@@ -107,6 +104,7 @@ const nodes = (
     case 'CHANGE_NODE_PARAM_VALUE':
     case 'CHANGE_NODE_PARAM_TYPE':
     case 'CHANGE_NODE_TYPE':      
+    case 'CHANGE_NODE_NAME':
     case 'CHANGE_NODE_PARAM_UNIT':
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     default: 
