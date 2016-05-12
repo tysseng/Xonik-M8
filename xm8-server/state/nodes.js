@@ -29,11 +29,11 @@ const getEmptyNode = (nodeId) => Map({
 })
 
 const param = (state, action) => {
+
   switch(action.type){
     case 'CHANGE_NODE_PARAM_TYPE':
       return state.merge(getEmptyParam(action.paramId, action.paramType));
     case 'CHANGE_NODE_PARAM_VALUE':
-      // link/unlink here
       return state.set('value', action.paramValue);
     case 'CHANGE_NODE_PARAM_UNIT':    
       return state.set('unit', action.paramUnit);
@@ -42,21 +42,45 @@ const param = (state, action) => {
   }
 }
 
+const validateNode = (state) => {
+  let nodeIsValid = true;
+  let updatedState = state;
+
+  let definition = nodeTypes.idMap[state.get('type')];
+  if(definition && definition.id != nodeTypes.map.NOT_SELECTED.id) {
+
+    _.each(definition.params, paramDef => {
+      let param = state.getIn(['params', paramDef.id]);
+      let paramValue = param.get('value');
+      let paramType = param.get('type');
+      let hasValue = paramValue && paramValue != "";
+      let hasSelectedType = paramType !== '' && paramType !== paramTypes.map.UNUSED.id;
+      let paramIsValid = paramDef.optional && !hasSelectedType || hasValue; // TODO: Add type and custom validators here
+
+      if(!paramIsValid){
+        nodeIsValid = false;
+      }
+      updatedState = updatedState.setIn(['params', paramDef.id, 'valid'], paramIsValid);        
+    });
+  } else {
+    nodeIsValid = false;
+  }
+  return updatedState.set('valid', nodeIsValid);   
+}
+
 const node = (state, action) => {
   switch (action.type){
     case 'NEW_NODE':
-      return getEmptyNode('' + nextAvailableNodeId++);
+      return validateNode(getEmptyNode('' + nextAvailableNodeId++));
     case 'CHANGE_NODE_TYPE':
-      // change type and reset parameters
-      // TODO: Remove links
-      return state.merge({
+      return validateNode(state.merge({
         type: action.typeId,
         params: getEmptyParams(action.typeId)
-      });
+      }));
     case 'CHANGE_NODE_PARAM_TYPE':
     case 'CHANGE_NODE_PARAM_VALUE':
     case 'CHANGE_NODE_PARAM_UNIT':
-      return state.updateIn(['params', action.paramId], (aParam) => param(aParam, action));
+      return validateNode(state.updateIn(['params', action.paramId], (aParam) => param(aParam, action)));
     default: 
       return state;
   }
@@ -66,7 +90,8 @@ const nodes = (
   state = OrderedMap({"0":
     Map({
       id: "0",
-      type: "2"
+      type: "2",
+      valid: false
     })
   }), 
   action) => {

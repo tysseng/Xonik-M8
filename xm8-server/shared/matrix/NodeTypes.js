@@ -13,6 +13,7 @@ var nodeTypes = {
     id: "1", 
     name: "Invert", 
     description: "Invert around 0",
+    hasVariableParamsLength: false,
     params: [{
       id: "0",
       name: "To invert",
@@ -46,8 +47,9 @@ var nodeTypes = {
   },
   MAX: {
     id: "10", 
-    name: "Max",
+    name: "Max",    
     description: "Maximum of parameter 1 to parameter 8",
+    hasVariableParamsLength: true,
     params: [{
       id: "0",
       name: "Parameter 1",
@@ -126,6 +128,7 @@ var nodeTypes = {
     id: "19", 
     name: "Output",     
     description: "Output to voice",
+    hasVariableParamsLength: false,
     params: [{
       id: "0",
       name: "To output",

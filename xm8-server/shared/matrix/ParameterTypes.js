@@ -1,4 +1,6 @@
- var parameterTypes = {
+// TODO: validate constant value, max 65535
+
+var parameterTypes = {
   UNUSED: {
     id: "unused", 
     name: "Unused",

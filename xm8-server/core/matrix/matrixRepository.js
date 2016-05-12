@@ -7,6 +7,10 @@ var printer = require('./printer.js');
 
 
 function sendMatrix(){
+  if(!preparer.isNetValid()){
+    console.log("Matrix has validation errors, synth voices not updated");
+    return;
+  }
   var buffers = serialize();/*
   _.each(buffers, function(buffer){
     spi.write(buffer);
@@ -26,8 +30,7 @@ function serialize(){
   var net = preparer.prepareNetForSerialization();
   printer.printNet(net);
 
-  /*
-  var buffers = []
+  var buffers = [];
 
   // add all constants and constant lengths
   for(var i = 0; i<net.constants.length; i++){
@@ -43,7 +46,7 @@ function serialize(){
   });
   buffers.push(serializer.serializeNodeCount(net.nodes));
 
-  return buffers;*/
+  return buffers;
 }
 
 module.exports.sendMatrix = sendMatrix;

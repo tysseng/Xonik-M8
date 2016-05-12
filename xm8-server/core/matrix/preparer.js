@@ -7,6 +7,7 @@ import store from '../../state/store.js';
 
 let paramType = paramTypes.map;
 let nodeType = nodeTypes.map;
+let nodeTypesIdMap = nodeTypes.idMap
 
 const addMissingFieldsWithDefaults = (nodes) => {
   _.each(nodes, function(node){
@@ -16,7 +17,30 @@ const addMissingFieldsWithDefaults = (nodes) => {
     _.each(nodes.params, function(param){
       param.nodePos = -1;
     });
+    setParamsInUse(node);
   });
+}
+
+const setParamsInUse = (node) => {
+
+  let typedef = nodeTypesIdMap[node.type];
+  if(typedef.hasVariableParamsLength){
+    let paramsInUse = 0;
+
+    // used parameters must be sequential, e.g. without any gap. (TODO: improve this later, allow gaps?)
+    for(let i = 0; i<node.params.length; i++){
+      let param = node.params[paramsInUse];
+      if(param.type === paramType.UNUSED.id || param.type == ''){
+        break;
+      }
+      paramsInUse++;
+    }
+    
+    node.paramsInUse = paramsInUse;
+  } else {
+    node.paramsInUse = typedef.params.length;
+  }
+
 }
 
 const linkNodes = (from, to, toParam) => {
@@ -59,6 +83,10 @@ const markAsReachable = (node) => {
       markAsReachable(param.value.from);
     }
   });
+}
+
+const removeUnreachable = (nodes) => {
+  return _.filter(nodes, node => node.reachable);
 }
 
 function setParamNodePosAndExtractConstants(nodes){
@@ -114,18 +142,40 @@ function addNode(node, sortedNodes, offset){
     });
 }
 
+function isNetValid(){
+  let state = store.getState();
+  let nodes = state.nodes.toIndexedSeq().toJS();
+
+  let isValid = true;
+
+  _.each(nodes, node => {
+    if(!node.valid){
+      isValid = false;  
+    }
+  });
+
+  return isValid;
+}
+
 function prepareNetForSerialization(){
   let state = store.getState();
   let nodes = state.nodes.toIndexedSeq().toJS();
   let links = state.links.toIndexedSeq().toJS();
 
+  let nodeCount = nodes.length;
 
   addMissingFieldsWithDefaults(nodes);
 
   // nodes and links are kept separate in the state object, merge them to make traversal easier
   mergeWithLinks(nodes, links);
-
   markReachable(nodes);
+  nodes = removeUnreachable(nodes);
+
+  let reachableNodeCount = nodes.length;
+  if(reachableNodeCount != nodeCount){
+    console.log((nodeCount - reachableNodeCount) + " nodes were not reachable and will not be sent to synth");
+  }
+
   var constants = setParamNodePosAndExtractConstants(nodes);
 
   var independentNodes = getReachableIndependentNodes(nodes);
@@ -138,3 +188,4 @@ function prepareNetForSerialization(){
 }
 
 module.exports.prepareNetForSerialization = prepareNetForSerialization;
+module.exports.isNetValid = isNetValid;

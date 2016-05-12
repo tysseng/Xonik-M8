@@ -9,13 +9,16 @@ import ParameterUnitDropdown from './ParameterUnitDropdown.js';
 
 const NodeParameterForm = ({
   name,
-  value, 
-  type,
-  unit,
+  parameter,
   onValueChange, 
   onTypeChange,
   onUnitChange
 }) => {
+  let value=parameter.value;
+  let type=parameter.type;
+  let unit=parameter.unit;
+  let valid=parameter.valid;
+
   let body;
 
   switch(type){
@@ -40,8 +43,11 @@ const NodeParameterForm = ({
       break;
   }
 
+  // show validation errors
+  let color = valid ? {} : {color: '#ff0000'};
+
   return (
-    <span>
+    <span style={color}>
       {name}:
       <NodeParameterTypeDropdown value={type} onParameterTypeChange={onTypeChange}/> 
       {body}<br/>
