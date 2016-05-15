@@ -15,6 +15,7 @@ function serializeNode(node){
 
   for(var i = 0; i<8; i++){
     var paramVal = (i < paramsInUse ? node.params[i].nodePos : 0);
+    console.log("ParamVal: " + paramVal)
     nodeBuffer.writeUInt16BE(paramVal, i * 2 + 5);
   }
 

@@ -21,7 +21,6 @@ const addMissingFieldsWithDefaults = (nodes) => {
 }
 
 const setParamsInUse = (node) => {
-
   let typedef = nodeTypesIdMap[node.type];
   if(typedef.hasVariableParamsLength){
     let paramsInUse = 0;
@@ -57,7 +56,6 @@ const linkNodes = (from, to, toParam) => {
 
 const mergeWithLinks = (nodes, links) => {
   _.each(links, (link) => {
-    console.log(link)
     linkNodes(nodes[link.from], nodes[link.to], link.toParam);
   });
 }
@@ -91,7 +89,7 @@ function setParamNodePosAndExtractConstants(nodes){
   _.each(nodes, function(node){
     if(node.reachable){
       _.each(node.params, function(param){
-        if(param.type === paramType.CONSTANT.id){
+        if(param.type === paramType.CONSTANT.id || param.type === paramType.OUTPUT.id){
           param.nodePos = constants.length + config.matrix.numberOfInputs;
           constants.push(param.value);
         } else if(param.type === paramType.INPUT.id){
@@ -156,16 +154,24 @@ function isNetValid(){
 
 function prepareNetForSerialization(){
   let state = store.getState();
-  let nodes = state.nodes.toIndexedSeq().toJS();
-  let links = state.links.toIndexedSeq().toJS();
+  let nodesMap = state.nodes.toJS();
 
-  let nodeCount = nodes.length;
+  // convert map to list for further processing.
+  let nodes = [];
+  for(let node in nodesMap){
+    nodes.push(nodesMap[node]);
+  }
+
+  let links = state.links.toIndexedSeq().toJS();
 
   addMissingFieldsWithDefaults(nodes);
 
   // nodes and links are kept separate in the state object, merge them to make traversal easier
-  mergeWithLinks(nodes, links);
+  mergeWithLinks(nodesMap, links);
+
   markReachable(nodes);
+
+  let nodeCount = nodes.length;
   nodes = removeUnreachable(nodes);
 
   let reachableNodeCount = nodes.length;
