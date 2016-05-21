@@ -46,8 +46,6 @@ unsigned short DAC_intervalMultiplier;  //TODO: set og reset denne
 // the current output, loops from timer interrupt.
 char output = 0;
 
-unsigned int debugout = 0;
-
 #ifndef RUNTESTS
 void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
 
@@ -112,15 +110,6 @@ void loadDac(unsigned int value){
 // once the hardware is corrected.
 
 void writeValuesToSH(char sr_output){
-  if(sr_output == 0 ) {
-    if(debugout==0){
-      debugout = 0xFFF0;
-    } else {
-      debugout = 0;
-    }
- }
-
-  LATA = debugout;
 
   // put s&h into hold mode
   SH_EN = 0;
@@ -129,17 +118,14 @@ void writeValuesToSH(char sr_output){
   // select and load DAC B
   DAC_ADDRESS = 1;
 
-//  loadDac(OUT_dacBuffer[sr_output] + 0x8000);
-//    loadDac(OUT_dacBuffer[0] + 0x8000);
-  loadDac(debugout);
+  loadDac(OUT_dacBuffer[sr_output] + 0x8000);
 
   //TODO: Switch DAC A/B outputs later.
   // select and load DAC A
   DAC_ADDRESS = 0;
 
-//  loadDac(OUT_dacBuffer[SR_OUTPUTS + sr_output] + 0x8000);
-//  loadDac(OUT_dacBuffer[0] + 0x8000);
-  loadDac(debugout);
+  loadDac(OUT_dacBuffer[SR_OUTPUTS + sr_output] + 0x8000);
+
   // set SH address
 
   // TODO: The S&H is miswired so the bit order here is a work around while

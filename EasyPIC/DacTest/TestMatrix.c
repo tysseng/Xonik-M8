@@ -7,14 +7,15 @@ void TM_setupTestMatrix(){
 
 
     // constants are placed form position INPUTS and onwards.
-    MX_addConstant(0x1388);
-    MX_addConstant(0); /*
+    MX_addConstant(0x7D00);
+    MX_addConstant(1);
+    
     MX_addConstant(4);
     MX_addConstant(1);
     MX_addConstant(1);
     MX_addConstant(0x7D00);
     MX_addConstant(0x8300);
-    MX_addConstant(0);   */
+    MX_addConstant(0);
 
     aNode1[NODE_FUNC] = NODE_OUTPUT;
     // Node to get output from
@@ -26,7 +27,7 @@ void TM_setupTestMatrix(){
 
     aNode1[NODE_PARAMS_IN_USE] = 2;
     MX_addNode(aNode1);
-    /*
+
     aNode2[NODE_FUNC] = NODE_LFO_PULSE;
     // cycle length
     aNode2[NODE_PARAM_0_LO] = 2 + INPUTS; // cycle length 4
@@ -57,6 +58,6 @@ void TM_setupTestMatrix(){
     aNode3[NODE_PARAM_1_HI] = 0;
 
     aNode2[NODE_PARAMS_IN_USE] = 2;
-    MX_addNode(aNode3);*/
+    MX_addNode(aNode3);
 
 }

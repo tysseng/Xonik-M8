@@ -137,7 +137,7 @@ void main() {
 
 //    MIDI_CORE_readFromRxBuffer();
 //    AI_readPotmeters();
-//    SPI_checkForReceivedData();
+    SPI_checkForReceivedData();
 
     if(DAC_dacUpdatesFinished){
       DAC_dacUpdatesFinished = 0;
