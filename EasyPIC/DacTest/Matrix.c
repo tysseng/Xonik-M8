@@ -361,10 +361,10 @@ void nodeFuncBufferInput(Node *aNode){
 }
 
 // write output to outputBuffer
-// Param 0: output buffer position
-// Param 1: index of Node to fetch result from
+// Param 0: index of Node to fetch result from
+// Param 1: output buffer position
 void nodeFuncOutput(Node *aNode){
-  OUT_outputBuffer[*aNode->params[0]] = *aNode->params[1];
+  OUT_outputBuffer[*aNode->params[1]] = *aNode->params[0];
 }
 
 // Convert linear value to exponential. Only positive values are converted,
@@ -382,11 +382,11 @@ void nodeFuncPositiveExp(Node *aNode){
 }
 
 // write output to outputBuffer and correct for vco tuning.
-// Param 0: output buffer position
-// Param 1: index of Node to fetch result from
+// Param 0: index of Node to fetch result from
+// Param 1: output buffer position
 void nodeFuncOutputTuned(Node *aNode){
-  char vco = *aNode->params[0]; // must be 0,1,2
-  matrixint value = *aNode->params[1];
+  char vco = *aNode->params[1]; // must be 0,1,2
+  matrixint value = *aNode->params[0];
   
   // convert value to 7 bit (between -64 and +63)
   int tuneIndex = 64 + (value >> 9);
@@ -436,7 +436,7 @@ void MX_addConstant(int constant){
 }
 
 void MX_updateConstant(unsigned short *bytes){
-  MX_nodeResults[bytes[CONST_POSITION]] = BAT_getAsInt(bytes, CONST_VALUE_HI);
+  MX_nodeResults[BAT_getAsInt(bytes, CONST_POSITION_HI)] = BAT_getAsInt(bytes, CONST_VALUE_HI);
 }
 
 void MX_addNode(unsigned short *bytes){
@@ -504,8 +504,10 @@ void MX_runMatrix(){
   unsigned short i;
 
   if(MX_isSuspended) return;
-  
-  for(i = 0; i<2; i++){
+
+
+  for(i = 0; i<nodesInUse; i++){
+    LATA=i;
     nodes[i].func(&nodes[i]);
   }
 

@@ -42,9 +42,10 @@
 #define NODE_RESULT_LO 23
 
 // placements in constants array when creating a constant through spi
-#define CONST_POSITION 2
-#define CONST_VALUE_HI 3
-#define CONST_VALUE_LO 4
+#define CONST_POSITION_HI 2
+#define CONST_POSITION_LO 3
+#define CONST_VALUE_HI 4
+#define CONST_VALUE_LO 5
 
 // array lengths
 #define CONSTS_COUNT_HI 2

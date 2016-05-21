@@ -110,6 +110,9 @@ void main() {
   // disable JTAG to get control of all pins on PORTA/L
   JTAGEN_bit = 0;
 
+  TRISA = 0;
+  LATA = 0xFFFF;
+
   AI_init();
   DAC_init();
   SPI_init();
@@ -131,9 +134,10 @@ void main() {
   DAC_startTimer();
 
   while(1){
+
 //    MIDI_CORE_readFromRxBuffer();
 //    AI_readPotmeters();
-    SPI_checkForReceivedData();
+//    SPI_checkForReceivedData();
 
     if(DAC_dacUpdatesFinished){
       DAC_dacUpdatesFinished = 0;
