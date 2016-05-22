@@ -3,7 +3,7 @@ import store from '../../state/store.js';
 var serializer = require('./serializer.js');
 var preparer = require('./preparer.js');
 var printer = require('./printer.js');
-//var spi = require('../spi/spi-fd.js');
+var spi = require('../spi/spi-fd.js');
 
 // auto-update voices whenever state changes
 // TODO: listen to only matrix changes!
@@ -22,7 +22,7 @@ function sendMatrix(){
   }
   var buffers = serialize();
   _.each(buffers, function(buffer){
-    //spi.write(buffer);
+    spi.write(buffer);
     console.log(buffer);
   });
 
