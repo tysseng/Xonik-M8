@@ -1,37 +1,41 @@
-module.exports = [
+import { panelControllers } from "./PanelControllers";
+
+let inputs = [
   {
-    id: 0,
+    id: '0',
     hwId: 0, 
-    defaultName: "VCO 1 pitch"
+    defaultPanelController: panelControllers.VCO_1_PITCH
   },
   {
-    id: 1,
+    id: '1',
     hwId: 1,    
-    defaultName: "VCO 2 pitch"
+    defaultPanelController: panelControllers.VCO_2_PITCH
   },  
   {
-    id: 2, 
+    id: '2', 
     hwId: 2,    
-    defaultName: "VCO 3 pitch"
+    defaultPanelController: panelControllers.VCO_3_PITCH
   },  
   {
-    id: 3, 
+    id: '3', 
     hwId: 3,    
-    defaultName: "Filter 1 cut-off"
+    defaultPanelController: panelControllers.FILTER_1_CUTOFF
   },
   {
-    id: 4, 
+    id: '4', 
     hwId: 4,    
-    defaultName: "Filter 1 resonance"
+    defaultPanelController: panelControllers.FILTER_1_RESONANCE
   },
   {
-    id: 5, 
+    id: '5', 
     hwId: 5,    
-    defaultName: "Filter 1 slope" //12/24 dB
+    defaultPanelController: panelControllers.FILTER_1_SLOPE
   },
   {
-    id: 6, 
+    id: '6', 
     hwId: 6,    
-    defaultName: "Filter 1 mode" //hp, bp, lp
+    defaultPanelController: panelControllers.FILTER_1_MODE
   } 
 ];
+
+export default inputs;
