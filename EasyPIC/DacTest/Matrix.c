@@ -11,6 +11,7 @@
 #include "Config.h"
 #include "Definitions.h"
 #include "Nodetypes.h"
+#include "MatrixCommandTypes.h"
 #include "Output.h"
 #include "Matrix.internal.h"
 #include "Matrix.h"
@@ -177,7 +178,7 @@ void nodeFuncLfoPulse(Node *aNode){
         }
         aNode->highResState = 0;
         //TODO: For testing
-        aNode->params[2] = 0;
+        *aNode->params[2] = 0;
     } else {
         aNode->highResState++;
         if(aNode->highResState == pulsewidth || aNode->highResState == cyclelength){
@@ -361,10 +362,10 @@ void nodeFuncBufferInput(Node *aNode){
 }
 
 // write output to outputBuffer
-// Param 0: output buffer position
-// Param 1: index of Node to fetch result from
+// Param 0: index of Node to fetch result from
+// Param 1: output buffer position
 void nodeFuncOutput(Node *aNode){
-  OUT_outputBuffer[*aNode->params[0]] = *aNode->params[1];
+  OUT_outputBuffer[*aNode->params[1]] = *aNode->params[0];
 }
 
 // Convert linear value to exponential. Only positive values are converted,
@@ -382,11 +383,11 @@ void nodeFuncPositiveExp(Node *aNode){
 }
 
 // write output to outputBuffer and correct for vco tuning.
-// Param 0: output buffer position
-// Param 1: index of Node to fetch result from
+// Param 0: index of Node to fetch result from
+// Param 1: output buffer position
 void nodeFuncOutputTuned(Node *aNode){
-  char vco = *aNode->params[0]; // must be 0,1,2
-  matrixint value = *aNode->params[1];
+  char vco = *aNode->params[1]; // must be 0,1,2
+  matrixint value = *aNode->params[0];
   
   // convert value to 7 bit (between -64 and +63)
   int tuneIndex = 64 + (value >> 9);
@@ -436,7 +437,7 @@ void MX_addConstant(int constant){
 }
 
 void MX_updateConstant(unsigned short *bytes){
-  MX_nodeResults[bytes[CONST_POSITION]] = BAT_getAsInt(bytes, CONST_VALUE_HI);
+  MX_nodeResults[BAT_getAsInt(bytes, CONST_POSITION_HI)] = BAT_getAsInt(bytes, CONST_VALUE_HI);
 }
 
 void MX_addNode(unsigned short *bytes){
@@ -457,6 +458,8 @@ void MX_addNode(unsigned short *bytes){
   
   MX_nodeResults[resultPosition] = BAT_getAsInt(bytes, NODE_RESULT_HI);
   nodes[position].result = &MX_nodeResults[resultPosition];
+  nodes[position].highResState = 0;
+  nodes[position].state = 0;
   nodesInUse++;
 }
 
@@ -469,15 +472,21 @@ void MX_updateNode(unsigned short *bytes){
   unsigned int resultPosition = BAT_getAsUInt(bytes, NODE_POSITION_HI);
   unsigned int position = resultPosition - constantsInUse - INPUTS;
   unsigned short i;
+  
+  unsigned int paramPos;
 
   nodes[position].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
   for(i=0; i<8; i++){
-    nodes[position].params[i] = &MX_nodeResults[BAT_getAsUInt(bytes, i*2 + NODE_PARAM_0_HI)];
+    paramPos = BAT_getAsUInt(bytes, i*2 + NODE_PARAM_0_HI);
+    LATA = paramPos;
+    nodes[position].params[i] = &MX_nodeResults[paramPos];
   }
   nodes[position].paramsInUse = bytes[NODE_PARAMS_IN_USE];
   
   MX_nodeResults[resultPosition] = BAT_getAsInt(bytes, NODE_RESULT_HI);
-  nodes[position].result = &MX_nodeResults[position + constantsInUse];
+  nodes[position].result = &MX_nodeResults[resultPosition];
+  nodes[position].highResState = 0;
+  nodes[position].state = 0;
 }
     
 void MX_setNodeCount(unsigned short *bytes){
@@ -504,8 +513,9 @@ void MX_runMatrix(){
   unsigned short i;
 
   if(MX_isSuspended) return;
-  
+
   for(i = 0; i<nodesInUse; i++){
+    LATA=i;
     nodes[i].func(&nodes[i]);
   }
 
@@ -516,7 +526,18 @@ void MX_runMatrix(){
 
 void MX_command(char* package){
   // Start, stop matrix, possibly in conjunction with an interrupt
-  
+  switch(package[MATRIX_CMD_KEY_POSITION]) {
+    case MATRIX_CMD_STOP:
+      MX_isSuspended = 1;
+      break;
+    case MATRIX_CMD_START:
+      MX_isSuspended = 0;
+      break;
+    case MATRIX_CMD_RESTART:
+      //TODO: Add cleanup of matrix before restart if necessary.
+      MX_isSuspended = 0;
+      break;
+  }
   // TODO: Turn down output volume on stop, requires knowledge of
 }
 

@@ -26,8 +26,6 @@
 // Oscillator Selection Bits: Primary Osc w/PLL
 // Primary Oscillator Configuration: XT osc mode
 
-
-
 #include "Dac.h"
 #include "AnalogInputs.h"
 #include "Spi.h"
@@ -38,6 +36,7 @@
 #include "Midi.h"
 #include "built_in.h"
 #include "Config.test.h"
+#include "PinConfig.h"
 
 #ifdef RUNTESTS
   #include "Spi.test.h"
@@ -105,8 +104,17 @@ void main() {
 }
 #endif
 
+unsigned int alive = 0;
+
 #ifndef RUNTESTS
 void main() {
+
+  // disable JTAG to get control of all pins on PORTA/L
+  JTAGEN_bit = 0;
+
+  TRISA = 0;
+  LATA = 0xFFFF;
+
   AI_init();
   DAC_init();
   SPI_init();
@@ -128,8 +136,19 @@ void main() {
   DAC_startTimer();
 
   while(1){
-    MIDI_CORE_readFromRxBuffer();
-    AI_readPotmeters();
+
+    if(alive == 0){
+      if(LATA == 0){
+        LATA = 0xFFFF;
+      } else {
+        LATA = 0;
+      }
+    }
+    alive++;
+
+//    MIDI_CORE_readFromRxBuffer();
+//    AI_readPotmeters();
+
     SPI_checkForReceivedData();
 
     if(DAC_dacUpdatesFinished){
@@ -151,6 +170,10 @@ TODO:
 - At start: prepare everything, then wait for start signal on pin with interrupt
 - Sync dac clock by using pin with interrupt instead of timer? will give
   synchronizable LFOs.
+
+- SPI: Request send to master if tuning and global tuning fails.
+- SPI: Allow master to fetch list of tunings and failed tunings
+
 
 Mathematical expressions
 - divide

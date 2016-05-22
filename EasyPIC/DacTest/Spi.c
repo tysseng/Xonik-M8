@@ -19,6 +19,7 @@
  *  - _SPI_ACTIVE_2_IDLE in MikroC PRO for PIC32 equals _SPI_HIGH_2_LOW in
  *    MikroC PRO for PIC
  *  - in MikroC, SPI3A is named SPI4
+    - SPI2A however, is named SPI2
  *  - Data received through SPI is displayed on PORTB
  *  - PIC32 SPI is 5v tolerant so no voltage conversion is needed between a
  *    PIC18F and a PIC32.
@@ -34,12 +35,13 @@
 #include "Tune.h"
 #include "Config.h"
 #include "Types.h"
+#include "Spi.h"
 #include "Spi.internal.h"
 #include "ByteArrayTools.h"
 #include <built_in.h>
 
-#define TX_INTERRUPT_TRIS TRISG1_bit
-#define TX_INTERRUPT LATG1_bit
+#define TX_INTERRUPT_TRIS TRISC4_bit
+#define TX_INTERRUPT LATC4_bit
 
 unsigned int i = 0;
 
@@ -65,11 +67,22 @@ unsigned short dataToSend = 0;
 unsigned short controller[8];
 unsigned short potmeter[8]; // last registered potmeter value
 
-void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
+#define SPI_IP0 IPC7.B26
+#define SPI_IP1 IPC7.B27
+#define SPI_IP2 IPC7.B28
+#define SPI_RX_IE SPI2RXIE_bit
+#define SPI_RX_IF SPI2RXIF_bit
+#define SPI_CON_ENHBUF SPI2CON.ENHBUF
+#define SPI_IVT IVT_SPI_2
+#define SPI_BUF SPI2BUF
+#define SLAVE_SPI_Init_Advanced SPI2_Init_Advanced
 
+void SPI3_interrupt() iv SPI_IVT ilevel 6 ics ICS_SOFT{
   volatile char rxbyte;
 
-  rxbyte = SPI4BUF;
+  rxbyte = SPI_BUF;
+
+//  LATA = rxbyte;
   
   if(dataToSend){
     // Remove interrupt after first byte has been sent.
@@ -80,7 +93,7 @@ void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
     // Prepare next byte if one is present.
     // If not, indicate that sending is complete
     if(txbytecounter < txlength){
-      SPI4BUF = txbuffer[txbytecounter];
+      SPI_BUF = txbuffer[txbytecounter];
       //txbuffer[txbytecounter] = 0;
       txbytecounter++;
     } else {
@@ -93,13 +106,13 @@ void SPI4_interrupt() iv IVT_SPI_4 ilevel 6 ics ICS_SOFT{
   // for send. This also covers the case when the master is writing but not
   // expecting any returned data.
   if(!dataToSend){
-    SPI4BUF = 0;
+    SPI_BUF = 0;
   }
   
   receiveByte(rxbyte);
-  
+
   //reset interrupt
-  SPI4RXIF_bit = 0;
+  SPI_RX_IF = 0;
 }
 
 void receiveByte(char rxbyte){
@@ -128,33 +141,45 @@ void receiveByte(char rxbyte){
   }
 }
 
-void initSPI4Interrupts(){
+void SPI_mockReceive(char* buffer){
+  char i;
+  bytesInRxBuffer = buffer[0];
+  rxReadPos = 0;
+  for(i=0; i < bytesInRxBuffer; i++){
+    rxbuffer[i] = buffer[i];
+  }
+  SPI_checkForReceivedData();
+}
+
+void initSlaveSPIInterrupts(){
 
   // Trigger interrupt when buffer is not empty.
   // Only used in enhanced buffer mode
-/*   SPI4CON.SRXISEL1 = 0;
-   SPI4CON.SRXISEL0 = 1;*/
+/*   SPI3CON.SRXISEL1 = 0;
+   SPI3CON.SRXISEL0 = 1;*/
 
    //Turn on if you want to be able to receive multiple bytes before
    //treating them.
-   SPI4CON.ENHBUF = 0;
+   SPI_CON_ENHBUF = 0;
 
    //Clear data received interrupt flag
-   SPI4RXIF_bit = 0;
+   SPI_RX_IF = 0;
 
    //Set priority as 6
-   IPC8.B4 = 1;  //SPI3AIP2
-   IPC8.B3 = 1;  //SPI3AIP1
-   IPC8.B2 = 0;  //SPI3AIP0
+   SPI_IP2 = 1;
+   SPI_IP1 = 1;
+   SPI_IP0 = 0;
 
    //Enable interrupt on receive
-   SPI4RXIE_bit = 1;
+   SPI_RX_IE = 1;
 }
 
-void initSPI4(){
+
+
+void initSlaveSPI(){
   //NB: SPI4 = SPI3A on the chip as Mikroelektronika and Microchip use
   //    different naming schemes
-  SPI4_Init_Advanced(
+  SLAVE_SPI_Init_Advanced(
     _SPI_SLAVE,
     _SPI_8_BIT,
     1024, // not used in slave mode
@@ -163,7 +188,7 @@ void initSPI4(){
     _SPI_CLK_IDLE_LOW,
     _SPI_ACTIVE_2_IDLE);
     
-  initSPI4Interrupts();
+  initSlaveSPIInterrupts();
 }
 
 void initSlaveInterrupt(){
@@ -268,37 +293,12 @@ void SPI_SEND_noteOff(char voice){
 }
 
 void SPI_init() {
-  initSPI4();
+  initSlaveSPI();
   initSlaveInterrupt();
 }
 
 // TODO: For debug only
 /*
-#define barport LATb
-
-void showAsBarOnPortD(unsigned short value){
-  trisb = 0;
-  if(value < 16){
-    barport = 0;
-  } else if (value < 48){
-    barport = 0b00000001;
-  } else if (value < 80){
-    barport = 0b00000011;
-  } else if (value < 112){
-    barport = 0b00000111;
-  } else if (value < 144){
-    barport = 0b00001111;
-  } else if (value < 176){
-    barport = 0b00011111;
-  } else if (value < 208){
-    barport = 0b00111111;
-  } else if (value < 240){
-    barport = 0b01111111;
-  } else {
-    barport = 0b11111111;
-  }
-}
-
 void updateControllerAndSendThroughSpi(unsigned short id, unsigned short value){
   potmeter[id] = value;
   controller[id] = value;

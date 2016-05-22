@@ -29,6 +29,7 @@ var SPI = require('spi');
 var exit = require('../exit.js');
 
 var spi;
+var slaveReadEnabled = false;
 var readCallback;
 
 // Watch changes on pin that indicates that the SPI slave has data it wants transferred 
@@ -119,6 +120,8 @@ function read(){
   // are completely isolated. Thus, we do not need to check if a read or write is in progress.
   var minBufferSize = config.spi.minBufferSize;
 
+  if(!slaveReadEnabled) return;
+
   spi.read(new Buffer(minBufferSize), function(device, rxbuffer) {
     // see comment above to understand why we try twice to read length
     console.log("rxbuffer:");
@@ -141,6 +144,8 @@ function read(){
 }
 
 function readRemainder(initialBuffer, transmissionLength){
+  if(!slaveReadEnabled) return;
+
   var remainder = transmissionLength - initialBuffer.length;  
 
   console.log("Going to read remaining " + remainder + " bytes from slave");
@@ -182,7 +187,10 @@ function write(txbuffer){
   console.log(txbuffer);
  
     spi.transfer(txbuffer, new Buffer(txbuffer.length), function(device, rxbuffer) {
-      // Detect if any data was received from the slave during write. The slave does not check
+ 
+     if(!slaveReadEnabled) return;
+
+     // Detect if any data was received from the slave during write. The slave does not check
       // if a master send is in progress before it starts sending data, but it raises an interrupt.
       // This interrupt may be received while the master sends data, in which case parts of the 
       // data the slave wants to send will be received while the master writes data. 

@@ -27,32 +27,10 @@
 #include "Dac.internal.h"
 #include "Matrix.h"
 #include "Output.h"
+#include "PinConfig.h"
 
-// PCB:
-
-#define A0 LATD2_bit
-#define A1 LATD3_bit
-#define _WR LATD4_bit
-#define LDAC LATD5_bit
-
-// In a real hw implementation _RS should always be 1 as we can reset the
-// dac manually before accepting user input.
-#define _RS LATD0_bit
-
-// NB: address bus is shared shared between the two multiplexers, so unless
-// both dac outputs are set correctly for the same output of the two mux'es,
-// one mux must be turned off before the second is turned on. As the
-// sample and hold circuit has some setling time, it will probably be best
-// to set them at the same time.
-#define SH_EN0 LATD8_bit
-#define SH_EN1 LATD9_bit
-#define SH_A0 LATD10_bit
-#define SH_A1 LATD12_bit
-#define SH_A2 LATD13_bit
-#define SH_A3 LATD14_bit
-
-#define DATA_LO LATA // porta/l - D0-D7
-#define DATA_HI LATB // portb/l - D8-D15
+//#define DATA_LO LATA // porta/l - D0-D7
+//#define DATA_HI LATB // portb/l - D8-D15
 
 
 // The number of dac updates finished since last time the matrix were run.
@@ -117,21 +95,13 @@ void DAC_step(){
 void loadDac(unsigned int value){
 
   // Set output value
-  // TODO: Improve efficiency here in real program by using all of a 16bit
-  // port
-  DATA_LO = Lo(value);
-  DATA_HI = Hi(value);
+  DAC_BUS = value;
 
    // load DAC input register
-  _WR=0;
-  LDAC=0;
+  DAC_WR_LD = 0;
 
   // load DAC register
-  _WR=1;
-  LDAC=1;
-
-  // reset state
-  LDAC=0;
+  DAC_WR_LD = 1;
 }
 
 //TODO:
@@ -142,64 +112,55 @@ void loadDac(unsigned int value){
 void writeValuesToSH(char sr_output){
 
   // put s&h into hold mode
-  SH_EN0 = 0;
-  SH_EN1 = 0;
+  SH_EN = 0;
 
   //TODO: Switch DAC A/B outputs later.
   // select and load DAC B
-  A0 = 1;
-  A1 = 1;
+  DAC_ADDRESS = 1;
 
   loadDac(OUT_dacBuffer[sr_output] + 0x8000);
 
   //TODO: Switch DAC A/B outputs later.
   // select and load DAC A
-  A0 = 0;
-  A1 = 0;
-  
+  DAC_ADDRESS = 0;
+
   loadDac(OUT_dacBuffer[SR_OUTPUTS + sr_output] + 0x8000);
 
-
-
   // set SH address
-  // TODO: Improve efficiency here in real program by using consecutive bits
-  // of a single 8 bit port.
 
   // TODO: The S&H is miswired so the bit order here is a work around while
   // waiting for the corrected PCB
-  //SH_A0 = sr_output.b0;
-  //SH_A1 = sr_output.b1;
-  //SH_A2 = sr_output.b2;
-  //SH_A3 = sr_output.b3;
+  // DAC_BUS = sr_output;
 
-  SH_A0 = sr_output.b1;
-  SH_A1 = sr_output.b0;
-  SH_A2 = sr_output.b3;
-  SH_A3 = sr_output.b2;
+  DAC_BUS.b0 = sr_output.b1;
+  DAC_BUS.b1 = sr_output.b0;
+  DAC_BUS.b2 = sr_output.b3;
+  DAC_BUS.b3 = sr_output.b2;
 
   // let values settle
   delay_cyc(20);
 
   // put s&h into sample mode, exposing the addressed s&h for the DAC output.
-  SH_EN0 = 1;
-  SH_EN1 = 1;
+  SH_EN = 1;
 
   // now go away and let the S&H sample untill the next SH should be loaded
 }
 
 void initDacPorts(){
-  // disable JTAG to get control of all pins on PORTA/L
-  JTAGEN_bit = 0;
 
-  //Set ports as output
-  TRISB = TRISB & 0xFF00;
-  LATB = 0;
+  DAC_ADDRESS = 0;
+  DAC_ADDRESS_TRIS = 0;
 
-  TRISD = 0;
-  LATD = 0;
-
-  TRISA = 0;
-  LATA = 0;
+  // data is loaded into input register on falling edge so it must initially
+  // be high.
+  DAC_WR_LD = 1;
+  DAC_WR_LD_TRIS = 0;
+  
+  SH_EN = 0;
+  SH_EN_TRIS = 0;
+  
+  DAC_BUS = 0;
+  DAC_BUS_TRIS = 0;
 }
 
 void DAC_startTimer(){
@@ -231,22 +192,12 @@ void DAC_init(){
 
   //necessary to start runMatrix.
   DAC_dacUpdatesFinished = 0;
-    
-  // select DAC A
-  A0 = 0;
-  A1 = 0;
 
-  // set
-  _WR = 1;
-  LDAC = 0;
-  _RS = 1;
+  // set DAC outputs to center
+  DAC_ADDRESS = 1;
+  loadDac(0x8000);
 
-  // select DAC B
-  A0 = 1;
-  A1 = 1;
-
-  // set
-  _WR = 1;
-  LDAC = 0;
-  _RS = 1;
+  DAC_ADDRESS = 0;
+  loadDac(0x8000);
+  
 }

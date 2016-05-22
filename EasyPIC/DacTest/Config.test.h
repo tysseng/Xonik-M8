@@ -1,4 +1,4 @@
-#define RUNTESTS
+//#define RUNTESTS
 #define UNIT_TEST_MATRIX
 //#define UNIT_TEST_TUNE
 //#define UNIT_TEST_SPI
