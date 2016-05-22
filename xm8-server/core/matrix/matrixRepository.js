@@ -1,9 +1,12 @@
 var _ = require('lodash');
 import store from '../../state/store.js';
+import config from '../config.js';
+
 var serializer = require('./serializer.js');
 var preparer = require('./preparer.js');
 var printer = require('./printer.js');
 var commands = require('./commands.js');
+
 
 let spi;
 
@@ -63,7 +66,7 @@ function serialize(){
 
   // add all constants and constant lengths
   for(var i = 0; i<net.constants.length; i++){
-    var serializedConstant = serializer.serializeConstant(i, net.constants[i]);
+    var serializedConstant = serializer.serializeConstant(i + config.matrix.numberOfInputs, net.constants[i]);
     buffers.push(serializedConstant);
   }
   buffers.push(serializer.serializeConstantsCount(net.constants));
