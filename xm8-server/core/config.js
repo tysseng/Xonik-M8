@@ -9,11 +9,15 @@ var config = {
     //250k makes pic32 fail at times
     //1000000 fails all the time
     maxSpeed: 200000, 
-    interruptPin: 3,
+    interruptPin: 22,
     minBufferSize: 16 
   },
   matrix: {
     numberOfInputs: 64
+  },
+  voices: {
+    numberOfVoices: 8,
+    numberOfGroups: 8
   },
   wifi: {
     adapter: "wlan0",

@@ -1,7 +1,8 @@
 var config = {
-  serverAddr: 'ws://10.0.1.123',
+  serverAddr: 'ws://localhost:8001',
   endpoints: {
-  	controllers: '/controller'
+  	controllers: '/controller',
+    state: '/state'
   }
 }
 

@@ -6,14 +6,20 @@ Go to http://pi_address/
 TODO: Sanitize inputs
 */
 
-var express = require('express');
-var app = express();
-var ws = require('express-ws')(app);
-var bodyParser = require('body-parser');
+// Server
+import express from 'express';
+import express_ws from 'express-ws';
+import bodyParser from 'body-parser';
 
-var wifiRoutes = require('./routes/wifi');
-var matrixRoutes = require('./routes/matrix');
-require('./routes/controller')(app, ws);
+//import wifiRoutes from './routes/wifi';
+import matrixRoutes from './routes/matrix';
+import voiceRoutes from './routes/voice';
+import stateRoute from './routes/state';
+//import controllerRoute from './routes/controller';
+
+// Setup server
+let app = express();
+let ws = express_ws(app);
 
 // for parsing application/json
 app.use(bodyParser.json()); 
@@ -27,8 +33,13 @@ app.get('/', function (req, res) {
   res.redirect("/xm8-gui.html");
 });
 
-app.use('/wifi', wifiRoutes);
+//web socket routes
+stateRoute(app, ws);
+//controllerRoute(app, ws);
+
+//app.use('/wifi', wifiRoutes);
 app.use('/matrix', matrixRoutes);
+app.use('/voice', voiceRoutes);
 
 // Capture all requests not yet handled and redirect them to the captive portal
 // page as they may origin from wifi logon.
@@ -38,4 +49,4 @@ app.use('/matrix', matrixRoutes);
   res.redirect("/xm8-captive-portal.html");
 });*/
 
-app.listen(80);
+app.listen(8001);

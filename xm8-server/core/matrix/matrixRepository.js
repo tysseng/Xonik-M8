@@ -1,16 +1,50 @@
 var _ = require('lodash');
-var matrix = require('./matrix.js');
+import store from '../../state/store.js';
 var serializer = require('./serializer.js');
 var preparer = require('./preparer.js');
 var printer = require('./printer.js');
-var spi = require('../spi/spi-fd.js');
+var commands = require('./commands.js');
+
+let spi;
+
+if(false){
+  spi = require('../spi/spi-fd.js');
+} else {
+  spi = {
+    write: buffer => {
+      console.log("Writing to mock SPI: ")
+      console.log(buffer);
+    }
+  }
+}
+
+
+
+// auto-update voices whenever state changes
+// TODO: listen to only matrix changes!
+store.subscribe(
+  () => {
+    if(store.getState().matrix.get('shouldAutoUpdate')){
+      sendMatrix(); 
+    }
+  }
+);
 
 function sendMatrix(){
+  if(!preparer.isNetValid()){
+    console.log("Matrix has validation errors, synth voices not updated");
+    return {updated: false, message: "Matrix has validation errors, synth voices not updated"};
+  }
+  
+  spi.write(commands.stop);
+
   var buffers = serialize();
   _.each(buffers, function(buffer){
     spi.write(buffer);
-    console.log(buffer);
-  });
+  });  
+  spi.write(commands.restart);
+
+  return {updated: true, message: "Synth voices updated"};  
 }
 
 function save(){
@@ -25,7 +59,7 @@ function serialize(){
   var net = preparer.prepareNetForSerialization();
   printer.printNet(net);
 
-  var buffers = []
+  var buffers = [];
 
   // add all constants and constant lengths
   for(var i = 0; i<net.constants.length; i++){

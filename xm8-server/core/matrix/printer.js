@@ -1,14 +1,17 @@
-var paramType = require('./paramType.js');
-var nodeType = require('./nodeType.js');
+var paramTypes = require('../../shared/matrix/ParameterTypes.js');
+var nodeTypes = require('../../shared/matrix/NodeTypes.js');
 var _ = require('lodash');
+
+let nodeType = nodeTypes.map;
+let paramType = paramTypes.map;
 
 function getNodeTypeStr(type){
   switch(type){
-    case nodeType.LFO_PULSE:
+    case nodeType.LFO_PULSE.id:
       return "NODE_LFO_PULSE";
-    case nodeType.OUTPUT:
+    case nodeType.OUTPUT.id:
       return "NODE_OUTPUT";
-    case nodeType.INVERT:
+    case nodeType.INVERT.id:
       return "NODE_INVERT";
     default:
       return "UNKNOWN (" + type + ")";
@@ -17,13 +20,13 @@ function getNodeTypeStr(type){
 
 function getParamTypeStr(type){
   switch(type){
-    case paramType.CONSTANT:
+    case paramType.CONSTANT.id:
       return "CONSTANT";
-    case paramType.LINK:
+    case paramType.LINK.id:
       return "LINK";
-    case paramType.INPUT:
+    case paramType.INPUT.id:
       return "INPUT";
-    case paramType.EMPTY:
+    case paramType.UNUSED.id:
       return "EMPTY";
     default:
       return "UNKNOWN (" + type + ")";
@@ -33,7 +36,7 @@ function getParamTypeStr(type){
 function isComplete(node){
   var isComplete = true;
   _.each(node.params, function(param){
-    if(param.type === paramType.EMPTY) isComplete = false;
+    if(param.type === paramType.UNUSED.id) isComplete = false;
   });
   return isComplete;
 }
@@ -49,8 +52,9 @@ function printNode(node){
   
   _.each(node.params, function(param){
     var parType = getParamTypeStr(param.type);
-    var parValue = (param.type === paramType.LINK ?  "from " + getNodeTypeStr(param.value.from.type) : param.value);
-    console.log("Param: " + parType + ' ' + parValue + " (" + param.label + ")" + ", pos " + param.nodePos);
+    var parValue = (param.type === paramType.LINK.id ?  "from " + getNodeTypeStr(param.value.from.type) : param.value);
+    var parLabel = param.label ? " (" + param.label + ")" : "";
+    console.log("Param: " + parType + ' ' + parValue + parLabel + ", pos " + param.nodePos);
   });
   
   _.each(node.consumers, function(consumer){

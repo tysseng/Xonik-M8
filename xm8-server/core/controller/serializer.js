@@ -45,7 +45,7 @@ function deserializeController(buffer, source){
         controller.value = buffer.readInt8(2);
         break;
       case spiType.CTRL_16_BIT.id:
-        controller.value = buffer.readInt16(2);
+        controller.value = buffer.readInt16BE(2);
         break;
     }  
   } else {
