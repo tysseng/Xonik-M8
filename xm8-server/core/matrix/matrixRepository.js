@@ -7,7 +7,7 @@ var commands = require('./commands.js');
 
 let spi;
 
-if(false){
+if(true){
   spi = require('../spi/spi-fd.js');
 } else {
   spi = {
