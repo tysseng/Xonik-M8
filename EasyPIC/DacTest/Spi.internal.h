@@ -1,7 +1,7 @@
 #ifndef _SPI_INTERNAL_H
 #define _SPI_INTERNAL_H
 
-#define MAX_PACKAGE_SIZE 21
+#define MAX_PACKAGE_SIZE 256
 
 enum packageTypes {
   SPI_CMD_CTRL_8_BIT = 0,

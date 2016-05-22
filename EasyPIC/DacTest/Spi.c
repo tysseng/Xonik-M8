@@ -35,6 +35,7 @@
 #include "Tune.h"
 #include "Config.h"
 #include "Types.h"
+#include "Spi.h"
 #include "Spi.internal.h"
 #include "ByteArrayTools.h"
 #include <built_in.h>
@@ -138,6 +139,16 @@ void receiveByte(char rxbyte){
       rxbytecounter = 0;
     }
   }
+}
+
+void SPI_mockReceive(char* buffer){
+  char i;
+  bytesInRxBuffer = buffer[0];
+  rxReadPos = 0;
+  for(i=0; i < bytesInRxBuffer; i++){
+    rxbuffer[i] = buffer[i];
+  }
+  SPI_checkForReceivedData();
 }
 
 void initSlaveSPIInterrupts(){

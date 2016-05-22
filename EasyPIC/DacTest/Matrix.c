@@ -11,6 +11,7 @@
 #include "Config.h"
 #include "Definitions.h"
 #include "Nodetypes.h"
+#include "MatrixCommandTypes.h"
 #include "Output.h"
 #include "Matrix.internal.h"
 #include "Matrix.h"
@@ -457,6 +458,8 @@ void MX_addNode(unsigned short *bytes){
   
   MX_nodeResults[resultPosition] = BAT_getAsInt(bytes, NODE_RESULT_HI);
   nodes[position].result = &MX_nodeResults[resultPosition];
+  nodes[position].highResState = 0;
+  nodes[position].state = 0;
   nodesInUse++;
 }
 
@@ -469,15 +472,21 @@ void MX_updateNode(unsigned short *bytes){
   unsigned int resultPosition = BAT_getAsUInt(bytes, NODE_POSITION_HI);
   unsigned int position = resultPosition - constantsInUse - INPUTS;
   unsigned short i;
+  
+  unsigned int paramPos;
 
   nodes[position].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
   for(i=0; i<8; i++){
-    nodes[position].params[i] = &MX_nodeResults[BAT_getAsUInt(bytes, i*2 + NODE_PARAM_0_HI)];
+    paramPos = BAT_getAsUInt(bytes, i*2 + NODE_PARAM_0_HI);
+    LATA = paramPos;
+    nodes[position].params[i] = &MX_nodeResults[paramPos];
   }
   nodes[position].paramsInUse = bytes[NODE_PARAMS_IN_USE];
   
   MX_nodeResults[resultPosition] = BAT_getAsInt(bytes, NODE_RESULT_HI);
-  nodes[position].result = &MX_nodeResults[position + constantsInUse];
+  nodes[position].result = &MX_nodeResults[resultPosition];
+  nodes[position].highResState = 0;
+  nodes[position].state = 0;
 }
     
 void MX_setNodeCount(unsigned short *bytes){
@@ -505,7 +514,6 @@ void MX_runMatrix(){
 
   if(MX_isSuspended) return;
 
-
   for(i = 0; i<nodesInUse; i++){
     LATA=i;
     nodes[i].func(&nodes[i]);
@@ -518,7 +526,18 @@ void MX_runMatrix(){
 
 void MX_command(char* package){
   // Start, stop matrix, possibly in conjunction with an interrupt
-  
+  switch(package[MATRIX_CMD_KEY_POSITION]) {
+    case MATRIX_CMD_STOP:
+      MX_isSuspended = 1;
+      break;
+    case MATRIX_CMD_START:
+      MX_isSuspended = 0;
+      break;
+    case MATRIX_CMD_RESTART:
+      //TODO: Add cleanup of matrix before restart if necessary.
+      MX_isSuspended = 0;
+      break;
+  }
   // TODO: Turn down output volume on stop, requires knowledge of
 }
 

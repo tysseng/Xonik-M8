@@ -41,6 +41,9 @@
 #define NODE_RESULT_HI 22
 #define NODE_RESULT_LO 23
 
+// positions in matrix command buffer
+#define MATRIX_CMD_KEY_POSITION 2
+
 // placements in constants array when creating a constant through spi
 #define CONST_POSITION_HI 2
 #define CONST_POSITION_LO 3

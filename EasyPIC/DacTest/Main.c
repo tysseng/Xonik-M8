@@ -104,6 +104,8 @@ void main() {
 }
 #endif
 
+unsigned int alive = 0;
+
 #ifndef RUNTESTS
 void main() {
 
@@ -135,8 +137,18 @@ void main() {
 
   while(1){
 
+    if(alive == 0){
+      if(LATA == 0){
+        LATA = 0xFFFF;
+      } else {
+        LATA = 0;
+      }
+    }
+    alive++;
+
 //    MIDI_CORE_readFromRxBuffer();
 //    AI_readPotmeters();
+
     SPI_checkForReceivedData();
 
     if(DAC_dacUpdatesFinished){
