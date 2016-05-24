@@ -1,4 +1,4 @@
-var config = require('../config.js');
+var config = require('../../shared/config.js');
 var _ = require('lodash');
 
 function getNetworkBySsid(ssid, nets){

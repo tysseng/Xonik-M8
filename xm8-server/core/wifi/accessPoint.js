@@ -1,6 +1,6 @@
 // TODO: Check if hostapd is running before starting. Kill any running processes.
 
-var config = require('../config.js');
+var config = require('../../shared/config.js');
 var wc = require('./wifiCommands.js');
 var pt = require('../promiseTools.js');
 var utils = require('./utils.js');

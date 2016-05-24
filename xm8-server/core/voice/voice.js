@@ -3,7 +3,7 @@
 // voice group
 // TODO: Save/load group configs - as 
 
-var config = require('../config.js');
+var config = require('../../shared/config.js');
 var _ = require('lodash');
 
 var voices = [];

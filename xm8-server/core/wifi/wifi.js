@@ -15,7 +15,7 @@ var wpaParameters = require('./wpaSupplicantParams.js');
 var knownNets = require('./knownNets.js');
 var availableNets = require('./availableNets.js');
 var utils = require('./utils.js');
-var config = require('../config.js');
+var config = require('../../shared/config.js');
 
 var state = {
   connectedNet: undefined,

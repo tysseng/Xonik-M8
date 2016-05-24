@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import paramTypes from '../../shared/matrix/ParameterTypes.js';
 import nodeTypes from '../../shared/matrix/NodeTypes.js';
-import config from '../config.js';
+import config from '../../shared/config.js';
 import store from '../../state/store.js';
 
 let paramType = paramTypes.map;

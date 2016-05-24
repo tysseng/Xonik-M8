@@ -3,7 +3,7 @@
 
 var eventbus = require('../eventbus.js');
 var spi = require('../spi/spi-fd.js');
-var config = require('../config.js');
+var config = require('../../shared/config.js');
 var ctrlConfig = require('../../shared/controllerSetup.js');
 var spiType = require('../spi/spiType.js');
 var serializer = require ('./serializer.js');

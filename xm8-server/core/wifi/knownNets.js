@@ -1,4 +1,4 @@
-var config = require('../config.js');
+var config = require('../../shared/config.js');
 var jsonfile = require('jsonfile');
 var _ = require('lodash');
 var utils = require('./utils.js');

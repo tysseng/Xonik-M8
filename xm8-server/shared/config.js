@@ -1,5 +1,15 @@
 var config = {
+  frontend: {
+    //serverAddr: 'ws://10.0.1.123:8001',
+    serverAddr: 'ws://localhost:8001',
+    endpoints: {
+      controllers: '/controller',
+      state: '/state'
+    }
+  },  
   spi: {
+    mockSpi: true,
+    slaveReadEnabled: true,
     loopback: false,
     device: '/dev/spidev0.0',
     mode: 'MODE_1',     // clock idle low, clock phase active to idle.

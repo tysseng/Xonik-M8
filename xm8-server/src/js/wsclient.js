@@ -1,5 +1,5 @@
 var events = require("./eventbusses.js");
-var config = require("./config.js");
+import config from "../../shared/config.js";
 var ctrlSetup = require("../../shared/controllerSetup.js");
 
 var receiveOn = true;
@@ -22,7 +22,7 @@ function wsConnect(){
   if ("WebSocket" in window) {
     console.log("WebSocket is supported by your Browser!");
       
-    var ws = new WebSocket(config.serverAddr + config.endpoints.controllers);
+    var ws = new WebSocket(config.frontend.serverAddr + config.frontend.endpoints.controllers);
     ws.onopen = function(){
       console.log("Connected to XM8 server");
 

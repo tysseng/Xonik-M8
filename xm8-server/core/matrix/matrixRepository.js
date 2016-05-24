@@ -1,27 +1,11 @@
-var _ = require('lodash');
+import _ from 'lodash';
 import store from '../../state/store.js';
-import config from '../config.js';
-
-var serializer = require('./serializer.js');
-var preparer = require('./preparer.js');
-var printer = require('./printer.js');
-var commands = require('./commands.js');
-
-
-let spi;
-
-if(true){
-  spi = require('../spi/spi-fd.js');
-} else {
-  spi = {
-    write: buffer => {
-      console.log("Writing to mock SPI: ")
-      console.log(buffer);
-    }
-  }
-}
-
-
+import config from '../../shared/config.js';
+import spi from '../spi/spi-fd.js';
+import serializer from './serializer.js';
+import preparer from './preparer.js';
+import printer from './printer.js';
+import commands from './commands.js';
 
 // auto-update voices whenever state changes
 // TODO: listen to only matrix changes!

@@ -1,9 +1,9 @@
-import config from "./config.js";
+import config from "../../shared/config.js";
 
 let ws;
 
 if ("WebSocket" in window) {
-  ws = new WebSocket(config.serverAddr + config.endpoints.state);
+  ws = new WebSocket(config.frontend.serverAddr + config.frontend.endpoints.state);
   ws.onopen = function(){
     console.log("Connected to state service on XM8 server");
   }

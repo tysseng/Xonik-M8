@@ -1,6 +1,6 @@
 var wc = require('./wifiCommands.js');
 var utils = require('./utils.js');
-var config = require('../config.js');
+var config = require('../../shared/config.js');
 var pt = require('../promiseTools.js');
 var _ = require('lodash');
 var fs = require('fs');

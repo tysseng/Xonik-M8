@@ -1,4 +1,4 @@
-var config = require('../config.js');
+var config = require('../../shared/config.js');
 var wc = require('./wifiCommands.js');
 var utils = require('./utils.js');
 var pt = require('../promiseTools.js');
