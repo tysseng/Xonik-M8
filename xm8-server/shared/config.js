@@ -1,7 +1,14 @@
-var config = {
+import _ from 'lodash';
+try{
+  // NB: Must use require as import cannot be used within a try/catch block.
+  var localOverrides = require('./localConfigOverrides.js');
+} catch (e){
+  console.log("No local config overrides found");
+}
+
+let config = {
   frontend: {
-    //serverAddr: 'ws://10.0.1.123:8001',
-    serverAddr: 'ws://localhost:8001',
+    serverAddr: 'ws://10.0.1.123:8001',
     endpoints: {
       controllers: '/controller',
       state: '/state'
@@ -64,6 +71,12 @@ var config = {
       dnsmasqConf: '/etc/dnsmasq.conf'
     }    
   }
+}
+
+if(localOverrides) {
+  console.log("Overridden configuration for this host:");
+  console.log(localOverrides);
+  _.merge(config, localOverrides);
 }
 
 module.exports = config;

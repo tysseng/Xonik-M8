@@ -1,5 +1,6 @@
 xm8-server/node_modules/*
 xm8-server/static/js/xm8.js
+xm8-server/shared/localConfigOverrides.js
 EasyPIC/**/*.cfg
 EasyPIC/**/*.bmk
 EasyPIC/**/*.brk
