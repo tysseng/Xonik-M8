@@ -13,8 +13,8 @@ const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, on
     <h2>{node.name}</h2>
     <h3>General</h3>
     <p>
-      <label htmlFor="nodeNamee">Name</label>     
-      <input id="nodeNamee" type="text" onChange={(e) => onNodeNameChange(node.id, e.target.value)} value={node.name}/>
+      <label htmlFor="nodeName">Name</label>     
+      <input id="nodeName" type="text" onChange={(e) => onNodeNameChange(node.id, e.target.value)} value={node.name}/>
     </p>
     <p> 
       <label htmlFor="nodeType">Node type</label>          

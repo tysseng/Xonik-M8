@@ -7,6 +7,10 @@ import _ from 'lodash';
 
 let nextAvailableNodeId = 1;
 
+const isLink = (type) => {
+  return type === paramTypes.map.LINK.id;
+}
+
 const getEmptyParam = (id, type) => Map({
   id: id,
   type: type,    
@@ -40,6 +44,9 @@ const param = (state, action) => {
       return state.set('value', action.paramValue);
     case 'CHANGE_NODE_PARAM_UNIT':    
       return state.set('unit', action.paramUnit);
+    case 'DELETE_NODE': 
+      // Will be executed if the deleted node links to this param, remove value
+      return state.set('value', "");      
     default:
       return state;
   }
@@ -86,6 +93,19 @@ const node = (state, action) => {
       return validateNode(state.updateIn(['params', action.paramId], (aParam) => param(aParam, action)));
     case 'CHANGE_NODE_NAME':
       return state.set('name', action.name);
+    case 'DELETE_NODE': 
+      // Will be executed if the deleted node links to this node - find and reset the parameter that
+      // links to the deleted node
+      let updatedState = state;
+      let params = state.get('params');
+      if(params){     
+        _.each(params.toArray(), currentParam => {
+          if(isLink(currentParam.get('type')) && currentParam.get('value') == action.nodeId){
+            updatedState = validateNode(updatedState.updateIn(['params', currentParam.get('id')], aParam => param(aParam, action)));
+          }
+        });
+      }    
+      return updatedState;  
     default: 
       return state;
   }
@@ -99,8 +119,22 @@ const nodes = (
       let nodeId = '' + nextAvailableNodeId;
       return state.set(nodeId, node(undefined, action));
     case 'DELETE_NODE':
-      // TODO: Find all nodes linking to this one and reset their value.
-      return state.delete(action.nodeId);      
+      let updatedState = state;
+
+      // Search for nodes that link to the deleted node and propagate the action all the way down to the parameter
+      // to reset it.
+      _.each(state.toIndexedSeq().toArray(), (currentNode) => {  
+        let params = currentNode.get('params');
+        if(params){     
+          _.each(params.toArray(), param => {
+            console.log(param);
+            if(isLink(param.get('type')) && param.get('value') == action.nodeId){
+              updatedState = updatedState.updateIn([currentNode.get('id')], aNode => node(aNode, action));
+            }
+          });
+        }
+      });
+      return updatedState.delete(action.nodeId);      
     case 'CHANGE_NODE_PARAM_VALUE':
     case 'CHANGE_NODE_PARAM_TYPE':
     case 'CHANGE_NODE_TYPE':      

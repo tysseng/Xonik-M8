@@ -33,7 +33,7 @@ const NodeParameterForm = ({
     case "output":
       body = <OutputLinkDropdown onOutputLinkChange={(value) => onValueChange(value)} value={value}/>;
       break;
-    case "result":
+    case "result":      
       body = <NodeLinkDropdown nodes={nodes} currentnode={currentnode} onNodeLinkChange={(value) => onValueChange(value)} value={value}/>;
       break;
     case "constant":

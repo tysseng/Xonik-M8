@@ -40,7 +40,6 @@ export const deleteNode = (nodeId) => {
   }
 }
 
-
 export const changeNodeName = (nodeId, name) => {
   return {
     type: 'CHANGE_NODE_NAME',
@@ -86,6 +85,14 @@ export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
     nodeId: nodeId,
     paramId: paramId,
     paramUnit: paramUnit,
+    target: 'SERVER'
+  }
+}
+
+export const deleteLink = (linkId) => {
+  return {
+    type: 'DELETE_LINK',
+    linkId,
     target: 'SERVER'
   }
 }
