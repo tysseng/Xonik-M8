@@ -1,7 +1,6 @@
 // TODO - let emtpy values be undefined, not ""?
 // TODO - se på om man kan tweake action.type for å få bedre plassering av sletting av consumers.
 // TODO: Bytt fra updatedState til state.
-// TODO: Make link immutable!!!!!
 
 import nodeTypes from '../shared/matrix/NodeTypes.js';
 import paramTypes from '../shared/matrix/ParameterTypes.js';
@@ -75,24 +74,7 @@ const createConsumerLink = action => {
   return link; 
 }
 
-const param = (state, action) => {
 
-  switch(action.type){
-    case 'CHANGE_NODE_PARAM_TYPE':
-      return state.merge(getEmptyParam(action.paramId, action.paramType));
-    case 'CHANGE_NODE_PARAM_VALUE':
-      let value = action.paramValue;
-      if(isLink(action.paramType) && value && value != "") value = createLink(action);
-      return state.set('value', value);
-    case 'CHANGE_NODE_PARAM_UNIT':    
-      return state.set('unit', action.paramUnit);
-    case 'DELETE_NODE': 
-      // Will be executed if the deleted node links to this param, remove value
-      return state.set('value', "");      
-    default:
-      return state;
-  }
-}
 
 const validateNode = (state) => {
   let nodeIsValid = true;
@@ -120,6 +102,44 @@ const validateNode = (state) => {
   return updatedState.set('valid', nodeIsValid);   
 }
 
+const getFromNodeId = param => {
+  return param.getIn(['value', 'from']);
+}
+
+const removeFromConsumers = (state, nodeId, paramId) => {
+    let param = state.getIn([nodeId, 'params', paramId]);      
+    if(isLink(param.get('type'))) {
+      let currentFromNodeId = getFromNodeId(param);
+      if(currentFromNodeId){
+        let linkId = getLinkIdFromIds(nodeId, paramId);
+        state = state.deleteIn([currentFromNodeId, 'consumers', linkId]);    
+      }
+    }  
+    return state;  
+}
+
+const param = (state, action) => {
+
+  switch(action.type){
+    case 'CHANGE_NODE_PARAM_TYPE':
+      return state.merge(getEmptyParam(action.paramId, action.paramType));
+    case 'CHANGE_NODE_PARAM_VALUE':
+      let value = action.paramValue;
+      if(isLink(action.paramType) && value && value != "") value = createLink(action);
+      return state.set('value', value);
+    case 'CHANGE_NODE_PARAM_UNIT':    
+      return state.set('unit', action.paramUnit);
+    case 'DELETE_NODE': 
+      // check if deleted node is the value of this parameter
+      if(isLink(state.get('type')) && getFromNodeId(state) == action.nodeId){
+        return state.set('value', "");        
+      }
+      return state;
+    default:
+      return state;
+  }
+}
+
 const node = (state, action) => {
   switch (action.type){
     case 'NEW_NODE':
@@ -136,37 +156,17 @@ const node = (state, action) => {
     case 'CHANGE_NODE_NAME':
       return state.set('name', action.name);
     case 'DELETE_NODE': 
-      // Will be executed if the deleted node links to this node - find and reset the parameter that
-      // links to the deleted node
-      let updatedState = state;
+      // check if deleted node is the value of any parameter of this node
       let params = state.get('params');
       if(params){     
-        _.each(params.toArray(), currentParam => {
-          let currentFromNodeId = currentParam.getIn(['value', 'from'])
-          if(isLink(currentParam.get('type')) && currentFromNodeId == action.nodeId){
-            updatedState = validateNode(updatedState.updateIn(['params', currentParam.get('id')], aParam => param(aParam, action)));
-            console.log("Removing link, node deleted ");
-            console.log(updatedState);
-          }
+        _.each(params.toArray(), currentParam => {            
+          state = state.updateIn(['params', currentParam.get('id')], aParam => param(aParam, action));
         });
       }    
-      return updatedState;  
+      return validateNode(state);  
     default: 
       return state;
   }
-}
-
-const removeFromConsumers = (state, nodeId, paramId) => {
-    let param = state.getIn([nodeId, 'params', paramId]);      
-    if(isLink(param.get('type'))) {
-      let currentFromNodeId = param.getIn(['value', 'from'])
-      if(currentFromNodeId){
-        let linkId = getLinkIdFromIds(nodeId, paramId);
-        console.log("Removing " + linkId + " from " + currentFromNodeId);
-        state = state.deleteIn([currentFromNodeId, 'consumers', linkId]);    
-      }
-    }  
-    return state;  
 }
   
 const nodes = (
@@ -181,19 +181,11 @@ const nodes = (
       return state.set(nodeId, node(undefined, action));
     case 'DELETE_NODE':
 
-      // Search for nodes that link to the deleted node and propagate the action all the way down to the parameter
-      // to reset it.
+      // check if deleted node is the value of any parameter of any node
       _.each(state.toIndexedSeq().toArray(), (currentNode) => {  
-        let params = currentNode.get('params');
-        if(params){     
-          _.each(params.toArray(), param => {
-            let currentFromNodeId = param.getIn(['value', 'from'])
-            if(isLink(param.get('type')) && currentFromNodeId === action.nodeId){
-              updatedState = updatedState.updateIn([currentNode.get('id')], aNode => node(aNode, action));
-            }
-          });
-        }
+        updatedState = updatedState.updateIn([currentNode.get('id')], aNode => node(aNode, action));
       });
+
       return updatedState.delete(action.nodeId);      
     case 'CHANGE_NODE_PARAM_VALUE':
       // add or remove consumer link
