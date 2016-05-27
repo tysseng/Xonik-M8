@@ -3,7 +3,7 @@ import $  from 'jquery';
 
 let nodeTypes = require('../../../../shared/matrix/NodeTypes.js').idMap;
 
-const NodeList = ({links, onDeleteClick}) => {
+const NodeList = ({links, onLinkClick, onDeleteClick}) => {
   return (
     <div>
       <h3>Links</h3>
@@ -11,7 +11,7 @@ const NodeList = ({links, onDeleteClick}) => {
         {links.map(link => {
           return (
             <li key={link.id}>
-              From node {link.from} to param {link.toParam} of node {link.to}&nbsp;
+              <span onClick={() => onLinkClick(link.id)}>{link.name} - From node {link.from} to param {link.toParam} of node {link.to}&nbsp;</span>
               <a href="#" onClick={() => onDeleteClick(link.id, link.from, link.to, link.toParam)}>Delete</a>
             </li>            
           )

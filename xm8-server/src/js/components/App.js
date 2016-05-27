@@ -2,9 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import NodeFormContainer from './matrix/NodeFormContainer.js'
+import LinkFormContainer from './matrix/LinkFormContainer.js'
 import NodeList from './matrix/NodeList.js'
 import LinkList from './matrix/LinkList.js'
-import { selectNode, createNewNode, deleteNode, deleteLink, toggleAutoUpdate } from '../../../shared/state/actions';
+import { selectNode, selectLink, createNewNode, deleteNode, deleteLink, toggleAutoUpdate } from '../../../shared/state/actions';
 import paramTypes from '../../../shared/matrix/ParameterTypes.js';
 
 const isLink = (type) => {
@@ -25,11 +26,13 @@ const mapStateToProps = (state, ownProps) => {
 
   //let links = state.links.toIndexedSeq().toJS();
   let selectedNode = state.matrix.get("selectedNode");
+  let selectedLink = state.matrix.get("selectedLink");
   let shouldAutoUpdate = state.matrix.get("shouldAutoUpdate");
   return {
     links,
     nodes,
     selectedNode,
+    selectedLink,
     shouldAutoUpdate
   }
 }
@@ -48,7 +51,7 @@ const forceUpdate = () => {
   });
 }
 
-let App = ({ selectedNode, shouldAutoUpdate, nodes, links, dispatch }) => {  
+let App = ({ selectedNode, selectedLink, shouldAutoUpdate, nodes, links, dispatch }) => {  
   return(
   <div>
     <input id="autoUpdate" type="checkbox" checked={shouldAutoUpdate} onChange={(e) => dispatch(toggleAutoUpdate(e.target.checked))}/>
@@ -57,18 +60,26 @@ let App = ({ selectedNode, shouldAutoUpdate, nodes, links, dispatch }) => {
     <button disabled={shouldAutoUpdate} onClick={forceUpdate}>Update voice</button>
 
     <NodeList nodes={nodes} onNodeClick={(id) => dispatch(selectNode(id))} onDeleteClick={(id) => dispatch(deleteNode(id))}/>
-    <LinkList links={links} onDeleteClick={(id, from, to, param) => dispatch(deleteLink(id, from, to, param))}/>
+    <LinkList links={links} onLinkClick={(id) => dispatch(selectLink(id))} onDeleteClick={(id, from, to, param) => dispatch(deleteLink(id, from, to, param))}/>
 
     <a href="#" onClick={(e) => { 
       e.preventDefault(); 
       dispatch(createNewNode());
     }}>Add node</a><br/>
+
     {(() => {
       if(selectedNode && selectedNode !== ""){
         return <NodeFormContainer nodeId={selectedNode}/>
       } 
       return "";
     })()}
+
+    {(() => {
+      if(selectedLink && selectedLink !== ""){
+        return <LinkFormContainer linkId={selectedLink}/>
+      } 
+      return "";
+    })()}    
   </div>
 )}
 

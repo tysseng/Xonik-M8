@@ -25,6 +25,14 @@ export const selectNode = (nodeId) => {
   }  
 }
 
+export const selectLink = (linkId) => {
+  return {
+    type: 'SELECT_LINK',
+    target: 'GUI',    
+    linkId
+  }  
+}
+
 export const createNewNode = () => {
   return {
     type: 'NEW_NODE',
@@ -89,6 +97,16 @@ export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
   }
 }
 
+export const changeLinkName = (toNodeId, toParamId, name) => {
+  return {
+    type: 'CHANGE_LINK_NAME',
+    toNodeId, 
+    toParamId,
+    name,
+    target: 'SERVER'
+  }
+}
+
 export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
   return {
     type: 'DELETE_LINK',
@@ -96,6 +114,6 @@ export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
     fromNodeId, 
     toNodeId, 
     toParamId,
-    target: 'SERVER'
+    target: 'BOTH'
   }
 }

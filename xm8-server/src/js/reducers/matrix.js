@@ -14,9 +14,19 @@ const matrix = (
         console.log(state)
         return state.set('selectedNode', '');
       }
-      return state;    
+      return state; 
+    case 'DELETE_LINK':
+      if(state.get('selectedLink') === action.linkId){
+        console.log(state)
+        return state.set('selectedLink', '');
+      }
+      return state; 
     case 'SELECT_NODE': 
+      state = state.set("selectedLink", "");
       return state.set("selectedNode", action.nodeId);
+    case 'SELECT_LINK': 
+      state = state.set("selectedNode", "");
+      return state.set("selectedLink", action.linkId);      
     case 'SET_STATE':
       console.log("Setting matrix state");
       console.log(action.state.matrix)

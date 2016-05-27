@@ -10,7 +10,7 @@ const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, on
   let nodeType = nodeTypes.idMap[node.type];  
 
   return <form>
-    <h2>{node.name}</h2>
+    <h2>Node properties</h2>
     <h3>General</h3>
     <p>
       <label htmlFor="nodeName">Name</label>     
