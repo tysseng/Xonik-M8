@@ -89,10 +89,13 @@ export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
   }
 }
 
-export const deleteLink = (linkId) => {
+export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
   return {
     type: 'DELETE_LINK',
     linkId,
+    fromNodeId, 
+    toNodeId, 
+    toParamId,
     target: 'SERVER'
   }
 }

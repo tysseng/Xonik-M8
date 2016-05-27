@@ -57,7 +57,7 @@ let App = ({ selectedNode, shouldAutoUpdate, nodes, links, dispatch }) => {
     <button disabled={shouldAutoUpdate} onClick={forceUpdate}>Update voice</button>
 
     <NodeList nodes={nodes} onNodeClick={(id) => dispatch(selectNode(id))} onDeleteClick={(id) => dispatch(deleteNode(id))}/>
-    <LinkList links={links} onDeleteClick={(id) => dispatch(deleteLink(id))}/>
+    <LinkList links={links} onDeleteClick={(id, from, to, param) => dispatch(deleteLink(id, from, to, param))}/>
 
     <a href="#" onClick={(e) => { 
       e.preventDefault(); 

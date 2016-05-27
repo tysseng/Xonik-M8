@@ -12,7 +12,7 @@ const NodeList = ({links, onDeleteClick}) => {
           return (
             <li key={link.id}>
               From node {link.from} to param {link.toParam} of node {link.to}&nbsp;
-              <a href="#" onClick={() => onDeleteClick(link.id)}>Delete</a>
+              <a href="#" onClick={() => onDeleteClick(link.id, link.from, link.to, link.toParam)}>Delete</a>
             </li>            
           )
         })}    

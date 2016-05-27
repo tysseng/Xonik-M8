@@ -1,5 +1,5 @@
 // TODO - let emtpy values be undefined, not ""?
-// TODO - se på om man kan tweake action.type for å få bedre plassering av sletting av consumers.
+// TODO - se på om man kan tweake action.type for å få bedre plassering av sletting av consumers.  
 // TODO: Bytt fra updatedState til state.
 
 import nodeTypes from '../shared/matrix/NodeTypes.js';
@@ -66,6 +66,7 @@ const createLink = (action) => {
 const createConsumerLink = action => {
   let link = Map({
     id: getLinkId(action),
+    from: action.paramValue,
     to: action.nodeId,
     toParam: action.paramId
   });
@@ -106,6 +107,8 @@ const getFromNodeId = param => {
   return param.getIn(['value', 'from']);
 }
 
+
+
 const removeFromConsumers = (state, nodeId, paramId) => {
     let param = state.getIn([nodeId, 'params', paramId]);      
     if(isLink(param.get('type'))) {
@@ -121,6 +124,8 @@ const removeFromConsumers = (state, nodeId, paramId) => {
 const param = (state, action) => {
 
   switch(action.type){
+    case 'DELETE_LINK':
+      return state.set('value', "");
     case 'CHANGE_NODE_PARAM_TYPE':
       return state.merge(getEmptyParam(action.paramId, action.paramType));
     case 'CHANGE_NODE_PARAM_VALUE':
@@ -142,6 +147,13 @@ const param = (state, action) => {
 
 const node = (state, action) => {
   switch (action.type){
+    case 'DELETE_LINK':
+      if(state.get('id') === action.fromNodeId){
+        return state.deleteIn(['consumers', getLinkIdFromIds(action.toNodeId, action.toParamId)]);
+      } else if(state.get('id') === action.toNodeId){
+        return validateNode(state.updateIn(['params', action.toParamId], aParam => param(aParam, action)));
+      }
+      return state;
     case 'NEW_NODE':
       return validateNode(getEmptyNode('' + nextAvailableNodeId++));
     case 'CHANGE_NODE_TYPE':
@@ -176,6 +188,9 @@ const nodes = (
   let updatedState = state;
 
   switch (action.type){
+    case 'DELETE_LINK':
+      state = state.updateIn([action.fromNodeId], aNode => node(aNode, action));
+      return state.updateIn([action.toNodeId], aNode => node(aNode, action));
     case 'NEW_NODE': 
       let nodeId = '' + nextAvailableNodeId;
       return state.set(nodeId, node(undefined, action));

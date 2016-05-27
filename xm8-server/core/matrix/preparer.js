@@ -8,11 +8,15 @@ let paramType = paramTypes.map;
 let nodeType = nodeTypes.map;
 let nodeTypesIdMap = nodeTypes.idMap
 
+
+const isLink = (type) => {
+  return type === paramTypes.map.LINK.id;
+}
+
 const addMissingFieldsWithDefaults = (nodes) => {
   _.each(nodes, function(node){
     node.nodePos = -1;
     node.reachable = false;
-    node.consumers = [];
     _.each(nodes.params, function(param){
       param.nodePos = -1;
     });
@@ -41,22 +45,19 @@ const setParamsInUse = (node) => {
 
 }
 
-const linkNodes = (from, to, toParam) => {
-  var link = {
-    from: from,
-    to: to,
-    toParam: toParam
-  };
-
-  from.consumers.push(link);
-  to.params[toParam].value = link;
-  to.params[toParam].type = paramType.LINK.id;
-  return link;
-}
-
-const mergeWithLinks = (nodes, links) => {
-  _.each(links, (link) => {
-    linkNodes(nodes[link.from], nodes[link.to], link.toParam);
+const convertLinkValuesToRefs = (nodes) => {
+  _.each(nodes, node => {
+    _.each(node.consumers, consumer => {
+      consumer.from = nodes[consumer.from];
+      consumer.to = nodes[consumer.to];
+    });
+    _.each(node.params, param => {
+      if(isLink(param.type)){
+        param.value.from = nodes[param.value.from];
+        param.value.to = nodes[param.value.to];
+      }
+    });
+    console.log(node);  
   });
 }
 
@@ -162,12 +163,10 @@ function prepareNetForSerialization(){
     nodes.push(nodesMap[node]);
   }
 
-  let links = state.links.toIndexedSeq().toJS();
-
   addMissingFieldsWithDefaults(nodes);
-
-  // nodes and links are kept separate in the state object, merge them to make traversal easier
-  mergeWithLinks(nodesMap, links);
+  
+  // links are stored as ids instead of real references, convert them to references to make traversal easier.
+  convertLinkValuesToRefs(nodesMap);
 
   markReachable(nodes);
 
