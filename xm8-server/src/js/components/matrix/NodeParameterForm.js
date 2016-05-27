@@ -33,7 +33,8 @@ const NodeParameterForm = ({
     case "output":
       body = <OutputLinkDropdown onOutputLinkChange={(value) => onValueChange(value)} value={value}/>;
       break;
-    case "result":      
+    case "result":
+      if(value)  value = value.from; // links are stored as objects, not single values. Get from-node from link
       body = <NodeLinkDropdown nodes={nodes} currentnode={currentnode} onNodeLinkChange={(value) => onValueChange(value)} value={value}/>;
       break;
     case "constant":

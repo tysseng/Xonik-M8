@@ -4,11 +4,26 @@ import $ from 'jquery';
 import NodeFormContainer from './matrix/NodeFormContainer.js'
 import NodeList from './matrix/NodeList.js'
 import LinkList from './matrix/LinkList.js'
-import { selectNode, createNewNode, deleteNode, toggleAutoUpdate } from '../../../shared/state/actions';
+import { selectNode, createNewNode, deleteNode, deleteLink, toggleAutoUpdate } from '../../../shared/state/actions';
+import paramTypes from '../../../shared/matrix/ParameterTypes.js';
+
+const isLink = (type) => {
+  return type === paramTypes.map.LINK.id;
+}
 
 const mapStateToProps = (state, ownProps) => {
   let nodes = state.nodes.toIndexedSeq().toJS();
-  let links = state.links.toIndexedSeq().toJS();
+
+  let links = [];
+  _.each(nodes, node => {
+    _.each(node.params, param => {
+      if(isLink(param.type) && param.value && param.value !== ""){
+        links.push(param.value);
+      }
+    });
+  });
+
+  //let links = state.links.toIndexedSeq().toJS();
   let selectedNode = state.matrix.get("selectedNode");
   let shouldAutoUpdate = state.matrix.get("shouldAutoUpdate");
   return {
@@ -42,7 +57,7 @@ let App = ({ selectedNode, shouldAutoUpdate, nodes, links, dispatch }) => {
     <button disabled={shouldAutoUpdate} onClick={forceUpdate}>Update voice</button>
 
     <NodeList nodes={nodes} onNodeClick={(id) => dispatch(selectNode(id))} onDeleteClick={(id) => dispatch(deleteNode(id))}/>
-    <LinkList links={links}/>
+    <LinkList links={links} onDeleteClick={(id) => dispatch(deleteLink(id))}/>
 
     <a href="#" onClick={(e) => { 
       e.preventDefault(); 
