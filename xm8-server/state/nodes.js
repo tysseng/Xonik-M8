@@ -103,7 +103,7 @@ const getFromNodeId = param => {
 const getAddToConsumersAction = action => {
   return {
     type: 'INTERNAL_ADD_TO_CONSUMERS',      
-    nodeId: action.nodeId
+    nodeId: action.nodeId,
     paramValue: action.paramValue,
     paramId: action.paramId
   }   
@@ -214,7 +214,7 @@ const nodes = (
       // add or remove consumer link
       if(isLink(action.paramType)){
         if(action.paramValue && action.paramValue !== ""){       
-          state = state.updateIn([action.paramValue], (aNode) => node(aNode, getAddToConsumersAction(action));
+          state = state.updateIn([action.paramValue], (aNode) => node(aNode, getAddToConsumersAction(action)));
         } else {
           state = removeFromConsumers(state, action.nodeId, action.paramId);
         }

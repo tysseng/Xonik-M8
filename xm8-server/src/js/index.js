@@ -9,6 +9,8 @@ import initWsclientForState from './wsclient-state.js';
 import guiReducers from './reducers';
 
 import App from './components/App';
+import FolderListContainer from './components/filesystem/FolderListContainer';
+
 import ws from './wsclient-state.js';
 
 ws.onmessage = (msg) => { 
@@ -22,9 +24,17 @@ const createStoreWithMiddleware = applyMiddleware(
 
 const store = createStoreWithMiddleware(guiReducers);
 
+/*
 render(
   <Provider store={store}>
     <App/>
+  </Provider>,
+  document.getElementById('content')
+);*/
+
+render(
+  <Provider store={store}>
+    <FolderListContainer/>
   </Provider>,
   document.getElementById('content')
 );
