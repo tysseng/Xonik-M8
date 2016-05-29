@@ -1,13 +1,9 @@
-// TODO - let emtpy values be undefined, not ""?
-// TODO - se på om man kan tweake action.type for å få bedre plassering av sletting av consumers.  
-// TODO: Bytt fra updatedState til state.
+// TODO - let emtpy values be undefined, not ""?  
 
 import nodeTypes from '../shared/matrix/NodeTypes.js';
 import paramTypes from '../shared/matrix/ParameterTypes.js';
 import {List, Map, OrderedMap} from 'immutable';
 import _ from 'lodash';
-
-// TODO: Too much bookkeeping related to links. rethink link concept.
 
 let nextAvailableNodeId = 1;
 
@@ -75,11 +71,8 @@ const createConsumerLink = action => {
   return link; 
 }
 
-
-
 const validateNode = (state) => {
   let nodeIsValid = true;
-  let updatedState = state;
 
   let definition = nodeTypes.idMap[state.get('type')];
   if(definition && definition.id != nodeTypes.map.NOT_SELECTED.id) {
@@ -95,19 +88,26 @@ const validateNode = (state) => {
       if(!paramIsValid){
         nodeIsValid = false;
       }
-      updatedState = updatedState.setIn(['params', paramDef.id, 'valid'], paramIsValid);        
+      state = state.setIn(['params', paramDef.id, 'valid'], paramIsValid);        
     });
   } else {
     nodeIsValid = false;
   }
-  return updatedState.set('valid', nodeIsValid);   
+  return state.set('valid', nodeIsValid);   
 }
 
 const getFromNodeId = param => {
   return param.getIn(['value', 'from']);
 }
 
-
+const getAddToConsumersAction = action => {
+  return {
+    type: 'INTERNAL_ADD_TO_CONSUMERS',      
+    nodeId: action.nodeId
+    paramValue: action.paramValue,
+    paramId: action.paramId
+  }   
+}
 
 const removeFromConsumers = (state, nodeId, paramId) => {
     let param = state.getIn([nodeId, 'params', paramId]);      
@@ -126,6 +126,8 @@ const param = (state, action) => {
   switch(action.type){
     case 'DELETE_LINK':
       return state.set('value', "");
+    case 'CHANGE_LINK_NAME':  
+      return state.setIn(['value', 'name'], action.name);
     case 'CHANGE_NODE_PARAM_TYPE':
       return state.merge(getEmptyParam(action.paramId, action.paramType));
     case 'CHANGE_NODE_PARAM_VALUE':
@@ -154,8 +156,14 @@ const node = (state, action) => {
         return validateNode(state.updateIn(['params', action.toParamId], aParam => param(aParam, action)));
       }
       return state;
+    case 'CHANGE_LINK_NAME':
+      return state.updateIn(['params', action.toParamId], aParam => param(aParam, action));
     case 'NEW_NODE':
       return validateNode(getEmptyNode('' + nextAvailableNodeId++));
+    case 'INTERNAL_ADD_TO_CONSUMERS':
+      let linkId = getLinkId(action);
+      let consumerLink = createConsumerLink(action);
+      state = updatedState.setIn(['consumers', linkId], consumerLink);      
     case 'CHANGE_NODE_TYPE':
       return validateNode(state.merge({
         type: action.typeId,
@@ -185,12 +193,12 @@ const nodes = (
   state = OrderedMap(), 
   action) => {
 
-  let updatedState = state;
-
   switch (action.type){
     case 'DELETE_LINK':
       state = state.updateIn([action.fromNodeId], aNode => node(aNode, action));
       return state.updateIn([action.toNodeId], aNode => node(aNode, action));
+    case 'CHANGE_LINK_NAME':
+      return state.updateIn([action.toNodeId], aNode => node(aNode, action));    
     case 'NEW_NODE': 
       let nodeId = '' + nextAvailableNodeId;
       return state.set(nodeId, node(undefined, action));
@@ -198,39 +206,37 @@ const nodes = (
 
       // check if deleted node is the value of any parameter of any node
       _.each(state.toIndexedSeq().toArray(), (currentNode) => {  
-        updatedState = updatedState.updateIn([currentNode.get('id')], aNode => node(aNode, action));
+        state = state.updateIn([currentNode.get('id')], aNode => node(aNode, action));
       });
 
-      return updatedState.delete(action.nodeId);      
+      return state.delete(action.nodeId);      
     case 'CHANGE_NODE_PARAM_VALUE':
       // add or remove consumer link
       if(isLink(action.paramType)){
-        let linkId = getLinkId(action);
-        if(action.paramValue && action.paramValue !== ""){
-          let consumerLink = createConsumerLink(action);
-          updatedState = updatedState.setIn([action.paramValue, 'consumers', linkId], consumerLink);
+        if(action.paramValue && action.paramValue !== ""){       
+          state = state.updateIn([action.paramValue], (aNode) => node(aNode, getAddToConsumersAction(action));
         } else {
-          updatedState = removeFromConsumers(updatedState, action.nodeId, action.paramId);
+          state = removeFromConsumers(state, action.nodeId, action.paramId);
         }
       }
-      return updatedState.updateIn([action.nodeId], (aNode) => node(aNode, action));
+      return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     case 'CHANGE_NODE_PARAM_TYPE':
       // Remove any from-node consumers
-      updatedState = removeFromConsumers(updatedState, action.nodeId, action.paramId);   
-      return updatedState.updateIn([action.nodeId], (aNode) => node(aNode, action));
+      state = removeFromConsumers(state, action.nodeId, action.paramId);   
+      return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     case 'CHANGE_NODE_TYPE':
       // Remove any from-node consumers
-      let params = updatedState.getIn([action.nodeId, 'params']);
+      let params = state.getIn([action.nodeId, 'params']);
       if(params){
         _.each(params.toArray(), param => {
-          updatedState = removeFromConsumers(updatedState, action.nodeId, param.get('id'));             
+          state = removeFromConsumers(state, action.nodeId, param.get('id'));             
         });        
       }
-      return updatedState.updateIn([action.nodeId], (aNode) => node(aNode, action));  
+      return state.updateIn([action.nodeId], (aNode) => node(aNode, action));  
     case 'CHANGE_NODE_NAME':
-      return updatedState.updateIn([action.nodeId], (aNode) => node(aNode, action));
+      return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     case 'CHANGE_NODE_PARAM_UNIT':
-      return updatedState.updateIn([action.nodeId], (aNode) => node(aNode, action));
+      return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     default: 
       return state;
   }
