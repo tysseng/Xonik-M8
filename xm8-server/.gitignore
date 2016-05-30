@@ -2,4 +2,4 @@ static/js/xm8.js
 log
 pid
 persistentStorage/*.json
-persistentStorage/patch/*.json
+persistentStorage/patches/*.json
