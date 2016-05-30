@@ -1,7 +1,7 @@
 // TODO - let emtpy values be undefined, not ""?  
 
-import nodeTypes from '../shared/matrix/NodeTypes.js';
-import paramTypes from '../shared/matrix/ParameterTypes.js';
+import nodeTypes from '../../shared/matrix/NodeTypes.js';
+import paramTypes from '../../shared/matrix/ParameterTypes.js';
 import {List, Map, OrderedMap} from 'immutable';
 import _ from 'lodash';
 

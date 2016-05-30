@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import store from '../../state/store.js';
+import store from '../state/store.js';
 import config from '../../shared/config.js';
 import spi from '../spi/spi-fd.js';
 import serializer from './serializer.js';

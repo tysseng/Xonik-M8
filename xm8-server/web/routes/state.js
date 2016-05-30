@@ -1,4 +1,4 @@
-import store from '../../state/store.js';
+import store from '../../core/state/store.js';
 import tools from './routeTools';
 import matrixRepository from '../../core/matrix/matrixRepository';
 

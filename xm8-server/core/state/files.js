@@ -46,7 +46,6 @@ const fileDelete = (state, action) => {
 }
 
 const files = (state, action) => {
-  console.log(action)
   switch(action.type){
     case 'FILE_NEW':
       return fileNew(state, action);     

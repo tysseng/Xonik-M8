@@ -10,19 +10,15 @@
 import {Map, fromJS} from 'immutable';
 import _ from 'lodash';
 
-import {saveFAT, loadFAT} from '../core/persistence/fileRepo';
+import {saveFAT, loadFAT} from '../persistence/fileRepo';
 
 // NB: These are not completely separate but work on the same parts of the 
 // state tree.
 import files from './files';
 import folders from './folders';
 
-const dehydrate = (state) => {
-  console.log("Saving filesystem state to disk")
-  console.log(JSON.stringify(state, null, '\t'));
-  
+const dehydrate = (state) => {  
   saveFAT(state.toJS());
-
   return state;
 }
 

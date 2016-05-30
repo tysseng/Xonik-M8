@@ -1,4 +1,4 @@
-import store from './state/store';
+import store from './core/state/store';
 import {loadFilesystem} from './shared/state/actions/filesystemActions';
 
 // Kickstart XM8!
