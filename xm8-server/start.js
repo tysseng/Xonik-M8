@@ -1,3 +1,3 @@
 require('babel-register');  
-require('./web/server.js');
+require('./xm8-server')
 
