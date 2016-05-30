@@ -6,7 +6,7 @@ import serializer from './serializer.js';
 import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
-import {newFile} from '../../shared/state/actions/filesystemActions';
+import {newFile, updateFile} from '../../shared/state/actions/filesystemActions';
 import {filetypes} from '../../shared/FileTypes';
 import {saveFile} from '../persistence/fileRepo';
 
@@ -49,9 +49,14 @@ export const save = (name, folderId, fileId) => {
     }
   }
 
-  let result = saveFile(file, filetypes.PATCH, fileId);
+  //let result = saveFile(file, filetypes.PATCH, fileId);
+  let result = saveFile(file, filetypes.PATCH, 'patch55');
   if(result.fileSaved){
-    store.dispatch(newFile(result.fileId, name, folderId));
+    if(result.version === 0){
+      store.dispatch(newFile(result.fileId, result.version, name, folderId));
+    } else {
+      store.dispatch(updateFile(result.fileId, result.version, folderId));
+    }
   } 
   return result;
 }

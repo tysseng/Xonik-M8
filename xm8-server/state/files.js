@@ -1,18 +1,24 @@
 import {Map} from 'immutable';
 import {findPath} from './folderTools';
 
-const createFile = (id, name, contents) => {
+const createFile = (id, version, name) => {
   return Map({
     id,
+    version,
     name
   })
 }
 
 const fileNew = (state, action) => {
-  let fileToSave = createFile(action.fileId, action.fileName);
+  let fileToSave = createFile(action.fileId, action.fileVersion, action.fileName);
   let path = findPath(action.folderId, state).concat(['files', action.fileId]);
 
   return state.setIn(path, fileToSave);
+}
+
+const fileUpdate = (state, action) => {
+  let path = findPath(action.folderId, state).concat(['files', action.fileId, 'version']);
+  return state.setIn(path, action.fileVersion);
 }
 
 const fileRename = (state, action) => {
@@ -44,6 +50,8 @@ const files = (state, action) => {
   switch(action.type){
     case 'FILE_NEW':
       return fileNew(state, action);     
+    case 'FILE_UPDATE':
+      return fileUpdate(state, action);     
     case 'FILE_RENAME':
       return fileRename(state, action);
     case 'FILE_MOVE':

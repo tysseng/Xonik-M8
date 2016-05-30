@@ -80,7 +80,8 @@ let config = {
   persistence: {
     filesystemPaths: {
       [filetypes.PATCH.id]: projectRoot + 'persistentStorage/patches/',
-      nextFileId: projectRoot + 'persistentStorage/nextFileId.json'
+      nextFileId: projectRoot + 'persistentStorage/nextFileId.json',
+      fat: projectRoot + 'persistentStorage/fat.json',
     },
 
   }

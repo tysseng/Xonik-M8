@@ -94,10 +94,29 @@ export const saveFile = (file, type, fileId) => {
   let version = getLatestVersion(fileId) + 1;;
 
   let fileName = getFileName(fileId, version);    ;
-  fs.writeFileSync(fileName, JSON.stringify(file));
+  fs.writeFileSync(fileName, JSON.stringify(file, null, '  '));
 
   let versionFilename = getVersionFileName(fileId);
   fs.writeFileSync(versionFilename, JSON.stringify({version: version}));
 
   return {fileSaved: true, fileId: fileId, version: version};
 }
+
+export const saveFAT = fat => {
+  fs.writeFileSync(config.persistence.filesystemPaths.fat, JSON.stringify(fat, null, '  '));
+}
+
+export const loadFAT = fat => {
+  let fatFileName = config.persistence.filesystemPaths.fat; 
+  if(fileExists(fatFileName)){
+    return JSON.parse(fs.readFileSync(fatFileName));
+  } else {
+    return {
+      files: {},
+      folders: {},
+      trash: {},
+      nextFolderId: 0
+    }
+  }
+}
+
