@@ -7,6 +7,7 @@ import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
 import {newFile, updateFile} from '../../shared/state/actions/filesystemActions';
+import {setLoadedPatchFileDetails} from '../../shared/state/actions';
 import {filetypes} from '../../shared/FileTypes';
 import {saveFile} from '../persistence/fileRepo';
 
@@ -41,11 +42,13 @@ export const save = (name, folderId, fileId) => {
   if(!name || !folderId){
     return {fileSaved: false, message: "Name or folder id missing"};
   }
+
+
+
   // TODO: Store input values as well  
   let file = {
     contents: {
-      //nodes: store.getState().nodes.toJS()
-      that: "rat"
+      nodes: store.getState().nodes.toJS()
     }
   }
 
@@ -56,6 +59,7 @@ export const save = (name, folderId, fileId) => {
     } else {
       store.dispatch(updateFile(result.fileId, result.version, folderId));
     }
+    store.dispatch(setLoadedPatchFileDetails(result.fileId));
   } 
   return result;
 }

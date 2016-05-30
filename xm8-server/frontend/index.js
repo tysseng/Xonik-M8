@@ -33,8 +33,13 @@ render(
 );*/
 
 render(
+  <div>
+  <Provider store={store}>
+    <App/>
+  </Provider>
   <Provider store={store}>
     <FolderListContainer/>
-  </Provider>,
+  </Provider>
+  </div>,
   document.getElementById('content')
 );

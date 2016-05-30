@@ -163,7 +163,7 @@ const node = (state, action) => {
     case 'INTERNAL_ADD_TO_CONSUMERS':
       let linkId = getLinkId(action);
       let consumerLink = createConsumerLink(action);
-      state = updatedState.setIn(['consumers', linkId], consumerLink);      
+      return state.setIn(['consumers', linkId], consumerLink);      
     case 'CHANGE_NODE_TYPE':
       return validateNode(state.merge({
         type: action.typeId,

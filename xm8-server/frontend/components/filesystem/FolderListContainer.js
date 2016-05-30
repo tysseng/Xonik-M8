@@ -7,9 +7,11 @@ import { newFolder, selectFolder, deleteFolder } from '../../../shared/state/act
 import FolderList from './FolderList'
 
 const mapStateToProps = (state, ownProps) => {
+  let fileId = state.matrix.getIn(['patch','fileId']);
   let filesystem = state.filesystem.toJS();
 
   return {
+    loadedPatchFileId: fileId,
     folders: filesystem.folders,
     selectedFolder: filesystem.selectedFolder
   }
@@ -28,12 +30,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onFolderDeleteClick: (id) => {
       dispatch(deleteFolder(id));      
     },
-    onFileSaveClick: (name, id) => {
+    onFileSaveClick: (name, id, fileId) => {
       $.ajax({
         url: '/matrix/save',
         type: 'PUT',
         contentType:'application/json',
-        data: JSON.stringify({name: name, folderId: id}),
+        data: JSON.stringify({name: name, folderId: id, fileId: fileId}),
         dataType:'json',
         success: function(response) {
           console.log(response);
