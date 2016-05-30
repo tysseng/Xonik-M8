@@ -4,7 +4,7 @@ import _ from 'lodash';
 import NodeTypeDropdown from './NodeTypeDropdown'
 import NodeParameterForm from './NodeParameterForm'
 
-import nodeTypes from '../../../../shared/matrix/NodeTypes.js';
+import nodeTypes from '../../../shared/matrix/NodeTypes.js';
 
 const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange }) => {
   let nodeType = nodeTypes.idMap[node.type];  

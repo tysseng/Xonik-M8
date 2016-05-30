@@ -1,6 +1,6 @@
-import store from '../state/store.js';
+import store from '../../state/store.js';
 import tools from './routeTools';
-import matrixRepository from '../core/matrix/matrixRepository';
+import matrixRepository from '../../core/matrix/matrixRepository';
 
 // receive actions and send state
 export default (app, ws) => {

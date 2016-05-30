@@ -1,5 +1,5 @@
 import React from 'react'
-import inputs from '../../../../shared/matrix/Inputs.js'
+import inputs from '../../../shared/matrix/Inputs.js'
 
 const InputLinkDropdown = ({value, onInputLinkChange}) => (
   <select value={value} onChange={(e) => {onInputLinkChange(e.target.value)}}>

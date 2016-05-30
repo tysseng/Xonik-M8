@@ -1,4 +1,4 @@
-import config from "../../shared/config.js";
+import config from "../shared/config.js";
 
 let ws;
 

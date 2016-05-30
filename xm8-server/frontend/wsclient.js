@@ -1,6 +1,6 @@
 var events = require("./eventbusses.js");
-import config from "../../shared/config.js";
-var ctrlSetup = require("../../shared/controllerSetup.js");
+import config from "../shared/config.js";
+var ctrlSetup = require("../shared/controllerSetup.js");
 
 var receiveOn = true;
 

@@ -5,7 +5,7 @@ Go to http://pi_address/
 
 TODO: Sanitize inputs
 */
-var wifi = require('../core/wifi/wifi.js');
+var wifi = require('../../core/wifi/wifi.js');
 var express = require('express');
 
 var router = express.Router();

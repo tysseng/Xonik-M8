@@ -1,5 +1,5 @@
 import React from 'react'
-import parameterTypes from '../../../../shared/matrix/ParameterTypes.js';
+import parameterTypes from '../../../shared/matrix/ParameterTypes.js';
 
 import NodeParameterTypeDropdown from './NodeParameterTypeDropdown.js';
 import NodeLinkDropdown from './NodeLinkDropdown.js';

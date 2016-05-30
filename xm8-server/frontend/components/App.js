@@ -5,8 +5,8 @@ import NodeFormContainer from './matrix/NodeFormContainer.js'
 import LinkFormContainer from './matrix/LinkFormContainer.js'
 import NodeList from './matrix/NodeList.js'
 import LinkList from './matrix/LinkList.js'
-import { selectNode, selectLink, createNewNode, deleteNode, deleteLink, toggleAutoUpdate } from '../../../shared/state/actions';
-import paramTypes from '../../../shared/matrix/ParameterTypes.js';
+import { selectNode, selectLink, createNewNode, deleteNode, deleteLink, toggleAutoUpdate } from '../../shared/state/actions';
+import paramTypes from '../../shared/matrix/ParameterTypes.js';
 
 const isLink = (type) => {
   return type === paramTypes.map.LINK.id;

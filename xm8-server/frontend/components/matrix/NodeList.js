@@ -1,7 +1,7 @@
 import React from 'react';
 import $  from 'jquery';
 
-let nodeTypes = require('../../../../shared/matrix/NodeTypes.js').idMap;
+let nodeTypes = require('../../../shared/matrix/NodeTypes.js').idMap;
 
 const NodeList = ({nodes, onNodeClick, onDeleteClick}) => {
   return (

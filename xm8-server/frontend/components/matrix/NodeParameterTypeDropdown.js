@@ -1,6 +1,6 @@
 //TODO: Check if unused is a legal option
 import React from 'react'
-import parameterTypes from '../../../../shared/matrix/ParameterTypes.js';
+import parameterTypes from '../../../shared/matrix/ParameterTypes.js';
 
 const NodeParameterTypeDropdown = ({value, onParameterTypeChange}) => (
   <select value={value} onChange={(e) => (onParameterTypeChange(e.target.value))}>

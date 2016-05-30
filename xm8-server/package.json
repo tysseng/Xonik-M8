@@ -4,8 +4,8 @@
   "description": "Xonik M8 prototype",
   "main": "xm8-server.js",
   "scripts": {
-    "build-js": "browserify -t [babelify --presets [react es2015] ] src/js/index.js > static/js/xm8.js",
-    "watch-js": "watchify   -t [babelify --presets [react es2015] ]  src/js/index.js -o static/js/xm8.js"
+    "build-js": "browserify -t [babelify --presets [react es2015] ]  frontend/index.js > web/static/js/xm8.js",
+    "watch-js": "watchify   -t [babelify --presets [react es2015] ]  frontend/index.js -o web/static/js/xm8.js"
   },
   "babel": {
     "presets": [

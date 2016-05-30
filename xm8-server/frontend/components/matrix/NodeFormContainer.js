@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { changeNodeName, changeNodeType, changeNodeParamType, changeNodeParamValue, changeNodeParamUnit } from '../../../../shared/state/actions';
+import { changeNodeName, changeNodeType, changeNodeParamType, changeNodeParamValue, changeNodeParamUnit } from '../../../shared/state/actions';
 import NodeForm from './NodeForm'
 
-import nodeTypes from '../../../../shared/matrix/NodeTypes.js';
+import nodeTypes from '../../../shared/matrix/NodeTypes.js';
 
 
 const mapStateToProps = (state, ownProps) => {

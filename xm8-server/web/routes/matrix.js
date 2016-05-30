@@ -1,7 +1,7 @@
 var express = require('express');
-var matrixRepository = require('../core/matrix/matrixRepository.js');
+var matrixRepository = require('../../core/matrix/matrixRepository.js');
 var router = express.Router();
-var paramType = require('../shared/matrix/ParameterTypes.js').map;
+var paramType = require('../../shared/matrix/ParameterTypes.js').map;
 
 // publish matrix to voice cards
 router.put('/publish', function(req, res){

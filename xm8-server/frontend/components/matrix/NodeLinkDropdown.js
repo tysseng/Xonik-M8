@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import nodeTypes from '../../../../shared/matrix/NodeTypes.js';
+import nodeTypes from '../../../shared/matrix/NodeTypes.js';
 
 let nodeTypeMap = nodeTypes.map;
 

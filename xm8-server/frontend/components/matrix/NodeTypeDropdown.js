@@ -1,5 +1,5 @@
 import React from 'react'
-import nodeTypes from '../../../../shared/matrix/NodeTypes.js';
+import nodeTypes from '../../../shared/matrix/NodeTypes.js';
 
 const NodeTypeDropdown = ({id, value, onNodeTypeChange}) => (
   <select id={id} value={value} onChange={(e) => (onNodeTypeChange(e.target.value))}>

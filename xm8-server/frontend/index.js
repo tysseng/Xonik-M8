@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { setState } from '../../shared/state/actions';
+import { setState } from '../shared/state/actions';
 import remoteActionMiddleware from './remoteActionMiddleware';
 import initWsclientForState from './wsclient-state.js';
 import guiReducers from './reducers';
@@ -24,17 +24,17 @@ const createStoreWithMiddleware = applyMiddleware(
 
 const store = createStoreWithMiddleware(guiReducers);
 
-/*
+
 render(
   <Provider store={store}>
     <App/>
   </Provider>,
   document.getElementById('content')
-);*/
-
+);
+/*
 render(
   <Provider store={store}>
     <FolderListContainer/>
   </Provider>,
   document.getElementById('content')
-);
+);*/
