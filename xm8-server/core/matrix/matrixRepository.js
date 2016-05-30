@@ -49,8 +49,7 @@ export const save = (name, folderId, fileId) => {
     }
   }
 
-  //let result = saveFile(file, filetypes.PATCH, fileId);
-  let result = saveFile(file, filetypes.PATCH, 'patch55');
+  let result = saveFile(file, filetypes.PATCH, fileId);
   if(result.fileSaved){
     if(result.version === 0){
       store.dispatch(newFile(result.fileId, result.version, name, folderId));

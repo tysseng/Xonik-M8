@@ -1,3 +1,10 @@
+export const loadFilesystem = () => {
+  return {
+    type: 'FILESYSTEM_LOAD_FROM_DISK',
+    target: 'SERVER'
+  }  
+}
+
 export const selectFolder = (selectedFolderId) => {
   return {
     type: 'SELECT_FOLDER',

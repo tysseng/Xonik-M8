@@ -7,22 +7,28 @@
 
 // TODO: MAJOR ISSUE - If next file/folder id is in state, and we undo some steps, the id generator will be reversed too.
 
-import {Map} from 'immutable';
+import {Map, fromJS} from 'immutable';
 import _ from 'lodash';
 
-import {saveFAT} from '../core/persistence/fileRepo';
+import {saveFAT, loadFAT} from '../core/persistence/fileRepo';
 
 // NB: These are not completely separate but work on the same parts of the 
 // state tree.
 import files from './files';
 import folders from './folders';
 
-const persist = (state) => {
-  console.log("Persisting")
+const dehydrate = (state) => {
+  console.log("Saving filesystem state to disk")
   console.log(JSON.stringify(state, null, '\t'));
   
   saveFAT(state.toJS());
 
+  return state;
+}
+
+const rehydrate = () => {
+  let state = fromJS(loadFAT());
+  console.log("Loaded filesystem state from disk");
   return state;
 }
 
@@ -38,17 +44,19 @@ const filesystem = (
   action) => {
 
   switch(action.type){
+    case 'FILESYSTEM_LOAD_FROM_DISK':
+      return rehydrate();
     case 'FOLDER_NEW':
     case 'FOLDER_RENAME':
     case 'FOLDER_DELETE':
     case 'FOLDER_MOVE':
-      return persist(folders(state, action));
+      return dehydrate(folders(state, action));
     case 'FILE_NEW':
     case 'FILE_UPDATE':
     case 'FILE_RENAME':
     case 'FILE_MOVE':
     case 'FILE_DELETE':
-      return persist(files(state, action));
+      return dehydrate(files(state, action));
   }
   return state;
 }
