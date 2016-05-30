@@ -6,6 +6,9 @@ import serializer from './serializer.js';
 import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
+import {newFile} from '../../shared/state/actions/filesystemActions';
+import {filetypes} from '../../shared/FileTypes';
+import {saveFile} from '../persistence/fileRepo';
 
 // auto-update voices whenever state changes
 // TODO: listen to only matrix changes!
@@ -34,8 +37,23 @@ function sendMatrix(){
   return {updated: true, message: "Synth voices updated"};  
 }
 
-function save(){
-  // TODO - IMPLEMENT! Remember to save input values (potmeter values) as well
+export const save = (name, folderId, fileId) => {
+  if(!name || !folderId){
+    return {fileSaved: false, message: "Name or folder id missing"};
+  }
+  // TODO: Store input values as well  
+  let file = {
+    contents: {
+      //nodes: store.getState().nodes.toJS()
+      that: "rat"
+    }
+  }
+
+  let result = saveFile(file, filetypes.PATCH, fileId);
+  if(result.fileSaved){
+    store.dispatch(newFile(result.fileId, name, folderId));
+  } 
+  return result;
 }
 
 function load(){

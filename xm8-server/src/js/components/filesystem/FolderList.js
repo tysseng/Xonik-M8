@@ -3,7 +3,7 @@ import FolderListItem from './FolderListItem';
 import NewFolderForm from './NewFolderForm';
 import _ from 'lodash';
 
-const FolderList = ({folders, selectedFolder, onFolderClick, onNewFolderClick, onFolderDeleteClick}) => {
+const FolderList = ({folders, selectedFolder, onFolderClick, onNewFolderClick, onFolderDeleteClick, onFileSaveClick}) => {
   if(!folders){
     return (<div>...loading folders</div>);
   }
@@ -12,6 +12,7 @@ const FolderList = ({folders, selectedFolder, onFolderClick, onNewFolderClick, o
     <div>
       <h3>File system</h3>
       <NewFolderForm selectedFolder={selectedFolder} onNewFolderClick={onNewFolderClick}/>
+      <button onClick={() => onFileSaveClick('My file', selectedFolder)}>Save file here</button>
       <h3>Folders</h3>
       <ul>
         {_.map(folders, folder => {

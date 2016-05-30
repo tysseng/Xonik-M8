@@ -41,31 +41,22 @@ export const moveFolder = (id, toId) => {
   };
 }
 
-export const newFile = (name, contents, folderId) => {
+export const newFile = (fileId, fileName, folderId) => {
   return {
     type: 'FILE_NEW',
     target: 'SERVER',
-    fileName: name,
-    fileContents, contents,
+    fileId,
+    fileName,
     folderId
   };
 }
 
-export const updateFile = (id, contents) => {
-  return {
-    type: 'FILE_UPDATE',
-    target: 'SERVER',
-    fileId: id,
-    fileContents, contents
-  };
-}
-
-export const renameFile = (id, name) => {
+export const renameFile = (fileId, fileName) => {
   return {
     type: 'FILE_RENAME',
     target: 'SERVER',
-    fileId: id,
-    fileName: name
+    fileId,
+    fileName,
   };
 }
 

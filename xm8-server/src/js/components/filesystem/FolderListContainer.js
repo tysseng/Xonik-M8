@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import $ from 'jquery';
 
 import { newFolder, selectFolder, deleteFolder } from '../../../../shared/state/actions/filesystemActions';
 
@@ -26,6 +27,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onFolderDeleteClick: (id) => {
       dispatch(deleteFolder(id));      
+    },
+    onFileSaveClick: (name, id) => {
+      $.ajax({
+        url: '/matrix/save',
+        type: 'PUT',
+        contentType:'application/json',
+        data: JSON.stringify({name: name, folderId: id}),
+        dataType:'json',
+        success: function(response) {
+          console.log(response);
+        },
+        error: function(response) {
+          console.log(response.responseText);
+        }
+      });
     }
   }
 }

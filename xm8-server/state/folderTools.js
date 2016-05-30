@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 // may be slow. 
 export const findPath = (id, folder) => {
   let foundSubPath = null;

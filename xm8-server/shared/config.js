@@ -1,10 +1,16 @@
 import _ from 'lodash';
+import {filetypes} from './FileTypes';
+
 try{
   // NB: Must use require as import cannot be used within a try/catch block.
   var localOverrides = require('./localConfigOverrides.js');
 } catch (e){
   console.log("No local config overrides found");
 }
+
+// where are we now?
+let projectRoot = __dirname.substr(0, __dirname.length - 6);
+
 
 let config = {
   frontend: {
@@ -70,6 +76,13 @@ let config = {
       hostapdConf: '/etc/hostapd/hostapd.conf',
       dnsmasqConf: '/etc/dnsmasq.conf'
     }    
+  },
+  persistence: {
+    filesystemPaths: {
+      [filetypes.PATCH.id]: projectRoot + 'persistentStorage/patches/',
+      nextFileId: projectRoot + 'persistentStorage/nextFileId.json'
+    },
+
   }
 }
 

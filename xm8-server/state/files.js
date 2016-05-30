@@ -1,36 +1,18 @@
 import {Map} from 'immutable';
 import {findPath} from './folderTools';
 
-const nextFileId = (state) => {
-  return 'file' + state.get('nextFileId');
-}
-
-const incrementFileId = (state) => {
-  let id = state.get('nextFileId');
-  return state.set('nextFileId', id+1);
-}
-
 const createFile = (id, name, contents) => {
   return Map({
     id,
-    name,
-    contents
+    name
   })
 }
 
 const fileNew = (state, action) => {
-  let fileId = nextFileId(state);
-  state = incrementFileId(state);
+  let fileToSave = createFile(action.fileId, action.fileName);
+  let path = findPath(action.folderId, state).concat(['files', action.fileId]);
 
-  let fileToSave = createFile(fileId, action.fileName, action.fileContents);
-  let path = findPath(action.folderId, state).concat(['files']);
-
-  return state.setIn(path, fileId);
-}
-
-const fileUpdate = (state, action) => {
-  let path = findPath(action.folderId, state).concat(['files', action.fileId, 'contents']);
-  return state.setIn(path, action.fileContents);
+  return state.setIn(path, fileToSave);
 }
 
 const fileRename = (state, action) => {
@@ -53,16 +35,15 @@ const fileDelete = (state, action) => {
   let fileToDelete = state.getIn(path);
 
   return state
-    .deleteIn(path);
+    .deleteIn(path)
     .setIn(['trash', action.fileId], fileToDelete);
 }
 
 const files = (state, action) => {
+  console.log(action)
   switch(action.type){
     case 'FILE_NEW':
       return fileNew(state, action);     
-    case 'FILE_UPDATE':
-      return fileUpdate(state, action);
     case 'FILE_RENAME':
       return fileRename(state, action);
     case 'FILE_MOVE':
