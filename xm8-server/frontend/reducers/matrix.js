@@ -5,10 +5,17 @@ const merge = (state, changes) => Object.assign({}, state, changes);
 const matrix = (
   state = Map({
     "selectedNode": "",
-    "shouldAutoUpdate": false
+    "shouldAutoUpdate": false,
+    patchFileDialog: Map({
+      show: false,
+      mode: 'none'
+    })
   }), 
   action) => {
+  
   switch (action.type){
+    case 'TOGGLE_PATCH_FILE_DIALOG':
+      return state.setIn(['patchFileDialog', 'show'], action.show).setIn(['patchFileDialog', 'mode'], action.mode);
     case 'DELETE_NODE':
       if(state.get('selectedNode') === action.nodeId){
         console.log(state)

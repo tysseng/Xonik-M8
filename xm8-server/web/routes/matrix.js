@@ -14,12 +14,12 @@ router.put('/publish', function(req, res){
 });
 
 // save matrix as a patch
-router.put('/save', function(req, res){
+router.put('/save', function(req, res){  
   let result = matrixRepository.save(req.body.name, req.body.folderId, req.body.fileId);
 
   // TODO: need try/catch here
   if(result.fileSaved){
-    res.status(200).send();
+    res.status(200).send('{}');
   } else {
     res.status(500).send(result.message);
   }
@@ -27,8 +27,7 @@ router.put('/save', function(req, res){
 
 // save matrix as a patch
 router.put('/load', function(req, res){
-  // TODO - IMPLEMENT!
-  matrixRepository.load();
+  matrixRepository.load(req.body.fileId, req.body.version);
   res.status(200).send();
 });
 

@@ -10,8 +10,6 @@ const filesystem = (
   switch (action.type){
     case 'SET_STATE':
       return state.merge(action.state.filesystem);
-    case 'SELECT_FOLDER':
-      return state.set('selectedFolder', action.selectedFolderId);
     default: 
       return state;
   }

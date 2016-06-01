@@ -1,4 +1,3 @@
-
 // If on, all changes to the matrix are sent to the synth core immediately
 export const toggleAutoUpdate = (shouldAutoUpdate) => {
   console.log(shouldAutoUpdate)
@@ -16,6 +15,18 @@ export const setLoadedPatchFileDetails = (fileId) => {
     fileId
   };
 }
+
+
+export const loadNodesFromFile = (fileId, version, nodes) => {
+  return {
+    type: 'LOAD_NODES_FROM_FILE',
+    target: 'SERVER',
+    fileId,
+    version,
+    nodes
+  }
+}
+
 
 export const setState = (state) => {
   return {
@@ -114,6 +125,7 @@ export const changeLinkName = (toNodeId, toParamId, name) => {
     target: 'SERVER'
   }
 }
+
 
 export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
   return {

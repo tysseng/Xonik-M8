@@ -3,8 +3,11 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 
 import { newFolder, selectFolder, deleteFolder } from '../../../shared/state/actions/filesystemActions';
+import { togglePatchSaveDialog, togglePatchLoadDialog } from '../../../shared/state/actions';
+import _ from 'lodash';
 
-import FolderList from './FolderList'
+import FileDialogDispatchers from './dispatchers/FileDialogDispatchers';
+import FolderList from './FolderList';
 
 const mapStateToProps = (state, ownProps) => {
   let fileId = state.matrix.getIn(['patch','fileId']);
@@ -18,17 +21,20 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+
   return {
     onFolderClick: (id) => {
-      console.log("clicked folder " + id);
       dispatch(selectFolder(id));
     },
     onNewFolderClick: (name, selectedFolder) => {
-      console.log("clicked new folder ");
       dispatch(newFolder(name, selectedFolder));
     },
     onFolderDeleteClick: (id) => {
       dispatch(deleteFolder(id));      
+    },
+    onDialogClose: () => {
+      dispatch(togglePatchSaveDialog(false));
+      dispatch(togglePatchLoadDialog(false));
     },
     onFileSaveClick: (name, id, fileId) => {
       $.ajax({

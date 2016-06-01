@@ -9,7 +9,8 @@ import commands from './commands.js';
 import {newFile, updateFile} from '../../shared/state/actions/filesystemActions';
 import {setLoadedPatchFileDetails} from '../../shared/state/actions';
 import {filetypes} from '../../shared/FileTypes';
-import {saveFile} from '../persistence/fileRepo';
+import {saveFile, loadFile} from '../persistence/fileRepo';
+import {fromJS} from 'immutable';
 
 // auto-update voices whenever state changes
 // TODO: listen to only matrix changes!
@@ -43,8 +44,6 @@ export const save = (name, folderId, fileId) => {
     return {fileSaved: false, message: "Name or folder id missing"};
   }
 
-
-
   // TODO: Store input values as well  
   let file = {
     contents: {
@@ -64,8 +63,12 @@ export const save = (name, folderId, fileId) => {
   return result;
 }
 
-function load(){
-  // TODO - implement!
+export const load =(fileId, version) => {
+  let file = loadFile(fileId, version);
+  if(file && file.contents && file.contents.nodes){
+    let immutableContents = fromJS(file);
+    store.dispatch(loadNodesFromFile(fileId, version, immutableContents));
+  }
 }
 
 function serialize(){

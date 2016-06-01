@@ -194,6 +194,8 @@ const nodes = (
   action) => {
 
   switch (action.type){
+    case 'LOAD_NODES_FROM_FILE':
+      return action.nodes;
     case 'DELETE_LINK':
       state = state.updateIn([action.fromNodeId], aNode => node(aNode, action));
       return state.updateIn([action.toNodeId], aNode => node(aNode, action));

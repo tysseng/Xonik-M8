@@ -4,15 +4,6 @@ export const loadFilesystem = () => {
     target: 'SERVER'
   }  
 }
-
-export const selectFolder = (selectedFolderId) => {
-  return {
-    type: 'SELECT_FOLDER',
-    target: 'GUI',    
-    selectedFolderId
-  }  
-}
-
 export const newFolder = (name, parentId) => {
   return {
     type: 'FOLDER_NEW',
@@ -51,7 +42,7 @@ export const moveFolder = (id, toId) => {
 export const newFile = (fileId, fileVersion, fileName, folderId) => {
   return {
     type: 'FILE_NEW',
-    target: 'SERVER',
+    target: 'BOTH',
     fileId,
     fileVersion,
     fileName,
