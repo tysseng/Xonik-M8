@@ -29,14 +29,7 @@ const rehydrate = () => {
 }
 
 const filesystem = (
-  state = Map({
-    files: Map(),
-    folders: Map(),
-    trash: Map({
-
-    }),
-    nextFolderId: 0
-  }),
+  state = rehydrate(),
   action) => {
 
   switch(action.type){
@@ -53,7 +46,7 @@ const filesystem = (
     case 'FILE_MOVE':
     case 'FILE_DELETE':
       return dehydrate(files(state, action));
-  }
+  } 
   return state;
 }
 

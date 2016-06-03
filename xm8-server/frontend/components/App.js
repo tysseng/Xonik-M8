@@ -81,7 +81,7 @@ let App = ({
   // TODO: Do this better!
   let patchFileDialog;
   if(showFileDialog){
-    patchFileDialog = <PatchFileDialogContainer/>;
+    patchFileDialog = <PatchFileDialogContainer path='/patches'/>;
   } 
 
   return(

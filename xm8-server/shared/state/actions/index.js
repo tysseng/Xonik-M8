@@ -28,7 +28,7 @@ export const loadNodesFromFile = (fileId, version, nodes) => {
 }
 
 
-export const setState = (state) => {
+export const setState = (state) => {  
   return {
     type: 'SET_STATE',
     target: 'GUI',

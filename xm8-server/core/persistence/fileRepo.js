@@ -91,7 +91,7 @@ export const saveFile = (file, type, fileId) => {
   if(!fileId){
     fileId = getNextId(type);  
   }
-  let version = getLatestVersion(fileId) + 1;;
+  let version = getLatestVersion(fileId) + 1;
 
   let fileName = getFileName(fileId, version);    ;
   fs.writeFileSync(fileName, JSON.stringify(file, null, '  '));
@@ -111,12 +111,22 @@ export const loadFAT = fat => {
   if(fileExists(fatFileName)){
     return JSON.parse(fs.readFileSync(fatFileName));
   } else {
-    return {
-      files: {},
-      folders: {},
-      trash: {},
-      nextFolderId: 0
-    }
+    return getInitialFat();
   }
 }
 
+const getInitialFat = () => {
+  return {   
+    files: {},
+    folders: {
+      patches: {
+        name: 'patches',
+        id: 'patches',
+        files: {},
+        folders: {}
+      }
+    },
+    trash: {},
+    nextFolderId: 0
+  } 
+}

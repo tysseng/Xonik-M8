@@ -1,6 +1,6 @@
 import {Map} from 'immutable';
 import _ from 'lodash';
-import {findPath} from './folderTools';
+import {findPath} from '../../shared/filesystem/fileTools';
 
 const nextFolderId = (state) => {
   return 'folder' + state.get('nextFolderId');

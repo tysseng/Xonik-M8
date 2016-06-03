@@ -9,6 +9,7 @@ import commands from './commands.js';
 import {newFile, updateFile} from '../../shared/state/actions/filesystemActions';
 import {setLoadedPatchFileDetails} from '../../shared/state/actions';
 import {filetypes} from '../../shared/FileTypes';
+import {findPath} from '../../shared/filesystem/fileTools';
 import {saveFile, loadFile} from '../persistence/fileRepo';
 import {fromJS} from 'immutable';
 
@@ -39,7 +40,7 @@ function sendMatrix(){
   return {updated: true, message: "Synth voices updated"};  
 }
 
-export const save = (name, folderId, fileId) => {
+export const save = (name, folderId) => {
   if(!name || !folderId){
     return {fileSaved: false, message: "Name or folder id missing"};
   }
@@ -51,8 +52,24 @@ export const save = (name, folderId, fileId) => {
     }
   }
 
+  // TODO: Move this to filesystem
+  // search for existing file by name, reuse id if name is found
+  let fileId;
+  let filesystem = store.getState().filesystem;
+  let folder = filesystem.getIn(findPath(folderId, filesystem));
+  let filesInFolder = folder.get('files');
+
+  _.forEach(filesInFolder.toJS(), file => {
+    if(file.name === name){
+      fileId = file.id;
+      return false;
+    }
+  });
+
+
   let result = saveFile(file, filetypes.PATCH, fileId);
   if(result.fileSaved){
+    // TODO: Move to filesystem
     if(result.version === 0){
       store.dispatch(newFile(result.fileId, result.version, name, folderId));
     } else {

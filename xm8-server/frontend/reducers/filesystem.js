@@ -4,11 +4,19 @@ const merge = (state, changes) => Object.assign({}, state, changes);
 
 const filesystem = (
   state = Map({
-    selectedFolder: "" 
+    selectedFolder: "",
+    files: Map(),
+    folders: Map({
+      patches: Map({
+        name: 'patches',
+        files: Map()
+      })
+    })
   }), 
   action) => {
   switch (action.type){
     case 'SET_STATE':
+    console.log(action.state)
       return state.merge(action.state.filesystem);
     default: 
       return state;

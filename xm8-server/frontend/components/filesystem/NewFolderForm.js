@@ -10,12 +10,12 @@ const submitForm = (e, onNewFolderClick, selectedFolder) => {
   }
 }
 
-const NewFolderForm = ({selectedFolder, onNewFolderClick}) => {
+const NewFolderForm = ({selectedFolderId, onNewFolderClick}) => {
   // This may break with the react/redux way of thinking, but I see no need for a 
   // two way binding of the input field here.
   return (
     <div>      
-      <form onSubmit={e =>  submitForm(e, onNewFolderClick, selectedFolder)}>
+      <form onSubmit={e =>  submitForm(e, onNewFolderClick, selectedFolderId)}>
         <label htmlFor="newFolder">New folder</label>     
         <input id="newFolder" type="text"/>
         <button type="submit">Create</button>

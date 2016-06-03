@@ -1,5 +1,5 @@
 import {Map} from 'immutable';
-import {findPath} from './folderTools';
+import {findPath} from '../../shared/filesystem/fileTools';
 
 const createFile = (id, version, name) => {
   return Map({
