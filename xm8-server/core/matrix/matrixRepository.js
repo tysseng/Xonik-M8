@@ -6,10 +6,9 @@ import serializer from './serializer.js';
 import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
-import {newFile, updateFile} from '../../shared/state/actions/filesystemActions';
+
 import {setLoadedPatchFileDetails} from '../../shared/state/actions';
 import {filetypes} from '../../shared/FileTypes';
-import {findPath} from '../../shared/filesystem/fileTools';
 import {saveFile, loadFile} from '../persistence/fileRepo';
 import {fromJS} from 'immutable';
 
@@ -52,29 +51,9 @@ export const save = (name, folderId) => {
     }
   }
 
-  // TODO: Move this to filesystem
-  // search for existing file by name, reuse id if name is found
-  let fileId;
-  let filesystem = store.getState().filesystem;
-  let folder = filesystem.getIn(findPath(folderId, filesystem));
-  let filesInFolder = folder.get('files');
+  let result = saveFile(file, filetypes.PATCH, name, folderId);
 
-  _.forEach(filesInFolder.toJS(), file => {
-    if(file.name === name){
-      fileId = file.id;
-      return false;
-    }
-  });
-
-
-  let result = saveFile(file, filetypes.PATCH, fileId);
   if(result.fileSaved){
-    // TODO: Move to filesystem
-    if(result.version === 0){
-      store.dispatch(newFile(result.fileId, result.version, name, folderId));
-    } else {
-      store.dispatch(updateFile(result.fileId, result.version, folderId));
-    }
     store.dispatch(setLoadedPatchFileDetails(result.fileId));
   } 
   return result;

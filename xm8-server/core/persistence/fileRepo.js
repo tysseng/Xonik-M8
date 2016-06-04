@@ -1,6 +1,13 @@
+import _ from 'lodash';
+import fs from 'fs';
+
 import config from '../../shared/config.js';
 import {typeFromFilename} from '../../shared/FileTypes.js';
-import fs from 'fs';
+import {findPath} from '../../shared/filesystem/fileTools';
+import {newFile, updateFile} from '../../shared/state/actions/filesystemActions';
+
+import store from '../state/store.js';
+
 
 const readNextIdFromFile = () => {
   try{
@@ -35,7 +42,22 @@ const fileExists = (filepath) => {
   }
 }
 
-const getPathFromFileId = (fileId) => {
+const getFileIdByFilename = (filename, folderId) => {
+  let fileId;
+  let filesystem = store.getState().filesystem;
+  let folder = filesystem.getIn(findPath(folderId, filesystem));
+  let filesInFolder = folder.get('files');
+
+  _.forEach(filesInFolder.toJS(), file => {
+    if(file.name === filename){
+      fileId = file.id;
+      return false;
+    }
+  });
+  return fileId;
+}
+
+const getHarddrivePathFromFileId = (fileId) => {
   let fileTypeKey = fileId.match(/^[a-z]+/g)[0];
   let fileType = typeFromFilename[fileTypeKey];
   if(!fileType){
@@ -50,25 +72,25 @@ const getPathFromFileId = (fileId) => {
   return path;
 }
 
-const getFileName = (fileId, version) => {
-  return getPathFromFileId(fileId) + fileId + 'contents' + version + '.json';
+const getFilename = (fileId, version) => {
+  return getHarddrivePathFromFileId(fileId) + fileId + 'contents' + version + '.json';
 }
 
-const getVersionFileName = (fileId) => {
-  return getPathFromFileId(fileId) + fileId + ".json";
+const getVersionFilename = (fileId) => {
+  return getHarddrivePathFromFileId(fileId) + fileId + ".json";
 }
 
 const getLatestVersion = (fileId) => {
-  let versionFileName = getVersionFileName(fileId);
+  let versionFilename = getVersionFilename(fileId);
 
-  if(fileExists(versionFileName)){
+  if(fileExists(versionFilename)){
     try{
-      let versionFile = fs.readFileSync(versionFileName);
+      let versionFile = fs.readFileSync(versionFilename);
       let versionFileContents = JSON.parse(versionFile);
       return versionFileContents.version;
     } catch (e){
       console.log(e);
-      throw new Error("Error while reading versioning info for file " + versionFileName);
+      throw new Error("Error while reading versioning info for file " + versionFilename);
     }
   } else {
     return -1; // no version of the file exists.
@@ -80,24 +102,34 @@ export const loadFile = (fileId, version) => {
     version = getLatestVersion(fileId);
   } 
   if(version === -1) {
-    throw new Error("No version of " + versionFileName + " exists");
+    throw new Error("No version of " + versionFilename + " exists");
   }
 
-  let fileName = getFileName(fileId, version);
-  return fs.readFileSync(fileName);
+  let filename = getFilename(fileId, version);
+  return fs.readFileSync(filename);
 }
 
-export const saveFile = (file, type, fileId) => {   
+export const saveFile = (file, type, filename, folderId) => {
+
+  // search for existing file by name, reuse id if name is found
+  let fileId = getFileIdByFilename(filename, folderId);
+
   if(!fileId){
     fileId = getNextId(type);  
   }
   let version = getLatestVersion(fileId) + 1;
 
-  let fileName = getFileName(fileId, version);    ;
-  fs.writeFileSync(fileName, JSON.stringify(file, null, '  '));
+  let harddriveFilename = getFilename(fileId, version);
+  fs.writeFileSync(harddriveFilename, JSON.stringify(file, null, '  '));
 
-  let versionFilename = getVersionFileName(fileId);
+  let versionFilename = getVersionFilename(fileId);
   fs.writeFileSync(versionFilename, JSON.stringify({version: version}));
+
+  if(version === 0){
+    store.dispatch(newFile(fileId, version, filename, folderId));
+  } else {
+    store.dispatch(updateFile(fileId, version, folderId));
+  }
 
   return {fileSaved: true, fileId: fileId, version: version};
 }
@@ -107,9 +139,9 @@ export const saveFAT = fat => {
 }
 
 export const loadFAT = fat => {
-  let fatFileName = config.persistence.filesystemPaths.fat; 
-  if(fileExists(fatFileName)){
-    return JSON.parse(fs.readFileSync(fatFileName));
+  let fatFilename = config.persistence.filesystemPaths.fat; 
+  if(fileExists(fatFilename)){
+    return JSON.parse(fs.readFileSync(fatFilename));
   } else {
     return getInitialFat();
   }
@@ -123,7 +155,8 @@ const getInitialFat = () => {
         name: 'patches',
         id: 'patches',
         files: {},
-        folders: {}
+        folders: {},
+        undeletable: true
       }
     },
     trash: {},

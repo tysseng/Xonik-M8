@@ -5,6 +5,8 @@
 // Figure out how to work with currently selected if folder structure changes, filename changes etc. 
 // Remove currentFile details if file is deleted (includes folder deletion)
 // Send filename and folderId when opening dialog. Store current folderId along with fileId in matrix.
+// Få enter til å virke på save
+// rename filesystemActions til filesystem
 
 import React from 'react';
 import { connect } from 'react-redux';

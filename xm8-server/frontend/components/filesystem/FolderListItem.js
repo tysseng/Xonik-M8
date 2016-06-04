@@ -6,7 +6,10 @@ const FolderListItem = ({folder, selectedFolderId, onFolderClick, onFolderDelete
   let style = folder.id === selectedFolderId ? {fontWeight: 'bold'} : {};
   return (
     <li>
-      <div><span onClick={() => onFolderClick(folder.id)} style={style}>{folder.name}</span> <span onClick={() => onFolderDeleteClick(folder.id)}>Delete</span></div>
+      <div>
+        <span onClick={() => onFolderClick(folder.id)} style={style}>{folder.name}</span> 
+        {!folder.undeletable && <span onClick={() => onFolderDeleteClick(folder.id)}>Delete</span>}
+      </div>
       <div>
         <ul>
           {_.map(folder.folders, subFolder => {

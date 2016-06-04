@@ -16,7 +16,10 @@ const filedialog = (
   switch (action.type){
     case 'TOGGLE_FILE_DIALOG':
       if(action.show === false){
-        state = state.set('filename', '');
+        state = state
+        .set('filename', '')
+        .set('selectedFolderId', '')
+        .set('selectedFileId', '');
       }
       return state
         .set('show', action.show)
