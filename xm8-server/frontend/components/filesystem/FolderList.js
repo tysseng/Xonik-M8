@@ -3,8 +3,8 @@ import FolderListItem from './FolderListItem';
 import NewFolderForm from './NewFolderForm';
 import _ from 'lodash';
 
-const FolderList = ({folders, selectedFolderId, onFolderClick, onFolderDeleteClick}) => {
-  if(!folders){
+const FolderList = ({rootFolder, selectedFolderId, onFolderClick, onFolderDeleteClick}) => {
+  if(!rootFolder){
     return (<div>...loading folders</div>);
   }
 
@@ -12,11 +12,7 @@ const FolderList = ({folders, selectedFolderId, onFolderClick, onFolderDeleteCli
     <div>
       <h3>Folders</h3>
       <ul>
-        {_.map(folders, folder => {
-          return (
-            <FolderListItem folder={folder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick} key={folder.id}/>
-          )
-        })}    
+        <FolderListItem folder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick} key={rootFolder.id}/>
       </ul>
     </div>
   )

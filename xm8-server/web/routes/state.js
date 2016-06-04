@@ -11,8 +11,6 @@ export default (app, ws) => {
     console.log("Something connected to the state websocket service");
 
     // Send current state to connecting client
-    console.log("Sending state");
-    console.log(store.getState());
     ws.send(JSON.stringify(store.getState()));
 
     // Setup action reception

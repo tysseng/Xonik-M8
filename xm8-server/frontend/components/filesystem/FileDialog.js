@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 const FileDialog = ({
   mode, 
-  folders, 
+  rootFolder,
   files,
   selectedFileId, 
   selectedFolderId, 
@@ -34,7 +34,7 @@ const FileDialog = ({
     <div>
       <div>
         <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderClick={onNewFolderClick}/>
-        <FolderList folders={folders} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
+        <FolderList rootFolder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
       </div>  
       <div>
         <FileList files={files} selectedFileId={selectedFileId} onFileClick={onFileClick}/>

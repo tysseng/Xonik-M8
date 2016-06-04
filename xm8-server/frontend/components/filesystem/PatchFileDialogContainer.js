@@ -5,7 +5,6 @@
 // Figure out how to work with currently selected if folder structure changes, filename changes etc. 
 // Remove currentFile details if file is deleted (includes folder deletion)
 // Send filename and folderId when opening dialog. Store current folderId along with fileId in matrix.
-// Make it possible to select root folder, now only folders within the root node are clickable.
 
 import React from 'react';
 import { connect } from 'react-redux';
@@ -29,15 +28,13 @@ const mapStateToProps = (state, ownProps) => {
   let selectedFolderId = state.filedialog.get('selectedFolderId');
   if(!selectedFolderId) selectedFolderId = root.get('id');
 
-  console.log("Root", root)
-
   console.log("Selected file id: " + selectedFileId);
   console.log("Selected folder id: " + selectedFolderId);
 
   return {
     mode: state.filedialog.get('mode'),
     selectedFileId: selectedFileId,
-    folders: root.get('folders').toJS(),
+    rootFolder: root.toJS(),
     files: selectedFolderId ? getFilesInFolder(selectedFolderId, root).toJS(): {},
     selectedFolderId,
     filename: state.filedialog.get('filename')
