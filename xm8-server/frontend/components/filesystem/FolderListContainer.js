@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
 
-import { newFolder, selectFolder, deleteFolder } from '../../../shared/state/actions/filesystemActions';
+import { newFolder, selectFolder, deleteFolder } from '../../../shared/state/actions/filesystem';
 import { togglePatchSaveDialog, togglePatchLoadDialog } from '../../../shared/state/actions';
 import _ from 'lodash';
 

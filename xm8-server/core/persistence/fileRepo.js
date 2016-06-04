@@ -4,7 +4,7 @@ import fs from 'fs';
 import config from '../../shared/config.js';
 import {typeFromFilename} from '../../shared/FileTypes.js';
 import {findPath} from '../../shared/filesystem/fileTools';
-import {newFile, updateFile} from '../../shared/state/actions/filesystemActions';
+import {newFile, updateFile} from '../../shared/state/actions/filesystem';
 
 import store from '../state/store.js';
 

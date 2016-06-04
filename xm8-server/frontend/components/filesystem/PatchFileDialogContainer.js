@@ -14,7 +14,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 import { toggleFileDialog, selectFolder, selectFile, setFilename } from '../../../shared/state/actions/filedialog';
-import { newFolder, deleteFolder } from '../../../shared/state/actions/filesystemActions';
+import { newFolder, deleteFolder } from '../../../shared/state/actions/filesystem';
 import { findPath, getFolderByPathNames, getFilesInFolder } from '../../../shared/filesystem/fileTools';
 
 import FileDialogDispatchers from './dispatchers/FileDialogDispatchers';
