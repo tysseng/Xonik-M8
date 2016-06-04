@@ -53,7 +53,7 @@ const FileDialog = ({
             <input onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
           </div>  
           <div>
-            <button type="submit">{actionButtonLabel}</button>
+            <button disabled={!filename} type="submit">{actionButtonLabel}</button>
             <button onClick={onDialogClose}>Cancel</button>
           </div> 
         </form>          

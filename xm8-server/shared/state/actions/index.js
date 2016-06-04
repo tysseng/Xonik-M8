@@ -8,11 +8,12 @@ export const toggleAutoUpdate = (shouldAutoUpdate) => {
   };
 }
 
-export const setLoadedPatchFileDetails = (fileId) => {
+export const setLoadedPatchFileDetails = (fileId, version) => {
   return {
     type: 'SET_LOADED_PATCH_FILE_DETAILS',
     target: 'SERVER',
-    fileId
+    fileId,
+    version
   };
 }
 

@@ -54,7 +54,7 @@ export const save = (name, folderId) => {
   let result = saveFile(file, filetypes.PATCH, name, folderId);
 
   if(result.fileSaved){
-    store.dispatch(setLoadedPatchFileDetails(result.fileId));
+    store.dispatch(setLoadedPatchFileDetails(result.fileId, result.version));
   } 
   return result;
 }

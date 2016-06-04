@@ -1,6 +1,28 @@
 import _ from 'lodash';
 
-// may be slow. 
+// may be slow, does a depth first search for folder
+export const findFolderIdForFileId = (fileId, version, root) => {
+  let foundFolderId = null;
+  let folders = root.get('folders');
+
+  let file = root.getIn(['files', fileId]);
+
+  if(file){
+    foundFolderId = root.get('id');
+  } else {
+    _.forEach(root.get('folders').toArray(), subFolder => {    
+      let folderId = findFolderIdForFileId(fileId, version, subFolder);
+      if(folderId){
+        foundFolderId = folderId;
+        return false;
+      } 
+    });
+  }
+
+  return foundFolderId;
+}
+
+// may be slow, does a depth first search for folder
 export const findPath = (id, folder) => {
   let foundSubPath = null;
   let folders = folder.get('folders');
