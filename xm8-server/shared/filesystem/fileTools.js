@@ -1,13 +1,36 @@
 import _ from 'lodash';
 
+export const findFilenameForFileId = (fileId, version, root) => {
+  let foundFilename = null;
+  let folders = root.get('folders');
+
+  let file = root.getIn(['files', fileId]);  
+  let versionInFolder = file ? root.getIn(['files', fileId, 'version']) : null;  
+
+  if(file && version === versionInFolder){
+    foundFilename = file.get('name');
+  } else {
+    _.forEach(root.get('folders').toArray(), subFolder => {    
+      let filename = findFilenameForFileId(fileId, version, subFolder);
+      if(filename){
+        foundFilename = filename;
+        return false;
+      } 
+    });
+  }
+
+  return foundFilename;
+}
+
 // may be slow, does a depth first search for folder
 export const findFolderIdForFileId = (fileId, version, root) => {
   let foundFolderId = null;
   let folders = root.get('folders');
 
   let file = root.getIn(['files', fileId]);
+  let versionInFolder = file ? root.getIn(['files', fileId, 'version']) : null;
 
-  if(file){
+  if(file && version === versionInFolder){
     foundFolderId = root.get('id');
   } else {
     _.forEach(root.get('folders').toArray(), subFolder => {    

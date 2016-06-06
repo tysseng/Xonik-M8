@@ -17,29 +17,41 @@ import _ from 'lodash';
 
 import { toggleFileDialog, selectFolder, selectFile, setFilename } from '../../../shared/state/actions/filedialog';
 import { newFolder, deleteFolder } from '../../../shared/state/actions/filesystem';
-import { findFolderIdForFileId, findPath, getFolderByPathNames, getFilesInFolder } from '../../../shared/filesystem/fileTools';
+import { findFilenameForFileId, findFolderIdForFileId, findPath, getFolderByPathNames, getFilesInFolder } from '../../../shared/filesystem/fileTools';
 
 import FileDialogDispatchers from './dispatchers/FileDialogDispatchers';
 import FileDialog from './FileDialog';
 
 
 const mapStateToProps = (state, ownProps) => {
-  let selectedFileId = state.filedialog.get('selectedFileId');
-  if(!selectedFileId) selectedFileId = state.matrix.getIn(['patch','fileId']);
 
   //TODO: Remember last directory on reopen - per file type
   let root = getFolderByPathNames(state.filesystem, ownProps.path);
-  
+
+  let selectedFileId = state.filedialog.get('selectedFileId');
+
+  let selectedFilename;
+  let selectedFileVersion;
+
+  if(!selectedFileId) {
+    selectedFileId = state.matrix.getIn(['patch','fileId']);
+    if(selectedFileId){
+      selectedFileVersion = state.matrix.getIn(['patch', 'version']);
+      selectedFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
+    } 
+  } else {
+    selectedFilename = state.filedialog.get('filename');  
+  }    
 
   let selectedFolderId = state.filedialog.get('selectedFolderId');
-  if(!selectedFolderId && selectedFileId) {
-    let selectedVersion = state.matrix.getIn(['patch','fileId']);
-    selectedFolderId = findFolderIdForFileId(selectedFileId, selectedVersion, root);
+  if(!selectedFolderId && selectedFileId && selectedFileVersion) {
+    selectedFolderId = findFolderIdForFileId(selectedFileId, selectedFileVersion, root);
   }
   
   if(!selectedFolderId) selectedFolderId = root.get('id');
 
   console.log("Selected file id: " + selectedFileId);
+  console.log("Selected file version: " + selectedFileVersion);
   console.log("Selected folder id: " + selectedFolderId);
 
   return {
@@ -48,7 +60,7 @@ const mapStateToProps = (state, ownProps) => {
     rootFolder: root.toJS(),
     files: selectedFolderId ? getFilesInFolder(selectedFolderId, root).toJS(): {},
     selectedFolderId,
-    filename: state.filedialog.get('filename')
+    filename: selectedFilename
   }
 }
 
