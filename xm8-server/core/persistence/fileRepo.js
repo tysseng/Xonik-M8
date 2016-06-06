@@ -106,7 +106,8 @@ export const loadFile = (fileId, version) => {
   }
 
   let filename = getFilename(fileId, version);
-  return fs.readFileSync(filename);
+
+  return JSON.parse(fs.readFileSync(filename, 'utf8'));
 }
 
 export const saveFile = (file, type, filename, folderId) => {
@@ -120,7 +121,7 @@ export const saveFile = (file, type, filename, folderId) => {
   let version = getLatestVersion(fileId) + 1;
 
   let harddriveFilename = getFilename(fileId, version);
-  fs.writeFileSync(harddriveFilename, JSON.stringify(file, null, '  '));
+  fs.writeFileSync(harddriveFilename, JSON.stringify(file, null, '  '), 'utf8');
 
   let versionFilename = getVersionFilename(fileId);
   fs.writeFileSync(versionFilename, JSON.stringify({version: version}));

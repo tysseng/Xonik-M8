@@ -1,3 +1,6 @@
+// TODO: Move mapping and state functionality to common class together with dispatchers.
+// TODO: Warn on load if current state is not saved (or save current state)
+
 // Figure out how to work with currently selected if folder structure changes, filename changes etc. 
 // Remove currentFile details if file is deleted (includes folder deletion)
 // Se hva som skjer hvis man sletter en folder som inneholder den filen som er åpen i øyeblikket. Hva skjer med filnavn på save.
@@ -47,10 +50,12 @@ const mapStateToProps = (state, ownProps) => {
   
   if(!selectedFolderId) selectedFolderId = root.get('id');
 
+  let files = getFilesInFolder(selectedFolderId, root);  
+
   return {
     mode: state.filedialog.get('mode'),
     rootFolder: root.toJS(),
-    files: selectedFolderId ? getFilesInFolder(selectedFolderId, root).toJS(): {},
+    files: files.toJS(),
     selectedFolderId,
     selectedFileId,
     selectedFileVersion,  
@@ -86,7 +91,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
       $.ajax({
         url: '/matrix/save',
-        type: 'PUT',
+        type: 'POST',
         contentType:'application/json',
         data: JSON.stringify({name: filename, folderId: folderId, fileId: fileId}),
         dataType:'json',
@@ -100,10 +105,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
       });
     },
-    onFileLoadClick: (filename, folderId, fileIdfileId, version) => {
+    onFileLoadClick: (filename, folderId, fileId, version) => {
       $.ajax({
         url: '/matrix/load',
-        type: 'GET',
+        type: 'POST',
         contentType:'application/json',
         data: JSON.stringify({fileId, version}),
         dataType:'json',
@@ -112,6 +117,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         error: function(response) {
           console.log("ERRROR loading file");
+          console.log(response);
           console.log(response.responseText);
         }
       });      

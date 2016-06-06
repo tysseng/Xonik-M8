@@ -14,7 +14,7 @@ router.put('/publish', function(req, res){
 });
 
 // save matrix as a patch
-router.put('/save', function(req, res){  
+router.post('/save', function(req, res){  
   let result = matrixRepository.save(req.body.name, req.body.folderId, req.body.fileId);
 
   // TODO: need try/catch here
@@ -25,10 +25,10 @@ router.put('/save', function(req, res){
   }
 });
 
-// save matrix as a patch
-router.put('/load', function(req, res){
+// load matrix from a patch
+router.post('/load', function(req, res){
   matrixRepository.load(req.body.fileId, req.body.version);
-  res.status(200).send();
+  res.status(200).send('{}');
 });
 
 

@@ -7,7 +7,7 @@ import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
 
-import {setLoadedPatchFileDetails} from '../../shared/state/actions';
+import {loadNodesFromFile, setLoadedPatchFileDetails} from '../../shared/state/actions';
 import {filetypes} from '../../shared/FileTypes';
 import {saveFile, loadFile} from '../persistence/fileRepo';
 import {fromJS} from 'immutable';
@@ -61,9 +61,11 @@ export const save = (name, folderId) => {
 
 export const load =(fileId, version) => {
   let file = loadFile(fileId, version);
+
   if(file && file.contents && file.contents.nodes){
-    let immutableContents = fromJS(file);
-    store.dispatch(loadNodesFromFile(fileId, version, immutableContents));
+    // TODO: Figure out how to make sure this is an orderedMap
+    let immutableNodes = fromJS(file.contents.nodes);
+    store.dispatch(loadNodesFromFile(fileId, version, immutableNodes));
   }
 }
 
