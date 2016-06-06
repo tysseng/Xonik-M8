@@ -8,7 +8,6 @@ const submitForm = (e, onFileActionClick, selectedFolderId, selectedFileId) => {
   e.preventDefault();
   let filename = e.target.filename.value;
   if(filename) {
-    console.log("submit", filename ,selectedFolderId, selectedFileId );
     onFileActionClick(filename, selectedFolderId, selectedFileId);    
   }
 }
@@ -18,7 +17,8 @@ const FileDialog = ({
   rootFolder,
   files,
   selectedFileId, 
-  selectedFolderId, 
+  selectedFolderId,
+  selectedFileVersion, 
   filename,
   onFolderClick, 
   onNewFolderClick, 
@@ -46,8 +46,8 @@ const FileDialog = ({
         <FolderList rootFolder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
       </div>  
       <div>
-        <FileList files={files} selectedFileId={selectedFileId} onFileClick={onFileClick}/>
-        <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolderId, selectedFileId)}>
+        <FileList files={files} selectedFilename={filename} onFileClick={onFileClick}/>
+        <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion)}>
           <div>
             <label forHtml="filename">File name:</label>
             <input onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>

@@ -9,7 +9,8 @@ const filedialog = (
     filename: '',
     root: 'root',
     selectedFolderId: '',
-    selectedFileId: ''
+    selectedFileId: '',
+    selectedFileVersion: ''
   }), 
   action) => {
   
@@ -31,6 +32,7 @@ const filedialog = (
     case 'SET_FILE_DIALOG_SELECTED_FILE':
       return state
         .set('selectedFileId', action.selectedFileId)
+        .set('selectedFileVersion', action.selectedFileVersion)
         .set('filename', action.filename);
     default: 
       return state;

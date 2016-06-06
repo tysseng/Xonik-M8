@@ -1,14 +1,6 @@
-//TODO: BUG - if a new name is selected on something that has already been saved, the old file id will be reused and the 
-// version bumped and the name replaced in the folder. Even if the name matches an existing name.
-
-// TODO: Remove usage of fileId, use name everywhere.
 // Figure out how to work with currently selected if folder structure changes, filename changes etc. 
 // Remove currentFile details if file is deleted (includes folder deletion)
-// find folderId from filename when opening dialog. (if not found, open root. See what happens if saving existing file in new folder.)
 // Se hva som skjer hvis man sletter en folder som inneholder den filen som er åpen i øyeblikket. Hva skjer med filnavn på save.
-// Finn ut om det er et problem å ikke bruke filversjon i et søk i filtreet. Kan en fil med samme id ligge med ulik versjon i ulike folder?
-// Slå sammen fileId og version til et objekt
-// Set filnavn første gang man åpner hvis selected file finnes (bare på save as, save skal ikke åpne dialog hvis file finnes)
 
 import React from 'react';
 import { connect } from 'react-redux';
@@ -29,19 +21,23 @@ const mapStateToProps = (state, ownProps) => {
   let root = getFolderByPathNames(state.filesystem, ownProps.path);
 
   let selectedFileId = state.filedialog.get('selectedFileId');
-
-  let selectedFilename;
-  let selectedFileVersion;
-
+  let selectedFilename = state.filedialog.get('filename');  
+  let selectedFileVersion = state.filedialog.get('selectedFileVersion');
+  
   if(!selectedFileId) {
     selectedFileId = state.matrix.getIn(['patch','fileId']);
     if(selectedFileId){
       selectedFileVersion = state.matrix.getIn(['patch', 'version']);
-      selectedFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
+
+      if(!selectedFilename) {        
+        selectedFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
+      }
     } 
-  } else {
-    selectedFilename = state.filedialog.get('filename');  
-  }    
+  } 
+
+
+  //TODO: BUG: hvis man skal save en eksisterende fil så går man automatisk til der filen er savet.
+  // men selectedFolderId settes ikke, så om man klikker på en annen fil så havner man i rotfolderen
 
   let selectedFolderId = state.filedialog.get('selectedFolderId');
   if(!selectedFolderId && selectedFileId && selectedFileVersion) {
@@ -50,16 +46,13 @@ const mapStateToProps = (state, ownProps) => {
   
   if(!selectedFolderId) selectedFolderId = root.get('id');
 
-  console.log("Selected file id: " + selectedFileId);
-  console.log("Selected file version: " + selectedFileVersion);
-  console.log("Selected folder id: " + selectedFolderId);
-
   return {
     mode: state.filedialog.get('mode'),
-    selectedFileId: selectedFileId,
     rootFolder: root.toJS(),
     files: selectedFolderId ? getFilesInFolder(selectedFolderId, root).toJS(): {},
     selectedFolderId,
+    selectedFileId,
+    selectedFileVersion,  
     filename: selectedFilename
   }
 }
@@ -71,7 +64,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(selectFolder(id));
     },
     onNewFolderClick: (name, selectedFolderId) => {
-      console.log("Creating in " + selectedFolderId)
       dispatch(newFolder(name, selectedFolderId));
     },
     onFolderDeleteClick: (id) => {
@@ -83,8 +75,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onFilenameInputChange: (filename) => {
       dispatch(setFilename(filename));
     },    
-    onFileClick: (fileId, filename) => {
-      dispatch(selectFile(fileId, filename));
+    onFileClick: (fileId, version, filename) => {
+      dispatch(selectFile(fileId, version, filename));
     },
     onFileSaveClick: (filename, folderId, fileId) => {
       if(!filename){
@@ -107,7 +99,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
       });
     },
-    onFileLoadClick: (fileId, version) => {
+    onFileLoadClick: (filename, folderId, fileIdfileId, version) => {
       $.ajax({
         url: '/matrix/load',
         type: 'GET',

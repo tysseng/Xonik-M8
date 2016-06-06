@@ -16,11 +16,12 @@ export const selectFolder = (selectedFolderId) => {
 }
 
       
-export const selectFile = (selectedFileId, filename) => {
+export const selectFile = (selectedFileId, selectedFileVersion, filename) => {
   return {
     type: 'SET_FILE_DIALOG_SELECTED_FILE',
     target: 'GUI',    
     selectedFileId,
+    selectedFileVersion,
     filename
   }  
 }
