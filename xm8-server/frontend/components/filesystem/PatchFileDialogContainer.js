@@ -26,6 +26,7 @@ const mapStateToProps = (state, ownProps) => {
   
   if(!selectedFileId) {
     selectedFileId = state.matrix.getIn(['patch','fileId']);
+
     if(selectedFileId){
       selectedFileVersion = state.matrix.getIn(['patch', 'version']);
 
@@ -40,7 +41,7 @@ const mapStateToProps = (state, ownProps) => {
   // men selectedFolderId settes ikke, så om man klikker på en annen fil så havner man i rotfolderen
 
   let selectedFolderId = state.filedialog.get('selectedFolderId');
-  if(!selectedFolderId && selectedFileId && selectedFileVersion) {
+  if(!selectedFolderId && selectedFileId && Number.isInteger(selectedFileVersion)) {
     selectedFolderId = findFolderIdForFileId(selectedFileId, selectedFileVersion, root);
   }
   
