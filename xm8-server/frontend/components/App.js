@@ -44,18 +44,15 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onPatchSave: () => {
-      dispatch(toggleFileDialog(true, 'save'));
-    },
-    onPatchSaveAs: () => {
-      dispatch(toggleFileDialog(true, 'saveas'));
-    },
-    onPatchLoad: () => { 
-      dispatch(toggleFileDialog(true, 'load'));
-    },
-    onCreateNewNode: () => {
-      dispatch(createNewNode());
-    }
+    onPatchSave: () => dispatch(toggleFileDialog(true, 'save')),
+    onPatchSaveAs: () => dispatch(toggleFileDialog(true, 'saveas')),
+    onPatchLoad: () => dispatch(toggleFileDialog(true, 'load')),
+    onCreateNewNode: () => dispatch(createNewNode()),
+    
+    onNodeClick: (id) => dispatch(selectNode(id)),
+    onLinkClick: (id) => dispatch(selectLink(id)),
+    onNodeDeleteClick: (id) => dispatch(deleteNode(id)),
+    onLinkDeleteClick: (id, from, to, param) => dispatch(deleteLink(id, from, to, param))
   }
 }
 
@@ -75,7 +72,8 @@ const forceUpdate = () => {
 
 let App = ({ 
   selectedNode, selectedLink, shouldAutoUpdate, nodes, links, showFileDialog, 
-  onCreateNewNode, onPatchSave, onPatchSaveAs, onPatchLoad 
+  onCreateNewNode, onPatchSave, onPatchSaveAs, onPatchLoad,
+  onNodeClick, onLinkClick, onNodeDeleteClick, onLinkDeleteClick 
 }) => {
 
   // TODO: Do this better!
@@ -96,8 +94,8 @@ let App = ({
 
     {patchFileDialog}
 
-    <NodeList nodes={nodes} onNodeClick={(id) => dispatch(selectNode(id))} onDeleteClick={(id) => dispatch(deleteNode(id))}/>
-    <LinkList links={links} onLinkClick={(id) => dispatch(selectLink(id))} onDeleteClick={(id, from, to, param) => dispatch(deleteLink(id, from, to, param))}/>
+    <NodeList nodes={nodes} onNodeClick={onNodeClick} onDeleteClick={onNodeDeleteClick}/>
+    <LinkList links={links} onLinkClick={onLinkClick} onDeleteClick={onLinkDeleteClick}/>
 
     <a href="#" onClick={(e) => { 
       e.preventDefault(); 
