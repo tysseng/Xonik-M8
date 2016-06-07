@@ -10,6 +10,7 @@ TODO: Sanitize inputs
 import express from 'express';
 import express_ws from 'express-ws';
 import bodyParser from 'body-parser';
+import sass from 'node-sass-middleware';
 
 //import wifiRoutes from './routes/wifi';
 import matrixRoutes from './routes/matrix';
@@ -20,9 +21,21 @@ import stateRoute from './routes/state';
 // Setup server
 let app = express();
 let ws = express_ws(app);
+let projectRoot = process.cwd();
 
 // for parsing application/json
 app.use(bodyParser.json()); 
+
+// Sass -> css files.
+app.use(
+  sass({
+    src: projectRoot + '/frontend/sass',
+    dest: __dirname + '/static/css',
+    prefix: '/css', // without this, css loading ony works the first time: http://stackoverflow.com/questions/31127848/node-sass-middleware-only-serving-css-file-once?rq=1
+    debug: true
+    //, outputStyle: 'compressed'
+  })
+);
 
 // static files location
 app.use(express.static('web/static'));

@@ -40,23 +40,25 @@ const FileDialog = ({
   }
 
   return (
-    <div>
-      <div>
-        <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderClick={onNewFolderClick}/>
-        <FolderList rootFolder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
-      </div>  
-      <div>
-        <FileList files={files} selectedFilename={filename} onFileClick={onFileClick}/>
-        <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion)}>
-          <div>
-            <label forHtml="filename">File name:</label>
-            <input disabled={mode === 'load'} onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
-          </div>  
-          <div>
-            <button disabled={!filename} type="submit">{actionButtonLabel}</button>
-            <button onClick={onDialogClose}>Cancel</button>
-          </div> 
-        </form>          
+    <div className="filedialog">
+      <div className="modal">
+        <div className="folders">
+          <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderClick={onNewFolderClick}/>
+          <FolderList rootFolder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
+        </div>  
+        <div className="files">
+          <FileList files={files} selectedFilename={filename} onFileClick={onFileClick}/>
+          <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion)}>
+            <div>
+              <label forHtml="filename">File name:</label>
+              <input disabled={mode === 'load'} onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
+            </div>  
+            <div>
+              <button disabled={!filename} type="submit">{actionButtonLabel}</button>
+              <button onClick={onDialogClose}>Cancel</button>
+            </div> 
+          </form>          
+        </div>
       </div>
     </div>
   )
