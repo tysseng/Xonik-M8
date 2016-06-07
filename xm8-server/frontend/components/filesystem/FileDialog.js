@@ -4,11 +4,11 @@ import FolderList from './FolderList';
 import FileList from './FileList';
 import _ from 'lodash';
 
-const submitForm = (e, onFileActionClick, selectedFolderId, selectedFileId) => {
+const submitForm = (e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion) => {
   e.preventDefault();
   let filename = e.target.filename.value;
   if(filename) {
-    onFileActionClick(filename, selectedFolderId, selectedFileId);    
+    onFileActionClick(filename, selectedFolderId, selectedFileId, selectedFileVersion);    
   }
 }
 
@@ -50,7 +50,7 @@ const FileDialog = ({
         <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion)}>
           <div>
             <label forHtml="filename">File name:</label>
-            <input onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
+            <input disabled={mode === 'load'} onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
           </div>  
           <div>
             <button disabled={!filename} type="submit">{actionButtonLabel}</button>

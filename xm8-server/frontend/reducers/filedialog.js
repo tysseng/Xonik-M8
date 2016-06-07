@@ -20,7 +20,8 @@ const filedialog = (
         state = state
         .set('filename', '')
         .set('selectedFolderId', '')
-        .set('selectedFileId', '');
+        .set('selectedFileId', '')
+        .set('selectedFileVersion', '');
       }
       return state
         .set('show', action.show)

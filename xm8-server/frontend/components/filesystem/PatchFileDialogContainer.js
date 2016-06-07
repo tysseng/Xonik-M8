@@ -20,6 +20,7 @@ import FileDialog from './FileDialog';
 
 const mapStateToProps = (state, ownProps) => {
 
+  let mode = state.filedialog.get('mode');
   //TODO: Remember last directory on reopen - per file type
   let root = getFolderByPathNames(state.filesystem, ownProps.path);
 
@@ -27,17 +28,19 @@ const mapStateToProps = (state, ownProps) => {
   let selectedFilename = state.filedialog.get('filename');  
   let selectedFileVersion = state.filedialog.get('selectedFileVersion');
   
-  if(!selectedFileId) {
-    selectedFileId = state.matrix.getIn(['patch','fileId']);
+  if(mode === 'save'){
+    if(!selectedFileId) {
+      selectedFileId = state.matrix.getIn(['patch','fileId']);
 
-    if(selectedFileId){
-      selectedFileVersion = state.matrix.getIn(['patch', 'version']);
-
-      if(!selectedFilename) {        
-        selectedFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
-      }
+      if(selectedFileId){
+        selectedFileVersion = state.matrix.getIn(['patch', 'version']);
+        console.log("Saving ", state.matrix.toJS())
+        if(!selectedFilename) {        
+          selectedFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
+        }
+      } 
     } 
-  } 
+  }
 
 
   //TODO: BUG: hvis man skal save en eksisterende fil så går man automatisk til der filen er savet.
@@ -53,7 +56,7 @@ const mapStateToProps = (state, ownProps) => {
   let files = getFilesInFolder(selectedFolderId, root);  
 
   return {
-    mode: state.filedialog.get('mode'),
+    mode,
     rootFolder: root.toJS(),
     files: files.toJS(),
     selectedFolderId,
@@ -100,7 +103,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           dispatch(toggleFileDialog(false));
         },
         error: function(response) {
-          console.log("ERRROR saving file");
+          console.log("ERROR saving file");
           console.log(response.responseText);          
         }
       });
@@ -116,7 +119,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           dispatch(toggleFileDialog(false));
         },
         error: function(response) {
-          console.log("ERRROR loading file");
+          console.log("ERROR loading file");
           console.log(response);
           console.log(response.responseText);
         }
