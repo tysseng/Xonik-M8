@@ -9,7 +9,7 @@ try{
 }
 
 // where are we now?
-let projectRoot = __dirname.substr(0, __dirname.length - 6);
+let projectRoot = process.cwd();
 
 
 let config = {
