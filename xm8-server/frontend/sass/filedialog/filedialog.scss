@@ -12,12 +12,47 @@
   pointer-events: auto;
 
   > div {
-      width: 400px;
-      position: relative;
-      margin: 10% auto;
-      padding: 5px 20px 13px 20px;
-      border-radius: 5px;
-      background: linear-gradient(#777, #999);
+    width: 400px;
+    position: relative;
+    margin: 10% auto;
+    padding: 5px 20px 13px 20px;
+    border-radius: 5px;
+    background: linear-gradient(#777, #999);
+    overflow: hidden; /* forces div to contain floated elements */
+
+    .files {
+      float: right;
+      width: 180px;
+      padding: 10px;
+
+      .new {
+        height: 50px;
+      }
+
+      .list {
+        height: 250px;
+        overflow: hidden;
+      }
+
+    }
+
+    .folders {
+      float: left;
+      width: 180px;
+      padding: 10px;
+
+      .new {
+        height: 50px;
+      }
+
+      .list {
+        height: 250px;
+        overflow: hidden;
+      }      
+    }    
   }  
+
+
+
 }
 

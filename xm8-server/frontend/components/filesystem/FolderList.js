@@ -9,7 +9,7 @@ const FolderList = ({rootFolder, selectedFolderId, onFolderClick, onFolderDelete
   }
 
   return (
-    <div>
+    <div className="list">
       <h3>Folders</h3>
       <ul>
         <FolderListItem folder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick} key={rootFolder.id}/>

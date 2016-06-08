@@ -41,23 +41,25 @@ const FileDialog = ({
 
   return (
     <div className="filedialog">
-      <div className="modal">
-        <div className="folders">
-          <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderClick={onNewFolderClick}/>
+      <div className="modalBox">
+        <div className="folders">          
           <FolderList rootFolder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
+          <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderClick={onNewFolderClick}/>
         </div>  
         <div className="files">
-          <FileList files={files} selectedFilename={filename} onFileClick={onFileClick}/>
-          <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion)}>
-            <div>
-              <label forHtml="filename">File name:</label>
-              <input disabled={mode === 'load'} onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
-            </div>  
-            <div>
-              <button disabled={!filename} type="submit">{actionButtonLabel}</button>
-              <button onClick={onDialogClose}>Cancel</button>
-            </div> 
-          </form>          
+          <FileList files={files} selectedFilename={filename} onFileClick={onFileClick}/>          
+          <div className="new">
+            <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion)}>
+              <div>
+                <label forHtml="filename">File name:</label>
+                <input disabled={mode === 'load'} onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
+              </div>  
+              <div>
+                <button disabled={!filename} type="submit">{actionButtonLabel}</button>
+                <button onClick={onDialogClose}>Cancel</button>
+              </div> 
+            </form>  
+          </div>        
         </div>
       </div>
     </div>
