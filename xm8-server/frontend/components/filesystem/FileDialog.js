@@ -13,6 +13,7 @@ const submitForm = (e, onFileActionClick, selectedFolderId, selectedFileId, sele
 }
 
 const FileDialog = ({
+  headingPostfix,
   mode, 
   rootFolder,
   files,
@@ -31,17 +32,21 @@ const FileDialog = ({
 
   let actionButtonLabel;
   let onFileActionClick;
+  let heading;
   if( mode === 'save' || mode === 'saveas'){
     actionButtonLabel = 'Save';
     onFileActionClick = onFileSaveClick;
+    heading = 'Save ' + headingPostfix;
   } else if( mode === 'load'){
     actionButtonLabel = 'Load';
     onFileActionClick = onFileLoadClick; 
+    heading = 'Load ' + headingPostfix;
   }
 
   return (
     <div className="filedialog">
       <div className="modalBox">
+        <div className="heading">{heading}</div>
         <div className="folders">          
           <FolderList rootFolder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
           <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderClick={onNewFolderClick}/>
@@ -51,12 +56,12 @@ const FileDialog = ({
           <div className="new">
             <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion)}>
               <div>
-                <label forHtml="filename">File name:</label>
+                <label forHtml="filename">Name</label>
                 <input disabled={mode === 'load'} onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
               </div>  
-              <div>
-                <button disabled={!filename} type="submit">{actionButtonLabel}</button>
+              <div>                
                 <button onClick={onDialogClose}>Cancel</button>
+                <button disabled={!filename} type="submit">{actionButtonLabel}</button>
               </div> 
             </form>  
           </div>        

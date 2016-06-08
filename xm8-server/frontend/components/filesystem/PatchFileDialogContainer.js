@@ -1,5 +1,12 @@
 // TODO: Move mapping and state functionality to common class together with dispatchers.
 // TODO: Warn on load if current state is not saved (or save current state)
+// -- får warning om uncontrolled field. Må fikses. Filnavn blir blankt (antakelig undefined)
+
+// TODO: Add scrollbars to files/folders
+// TODO: Add swipe-scroll to files/folders
+// TODO: Add in-field naming ("filename, folder name");
+// TODO: Prevent word-wrap in names
+// TODO: Sort files and folders by name
 
 // Figure out how to work with currently selected if folder structure changes, filename changes etc. 
 // Remove currentFile details if file is deleted (includes folder deletion)
@@ -56,6 +63,7 @@ const mapStateToProps = (state, ownProps) => {
   let files = getFilesInFolder(selectedFolderId, root);  
 
   return {
+    headingPostfix: "patch", 
     mode,
     rootFolder: root.toJS(),
     files: files.toJS(),

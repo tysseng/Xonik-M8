@@ -35,6 +35,11 @@ const filedialog = (
         .set('selectedFileId', action.selectedFileId)
         .set('selectedFileVersion', action.selectedFileVersion)
         .set('filename', action.filename);
+    case 'FOLDER_DELETE':
+      if(state.get('selectedFolderId') === action.folderId){
+        return state.set('selectedFolderId', '');
+      } 
+      return state;       
     default: 
       return state;
   }

@@ -25,7 +25,7 @@ export const renameFolder = (id, name) => {
 export const deleteFolder = (id) => {
   return {
     type: 'FOLDER_DELETE',
-    target: 'SERVER',
+    target: 'BOTH',
     folderId: id
   };
 }

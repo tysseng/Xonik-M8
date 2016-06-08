@@ -8,8 +8,7 @@ const FileList = ({files, selectedFilename, onFileClick}) => {
   }
 
   return (
-    <div className="list">        
-      <h3>Files</h3>
+    <div className="list">              
       <ul>
         {_.map(files, file => {
           return (
