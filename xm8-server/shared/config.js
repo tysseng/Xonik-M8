@@ -11,7 +11,6 @@ try{
 // where are we now?
 let projectRoot = process.cwd();
 
-
 let config = {
   frontend: {
     serverAddr: 'ws://10.0.1.123:8001',
@@ -79,9 +78,9 @@ let config = {
   },
   persistence: {
     filesystemPaths: {
-      [filetypes.PATCH.id]: projectRoot + 'persistentStorage/patches/',
-      nextFileId: projectRoot + 'persistentStorage/nextFileId.json',
-      fat: projectRoot + 'persistentStorage/fat.json',
+      [filetypes.PATCH.id]: projectRoot + '/persistentStorage/patches/',
+      nextFileId: projectRoot + '/persistentStorage/nextFileId.json',
+      fat: projectRoot + '/persistentStorage/fat.json',
     },
 
   }
