@@ -8,9 +8,8 @@
 // TODO: Prevent word-wrap in names
 
 // TODO: Reset current file på load hvis man bytter folder.
-// TODO: Add new folder-popup.
-// TODO: Delete folder-button instead of per-folder delete icon/label
 
+// TODO: BUG - ikke mulig å cleare filename, da hopper gammelt navn tilbake...
 // TODO: Make it impossible to delete undeletable folders (need to find current folder by Id...)
 
 import React from 'react';
@@ -20,7 +19,7 @@ import _ from 'lodash';
 
 import { toggleFileDialog, toggleNewFolderDialog, selectFolder, selectFile, setFilename } from '../../../shared/state/actions/filedialog';
 import { newFolder, deleteFolder } from '../../../shared/state/actions/filesystem';
-import { findFilenameForFileId, findFolderIdForFileId, findPath, getFolderByPathNames, getFilesInFolder } from '../../../shared/filesystem/fileTools';
+import { findFilenameForFileId, findFolderForFileId, findFolderById, getFolderByPathNames, getFilesInFolder } from '../../../shared/filesystem/fileTools';
 
 import FileDialogDispatchers from './dispatchers/FileDialogDispatchers';
 import FileDialog from './FileDialog';
@@ -32,6 +31,7 @@ const mapStateToProps = (state, ownProps) => {
   //TODO: Remember last directory on reopen - per file type
   let root = getFolderByPathNames(state.filesystem, ownProps.path);
 
+  let selectedFolder;
   let selectedFileId = state.filedialog.get('selectedFileId');
   let selectedFilename = state.filedialog.get('filename');  
   let selectedFileVersion = state.filedialog.get('selectedFileVersion');
@@ -47,7 +47,8 @@ const mapStateToProps = (state, ownProps) => {
         // only load the existing filename if user has not changed the filename in the filename input box.
         if(!selectedFilename) {                  
           let foundFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
-          if(foundFilename) selectedFilename == foundFilename;
+
+          if(foundFilename) selectedFilename = foundFilename;
         }
       } 
     } 
@@ -56,18 +57,26 @@ const mapStateToProps = (state, ownProps) => {
   // Default folder to show is the one explicity selected by the user.
   let selectedFolderId = state.filedialog.get('selectedFolderId');
 
+  if(selectedFolderId){
+    selectedFolder = findFolderById(selectedFolderId, root);
+
+    console.log("selectedFolderId", selectedFolder)
+  }  
+
   // If user has not explicitly navigated to a different folder, show the folder the currently loaded patch is in.
-  if(!selectedFolderId && selectedFileId && Number.isInteger(selectedFileVersion)) {
-    selectedFolderId = findFolderIdForFileId(selectedFileId, selectedFileVersion, root);
+  if(!selectedFolder && selectedFileId && Number.isInteger(selectedFileVersion)) {
+    // TODO: Change to selectedFolder
+    selectedFolder = findFolderForFileId(selectedFileId, selectedFileVersion, root);
   }
 
   // Fall back to root if no current file or file not found for some reason.
-  if(!selectedFolderId) selectedFolderId = root.get('id');
+  //TODO: change to selected folder
+  if(!selectedFolder) selectedFolder = root;
 
   // Temporarily disable load button if the selected file is not within the currently selected folder.
   if(mode === 'load' && selectedFileId &&  Number.isInteger(selectedFileVersion)){
-    let folderForFile = findFolderIdForFileId(selectedFileId, selectedFileVersion, root);
-    if(folderForFile != selectedFolderId){
+    let folderForFile = findFolderForFileId(selectedFileId, selectedFileVersion, root);
+    if(folderForFile != selectedFolder){
       selectedFileId = '';
       selectedFilename = '';
       selectedFileVersion = '';
@@ -75,14 +84,14 @@ const mapStateToProps = (state, ownProps) => {
   }
 
 
-  let files = getFilesInFolder(selectedFolderId, root);  
+  let files = selectedFolder.get('files'); //getFilesInFolder(selectedFolderId, root);  
 
   return {
     headingPostfix: "patch", 
     mode,
     rootFolder: root.toJS(),
     files: files.toJS(),
-    selectedFolderId,
+    selectedFolderId: selectedFolder.get('id'), // todo: get from selected folder in each component.
     selectedFileId,
     selectedFileVersion,  
     filename: selectedFilename,
@@ -97,16 +106,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(selectFolder(id));
     },
     onNewFolderOpen: () => {
-      console.log("open")
       dispatch(toggleNewFolderDialog(true));
     },    
     onNewFolderSave: (name, selectedFolderId) => {
-      console.log("save")
       dispatch(newFolder(name, selectedFolderId));
       dispatch(toggleNewFolderDialog(false));
     },
     onNewFolderClose: (name, selectedFolderId) => {
-      console.log("close")
       dispatch(toggleNewFolderDialog(false));
     },
     onFolderDeleteClick: (id) => {

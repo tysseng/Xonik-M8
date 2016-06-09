@@ -67,6 +67,12 @@ const FileDialog = ({
                   <input disabled={mode === 'load'} onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
                 </div>  
               }
+              {mode === 'load' &&
+                <div>
+                  <label forHtml="filename">Name</label>
+                  <input id="filename" type="hidden" value={filename}/>
+                </div>  
+              }              
               <div>                
                 <button onClick={onDialogClose}>Cancel</button>
                 <button disabled={!filename} type="submit">{actionButtonLabel}</button>

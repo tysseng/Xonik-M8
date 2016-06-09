@@ -46,6 +46,50 @@ export const findFolderIdForFileId = (fileId, version, root) => {
 }
 
 // may be slow, does a depth first search for folder
+export const findFolderForFileId = (fileId, version, root) => {
+  let foundFolder = null;
+  let folders = root.get('folders');
+
+  let file = root.getIn(['files', fileId]);
+  let versionInFolder = file ? root.getIn(['files', fileId, 'version']) : null;
+
+  if(file && version === versionInFolder){
+    foundFolder = root;
+  } else {
+    _.forEach(root.get('folders').toArray(), subFolder => {    
+      let folder = findFolderForFileId(fileId, version, subFolder);
+      if(folder){
+        foundFolder = folder;
+        return false;
+      } 
+    });
+  }
+
+  return foundFolder;
+}
+
+// may be slow, does a depth first search for folder
+export const findFolderById = (id, folder) => {
+
+  if(folder.get('id') === id){
+    return folder;
+  }
+
+  let foundFolder = null;
+  let folders = folder.get('folders');
+
+  _.forEach(folders.toArray(), subFolder => {    
+
+    let foundSubFolder = findFolderById(id, subFolder);
+    if(foundSubFolder){
+      foundFolder = foundSubFolder;
+      return false; 
+    }    
+  });
+  return foundFolder;
+}
+
+// may be slow, does a depth first search for folder
 export const findPath = (id, folder) => {
   let foundSubPath = null;
   let folders = folder.get('folders');
