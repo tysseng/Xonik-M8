@@ -6,11 +6,11 @@ const submitForm = (e, onNewFolderSave, selectedFolder) => {
   if(name) {
     console.log("submit " + name);
     e.target.newFolder.value = "";
-    onNewFolderSave(name, selectedFolder);
+    onNewFolderSave(name, selectedFolder.id);
   }
 }
 
-const NewFolderForm = ({selectedFolderId, onNewFolderSave, onNewFolderOpen, onNewFolderClose, onFolderDeleteClick, showNewFolderDialog}) => {
+const NewFolderForm = ({selectedFolder, onNewFolderSave, onNewFolderOpen, onNewFolderClose, onFolderDeleteClick, showNewFolderDialog}) => {
   // This may break with the react/redux way of thinking, but I see no need for a 
   // two way binding of the input field here.
 
@@ -18,12 +18,12 @@ const NewFolderForm = ({selectedFolderId, onNewFolderSave, onNewFolderOpen, onNe
   return (
     <div className="new"> 
       <button onClick={onNewFolderOpen}>New folder</button>
-      <button disabled={!selectedFolderId} onClick={() => onFolderDeleteClick(selectedFolderId)}>Delete folder</button>
+      <button disabled={selectedFolder.undeletable} onClick={() => onFolderDeleteClick(selectedFolder.id)}>Delete folder</button>
       {
         showNewFolderDialog &&     
         <div className="newfolderdialog">
           <div>
-            <form onSubmit={e =>  submitForm(e, onNewFolderSave, selectedFolderId)}>
+            <form onSubmit={e =>  submitForm(e, onNewFolderSave, selectedFolder.id)}>
               <div>Name of new folder</div>     
               <input id="newFolder" type="text"/>
               <div>

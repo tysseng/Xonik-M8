@@ -4,11 +4,11 @@ import FolderList from './FolderList';
 import FileList from './FileList';
 import _ from 'lodash';
 
-const submitForm = (e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion) => {
+const submitForm = (e, onFileActionClick, selectedFolder, selectedFileId, selectedFileVersion) => {
   e.preventDefault();
   let filename = e.target.filename.value;
   if(filename) {
-    onFileActionClick(filename, selectedFolderId, selectedFileId, selectedFileVersion);    
+    onFileActionClick(filename, selectedFolder.id, selectedFileId, selectedFileVersion);    
   }
 }
 
@@ -17,8 +17,8 @@ const FileDialog = ({
   mode, 
   rootFolder,
   files,
+  selectedFolder, 
   selectedFileId, 
-  selectedFolderId,
   selectedFileVersion, 
   filename,
   showNewFolderDialog,
@@ -46,21 +46,24 @@ const FileDialog = ({
     heading = 'Load ' + headingPostfix;
   }
 
+
+  console.log("Selected folder", selectedFolder)
+
   return (
     <div className="filedialog">
       <div className="modalBox">
         <div className="heading">{heading}</div>
         <div className="folders">          
-          <FolderList rootFolder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
+          <FolderList rootFolder={rootFolder} selectedFolder={selectedFolder} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
           {
             mode === 'save' && 
-            <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderSave={onNewFolderSave} onNewFolderOpen={onNewFolderOpen} onNewFolderClose={onNewFolderClose} onFolderDeleteClick={onFolderDeleteClick} showNewFolderDialog={showNewFolderDialog}/>
+            <NewFolderForm selectedFolder={selectedFolder} onNewFolderSave={onNewFolderSave} onNewFolderOpen={onNewFolderOpen} onNewFolderClose={onNewFolderClose} onFolderDeleteClick={onFolderDeleteClick} showNewFolderDialog={showNewFolderDialog}/>
           }          
         </div>  
         <div className="files">
           <FileList files={files} selectedFilename={filename} onFileClick={onFileClick}/>          
           <div className="new">
-            <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion)}>
+            <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolder, selectedFileId, selectedFileVersion)}>
               {mode === 'save' &&
                 <div>
                   <label forHtml="filename">Name</label>

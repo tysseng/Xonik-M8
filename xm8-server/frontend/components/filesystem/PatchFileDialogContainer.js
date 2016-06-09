@@ -7,10 +7,7 @@
 // TODO: Add in-field naming ("filename, folder name");
 // TODO: Prevent word-wrap in names
 
-// TODO: Reset current file på load hvis man bytter folder.
-
 // TODO: BUG - ikke mulig å cleare filename, da hopper gammelt navn tilbake...
-// TODO: Make it impossible to delete undeletable folders (need to find current folder by Id...)
 
 import React from 'react';
 import { connect } from 'react-redux';
@@ -19,7 +16,7 @@ import _ from 'lodash';
 
 import { toggleFileDialog, toggleNewFolderDialog, selectFolder, selectFile, setFilename } from '../../../shared/state/actions/filedialog';
 import { newFolder, deleteFolder } from '../../../shared/state/actions/filesystem';
-import { findFilenameForFileId, findFolderForFileId, findFolderById, getFolderByPathNames, getFilesInFolder } from '../../../shared/filesystem/fileTools';
+import { findFilenameForFileId, findFolderForFileId, findFolderById, getFolderByPathNames } from '../../../shared/filesystem/fileTools';
 
 import FileDialogDispatchers from './dispatchers/FileDialogDispatchers';
 import FileDialog from './FileDialog';
@@ -59,8 +56,6 @@ const mapStateToProps = (state, ownProps) => {
 
   if(selectedFolderId){
     selectedFolder = findFolderById(selectedFolderId, root);
-
-    console.log("selectedFolderId", selectedFolder)
   }  
 
   // If user has not explicitly navigated to a different folder, show the folder the currently loaded patch is in.
@@ -84,14 +79,14 @@ const mapStateToProps = (state, ownProps) => {
   }
 
 
-  let files = selectedFolder.get('files'); //getFilesInFolder(selectedFolderId, root);  
+  let files = selectedFolder.get('files'); 
 
   return {
     headingPostfix: "patch", 
     mode,
     rootFolder: root.toJS(),
     files: files.toJS(),
-    selectedFolderId: selectedFolder.get('id'), // todo: get from selected folder in each component.
+    selectedFolder: selectedFolder.toJS(),
     selectedFileId,
     selectedFileVersion,  
     filename: selectedFilename,

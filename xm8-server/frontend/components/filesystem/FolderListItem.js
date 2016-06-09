@@ -1,9 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
 
-const FolderListItem = ({folder, selectedFolderId, onFolderClick, onFolderDeleteClick}) => {
+const FolderListItem = ({folder, selectedFolder, onFolderClick, onFolderDeleteClick}) => {
 
-  let style = folder.id === selectedFolderId ? {fontWeight: 'bold'} : {};
+  console.log(folder.id, selectedFolder)
+
+  let style = folder.id === selectedFolder.id ? {fontWeight: 'bold'} : {};
 
   let folders = _.sortBy(folder.folders, 'name');
   return (
@@ -15,7 +17,7 @@ const FolderListItem = ({folder, selectedFolderId, onFolderClick, onFolderDelete
         <ul>
           {_.map(folders, subFolder => {
             return (
-              <FolderListItem folder={subFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick} key={subFolder.id}/>
+              <FolderListItem folder={subFolder} selectedFolder={selectedFolder} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick} key={subFolder.id}/>
             )
           })}
         </ul>
