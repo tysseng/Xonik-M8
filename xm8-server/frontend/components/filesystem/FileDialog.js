@@ -54,17 +54,19 @@ const FileDialog = ({
           <FolderList rootFolder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
           {
             mode === 'save' && 
-            <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderSave={onNewFolderSave} onNewFolderOpen={onNewFolderOpen} onNewFolderClose={onNewFolderClose} showNewFolderDialog={showNewFolderDialog}/>
+            <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderSave={onNewFolderSave} onNewFolderOpen={onNewFolderOpen} onNewFolderClose={onNewFolderClose} onFolderDeleteClick={onFolderDeleteClick} showNewFolderDialog={showNewFolderDialog}/>
           }          
         </div>  
         <div className="files">
           <FileList files={files} selectedFilename={filename} onFileClick={onFileClick}/>          
           <div className="new">
             <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolderId, selectedFileId, selectedFileVersion)}>
-              <div>
-                <label forHtml="filename">Name</label>
-                <input disabled={mode === 'load'} onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
-              </div>  
+              {mode === 'save' &&
+                <div>
+                  <label forHtml="filename">Name</label>
+                  <input disabled={mode === 'load'} onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
+                </div>  
+              }
               <div>                
                 <button onClick={onDialogClose}>Cancel</button>
                 <button disabled={!filename} type="submit">{actionButtonLabel}</button>

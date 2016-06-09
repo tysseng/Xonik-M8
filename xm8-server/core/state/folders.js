@@ -45,11 +45,10 @@ const folderRename = (state, action) => {
 
 const folderDelete = (state, action) => {           
   let path = findPath(action.folderId, state);
-  console.log(path);
   let folderToDelete = state.getIn(path);  
 
-  if(folderToDelete.get('parent')){
-    state = state
+  if(!folderToDelete.get('undeletable')){
+    return state
       .deleteIn(path)
       .setIn(['trash', action.folderId], folderToDelete);
   }

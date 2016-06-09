@@ -9,8 +9,7 @@ const FolderListItem = ({folder, selectedFolderId, onFolderClick, onFolderDelete
   return (
     <li>
       <div>
-        <span onClick={() => onFolderClick(folder.id)} style={style}>{folder.name}</span> 
-        {!folder.undeletable && <span onClick={() => onFolderDeleteClick(folder.id)}>Delete</span>}
+        <span onClick={() => onFolderClick(folder.id)} style={style}>{folder.name}</span>
       </div>
       <div>
         <ul>

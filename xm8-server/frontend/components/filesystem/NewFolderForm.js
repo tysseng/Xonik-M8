@@ -10,12 +10,15 @@ const submitForm = (e, onNewFolderSave, selectedFolder) => {
   }
 }
 
-const NewFolderForm = ({selectedFolderId, onNewFolderSave, onNewFolderOpen, onNewFolderClose, showNewFolderDialog}) => {
+const NewFolderForm = ({selectedFolderId, onNewFolderSave, onNewFolderOpen, onNewFolderClose, onFolderDeleteClick, showNewFolderDialog}) => {
   // This may break with the react/redux way of thinking, but I see no need for a 
   // two way binding of the input field here.
+
+  //!selectedFolder.undeletable
   return (
     <div className="new"> 
       <button onClick={onNewFolderOpen}>New folder</button>
+      <button disabled={!selectedFolderId} onClick={() => onFolderDeleteClick(selectedFolderId)}>Delete folder</button>
       {
         showNewFolderDialog &&     
         <div className="newfolderdialog">

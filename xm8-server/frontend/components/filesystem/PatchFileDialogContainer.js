@@ -7,12 +7,11 @@
 // TODO: Add in-field naming ("filename, folder name");
 // TODO: Prevent word-wrap in names
 
-// TODO: Hide filename and new folder form on load.
+// TODO: Reset current file på load hvis man bytter folder.
 // TODO: Add new folder-popup.
 // TODO: Delete folder-button instead of per-folder delete icon/label
 
-// Remove currentFile details if file is deleted (includes folder deletion)
-
+// TODO: Make it impossible to delete undeletable folders (need to find current folder by Id...)
 
 import React from 'react';
 import { connect } from 'react-redux';
@@ -37,14 +36,16 @@ const mapStateToProps = (state, ownProps) => {
   let selectedFilename = state.filedialog.get('filename');  
   let selectedFileVersion = state.filedialog.get('selectedFileVersion');
   
+  // If saving, find the currently open file if the user has not explicitly selected a different file or entered a new file name
   if(mode === 'save'){
     if(!selectedFileId) {
       selectedFileId = state.matrix.getIn(['patch','fileId']);
 
       if(selectedFileId){
         selectedFileVersion = state.matrix.getIn(['patch', 'version']);
-        console.log("Saving ", state.matrix.toJS())
-        if(!selectedFilename) {        
+
+        // only load the existing filename if user has not changed the filename in the filename input box.
+        if(!selectedFilename) {                  
           let foundFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
           if(foundFilename) selectedFilename == foundFilename;
         }
@@ -52,13 +53,27 @@ const mapStateToProps = (state, ownProps) => {
     } 
   }
 
-
+  // Default folder to show is the one explicity selected by the user.
   let selectedFolderId = state.filedialog.get('selectedFolderId');
+
+  // If user has not explicitly navigated to a different folder, show the folder the currently loaded patch is in.
   if(!selectedFolderId && selectedFileId && Number.isInteger(selectedFileVersion)) {
     selectedFolderId = findFolderIdForFileId(selectedFileId, selectedFileVersion, root);
   }
-  
+
+  // Fall back to root if no current file or file not found for some reason.
   if(!selectedFolderId) selectedFolderId = root.get('id');
+
+  // Temporarily disable load button if the selected file is not within the currently selected folder.
+  if(mode === 'load' && selectedFileId &&  Number.isInteger(selectedFileVersion)){
+    let folderForFile = findFolderIdForFileId(selectedFileId, selectedFileVersion, root);
+    if(folderForFile != selectedFolderId){
+      selectedFileId = '';
+      selectedFilename = '';
+      selectedFileVersion = '';
+    }
+  }
+
 
   let files = getFilesInFolder(selectedFolderId, root);  
 
