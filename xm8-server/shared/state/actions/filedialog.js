@@ -6,7 +6,15 @@ export const toggleFileDialog = (show, mode) => {
     mode
   };
 }
-      
+
+export const toggleNewFolderDialog = (show) => {
+  return {
+    type: 'TOGGLE_NEW_FOLDER_DIALOG',
+    target: 'GUI',
+    show
+  };
+}
+
 export const selectFolder = (selectedFolderId) => {
   return {
     type: 'SET_FILE_DIALOG_SELECTED_FOLDER',

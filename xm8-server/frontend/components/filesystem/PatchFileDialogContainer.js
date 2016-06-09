@@ -1,23 +1,25 @@
 // TODO: Move mapping and state functionality to common class together with dispatchers.
 // TODO: Warn on load if current state is not saved (or save current state)
-// -- får warning om uncontrolled field. Må fikses. Filnavn blir blankt (antakelig undefined)
 
-// TODO: Add scrollbars to files/folders
+
+// TODO: Autoscroll to make selected file/folder visible
 // TODO: Add swipe-scroll to files/folders
 // TODO: Add in-field naming ("filename, folder name");
 // TODO: Prevent word-wrap in names
-// TODO: Sort files and folders by name
 
-// Figure out how to work with currently selected if folder structure changes, filename changes etc. 
+// TODO: Hide filename and new folder form on load.
+// TODO: Add new folder-popup.
+// TODO: Delete folder-button instead of per-folder delete icon/label
+
 // Remove currentFile details if file is deleted (includes folder deletion)
-// Se hva som skjer hvis man sletter en folder som inneholder den filen som er åpen i øyeblikket. Hva skjer med filnavn på save.
+
 
 import React from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import _ from 'lodash';
 
-import { toggleFileDialog, selectFolder, selectFile, setFilename } from '../../../shared/state/actions/filedialog';
+import { toggleFileDialog, toggleNewFolderDialog, selectFolder, selectFile, setFilename } from '../../../shared/state/actions/filedialog';
 import { newFolder, deleteFolder } from '../../../shared/state/actions/filesystem';
 import { findFilenameForFileId, findFolderIdForFileId, findPath, getFolderByPathNames, getFilesInFolder } from '../../../shared/filesystem/fileTools';
 
@@ -43,15 +45,13 @@ const mapStateToProps = (state, ownProps) => {
         selectedFileVersion = state.matrix.getIn(['patch', 'version']);
         console.log("Saving ", state.matrix.toJS())
         if(!selectedFilename) {        
-          selectedFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
+          let foundFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
+          if(foundFilename) selectedFilename == foundFilename;
         }
       } 
     } 
   }
 
-
-  //TODO: BUG: hvis man skal save en eksisterende fil så går man automatisk til der filen er savet.
-  // men selectedFolderId settes ikke, så om man klikker på en annen fil så havner man i rotfolderen
 
   let selectedFolderId = state.filedialog.get('selectedFolderId');
   if(!selectedFolderId && selectedFileId && Number.isInteger(selectedFileVersion)) {
@@ -70,7 +70,8 @@ const mapStateToProps = (state, ownProps) => {
     selectedFolderId,
     selectedFileId,
     selectedFileVersion,  
-    filename: selectedFilename
+    filename: selectedFilename,
+    showNewFolderDialog: state.filedialog.get('showNewFolderDialog')
   }
 }
 
@@ -80,8 +81,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onFolderClick: (id) => {
       dispatch(selectFolder(id));
     },
-    onNewFolderClick: (name, selectedFolderId) => {
+    onNewFolderOpen: () => {
+      console.log("open")
+      dispatch(toggleNewFolderDialog(true));
+    },    
+    onNewFolderSave: (name, selectedFolderId) => {
+      console.log("save")
       dispatch(newFolder(name, selectedFolderId));
+      dispatch(toggleNewFolderDialog(false));
+    },
+    onNewFolderClose: (name, selectedFolderId) => {
+      console.log("close")
+      dispatch(toggleNewFolderDialog(false));
     },
     onFolderDeleteClick: (id) => {
       dispatch(deleteFolder(id));      

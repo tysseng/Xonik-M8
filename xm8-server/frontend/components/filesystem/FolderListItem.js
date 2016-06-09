@@ -4,6 +4,8 @@ import _ from 'lodash';
 const FolderListItem = ({folder, selectedFolderId, onFolderClick, onFolderDeleteClick}) => {
 
   let style = folder.id === selectedFolderId ? {fontWeight: 'bold'} : {};
+
+  let folders = _.sortBy(folder.folders, 'name');
   return (
     <li>
       <div>
@@ -12,7 +14,7 @@ const FolderListItem = ({folder, selectedFolderId, onFolderClick, onFolderDelete
       </div>
       <div>
         <ul>
-          {_.map(folder.folders, subFolder => {
+          {_.map(folders, subFolder => {
             return (
               <FolderListItem folder={subFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick} key={subFolder.id}/>
             )

@@ -5,6 +5,7 @@ const merge = (state, changes) => Object.assign({}, state, changes);
 const filedialog = (
   state = Map({
     show: false,
+    showNewFolderDialog: false,
     mode: 'none',
     filename: '',
     root: 'root',
@@ -39,7 +40,9 @@ const filedialog = (
       if(state.get('selectedFolderId') === action.folderId){
         return state.set('selectedFolderId', '');
       } 
-      return state;       
+      return state; 
+    case 'TOGGLE_NEW_FOLDER_DIALOG':
+      return state.set('showNewFolderDialog', action.show);      
     default: 
       return state;
   }

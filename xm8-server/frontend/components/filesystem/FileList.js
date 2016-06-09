@@ -7,6 +7,8 @@ const FileList = ({files, selectedFilename, onFileClick}) => {
     return (<div>...loading files</div>);
   }
 
+  files = _.sortBy(files, 'name');
+
   return (
     <div className="list">              
       <ul>

@@ -21,8 +21,11 @@ const FileDialog = ({
   selectedFolderId,
   selectedFileVersion, 
   filename,
+  showNewFolderDialog,
   onFolderClick, 
-  onNewFolderClick, 
+  onNewFolderSave,
+  onNewFolderOpen, 
+  onNewFolderClose, 
   onFolderDeleteClick, 
   onFileClick,
   onFilenameInputChange,
@@ -49,7 +52,10 @@ const FileDialog = ({
         <div className="heading">{heading}</div>
         <div className="folders">          
           <FolderList rootFolder={rootFolder} selectedFolderId={selectedFolderId} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
-          <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderClick={onNewFolderClick}/>
+          {
+            mode === 'save' && 
+            <NewFolderForm selectedFolderId={selectedFolderId} onNewFolderSave={onNewFolderSave} onNewFolderOpen={onNewFolderOpen} onNewFolderClose={onNewFolderClose} showNewFolderDialog={showNewFolderDialog}/>
+          }          
         </div>  
         <div className="files">
           <FileList files={files} selectedFilename={filename} onFileClick={onFileClick}/>          

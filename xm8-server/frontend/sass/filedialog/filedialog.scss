@@ -6,7 +6,7 @@
   bottom: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.8);
-  z-index: 99999;
+  z-index: 88888;
   opacity:1;
   transition: opacity 400ms ease-in;
   pointer-events: auto;
@@ -31,7 +31,7 @@
       float: right;
       width: 180px;
       width: 170px;
-      padding: 0px 20px 0px 10px;
+      padding: 0px 20px 0px 10px;      
 
       .new {
         height: 56px;
@@ -39,7 +39,8 @@
 
       .list {
         height: 250px;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
       }
 
     }
@@ -55,7 +56,8 @@
 
       .list {
         height: 250px;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
       }      
     } 
 
@@ -64,8 +66,34 @@
       margin-right: 5px;
     }   
   }  
-
-
-
 }
+
+.newfolderdialog {
+  position: fixed;
+  font-family: Arial, Helvetica, sans-serif;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 99999;
+  opacity:1;
+  transition: opacity 400ms ease-in;
+  pointer-events: auto;
+
+  > div {
+    width: 300px;
+    height: 64px;
+    position: relative;
+    margin: 20% auto;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    background: linear-gradient(#777, #999);
+    overflow: hidden; /* forces div to contain floated elements */
+  }
+} 
+
+
+
+
 
