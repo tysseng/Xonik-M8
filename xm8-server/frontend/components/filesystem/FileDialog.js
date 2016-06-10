@@ -46,9 +46,6 @@ const FileDialog = ({
     heading = 'Load ' + headingPostfix;
   }
 
-
-  console.log("Selected folder", selectedFolder)
-
   return (
     <div className="filedialog">
       <div className="modalBox">
@@ -73,7 +70,7 @@ const FileDialog = ({
               {mode === 'load' &&
                 <div>
                   <label forHtml="filename">Name</label>
-                  <input id="filename" type="hidden" value={filename}/>
+                  <input id="filename" type="hidden" value={filename}/> {filename}
                 </div>  
               }              
               <div>                
