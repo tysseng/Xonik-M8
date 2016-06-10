@@ -1,9 +1,10 @@
-export const toggleFileDialog = (show, mode) => {
+export const toggleFileDialog = (show, mode, options = {}) => {
   return {
     type: 'TOGGLE_FILE_DIALOG',
     target: 'GUI',
     show,
-    mode
+    mode,
+    options
   };
 }
 

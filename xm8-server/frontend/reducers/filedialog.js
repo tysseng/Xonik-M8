@@ -23,6 +23,13 @@ const filedialog = (
         .set('selectedFolderId', '')
         .set('selectedFileId', '')
         .set('selectedFileVersion', '');
+      } else {
+        let opts = action.options;
+        console.log("Options", action.options)
+        if(opts.selectedFolderId) state = state.set('selectedFolderId', opts.selectedFolderId);
+        if(opts.selectedFileId) state = state.set('selectedFileId', opts.selectedFileId);
+        if(opts.selectedFileVersion) state = state.set('selectedFileVersion', opts.selectedFileVersion);
+        if(opts.filename) state = state.set('filename', opts.filename);
       }
       return state
         .set('show', action.show)

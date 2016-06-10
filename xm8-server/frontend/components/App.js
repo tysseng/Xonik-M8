@@ -31,11 +31,18 @@ const mapStateToProps = (state, ownProps) => {
   let selectedLink = state.matrix.get('selectedLink');
   let shouldAutoUpdate = state.matrix.get('shouldAutoUpdate');
   let showFileDialog = state.filedialog.get('show');
+
+  let selectedFileDetails = {
+    selectedFileId: state.matrix.getIn(['patch','fileId']),
+    selectedFileVersion: state.matrix.getIn(['patch', 'version']),
+  }
+
   return {
     links,
     nodes,
     selectedNode,
     selectedLink,
+    selectedFileDetails,
     shouldAutoUpdate,
     showFileDialog
   }
@@ -44,8 +51,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onPatchSave: () => dispatch(toggleFileDialog(true, 'save')),
-    onPatchSaveAs: () => dispatch(toggleFileDialog(true, 'saveas')),
+    onPatchSave: (options) => dispatch(toggleFileDialog(true, 'save', options)),
+    onPatchSaveAs: (options) => dispatch(toggleFileDialog(true, 'saveas', options)),
     onPatchLoad: () => dispatch(toggleFileDialog(true, 'load')),
     onCreateNewNode: () => dispatch(createNewNode()),
     
@@ -71,7 +78,7 @@ const forceUpdate = () => {
 }
 
 let App = ({ 
-  selectedNode, selectedLink, shouldAutoUpdate, nodes, links, showFileDialog, 
+  selectedNode, selectedLink, shouldAutoUpdate, nodes, links, showFileDialog, selectedFileDetails,
   onCreateNewNode, onPatchSave, onPatchSaveAs, onPatchLoad,
   onNodeClick, onLinkClick, onNodeDeleteClick, onLinkDeleteClick 
 }) => {
@@ -88,8 +95,8 @@ let App = ({
     <label htmlFor="autoUpdate">Auto update synth voice</label><br/>
 
     <button disabled={shouldAutoUpdate} onClick={forceUpdate}>Update voice</button>
-    <button onClick={onPatchSave}>Save</button>
-    <button onClick={onPatchSaveAs}>Save as</button>
+    <button onClick={() => onPatchSave(selectedFileDetails)}>Save</button>
+    <button onClick={() => onPatchSaveAs(selectedFileDetails)}>Save as</button>
     <button onClick={onPatchLoad}>Load</button>
 
     {patchFileDialog}

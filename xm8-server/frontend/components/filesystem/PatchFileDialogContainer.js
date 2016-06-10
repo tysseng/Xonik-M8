@@ -6,8 +6,12 @@
 // TODO: Add swipe-scroll to files/folders
 // TODO: Add in-field naming ("filename, folder name");
 // TODO: Prevent word-wrap in names
+// TODO: BEtter styling
 
 // TODO: BUG - ikke mulig å cleare filename, da hopper gammelt navn tilbake...
+// --> Bytte til at sekected-state bare settes ved OPEN. Kan da droppe mye switching.x
+// TODO: BUG - navn vises ikke på load.
+// TODO: Flytte ut filename form
 
 import React from 'react';
 import { connect } from 'react-redux';
@@ -35,20 +39,12 @@ const mapStateToProps = (state, ownProps) => {
   
   // If saving, find the currently open file if the user has not explicitly selected a different file or entered a new file name
   if(mode === 'save'){
-    if(!selectedFileId) {
-      selectedFileId = state.matrix.getIn(['patch','fileId']);
+    // only load the existing filename if user has not changed the filename in the filename input box.
+    if(!selectedFilename) {                  
+      let foundFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
 
-      if(selectedFileId){
-        selectedFileVersion = state.matrix.getIn(['patch', 'version']);
-
-        // only load the existing filename if user has not changed the filename in the filename input box.
-        if(!selectedFilename) {                  
-          let foundFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
-
-          if(foundFilename) selectedFilename = foundFilename;
-        }
-      } 
-    } 
+      if(foundFilename) selectedFilename = foundFilename;
+    }
   }
 
   // Default folder to show is the one explicity selected by the user.
