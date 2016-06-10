@@ -91,38 +91,56 @@ let App = ({
 
   return(
   <div>
-    <input id="autoUpdate" type="checkbox" checked={shouldAutoUpdate} onChange={(e) => dispatch(toggleAutoUpdate(e.target.checked))}/>
-    <label htmlFor="autoUpdate">Auto update synth voice</label><br/>
+    <div className="mainmenu">
+      <span className="icon"><img src="img/icons/house.svg"/><div className="name">Home</div></span>
+      <span className="icon"><img src="img/icons/network.svg"/><div className="name">Patches</div></span>
+      <span className="icon"><img src="img/icons/settings.svg"/><div className="name">Control</div></span>
+      <span className="icon"><img src="img/icons/folder.svg"/><div className="name">Files</div></span>
+      <span className="icon"><img src="img/icons/settings-1.svg"/><div className="name">Settings</div></span>
+      <span className="icon"><img src="img/icons/wifi-2.svg"/><div className="name">Network</div></span>
+      <span className="icon"><img src="img/icons/garbage.svg"/><div className="name">Trash</div></span>
+    </div>
+    <div className="leftmenu">
+      <span className="icon"><img src="img/icons/reload-1.svg"/><div className="name">Update voice</div></span>
+      <span className="icon"><img src="img/icons/download.svg"/><div className="name">Save</div></span>
+      <span className="icon"><img src="img/icons/upload 2.svg"/><div className="name">Load</div></span> 
+      <span className="icon"><img src="img/icons/circular-arrow-1.svg"/><div className="name">Undo</div></span>
+      <span className="icon"><img src="img/icons/circular-arrow.svg"/><div className="name">Redo</div></span>  
+    </div>
+      <div className="main">
+      <input id="autoUpdate" type="checkbox" checked={shouldAutoUpdate} onChange={(e) => dispatch(toggleAutoUpdate(e.target.checked))}/>
+      <label htmlFor="autoUpdate">Auto update synth voice</label><br/>
 
-    <button disabled={shouldAutoUpdate} onClick={forceUpdate}>Update voice</button>
-    <button onClick={() => onPatchSave(selectedFileDetails)}>Save</button>
-    <button onClick={() => onPatchSaveAs(selectedFileDetails)}>Save as</button>
-    <button onClick={onPatchLoad}>Load</button>
+      <button disabled={shouldAutoUpdate} onClick={forceUpdate}>Update voice</button>
+      <button onClick={() => onPatchSave(selectedFileDetails)}>Save</button>
+      <button onClick={() => onPatchSaveAs(selectedFileDetails)}>Save as</button>
+      <button onClick={onPatchLoad}>Load</button>
 
-    {patchFileDialog}
+      {patchFileDialog}
 
-    <NodeList nodes={nodes} onNodeClick={onNodeClick} onDeleteClick={onNodeDeleteClick}/>
-    <LinkList links={links} onLinkClick={onLinkClick} onDeleteClick={onLinkDeleteClick}/>
+      <NodeList nodes={nodes} onNodeClick={onNodeClick} onDeleteClick={onNodeDeleteClick}/>
+      <LinkList links={links} onLinkClick={onLinkClick} onDeleteClick={onLinkDeleteClick}/>
 
-    <a href="#" onClick={(e) => { 
-      e.preventDefault(); 
-      onCreateNewNode();
-      
-    }}>Add node</a><br/>
+      <a href="#" onClick={(e) => { 
+        e.preventDefault(); 
+        onCreateNewNode();
+        
+      }}>Add node</a><br/>
 
-    {(() => {
-      if(selectedNode && selectedNode !== ""){
-        return <NodeFormContainer nodeId={selectedNode}/>
-      } 
-      return "";
-    })()}
+      {(() => {
+        if(selectedNode && selectedNode !== ""){
+          return <NodeFormContainer nodeId={selectedNode}/>
+        } 
+        return "";
+      })()}
 
-    {(() => {
-      if(selectedLink && selectedLink !== ""){
-        return <LinkFormContainer linkId={selectedLink}/>
-      } 
-      return "";
-    })()}    
+      {(() => {
+        if(selectedLink && selectedLink !== ""){
+          return <LinkFormContainer linkId={selectedLink}/>
+        } 
+        return "";
+      })()}    
+    </div>
   </div>
 )}
 

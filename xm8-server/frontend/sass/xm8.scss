@@ -1,7 +1,13 @@
 @import 'filedialog/filedialog';
+@import 'mainmenu';
 
 body {
+  margin: 0px;
   background-color: #666;
   color: #eee;
   font-family: sans-serif;
+}
+
+.main {
+  float: left;
 }

@@ -1,0 +1,67 @@
+/*
+Icon sets:
+http://www.flaticon.com/packs/multimedia-collection -- mainly from this one
+http://www.flaticon.com/packs/simple-icon-set
+http://www.flaticon.com/packs/free-basic-ui-elements
+http://www.flaticon.com/packs/ecommerce-set
+http://www.flaticon.com/packs/multimedia-set
+*/
+
+.mainmenu {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  background-color: #ddd;
+  color: #333;
+
+  .icon {
+
+    text-align:center;
+    position: relative;
+    float: left;
+    margin-left: 7px;
+    margin-right: 7px;
+    width: 70px;    
+
+    img{
+      display: block;
+      margin: auto;    
+      height: 30px;
+    }
+    .name{
+      padding-top: 6px;
+    }
+  }
+}
+
+.leftmenu{
+  position: relative;
+  float: left;
+  width: 70px;
+  height: 200px;
+  padding: 10px;
+  background-color: #f00;
+  color: #333;
+
+  .icon {
+
+    text-align:center;
+    position: relative;
+    float: left;
+    margin-left: 7px;
+    margin-right: 7px;
+    margin-bottom: 10px;
+    width: 50px;    
+
+    img{
+      display: block;
+      margin: auto;    
+      height: 30px;
+    }
+    .name{
+      display: none;
+      font-size: 10px;
+      padding-top: 6px;
+    }
+  }  
+}
