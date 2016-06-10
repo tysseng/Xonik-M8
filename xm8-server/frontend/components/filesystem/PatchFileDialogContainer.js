@@ -1,3 +1,7 @@
+// TODO: BUG - ikke mulig å opprette ny folder.
+
+// TODO: SKRIVE TESTER!!!  
+
 // TODO: Move mapping and state functionality to common class together with dispatchers.
 // TODO: Warn on load if current state is not saved (or save current state)
 
@@ -7,9 +11,6 @@
 // TODO: Add in-field naming ("filename, folder name");
 // TODO: Prevent word-wrap in names
 // TODO: BEtter styling
-
-// TODO: BUG - ikke mulig å cleare filename, da hopper gammelt navn tilbake...
-// --> Bytte til at sekected-state bare settes ved OPEN. Kan da droppe mye switching.x
 // TODO: Flytte ut filename form
 
 import React from 'react';
@@ -46,11 +47,11 @@ const mapStateToProps = (state, ownProps) => {
       let foundFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
       if(foundFilename) {
         selectedFilename = foundFilename;
-      } else {
-        selectedFilename = '';
       }
     }
   }
+  // See previous comment
+  if(selectedFilename === null) selectedFilename = '';
 
   // Default folder to show is the one explicity selected by the user.
   let selectedFolderId = state.filedialog.get('selectedFolderId');
@@ -74,8 +75,7 @@ const mapStateToProps = (state, ownProps) => {
       selectedFilename = '';
       selectedFileVersion = '';
     }
-  }
-
+  }      
 
   let files = selectedFolder.get('files'); 
 
