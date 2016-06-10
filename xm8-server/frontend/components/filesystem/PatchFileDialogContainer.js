@@ -10,7 +10,6 @@
 
 // TODO: BUG - ikke mulig å cleare filename, da hopper gammelt navn tilbake...
 // --> Bytte til at sekected-state bare settes ved OPEN. Kan da droppe mye switching.x
-// TODO: BUG - navn vises ikke på load.
 // TODO: Flytte ut filename form
 
 import React from 'react';
@@ -39,29 +38,32 @@ const mapStateToProps = (state, ownProps) => {
   
   // If saving, find the currently open file if the user has not explicitly selected a different file or entered a new file name
   if(mode === 'save'){
-    // only load the existing filename if user has not changed the filename in the filename input box.
-    if(!selectedFilename) {                  
-      let foundFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
 
-      if(foundFilename) selectedFilename = foundFilename;
+    // Load the name of the currently open file if the user has not changed the filename in the filename input box or selected a different 
+    // file. This is a bit hackish, as we set the original filename to null. Whenever the user clears the field, the value will be '' instead 
+    // of null so this code is only executed until the user has selected a file, a file is found or the user has touched the filename input field.
+    if(selectedFilename === null) {                  
+      let foundFilename = findFilenameForFileId(selectedFileId, selectedFileVersion, root);
+      if(foundFilename) {
+        selectedFilename = foundFilename;
+      } else {
+        selectedFilename = '';
+      }
     }
   }
 
   // Default folder to show is the one explicity selected by the user.
   let selectedFolderId = state.filedialog.get('selectedFolderId');
-
   if(selectedFolderId){
     selectedFolder = findFolderById(selectedFolderId, root);
   }  
 
-  // If user has not explicitly navigated to a different folder, show the folder the currently loaded patch is in.
+  // If user has not explicitly navigated to a different folder, show the folder the currently open file is in.
   if(!selectedFolder && selectedFileId && Number.isInteger(selectedFileVersion)) {
-    // TODO: Change to selectedFolder
     selectedFolder = findFolderForFileId(selectedFileId, selectedFileVersion, root);
   }
 
-  // Fall back to root if no current file or file not found for some reason.
-  //TODO: change to selected folder
+  // Fall back to root if no open file or file not found for some reason.
   if(!selectedFolder) selectedFolder = root;
 
   // Temporarily disable load button if the selected file is not within the currently selected folder.

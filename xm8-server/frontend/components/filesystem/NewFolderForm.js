@@ -4,7 +4,6 @@ const submitForm = (e, onNewFolderSave, selectedFolder) => {
   e.preventDefault();
   let name = e.target.newFolder.value;
   if(name) {
-    console.log("submit " + name);
     e.target.newFolder.value = "";
     onNewFolderSave(name, selectedFolder.id);
   }

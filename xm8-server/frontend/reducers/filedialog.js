@@ -7,7 +7,7 @@ const filedialog = (
     show: false,
     showNewFolderDialog: false,
     mode: 'none',
-    filename: '',
+    filename: null,
     root: 'root',
     selectedFolderId: '',
     selectedFileId: '',
@@ -19,16 +19,16 @@ const filedialog = (
     case 'TOGGLE_FILE_DIALOG':
       if(action.show === false){
         state = state
-        .set('filename', '')
+        .set('filename', null)
         .set('selectedFolderId', '')
         .set('selectedFileId', '')
         .set('selectedFileVersion', '');
       } else {
+
         let opts = action.options;
-        console.log("Options", action.options)
         if(opts.selectedFolderId) state = state.set('selectedFolderId', opts.selectedFolderId);
         if(opts.selectedFileId) state = state.set('selectedFileId', opts.selectedFileId);
-        if(opts.selectedFileVersion) state = state.set('selectedFileVersion', opts.selectedFileVersion);
+        if(Number.isInteger(opts.selectedFileVersion)) state = state.set('selectedFileVersion', opts.selectedFileVersion);
         if(opts.filename) state = state.set('filename', opts.filename);
       }
       return state

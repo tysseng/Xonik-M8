@@ -74,7 +74,7 @@ const FileDialog = ({
                 </div>  
               }              
               <div>                
-                <button onClick={onDialogClose}>Cancel</button>
+                <button type="button" onClick={onDialogClose}>Cancel</button>
                 <button disabled={!filename} type="submit">{actionButtonLabel}</button>
               </div> 
             </form>  
