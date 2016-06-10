@@ -1,5 +1,3 @@
-// TODO: BUG - ikke mulig å opprette ny folder.
-
 // TODO: SKRIVE TESTER!!!  
 
 // TODO: Move mapping and state functionality to common class together with dispatchers.

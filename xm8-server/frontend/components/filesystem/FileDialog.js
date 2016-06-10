@@ -1,5 +1,5 @@
 import React from 'react';
-import NewFolderForm from './NewFolderForm';
+import EditFolderForm from './EditFolderForm';
 import FolderList from './FolderList';
 import FileList from './FileList';
 import _ from 'lodash';
@@ -54,7 +54,7 @@ const FileDialog = ({
           <FolderList rootFolder={rootFolder} selectedFolder={selectedFolder} onFolderClick={onFolderClick} onFolderDeleteClick={onFolderDeleteClick}/>
           {
             mode === 'save' && 
-            <NewFolderForm selectedFolder={selectedFolder} onNewFolderSave={onNewFolderSave} onNewFolderOpen={onNewFolderOpen} onNewFolderClose={onNewFolderClose} onFolderDeleteClick={onFolderDeleteClick} showNewFolderDialog={showNewFolderDialog}/>
+            <EditFolderForm selectedFolder={selectedFolder} onNewFolderSave={onNewFolderSave} onNewFolderOpen={onNewFolderOpen} onNewFolderClose={onNewFolderClose} onFolderDeleteClick={onFolderDeleteClick} showNewFolderDialog={showNewFolderDialog}/>
           }          
         </div>  
         <div className="files">

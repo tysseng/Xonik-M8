@@ -9,7 +9,7 @@ const submitForm = (e, onNewFolderSave, selectedFolder) => {
   }
 }
 
-const NewFolderForm = ({selectedFolder, onNewFolderSave, onNewFolderOpen, onNewFolderClose, onFolderDeleteClick, showNewFolderDialog}) => {
+const EditFolderForm = ({selectedFolder, onNewFolderSave, onNewFolderOpen, onNewFolderClose, onFolderDeleteClick, showNewFolderDialog}) => {
   // This may break with the react/redux way of thinking, but I see no need for a 
   // two way binding of the input field here.
 
@@ -36,4 +36,4 @@ const NewFolderForm = ({selectedFolder, onNewFolderSave, onNewFolderOpen, onNewF
   )
 }
 
-export default NewFolderForm;
+export default EditFolderForm;
