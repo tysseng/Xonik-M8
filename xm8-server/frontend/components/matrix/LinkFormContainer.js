@@ -20,7 +20,8 @@ const mapStateToProps = (state, ownProps) => {
     });
   });
 
-  let link = links[ownProps.linkId];
+  let selecedLinkId = state.matrix.get('selectedLink');
+  let link = links[selecedLinkId];
   
   return {
     link

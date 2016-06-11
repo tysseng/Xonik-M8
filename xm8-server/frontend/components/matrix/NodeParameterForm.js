@@ -40,7 +40,7 @@ const NodeParameterForm = ({
     case "constant":
       body = 
         <span>
-          <input type="text" onChange={(e) => onValueChange(e.target.value)} value={value}/>
+          <input className="paramValue" type="text" onChange={(e) => onValueChange(e.target.value)} value={value}/>
           <ParameterUnitDropdown onUnitChange={(value) => onUnitChange(value)} value={unit}/>
         </span>;
       break;
@@ -51,9 +51,10 @@ const NodeParameterForm = ({
 
   return (
     <span style={color}>
-      {name}:
-      <NodeParameterTypeDropdown value={type} onParameterTypeChange={onTypeChange}/> 
-      {body}<br/>
+      <label>{name}</label>
+      <div>
+        <NodeParameterTypeDropdown value={type} onParameterTypeChange={onTypeChange}/> {body}
+      </div>
     </span>
   )
 }

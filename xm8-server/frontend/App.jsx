@@ -35,9 +35,6 @@ var NodeForm = require('./components/matrix/NodeForm.jsx');
 var NodeList = require('./components/matrix/NodeList.jsx');
 
 
-//    
-
-
 ReactDOM.render(
   <div>
     <<Knob controllerId="volume"/>

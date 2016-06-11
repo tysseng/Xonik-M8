@@ -1,5 +1,7 @@
+@import 'grid';
 @import 'filedialog/filedialog';
 @import 'mainmenu';
+@import 'matrixforms';
 
 body {
   margin: 0px;
@@ -8,6 +10,6 @@ body {
   font-family: sans-serif;
 }
 
-.main {
-  float: left;
+.miniicon {
+  height: 16px;
 }

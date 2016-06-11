@@ -8,11 +8,13 @@ import nodeTypes from '../../../shared/matrix/NodeTypes.js';
 
 
 const mapStateToProps = (state, ownProps) => {
+
   let nodes = state.nodes.toJS();
-  let node = nodes[ownProps.nodeId];
+  let selectedNodeId = state.matrix.get('selectedNode');
+  let node = nodes[selectedNodeId];
   
   return {
-    node,
+    node, 
     nodes
   }
 }
