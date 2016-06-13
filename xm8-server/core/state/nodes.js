@@ -33,6 +33,7 @@ const getEmptyNode = (nodeId) => Map({
   id: nodeId,
   name: "Node " + nodeId,  
   type: "-1",
+  vis: Map({x: nextAvailableNodeId * 20, y: nextAvailableNodeId * 10}),
   consumers: Map()  
 })
 
@@ -184,6 +185,9 @@ const node = (state, action) => {
         });
       }    
       return validateNode(state);  
+    case 'NODE_MOVE':    
+      console.log(action)
+      return state.setIn(['vis','x'], action.x).setIn(['vis','y'], action.y);  
     default: 
       return state;
   }
@@ -238,6 +242,8 @@ const nodes = (
     case 'CHANGE_NODE_NAME':
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     case 'CHANGE_NODE_PARAM_UNIT':
+      return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
+    case 'NODE_MOVE':
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     default: 
       return state;

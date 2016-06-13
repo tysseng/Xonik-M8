@@ -21,6 +21,8 @@
     "babel-polyfill": "^6.8.0",
     "babel-register": "^6.8.0",
     "body-parser": "^1.15.1",
+    "chai": "^3.5.0",
+    "d3": "^3.5.17",
     "express": "^4.13.4",
     "express-ws": "^0.2.6",
     "immutable": "^3.8.1",
