@@ -45,7 +45,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     links,
     nodes,
-    shouldAutoUpdate
+    shouldAutoUpdate,
+    showFileDialog: state.filedialog.get('show')
   }
 }
 

@@ -78,7 +78,7 @@ const mapStateToProps = (state, ownProps) => {
   let files = selectedFolder.get('files'); 
 
   return {
-    headingPostfix: "patch", 
+    headingPostfix: ownProps.headingPostfix, //"patch", 
     mode,
     rootFolder: root.toJS(),
     files: files.toJS(),
@@ -124,7 +124,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         return;
       }
       $.ajax({
-        url: '/matrix/save',
+        url: ownProps.saveUrl,
         type: 'POST',
         contentType:'application/json',
         data: JSON.stringify({name: filename, folderId: folderId, fileId: fileId}),
@@ -141,7 +141,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onFileLoadClick: (filename, folderId, fileId, version) => {
       $.ajax({
-        url: '/matrix/load',
+        url: ownProps.loadUrl,
         type: 'POST',
         contentType:'application/json',
         data: JSON.stringify({fileId, version}),
