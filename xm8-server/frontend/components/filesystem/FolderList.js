@@ -1,6 +1,5 @@
 import React from 'react';
 import FolderListItem from './FolderListItem';
-import NewFolderForm from './NewFolderForm';
 import _ from 'lodash';
 
 const FolderList = ({rootFolder, selectedFolder, onFolderClick, onFolderDeleteClick}) => {

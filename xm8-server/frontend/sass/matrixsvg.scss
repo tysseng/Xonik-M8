@@ -1,7 +1,29 @@
 .matrixSvg {
   .node {
-    fill: #f55;
+    .nodebox {
+      fill: #f55;
+      stroke: #555;
+      stroke-width: 2;
+
+      &.selected {
+        stroke: #aaa;
+        stroke-width: 3;
+      }
+      &.invalid {
+        stroke: #f00;
+      }
+    }
+    .label {
+      font-size: 10px;
+    }
+  }
+
+  .link {
     stroke: #555;
     stroke-width: 2;
+    &.selected {
+      stroke: #aaa;
+      stroke-width: 3;
+    }    
   }
 }

@@ -31,15 +31,23 @@ const isLink = (type) => {
 
 const mapStateToProps = (state, ownProps) => {
   let nodes = state.nodes.toIndexedSeq().toJS();
+  let nodes2 = state.nodes.toJS();
 
   let links = [];
   _.each(nodes, node => {
     _.each(node.params, param => {
-      if(isLink(param.type) && param.value && param.value !== ""){
+      if(isLink(param.type) && param.value && param.value !== ""){   
+
+        param.value.vis = {
+          from: nodes2[param.value.from].vis,
+          to: node.vis
+        }
+
         links.push(param.value);
       }
     });
   });
+
 
   let shouldAutoUpdate = state.matrix.get('shouldAutoUpdate');
 
@@ -47,6 +55,8 @@ const mapStateToProps = (state, ownProps) => {
     links,
     nodes,
     shouldAutoUpdate,
+    selectedNodeId: state.matrix.get('selectedNode'),
+    selectedLinkId: state.matrix.get('selectedLink'),
     showFileDialog: state.filedialog.get('show')
   }
 }

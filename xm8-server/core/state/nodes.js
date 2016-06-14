@@ -33,7 +33,7 @@ const getEmptyNode = (nodeId) => Map({
   id: nodeId,
   name: "Node " + nodeId,  
   type: "-1",
-  vis: Map({x: nextAvailableNodeId * 20, y: nextAvailableNodeId * 10}),
+  vis: Map({x: 10, y: 10}),
   consumers: Map()  
 })
 
