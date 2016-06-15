@@ -6,38 +6,17 @@ import _ from 'lodash';
 import MatrixCenterColumn from './MatrixCenterColumn';
 import { selectNode, selectLink, createNewNode, deleteNode, deleteLink, toggleAutoUpdate } from '../../../shared/state/actions';
 import { moveNode } from '../../../shared/state/actions/matrixvisualization';
-import paramTypes from '../../../shared/matrix/ParameterTypes.js';
 
 // TODO: Don't update if net does not validate (or send error message)
 
-const isLink = (type) => {
-  return type === paramTypes.map.LINK.id;
-}
+
 
 const mapStateToProps = (state, ownProps) => {
   let nodes = state.nodes.toIndexedSeq().toJS();
-  let nodes2 = state.nodes.toJS();
-
-  let links = [];
-  _.each(nodes, node => {
-    _.each(node.params, param => {
-      if(isLink(param.type) && param.value && param.value !== ""){   
-
-        param.value.vis = {
-          from: nodes2[param.value.from].vis,
-          to: node.vis
-        }
-
-        links.push(param.value);
-      }
-    });
-  });
-
-
   let shouldAutoUpdate = state.matrix.get('shouldAutoUpdate');
 
   return {
-    links,
+    links: ownProps.links,
     nodes,
     shouldAutoUpdate,
     selectedNodeId: state.matrix.get('selectedNode'),

@@ -14,25 +14,10 @@ const isLink = (type) => {
 // TODO: This should be done higher up in the tree to prevent doing it twice!
 const mapStateToProps = (state, ownProps) => {
   let nodes = state.nodes.toIndexedSeq().toJS();
-  let nodes2 = state.nodes.toJS();
 
-  let links = [];
-  _.each(nodes, node => {
-    _.each(node.params, param => {
-      if(isLink(param.type) && param.value && param.value !== ""){   
-
-        param.value.vis = {
-          from: nodes2[param.value.from].vis,
-          to: node.vis
-        }
-
-        links.push(param.value);
-      }
-    });
-  });
 
   return {
-    links,
+    links: ownProps.links,  
     nodes,
     selectedNodeId: state.matrix.get('selectedNode'),
     selectedLinkId: state.matrix.get('selectedLink')

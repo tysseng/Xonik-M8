@@ -23,7 +23,6 @@ class MatrixSvg extends Component {
   }
 
   componentDidMount() {
-    console.log("componentDidMount")
     this.svg = d3.select(this.refs.svg);
 
     this.svg.on('mousedown', () => {

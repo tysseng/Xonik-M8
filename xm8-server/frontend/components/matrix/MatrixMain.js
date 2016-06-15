@@ -3,17 +3,17 @@ import MatrixLeftMenuContainer from './MatrixLeftMenuContainer';
 import MatrixRightColumn from './MatrixRightColumn';
 import MatrixCenterColumnContainer from './MatrixCenterColumnContainer';
 
-const MatrixMain = () => {    
+const MatrixMain = ({links}) => {    
   return (  
     <div>
       <div className="leftcolumn">
         <MatrixLeftMenuContainer/>
       </div>
       <div className="rightcolumn">
-        <MatrixRightColumn/>        
+        <MatrixRightColumn links={links}/>        
       </div>
       <div className="centercolumn">
-        <MatrixCenterColumnContainer/>
+        <MatrixCenterColumnContainer links={links}/>
       </div>
     </div>
   ) 

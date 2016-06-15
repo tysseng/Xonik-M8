@@ -4,12 +4,12 @@ import NodeFormContainer from './NodeFormContainer';
 import LinkFormContainer from './LinkFormContainer';
 import NodeLinkListContainer from './NodeLinkListContainer';
 
-const MatrixRightColumn = () => {    
+const MatrixRightColumn = ({links}) => {    
   return (  
     <div>
       <NodeFormContainer/>
       <LinkFormContainer/>
-      <NodeLinkListContainer/>
+      <NodeLinkListContainer links={links}/>
     </div>    
   )
 }

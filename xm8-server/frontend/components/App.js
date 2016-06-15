@@ -2,13 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux';
 
 import MainMenu from './framework/MainMenu';
-import MatrixMain from './matrix/MatrixMain';
+import MatrixMainContainer from './matrix/MatrixMainContainer';
 
 let App = () => {
   return(
   <div>
     <MainMenu/>
-    <MatrixMain/>
+    <MatrixMainContainer/>
   </div>
 )}
 

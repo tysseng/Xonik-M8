@@ -87,8 +87,8 @@ let config = {
 }
 
 if(localOverrides) {
-  console.log("Overridden configuration for this host:");
-  console.log(localOverrides);
+  //console.log("Overridden configuration for this host:");
+  //console.log(localOverrides);
   _.merge(config, localOverrides);
 }
 
