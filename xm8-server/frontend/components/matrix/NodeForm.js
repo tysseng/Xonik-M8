@@ -20,8 +20,8 @@ const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, on
       <div className="heading">Node 
       <img className="miniicon" src="img/icons/cancel.svg" onClick={onCloseDialog}/></div>
       <div className="nodeBlock">
-        <label htmlFor="nodeName">Name</label>     
-        <input id="nodeName" type="text" onChange={(e) => onNodeNameChange(node.id, e.target.value)} value={node.name}/>
+        <label htmlFor="nameOfNode">Name</label>     
+        <input id="nameOfNode" type="text" onChange={(e) => onNodeNameChange(node.id, e.target.value)} value={node.name}/>
 
         <NodeTypeDropdown id="nodeType" value={node.type} 
           onNodeTypeChange={
