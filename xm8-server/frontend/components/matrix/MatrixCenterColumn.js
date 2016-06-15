@@ -19,9 +19,6 @@ const MatrixCenterColumn = ({nodes, links, selectedNodeId, selectedLinkId, shoul
         onNodeMove={onNodeMove} 
         onNodeClick={onNodeClick}
         onLinkClick={onLinkClick}/>
-
-      <NodeList nodes={nodes} onNodeClick={onNodeClick} onDeleteClick={onNodeDeleteClick}/>
-      <LinkList links={links} onLinkClick={onLinkClick} onDeleteClick={onLinkDeleteClick}/>
     </div>
   )
 }

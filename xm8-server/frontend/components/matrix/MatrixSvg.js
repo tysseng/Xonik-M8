@@ -109,7 +109,7 @@ class MatrixSvg extends Component {
   render() {
     return (
       <div>
-        <svg ref="svg" className='matrixSvg' width='300' height='300' style={{background: 'rgba(124, 224, 249, .3)'}}>
+        <svg ref="svg" className='matrixSvg' width='700' height='700' style={{background: 'rgba(124, 224, 249, .3)'}}>
           {this.props.links.map(link => {
             let className = this.getClassName('link', link.id, this.props.selectedLinkId);
 

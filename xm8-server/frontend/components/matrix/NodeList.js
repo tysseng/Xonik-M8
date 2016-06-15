@@ -6,7 +6,7 @@ let nodeTypes = require('../../../shared/matrix/NodeTypes.js').idMap;
 const NodeList = ({nodes, onNodeClick, onDeleteClick}) => {
   return (
     <div>
-      <h3>Nodes</h3>
+      <div className="heading">Nodes</div>
 
       <ul>
         {nodes.map(node => {
