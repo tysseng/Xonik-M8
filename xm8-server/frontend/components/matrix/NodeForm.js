@@ -8,7 +8,7 @@ import NodeParameterForm from './NodeParameterForm'
 
 import nodeTypes from '../../../shared/matrix/NodeTypes.js';
 
-const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange }) => {
+const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange, onCloseDialog }) => {
 
   if(!node){
     return null;
@@ -17,7 +17,8 @@ const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, on
 
   return (
     <form className="nodeForm">
-      <div className="heading">Node</div>
+      <div className="heading">Node 
+      <img className="miniicon" src="img/icons/cancel.svg" onClick={onCloseDialog}/></div>
       <div className="nodeBlock">
         <label htmlFor="nodeName">Name</label>     
         <input id="nodeName" type="text" onChange={(e) => onNodeNameChange(node.id, e.target.value)} value={node.name}/>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { changeNodeName, changeNodeType, changeNodeParamType, changeNodeParamValue, changeNodeParamUnit } from '../../../shared/state/actions';
+import { selectNode, changeNodeName, changeNodeType, changeNodeParamType, changeNodeParamValue, changeNodeParamUnit } from '../../../shared/state/actions';
 import NodeForm from './NodeForm'
 
 import nodeTypes from '../../../shared/matrix/NodeTypes.js';
@@ -35,7 +35,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onParameterUnitChange: (nodeId, paramId, paramUnit) => {
       dispatch(changeNodeParamUnit(nodeId, paramId, paramUnit));  
-    }
+    },
+    onCloseDialog: () => {
+      dispatch(selectNode(''));
+    }    
   }
 }
 

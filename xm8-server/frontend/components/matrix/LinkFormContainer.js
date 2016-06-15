@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { changeLinkName } from '../../../shared/state/actions';
+import { selectLink, changeLinkName } from '../../../shared/state/actions';
 import paramTypes from '../../../shared/matrix/ParameterTypes.js';
 import LinkForm from './LinkForm'
 
@@ -32,7 +32,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onLinkNameChange: (toNodeId, toParamId, name) => {
       dispatch(changeLinkName(toNodeId, toParamId, name));
-    }
+    },
+    onCloseDialog: () => dispatch(selectLink(''))
   }
 }
 
