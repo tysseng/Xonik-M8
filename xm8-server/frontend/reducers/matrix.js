@@ -5,7 +5,9 @@ const merge = (state, changes) => Object.assign({}, state, changes);
 const matrix = (
   state = Map({
     "selectedNode": "",
+    "mode": 'default',
     "shouldAutoUpdate": false,
+    linkFromNode: '',
     patchFileDialog: Map({
       show: false,
       mode: 'none'
@@ -27,11 +29,13 @@ const matrix = (
       }
       return state; 
     case 'SELECT_NODE': 
-      state = state.set("selectedLink", "");
-      return state.set("selectedNode", action.nodeId);
+      return state.set("selectedLink", "").set("selectedNode", action.nodeId);
     case 'SELECT_LINK': 
-      state = state.set("selectedNode", "");
-      return state.set("selectedLink", action.linkId);      
+      return state.set("selectedNode", "").set("selectedLink", action.linkId);      
+    case 'MATRIX_TOGGLE_MODE':
+      return state.set('mode', action.mode);
+    case 'MATRIX_SET_LINK_FROM':
+      return state.set('linkFromNode', action.fromNodeId);
     case 'SET_STATE':
       return state.merge(action.state.matrix);
     default: 

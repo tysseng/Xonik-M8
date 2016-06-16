@@ -2,14 +2,14 @@
 // TODO: Make canvas scalable , keep inputs/outputs on the left/right/side.
 // Make it possible to reorder inputs/outputs vertically, make them snap in place.
 
-// TODO- BUG: Select on start of click and not if dragging.
-
 // TODO: Make it possible to click next to a property (link) to give it a name (...)-icon
 // TODO: List from-to-node in node details box. make clickable.
 // TODO: List consumers, make clickable
 // TODO: Show reachable
 // TODO: Make linking by clicking.
 // SELECT multiple by starting a drag outside a node
+// TODO: Prevent node names from being selectable
+// TODO: highlight link icon on click
 
 import d3 from 'd3';
 
@@ -30,13 +30,17 @@ class MatrixSvg extends Component {
         nodes.on('mousedown', (d, i) => {
           // set starting point for moving node
           let [x, y] = d3.mouse(this.refs.svg);
-          this.nodeToMove = nodes[0][i];    
-          this.offsetX = x - this.nodeToMove.getAttribute('x');
-          this.offsetY = y - this.nodeToMove.getAttribute('y');
+          let selectedNode = nodes[0][i];    
+
+          // TODO: This is state, but not state that will survive a refresh gracefully...
+          this.offsetX = x - selectedNode.getAttribute('x');
+          this.offsetY = y - selectedNode.getAttribute('y');
 
           // select node
-          let nodeId = this.nodeToMove.getAttribute('data-node-id')
-          this.props.onNodeClick(nodeId);          
+          let nodeId = selectedNode.getAttribute('data-node-id')
+
+          this.onNodeClick(nodeId);
+
         })
 
         let links = this.svg.selectAll('line');
@@ -78,14 +82,39 @@ class MatrixSvg extends Component {
     
   }
 
+  //TODO: Get this from state instead
+  onNodeClick(nodeId) {
+    if(this.props.mode === 'create_link'){
+      if(!this.linkFromNode){
+        //dispatch: this.linkFromNode = selectedNode;
+      } else if(this.linkFromNode === selectedNode){
+        //dispatch this.linkFromNode = null;
+      } else {
+        // dispatch
+        //this.createLinkBetween(this.linkFromNode, selectedNode);              
+        //this.linkFromNode = null;
+      }
+    } else {
+      this.props.onNodeClick(nodeId);
+    } 
+  }
+
+  createLinkBetween(from, to){
+    console.log("create link ", from, to)
+  }
+
   updateMousePos(){
-    if(this.isMouseDown && this.nodeToMove){
+    if(this.props.mode === 'create_link'){
 
-      let [x, y] = d3.mouse(this.refs.svg);
-      var newX = x - this.offsetX;
-      var newY = y - this.offsetY;
+    } else {
+      if(this.isMouseDown && this.props.selectedNodeId){
 
-      this.props.onNodeMove(this.nodeToMove.getAttribute('data-node-id'), newX, newY);
+        let [x, y] = d3.mouse(this.refs.svg);
+        var newX = x - this.offsetX;
+        var newY = y - this.offsetY;
+
+        this.props.onNodeMove(this.props.selectedNodeId, newX, newY);
+      }
     }
   }
  

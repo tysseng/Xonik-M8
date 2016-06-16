@@ -3,6 +3,7 @@ import MatrixLeftMenu from './MatrixLeftMenu';
 import { connect } from 'react-redux';
 import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
 import { createNewNode, deleteNode, deleteLink } from '../../../shared/state/actions';
+import { toggleMode } from '../../../shared/state/actions/matrixgui';
 
 const forceUpdate = () => {
   $.ajax({
@@ -25,6 +26,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     selectedFileDetails,
+    mode: state.matrix.get('mode'),
     selectedNodeId: state.matrix.get('selectedNode'),
     selectedLinkId: state.matrix.get('selectedLink'),
     shouldAutoUpdate: state.matrix.get('shouldAutoUpdate')
@@ -45,8 +47,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
     },
     onCreate: () => {
-      console.log("Create!")
       dispatch(createNewNode())
+    },
+    onModeChange: (mode) => {
+      dispatch(toggleMode(mode));
     }
   }
 }

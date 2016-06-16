@@ -19,6 +19,8 @@ const mapStateToProps = (state, ownProps) => {
     links: ownProps.links,
     nodes,
     shouldAutoUpdate,
+    mode: state.matrix.get('mode'),
+    linkFromNode: state.matrix.get('linkFromNode'),
     selectedNodeId: state.matrix.get('selectedNode'),
     selectedLinkId: state.matrix.get('selectedLink'),
     showFileDialog: state.filedialog.get('show')
