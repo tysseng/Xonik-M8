@@ -4,7 +4,10 @@ import LinkList from './LinkList';
 import MatrixSvg from './MatrixSvg';
 import FileDialogContainer from '../filesystem/FileDialogContainer';
 
-const MatrixCenterColumn = ({nodes, links, mode, selectedNodeId, selectedLinkId, shouldAutoUpdate, showFileDialog, toggleAutoUpdate, onNodeMove, onNodeClick, onNodeDeleteClick, onLinkClick, onLinkDeleteClick, onCreateNewNode}) => {    
+const MatrixCenterColumn = ({
+  nodes, links, mode, selectedNodeId, selectedLinkId, shouldAutoUpdate, linkFromNodeId, linkToNodeId, 
+  showFileDialog, toggleAutoUpdate, onNodeMove, onNodeClick, onNodeDeleteClick, onLinkClick, onLinkDeleteClick, onCreateNewNode,
+  setLinkFromNode, setLinkToNode, cancelLinkCreation}) => {
   return ( 
     <div>
       {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/matrix/save' loadUrl = '/matrix/load'/> }     
@@ -15,11 +18,16 @@ const MatrixCenterColumn = ({nodes, links, mode, selectedNodeId, selectedLinkId,
         nodes={nodes} 
         links={links} 
         mode={mode}
+        linkFromNodeId={linkFromNodeId} 
+        linkToNodeId={linkToNodeId}
         selectedNodeId={selectedNodeId} 
         selectedLinkId={selectedLinkId} 
         onNodeMove={onNodeMove} 
         onNodeClick={onNodeClick}
-        onLinkClick={onLinkClick}/>
+        onLinkClick={onLinkClick}
+        setLinkFromNode={setLinkFromNode}
+        setLinkToNode={setLinkToNode}
+        cancelLinkCreation={cancelLinkCreation}/>
     </div>
   )
 }

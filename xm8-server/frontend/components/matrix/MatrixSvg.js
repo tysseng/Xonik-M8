@@ -84,15 +84,15 @@ class MatrixSvg extends Component {
 
   //TODO: Get this from state instead
   onNodeClick(nodeId) {
+    let fromNodeId = this.props.linkFromNodeId;
+
     if(this.props.mode === 'create_link'){
-      if(!this.linkFromNode){
-        //dispatch: this.linkFromNode = selectedNode;
-      } else if(this.linkFromNode === selectedNode){
-        //dispatch this.linkFromNode = null;
+      if(!fromNodeId){
+        this.props.setLinkFromNode(nodeId);
+      } else if(fromNodeId === nodeId){
+        this.props.setLinkFromNode('');
       } else {
-        // dispatch
-        //this.createLinkBetween(this.linkFromNode, selectedNode);              
-        //this.linkFromNode = null;
+        this.props.setLinkToNode(nodeId);
       }
     } else {
       this.props.onNodeClick(nodeId);

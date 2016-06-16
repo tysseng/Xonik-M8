@@ -7,7 +7,8 @@ const matrix = (
     "selectedNode": "",
     "mode": 'default',
     "shouldAutoUpdate": false,
-    linkFromNode: '',
+    linkFromNodeId: '',
+    linkToNodeId: '',
     patchFileDialog: Map({
       show: false,
       mode: 'none'
@@ -35,7 +36,11 @@ const matrix = (
     case 'MATRIX_TOGGLE_MODE':
       return state.set('mode', action.mode);
     case 'MATRIX_SET_LINK_FROM':
-      return state.set('linkFromNode', action.fromNodeId);
+      return state.set('linkFromNodeId', action.nodeId);
+    case 'MATRIX_SET_LINK_TO':
+      return state.set('linkToNodeId', action.nodeId);
+    case 'MATRIX_CANCEL_LINK_CREATION':
+      return state.set('linkToNodeId', '').set('linkFromNodeId', '');
     case 'SET_STATE':
       return state.merge(action.state.matrix);
     default: 
