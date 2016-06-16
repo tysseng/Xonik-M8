@@ -6,15 +6,18 @@
 // TODO: List from-to-node in node details box. make clickable.
 // TODO: List consumers, make clickable
 // TODO: Show reachable
-// TODO: Make linking by clicking.
 // SELECT multiple by starting a drag outside a node
 // TODO: Prevent node names from being selectable
 // TODO: highlight link icon on click
+// TODO: Make it possible to select node type from link dialog
+// TODO: Show current parameter value in link box
+// TODO: Highlight nodes selected for linking
 
 import d3 from 'd3';
 
 import React from 'react';
 import {Component} from 'react';
+import _ from 'lodash';
 
 class MatrixSvg extends Component {
   constructor(props) {
@@ -26,35 +29,35 @@ class MatrixSvg extends Component {
     this.svg = d3.select(this.refs.svg);
 
     this.svg.on('mousedown', () => {
-        let nodes = this.svg.selectAll('rect');
-        nodes.on('mousedown', (d, i) => {
-          // set starting point for moving node
-          let [x, y] = d3.mouse(this.refs.svg);
-          let selectedNode = nodes[0][i];    
+      let nodes = this.svg.selectAll('rect');
+      nodes.on('mousedown', (d, i) => {
+        // set starting point for moving node
+        let [x, y] = d3.mouse(this.refs.svg);
+        let selectedNode = nodes[0][i];    
 
-          // TODO: This is state, but not state that will survive a refresh gracefully...
-          this.offsetX = x - selectedNode.getAttribute('x');
-          this.offsetY = y - selectedNode.getAttribute('y');
+        // TODO: This is state, but not state that will survive a refresh gracefully...
+        this.offsetX = x - selectedNode.getAttribute('x');
+        this.offsetY = y - selectedNode.getAttribute('y');
 
-          // select node
-          let nodeId = selectedNode.getAttribute('data-node-id')
+        // select node
+        let nodeId = selectedNode.getAttribute('data-node-id')
 
-          this.onNodeClick(nodeId);
+        this.onNodeClick(nodeId);
 
-        })
+      })
 
-        let links = this.svg.selectAll('line');
-        links.on('click', (d, i) => {
-          let linkClicked = links[0][i];
-          let linkId = linkClicked.getAttribute('data-link-id')
-          this.props.onLinkClick(linkId);
-        });
+      let links = this.svg.selectAll('line');
+      links.on('click', (d, i) => {
+        let linkClicked = links[0][i];
+        let linkId = linkClicked.getAttribute('data-link-id')
+        this.props.onLinkClick(linkId);
+      });
 
 
 
-        this.updateMousePos();
-        this.isMouseDown = true;
-       
+      this.updateMousePos();
+      this.isMouseDown = true;
+     
     });
     this.svg.on('touchstart', () => {
         this.updateTouchPos();
@@ -84,7 +87,7 @@ class MatrixSvg extends Component {
 
   //TODO: Get this from state instead
   onNodeClick(nodeId) {
-    let fromNodeId = this.props.linkFromNodeId;
+    let fromNodeId = this.props.linkDialog.fromNodeId;
 
     if(this.props.mode === 'create_link'){
       if(!fromNodeId){
@@ -135,6 +138,7 @@ class MatrixSvg extends Component {
   }
 
   render() {
+
     return (
       <div>
         <svg ref="svg" className='matrixSvg' width='700' height='700' style={{background: 'rgba(124, 224, 249, .3)'}}>
@@ -145,7 +149,7 @@ class MatrixSvg extends Component {
               <line data-link-id={link.id} key={'link' + link.id} x1={link.vis.from.x + 20} y1={link.vis.from.y + 20} x2={link.vis.to.x + 20} y2={link.vis.to.y + 20} className={className} />
             )
           })}                      
-          {this.props.nodes.map(node => {
+          {Object.values(this.props.nodes).map(node => {
             let className = this.getClassName('nodebox', node.id, this.props.selectedNodeId, node.valid);
     
             return (

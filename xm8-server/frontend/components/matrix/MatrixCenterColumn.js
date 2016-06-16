@@ -1,16 +1,18 @@
 import React from 'react';
-import NodeList from './NodeList';
-import LinkList from './LinkList';
+import LinkDialog from './LinkDialog';
 import MatrixSvg from './MatrixSvg';
 import FileDialogContainer from '../filesystem/FileDialogContainer';
 
+
 const MatrixCenterColumn = ({
-  nodes, links, mode, selectedNodeId, selectedLinkId, shouldAutoUpdate, linkFromNodeId, linkToNodeId, 
+  nodes, links, mode, selectedNodeId, selectedLinkId, shouldAutoUpdate, linkDialog, 
   showFileDialog, toggleAutoUpdate, onNodeMove, onNodeClick, onNodeDeleteClick, onLinkClick, onLinkDeleteClick, onCreateNewNode,
-  setLinkFromNode, setLinkToNode, cancelLinkCreation}) => {
+  setLinkFromNode, setLinkToNode, cancelLinkCreation, createLink}) => {
   return ( 
     <div>
-      {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/matrix/save' loadUrl = '/matrix/load'/> }     
+      {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/matrix/save' loadUrl = '/matrix/load'/> } 
+      {linkDialog.show && <LinkDialog nodes={nodes} linkDialog={linkDialog} onCancel={cancelLinkCreation} onCreate={createLink}/> }    
+
       <input id="autoUpdate" type="checkbox" checked={shouldAutoUpdate} onChange={(e) => toggleAutoUpdate(e.target.checked)}/>
       <label htmlFor="autoUpdate">Auto update synth voice</label><br/>
 
@@ -18,16 +20,14 @@ const MatrixCenterColumn = ({
         nodes={nodes} 
         links={links} 
         mode={mode}
-        linkFromNodeId={linkFromNodeId} 
-        linkToNodeId={linkToNodeId}
+        linkDialog={linkDialog}
         selectedNodeId={selectedNodeId} 
         selectedLinkId={selectedLinkId} 
         onNodeMove={onNodeMove} 
         onNodeClick={onNodeClick}
         onLinkClick={onLinkClick}
         setLinkFromNode={setLinkFromNode}
-        setLinkToNode={setLinkToNode}
-        cancelLinkCreation={cancelLinkCreation}/>
+        setLinkToNode={setLinkToNode}/>
     </div>
   )
 }
