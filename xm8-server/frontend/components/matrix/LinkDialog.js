@@ -1,4 +1,5 @@
 import nodeTypes from '../../../shared/matrix/NodeTypes.js';
+import ParameterDescription from './ParameterDescription';
 
 const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate}) => {
 
@@ -7,6 +8,7 @@ const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate}) => {
 
   if(!toNode || !fromNode) return null;
   let nodeType = nodeTypes.idMap[toNode.type];
+
 
   return ( 
     <div className="linkdialog">
@@ -19,8 +21,15 @@ const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate}) => {
             <div>What parameter of {toNode.name} do you want to send the output of {fromNode.name} to?</div>          
             <div className="parameters">          
               {        
-                nodeType.params.map((parameterDefinition) => {  
-                  return <div className="parameter" onClick={() => onCreate(linkDialog.fromNodeId, linkDialog.toNodeId, parameterDefinition.id)}>{parameterDefinition.name}</div>
+                nodeType.params.map((parameterDefinition) => { 
+                  let paramId = parameterDefinition.id;
+                  let name = parameterDefinition.name;                
+                  let parameter = toNode.params[paramId];                 
+                  return (
+                    <div className="parameter" onClick={() => onCreate(linkDialog.fromNodeId, linkDialog.toNodeId, parameterDefinition.id)}>
+                      <ParameterDescription name={name} parameter={parameter} nodes={nodes}/>
+                    </div>
+                  ) 
                 })
               }
             </div>
