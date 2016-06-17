@@ -38,7 +38,7 @@ const matrix = (
       return state.set("selectedNode", "").set("selectedLink", action.linkId);      
     case 'MATRIX_TOGGLE_MODE':
       if(action.mode != 'create_link'){
-        return closeLinkDialog(state);        
+        state = closeLinkDialog(state);        
       }
       return state.set('mode', action.mode);
     case 'MATRIX_SET_LINK_FROM':

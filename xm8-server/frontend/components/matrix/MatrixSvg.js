@@ -11,7 +11,7 @@
 // TODO: highlight link icon on click
 // TODO: Make it possible to select node type from link dialog
 // TODO: Show current parameter value in link box
-// TODO: Highlight nodes selected for linking
+// TODO: Reset nodes selected for linking when file dialog opens (use mode for file dialog opening?)
 
 import d3 from 'd3';
 
@@ -22,7 +22,6 @@ import _ from 'lodash';
 class MatrixSvg extends Component {
   constructor(props) {
     super(props);
-    this.isMouseDown = false;
   }
 
   componentDidMount() {
@@ -53,10 +52,7 @@ class MatrixSvg extends Component {
         this.props.onLinkClick(linkId);
       });
 
-
-
       this.updateMousePos();
-      this.isMouseDown = true;
      
     });
     this.svg.on('touchstart', () => {
@@ -70,8 +66,9 @@ class MatrixSvg extends Component {
         this.updateTouchPos();
     });
     this.svg.on('mouseup', () => {
-        this.isMouseDown = false;
-        this.nodeToMove = null;
+      if(this.props.mode === 'move_node'){
+        this.props.onNodeMoveEnded();
+      }
     });
     this.svg.on('touchend', () => {
         //this.props.stopParticles();
@@ -110,7 +107,7 @@ class MatrixSvg extends Component {
     if(this.props.mode === 'create_link'){
 
     } else {
-      if(this.isMouseDown && this.props.selectedNodeId){
+      if(this.props.mode === 'move_node' && this.props.selectedNodeId){
 
         let [x, y] = d3.mouse(this.refs.svg);
         var newX = x - this.offsetX;
@@ -126,9 +123,22 @@ class MatrixSvg extends Component {
     this.props.updateMousePos(x, y);
   }
 
-  getClassName(defaultName, id, selectedId, valid = true){
+  isLinkSelected(link, props){
+    return (link.id === props.selectedLinkId);
+  }
+
+  isNodeSelected(node, props){
+    if(props.mode === 'create_link'){
+      return node.id === props.linkDialog.fromNodeId || node.id === props.linkDialog.toNodeId;
+    } else {
+      return (node.id === props.selectedNodeId);
+    }
+  }
+
+  getClassName(defaultName, id, selected, valid = true){
+
     let className = defaultName;
-    if(id === selectedId){
+    if(selected){
       className += ' selected';
     }
     if(!valid){
@@ -143,14 +153,16 @@ class MatrixSvg extends Component {
       <div>
         <svg ref="svg" className='matrixSvg' width='700' height='700' style={{background: 'rgba(124, 224, 249, .3)'}}>
           {this.props.links.map(link => {
-            let className = this.getClassName('link', link.id, this.props.selectedLinkId);
+            let isSelected = this.isLinkSelected(link, this.props);
+            let className = this.getClassName('link', link.id, isSelected);
 
             return (
               <line data-link-id={link.id} key={'link' + link.id} x1={link.vis.from.x + 20} y1={link.vis.from.y + 20} x2={link.vis.to.x + 20} y2={link.vis.to.y + 20} className={className} />
             )
           })}                      
           {Object.values(this.props.nodes).map(node => {
-            let className = this.getClassName('nodebox', node.id, this.props.selectedNodeId, node.valid);
+            let isSelected = this.isNodeSelected(node, this.props);
+            let className = this.getClassName('nodebox', node.id, isSelected, node.valid);
     
             return (
               <g className='node' key={'nodegroup' + node.id}>
