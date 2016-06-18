@@ -10,7 +10,7 @@ const MenuItem = ({label, icon, onClick, selected, target = "Capa_1"}) => {
   return (
     <span className="menuicon">
       <svg className={svgClassName} onClick={onClick}>
-        <filter id="drop-shadow" width="1.5" height="1.5" x="-.25" y="-.25">
+        <filter id="drop-shadow"  x="-30%" y="-30%" width="150%" height="150%">
           <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/>
           <feColorMatrix result="bluralpha" type="matrix" values=
                   "1 0 0 0   0

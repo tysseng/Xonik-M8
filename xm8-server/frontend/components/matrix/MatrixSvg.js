@@ -131,6 +131,26 @@ class MatrixSvg extends Component {
     return (
       <div>
         <svg ref="svg" className='matrixSvg' id='matrixSvg' width='700' height='700'>
+          <filter id="glow" x="-30%" y="-30%" width="150%" height="150%">
+            <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <filter id="drop-shadow"  x="-30%" y="-30%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/>
+            <feColorMatrix result="bluralpha" type="matrix" values=
+                    "1 0 0 0   0
+                     0 1 0 0   0
+                     0 0 1 0   0
+                     0 0 0 0.4 0 "/>
+            <feOffset in="bluralpha" dx="1" dy="1" result="offsetBlur"/>
+            <feMerge>
+              <feMergeNode in="offsetBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>               
           {this.props.links.map(link => {
             let isSelected = this.isLinkSelected(link, this.props);
             let className = this.getClassName('link', link.id, isSelected);

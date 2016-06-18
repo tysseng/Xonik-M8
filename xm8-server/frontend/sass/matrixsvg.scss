@@ -6,33 +6,38 @@
 
   .node {
     .nodebox {
+      margin: 10px;
       fill: #999;
-      stroke: #555;
-      stroke-width: 2;
+      stroke: #999;
+      stroke-width: 1;
+      filter: url(#drop-shadow);
 
       &.invalid {
-        stroke: #f00;
-        fill: #f55;
+        stroke: #d00;
+        fill: #d00;
       }
 
       &.selected {
-        stroke: #aaa;
-        stroke-width: 3;
+        stroke: #0f0;
+        fill: #0f0;      
+        filter: url(#glow);
       }
 
     }
     .label {
       font-size: 10px;
-      stroke: #aeb6bd;
+      fill: #aeb6bd;
     }
   }
 
   .link {
     stroke: #555;
     stroke-width: 2;
+    filter: url(#drop-shadow);
+
     &.selected {
-      stroke: #aaa;
-      stroke-width: 3;
+      stroke: #0f0;
+      filter: url(#glow);
     }    
   }
 }
