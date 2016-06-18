@@ -5,7 +5,7 @@ import FileDialogContainer from '../filesystem/FileDialogContainer';
 
 
 const MatrixCenterColumn = ({
-  nodes, links, mode, selectedNodeId, selectedLinkId, shouldAutoUpdate, linkDialog, 
+  nodes, links, mode, selectedNodeId, selectedLinkId, shouldAutoUpdate, linkDialog, offsetX, offsetY,
   showFileDialog, toggleAutoUpdate, onNodeMove, onNodeClick, onNodeMoveEnded, onNodeDeleteClick, onLinkClick, onLinkDeleteClick, onCreateNewNode,
   setLinkFromNode, setLinkToNode, cancelLinkCreation, createLink}) => {
   return ( 
@@ -20,6 +20,8 @@ const MatrixCenterColumn = ({
         nodes={nodes} 
         links={links} 
         mode={mode}
+        offsetX={offsetX}
+        offsetY={offsetY}
         linkDialog={linkDialog}
         selectedNodeId={selectedNodeId} 
         selectedLinkId={selectedLinkId} 

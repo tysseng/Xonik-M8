@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 import MatrixCenterColumn from './MatrixCenterColumn';
 import { selectNode, selectLink, createNewNode, createNewLink, deleteNode, deleteLink, toggleAutoUpdate } from '../../../shared/state/actions';
-import { moveNode, setLinkFromNodeId, setLinkToNodeId, cancelLinkCreation } from '../../../shared/state/actions/matrixvisualization';
+import { startNodeMove, moveNode, setLinkFromNodeId, setLinkToNodeId, cancelLinkCreation } from '../../../shared/state/actions/matrixvisualization';
 import { toggleMode } from '../../../shared/state/actions/matrixgui';
 
 // TODO: Don't update if net does not validate (or send error message)
@@ -21,6 +21,8 @@ const mapStateToProps = (state, ownProps) => {
     nodes,
     shouldAutoUpdate,
     mode: state.matrix.get('mode'),
+    offsetX: state.matrix.get('offsetX'),
+    offsetY: state.matrix.get('offsetY'),
     linkDialog: state.matrix.get('linkDialog').toJS(),
     selectedNodeId: state.matrix.get('selectedNode'),
     selectedLinkId: state.matrix.get('selectedLink'),
@@ -31,13 +33,12 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onCreateNewNode: () => dispatch(createNewNode()),    
-    onNodeClick: (id) => {
+    onNodeClick: (id, offsetX, offsetY) => {
       dispatch(selectNode(id));
       dispatch(toggleMode('move_node'));
+      dispatch(startNodeMove(offsetX, offsetY));
     },
-    onNodeMoveEnded: () => {
-      dispatch(toggleMode('default'));
-    },
+    onNodeMoveEnded: () => dispatch(toggleMode('default')),
     onLinkClick: (id) => dispatch(selectLink(id)),
     onNodeDeleteClick: (id) => dispatch(deleteNode(id)),
     onLinkDeleteClick: (id, from, to, param) => dispatch(deleteLink(id, from, to, param)),

@@ -5,15 +5,21 @@ const MatrixLeftMenu = ({mode, selectedNodeId, selectedLinkId, onPatchSave, onPa
 
   return ( 
     <div>
-      <span className="icon"><img src="img/icons/add-2.svg" onClick={onCreate}/><div className="name">Create</div></span>
-      <span className="icon"><img src="img/icons/share.svg" onClick={() => onModeChange(linkButtonMode)}/><div className="name">Link</div></span>
-      <span className="icon"><img src="img/icons/garbage.svg" onClick={() => onDelete(selectedNodeId, selectedLinkId)}/><div className="name">Delete</div></span>
-      <span className="icon"><img src="img/icons/reload-1.svg" onClick={onUpdateVoice} disabled={shouldAutoUpdate}/><div className="name">Update voice</div></span>
-      <span className="icon"><img src="img/icons/download.svg" onClick={() => onPatchSave(selectedFileDetails)}/><div className="name">Save</div></span>
-      <span className="icon"><img src="img/icons/upload 2.svg" onClick={onPatchLoad}/><div className="name">Load</div></span> 
-      <span className="icon"><img src="img/icons/circular-arrow-1.svg"/><div className="name">Undo</div></span>
-      <span className="icon"><img src="img/icons/circular-arrow.svg"/><div className="name">Redo</div></span>  
-      <span className="icon"><img src="img/icons/photo-camera-3.svg"/><div className="name">Snapshot</div></span>  
+      <div className="leftMenu">
+        <span className="icon"><img src="img/icons/add-2.svg" onClick={onCreate}/><div className="name">Create</div></span>
+        <span className="icon"><img src="img/icons/share.svg" onClick={() => onModeChange(linkButtonMode)}/><div className="name">Link</div></span>
+        <span className="icon"><img src="img/icons/garbage.svg" onClick={() => onDelete(selectedNodeId, selectedLinkId)}/><div className="name">Delete</div></span>
+      </div>
+      <div className="leftMenu">
+        <span className="icon"><img src="img/icons/circular-arrow-1.svg"/><div className="name">Undo</div></span>
+        <span className="icon"><img src="img/icons/circular-arrow.svg"/><div className="name">Redo</div></span>  
+      </div>
+      <div className="leftMenu">
+        <span className="icon"><img src="img/icons/reload-1.svg" onClick={onUpdateVoice} disabled={shouldAutoUpdate}/><div className="name">Update voice</div></span>
+        <span className="icon"><img src="img/icons/download.svg" onClick={() => onPatchSave(selectedFileDetails)}/><div className="name">Save</div></span>
+        <span className="icon"><img src="img/icons/upload 2.svg" onClick={onPatchLoad}/><div className="name">Load</div></span> 
+        <span className="icon"><img src="img/icons/photo-camera-3.svg"/><div className="name">Snapshot</div></span>  
+      </div>
     </div>
   )
 }

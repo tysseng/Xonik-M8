@@ -31,3 +31,12 @@ export const cancelLinkCreation = () => {
     target: 'GUI'
   };
 }
+
+export const startNodeMove = (offsetX, offsetY) => {
+  return {
+    type: 'MATRIX_START_NODE_MOVE',
+    target: 'GUI',
+    offsetX,
+    offsetY
+  };
+}

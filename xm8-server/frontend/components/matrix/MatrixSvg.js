@@ -18,32 +18,21 @@ import d3 from 'd3';
 import React from 'react';
 import {Component} from 'react';
 import _ from 'lodash';
+import MatrixSvgNode from './MatrixSvgNode';
 
 class MatrixSvg extends Component {
   constructor(props) {
     super(props);
+
+    // expose metbods with this bound to the current class instance instead of the calling component
+    this.onNodeClick = (nodeId, offsetX, offsetY) => this.onNodeClickInternal(nodeId, offsetX, offsetY);
+    
   }
 
   componentDidMount() {
     this.svg = d3.select(this.refs.svg);
 
     this.svg.on('mousedown', () => {
-      let nodes = this.svg.selectAll('rect');
-      nodes.on('mousedown', (d, i) => {
-        // set starting point for moving node
-        let [x, y] = d3.mouse(this.refs.svg);
-        let selectedNode = nodes[0][i];    
-
-        // TODO: This is state, but not state that will survive a refresh gracefully...
-        this.offsetX = x - selectedNode.getAttribute('x');
-        this.offsetY = y - selectedNode.getAttribute('y');
-
-        // select node
-        let nodeId = selectedNode.getAttribute('data-node-id')
-
-        this.onNodeClick(nodeId);
-
-      })
 
       let links = this.svg.selectAll('line');
       links.on('click', (d, i) => {
@@ -57,7 +46,6 @@ class MatrixSvg extends Component {
     });
     this.svg.on('touchstart', () => {
         this.updateTouchPos();
-        //this.props.startParticles();
     });
     this.svg.on('mousemove', () => {
         this.updateMousePos();
@@ -66,26 +54,20 @@ class MatrixSvg extends Component {
         this.updateTouchPos();
     });
     this.svg.on('mouseup', () => {
-      if(this.props.mode === 'move_node'){
-        this.props.onNodeMoveEnded();
-      }
+
     });
     this.svg.on('touchend', () => {
-        //this.props.stopParticles();
+        
     });
     this.svg.on('mouseleave', () => {
-        //this.props.stopParticles();
+        
     });
   }
 
-  componentDidUpdate() {
-    
-  }
+  onNodeClickInternal(nodeId, offsetX, offsetY) {
 
-  //TODO: Get this from state instead
-  onNodeClick(nodeId) {
     let fromNodeId = this.props.linkDialog.fromNodeId;
-
+    
     if(this.props.mode === 'create_link'){
       if(!fromNodeId){
         this.props.setLinkFromNode(nodeId);
@@ -95,7 +77,7 @@ class MatrixSvg extends Component {
         this.props.setLinkToNode(nodeId);
       }
     } else {
-      this.props.onNodeClick(nodeId);
+      this.props.onNodeClick(nodeId, offsetX, offsetY);
     } 
   }
 
@@ -110,8 +92,8 @@ class MatrixSvg extends Component {
       if(this.props.mode === 'move_node' && this.props.selectedNodeId){
 
         let [x, y] = d3.mouse(this.refs.svg);
-        var newX = x - this.offsetX;
-        var newY = y - this.offsetY;
+        var newX = x - this.props.offsetX;
+        var newY = y - this.props.offsetY;
 
         this.props.onNodeMove(this.props.selectedNodeId, newX, newY);
       }
@@ -135,14 +117,11 @@ class MatrixSvg extends Component {
     }
   }
 
-  getClassName(defaultName, id, selected, valid = true){
+  getClassName(defaultName, id, selected){
 
     let className = defaultName;
     if(selected){
       className += ' selected';
-    }
-    if(!valid){
-      className += ' invalid';
     }
     return className;
   }
@@ -151,7 +130,7 @@ class MatrixSvg extends Component {
 
     return (
       <div>
-        <svg ref="svg" className='matrixSvg' width='700' height='700' style={{background: 'rgba(124, 224, 249, .3)'}}>
+        <svg ref="svg" className='matrixSvg' id='matrixSvg' width='700' height='700'>
           {this.props.links.map(link => {
             let isSelected = this.isLinkSelected(link, this.props);
             let className = this.getClassName('link', link.id, isSelected);
@@ -163,12 +142,17 @@ class MatrixSvg extends Component {
           {Object.values(this.props.nodes).map(node => {
             let isSelected = this.isNodeSelected(node, this.props);
             let className = this.getClassName('nodebox', node.id, isSelected, node.valid);
-    
+
             return (
-              <g className='node' key={'nodegroup' + node.id}>
-                <rect data-node-id={node.id} key={'node' + node.id} x={node.vis.x} y={node.vis.y} rx="10" ry="10" width="40" height="40" className={className}/>
-                <text key={'label' + node.id} textAnchor="middle" x={node.vis.x + 20 } y={node.vis.y + 52} className='label'>{node.name}</text>
-              </g>
+              <MatrixSvgNode key={node.id} 
+                mode={this.props.mode}
+                node={node}
+                selected={isSelected}
+                drawingAreaId='matrixSvg'                
+                onNodeClick={this.onNodeClick}
+                onNodeMoveEnded={this.props.onNodeMoveEnded}
+                setLinkFromNode={this.props.setLinkFromNode}
+                setLinkToNode={this.props.setLinkToNode}/>
             )
           })}    
         </svg>

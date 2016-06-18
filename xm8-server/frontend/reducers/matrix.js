@@ -7,6 +7,8 @@ const matrix = (
     "selectedNode": "",
     "mode": 'default',
     "shouldAutoUpdate": false,
+    offsetX: 0,
+    offsetY: 0,
     linkDialog: Map({
       show: false,
       fromNodeId: '',
@@ -36,6 +38,8 @@ const matrix = (
       return state.set("selectedLink", "").set("selectedNode", action.nodeId);
     case 'SELECT_LINK': 
       return state.set("selectedNode", "").set("selectedLink", action.linkId);      
+    case 'MATRIX_START_NODE_MOVE':
+      return state.set('offsetX', action.offsetX).set('offsetY', action.offsetY);
     case 'MATRIX_TOGGLE_MODE':
       if(action.mode != 'create_link'){
         state = closeLinkDialog(state);        
