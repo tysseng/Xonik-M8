@@ -58,11 +58,32 @@ http://www.flaticon.com/packs/multimedia-set
     margin-bottom: 10px;
     width: 50px;    
 
+    .image{
+      fill: #aeb6bd;
+      display: block;
+      margin: auto;
+      height: 30px;
+      width: 30px;
+
+      &.selected{
+        fill: #0f0;
+      }
+    }
+
     img{
       display: block;
       margin: auto;    
       height: 30px;
     }
+
+
+    object{
+    fill: #0f0;
+      display: block;
+      margin: auto;    
+      height: 30px;
+    }
+
     .name{
       display: none;
       font-size: 10px;

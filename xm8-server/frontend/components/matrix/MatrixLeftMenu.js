@@ -6,8 +6,18 @@ const MatrixLeftMenu = ({mode, selectedNodeId, selectedLinkId, onPatchSave, onPa
   return ( 
     <div>
       <div className="leftMenu">
-        <span className="icon"><img src="img/icons/add-2.svg" onClick={onCreate}/><div className="name">Create</div></span>
-        <span className="icon"><img src="img/icons/share.svg" onClick={() => onModeChange(linkButtonMode)}/><div className="name">Link</div></span>
+        <span className="icon">
+          <svg className="image" onClick={onCreate}>
+            <use xlinkHref="img/icons/add-2.svg#Capa_1"></use>
+          </svg>
+          <div className="name">Create</div>
+        </span>
+        <span className="icon">
+          <svg className="image" onClick={() => onModeChange(linkButtonMode)}>
+            <use xlinkHref="img/icons/share.svg#Capa_1"></use>
+          </svg>
+          <div className="name">Link</div>
+        </span>
         <span className="icon"><img src="img/icons/garbage.svg" onClick={() => onDelete(selectedNodeId, selectedLinkId)}/><div className="name">Delete</div></span>
       </div>
       <div className="leftMenu">
