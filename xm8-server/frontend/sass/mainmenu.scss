@@ -17,23 +17,39 @@ http://www.flaticon.com/packs/multimedia-set
   border-radius: 15px;
   box-shadow: 5px 5px 22px 2px rgba(0,0,0,0.2);
 
-  .icon {
-
-    text-align:center;
-    position: relative;
-    float: left;
-    margin-left: 7px;
-    margin-right: 7px;
+  .menuicon {
     width: 70px;    
+  }
+}
 
-    img{
-      display: block;
-      margin: auto;    
-      height: 30px;
+.menuicon {
+
+  text-align:center;
+  position: relative;
+  float: left;
+  margin-left: 7px;
+  margin-right: 7px;
+  margin-bottom: 10px;
+  width: 50px;    
+
+  .image{
+    fill: #aeb6bd;
+    display: block;
+    margin: auto;
+    height: 30px;
+    width: 30px;
+
+    &.selected{
+      fill: #0f0;
     }
-    .name{
-      padding-top: 6px;
+  }
+
+  .name{
+    &.selected{
+      color: #0f0;
     }
+    font-size: 16px;
+    padding-top: 6px;
   }
 }
 
@@ -43,52 +59,17 @@ http://www.flaticon.com/packs/multimedia-set
   padding: 10px;
   margin: 10px;
   color: #333;
-
   background: rgba(240, 240, 240, .05);
   border-radius: 15px;
   box-shadow: 5px 5px 22px 2px rgba(0,0,0,0.2);
-  
-  .icon {
 
-    text-align:center;
-    position: relative;
-    float: left;
-    margin-left: 7px;
-    margin-right: 7px;
-    margin-bottom: 10px;
-    width: 50px;    
-
-    .image{
-      fill: #aeb6bd;
-      display: block;
-      margin: auto;
-      height: 30px;
-      width: 30px;
-
-      &.selected{
-        fill: #0f0;
-      }
-    }
-
-    img{
-      display: block;
-      margin: auto;    
-      height: 30px;
-    }
-
-
-    object{
-    fill: #0f0;
-      display: block;
-      margin: auto;    
-      height: 30px;
-    }
-
+  .menuicon {
     .name{
       display: none;
-      font-size: 10px;
-      padding-top: 6px;
     }
-  }  
+  }
+
+  
+  
 }
 

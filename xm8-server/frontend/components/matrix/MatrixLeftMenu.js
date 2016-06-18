@@ -1,3 +1,5 @@
+import MenuItem from './MenuItem';
+
 const MatrixLeftMenu = ({mode, selectedNodeId, selectedLinkId, onPatchSave, onPatchLoad, selectedFileDetails, onDelete, onCreate, onModeChange, onUpdateVoice, shouldAutoUpdate}) => {    
   
   //<button onClick={() => onPatchSaveAs(selectedFileDetails)}>Save as</button>
@@ -6,29 +8,19 @@ const MatrixLeftMenu = ({mode, selectedNodeId, selectedLinkId, onPatchSave, onPa
   return ( 
     <div>
       <div className="leftMenu">
-        <span className="icon">
-          <svg className="image" onClick={onCreate}>
-            <use xlinkHref="img/icons/add-2.svg#Capa_1"></use>
-          </svg>
-          <div className="name">Create</div>
-        </span>
-        <span className="icon">
-          <svg className="image" onClick={() => onModeChange(linkButtonMode)}>
-            <use xlinkHref="img/icons/share.svg#Capa_1"></use>
-          </svg>
-          <div className="name">Link</div>
-        </span>
-        <span className="icon"><img src="img/icons/garbage.svg" onClick={() => onDelete(selectedNodeId, selectedLinkId)}/><div className="name">Delete</div></span>
+        <MenuItem label="Create" icon="add-2.svg" onClick={onCreate}/>
+        <MenuItem label="Link" icon="share.svg" onClick={() => onModeChange(linkButtonMode)} selected={mode === 'create_link'}/>
+        <MenuItem label="Delete" icon="garbage.svg" onClick={() => onDelete(selectedNodeId, selectedLinkId)}/>
       </div>
       <div className="leftMenu">
-        <span className="icon"><img src="img/icons/circular-arrow-1.svg"/><div className="name">Undo</div></span>
-        <span className="icon"><img src="img/icons/circular-arrow.svg"/><div className="name">Redo</div></span>  
+        <MenuItem label="Undo" icon="circular-arrow-1.svg" onClick={() => console.log("undo")}/>
+        <MenuItem label="Redo" icon="circular-arrow.svg" onClick={() => console.log("redo")}/>
       </div>
       <div className="leftMenu">
-        <span className="icon"><img src="img/icons/reload-1.svg" onClick={onUpdateVoice} disabled={shouldAutoUpdate}/><div className="name">Update voice</div></span>
-        <span className="icon"><img src="img/icons/download.svg" onClick={() => onPatchSave(selectedFileDetails)}/><div className="name">Save</div></span>
-        <span className="icon"><img src="img/icons/upload 2.svg" onClick={onPatchLoad}/><div className="name">Load</div></span> 
-        <span className="icon"><img src="img/icons/photo-camera-3.svg"/><div className="name">Snapshot</div></span>  
+        <MenuItem label="Update voice" icon="reload-1.svg" onClick={onUpdateVoice} disabled={shouldAutoUpdate}/>
+        <MenuItem label="Save" icon="download.svg" onClick={() => onPatchSave(selectedFileDetails)}/>
+        <MenuItem label="Load" icon="upload 2.svg" onClick={onPatchLoad}/>
+        <MenuItem label="Load" icon="photo-camera-3.svg" onClick={() => console.log("Snapshot")}/>
       </div>
     </div>
   )
