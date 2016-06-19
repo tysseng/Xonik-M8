@@ -16,7 +16,7 @@ const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate, onNodeTypeChange}) 
     <ModalBox heading='Connect nodes' boxClass='linkdialog'>
       {toNode.type === "-1" && 
         <div>
-          <div>Before linking {fromNode.name} and {toNode.name} you have to select the type for {toNode.name}. What do you want it to be?</div>
+          <div className="intro">Before linking {fromNode.name} and {toNode.name} you have to select the type for {toNode.name}. What do you want it to be?</div>
           <div>
             <NodeTypeDropdown id="nodeType" value={toNode.type} 
               onNodeTypeChange={
@@ -30,7 +30,7 @@ const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate, onNodeTypeChange}) 
       {
         toNode.type != '-1' && 
         <div>
-          <div>What parameter of {toNode.name} do you want to send the output of {fromNode.name} to?</div>          
+          <div className="intro">What parameter of {toNode.name} do you want to send the output of {fromNode.name} to?</div>          
           <div className="parameters">          
             {        
               nodeType.params.map((parameterDefinition) => { 
