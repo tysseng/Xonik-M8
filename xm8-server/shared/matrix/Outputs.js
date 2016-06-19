@@ -1,4 +1,4 @@
-module.exports = [
+let outputs = [
   {
     id: 0,
     hwId: 0, 
@@ -35,3 +35,13 @@ module.exports = [
     name: "Filter 1 mode" //hp, bp, lp
   } 
 ];
+
+let outputsById = {};
+
+_.each(outputs, output => {
+  outputsById[output.id] = output;
+});
+
+export {outputsById};
+ 
+export default outputs;

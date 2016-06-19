@@ -1,4 +1,4 @@
-module.exports = [
+let units = [
   {
     id: 0, 
     name: "Fraction", 
@@ -58,3 +58,11 @@ module.exports = [
     validator: undefined
   }
 ];
+
+let unitsById = {};
+_.each(units, unit => {
+  unitsById[unit.id] = unit;
+});
+
+export {unitsById};
+export default units;

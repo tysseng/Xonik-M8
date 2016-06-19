@@ -1,8 +1,8 @@
 import React from 'react'
 import parameterTypes from '../../../shared/matrix/ParameterTypes.js';
-import inputs from '../../../shared/matrix/Inputs.js'
-import outputs from '../../../shared/matrix/Outputs.js'
-import parameterUnits from '../../../shared/matrix/ParameterUnits.js';
+import {inputsById} from '../../../shared/matrix/Inputs.js'
+import {outputsById} from '../../../shared/matrix/Outputs.js'
+import {unitsById} from '../../../shared/matrix/ParameterUnits.js';
 
 const ParameterDescription = ({
   name,
@@ -16,8 +16,7 @@ const ParameterDescription = ({
 
   let body;
 
-  console.log(name, parameter, nodes)
-  //if(!valid) return null;
+  console.log(inputsById)
 
   switch(type){
     case "unused":
@@ -25,11 +24,11 @@ const ParameterDescription = ({
       break;
     case "input":
       // TODO: Get inputs as id->map
-      let inputName = '';//inputsAsMap[parameter.value].defaultName;
+      let inputName = inputsById[parameter.value].defaultName;
       body = "Input from " + inputName;
       break;
     case "output":
-      let outputName = ''; //outputsAsMap[parameter.value].name;
+      let outputName = outputsById[parameter.value].name;
       body = "Output to " + outputName;
       break;
     case "result":
@@ -39,7 +38,7 @@ const ParameterDescription = ({
       }
       break;
     case "constant":
-      body = value + ' '// + parameterUnits[unit].name;
+      body = value + ' ' + unitsById[unit].name;
       break;
   }
 
