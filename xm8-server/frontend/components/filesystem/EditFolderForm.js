@@ -1,4 +1,5 @@
 import React from 'react';
+import ModalBox from '../framework/ModalBox';
 
 const submitForm = (e, onNewFolderSave, selectedFolder) => {
   e.preventDefault();
@@ -18,19 +19,17 @@ const EditFolderForm = ({selectedFolder, onNewFolderSave, onNewFolderOpen, onNew
       <button onClick={onNewFolderOpen}>New folder</button>
       <button disabled={selectedFolder.undeletable} onClick={() => onFolderDeleteClick(selectedFolder.id)}>Delete folder</button>
       {
-        showNewFolderDialog &&     
-        <div className="newfolderdialog">
-          <div>
-            <form onSubmit={e =>  submitForm(e, onNewFolderSave, selectedFolder)}>
-              <div>Name of new folder</div>     
-              <input id="newFolder" type="text"/>
-              <div>
-                <button type="button" onClick={onNewFolderClose}>Cancel</button>
-                <button type="submit">Create</button>
-              </div>
-            </form>
-          </div> 
-        </div>
+        showNewFolderDialog && 
+        <ModalBox heading='Create new folder' boxClass='newfolderdialog'>    
+          <form onSubmit={e =>  submitForm(e, onNewFolderSave, selectedFolder)}>
+            <div>Name</div>     
+            <input id="newFolder" type="text"/>
+            <div>
+              <button type="button" onClick={onNewFolderClose}>Cancel</button>
+              <button type="submit">Create</button>
+            </div>
+          </form>
+        </ModalBox>
       }
     </div>
   )

@@ -1,99 +1,48 @@
 .filedialog {
-  position: fixed;
-  font-family: Arial, Helvetica, sans-serif;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  //background: rgba(0, 0, 0, 0.8);
-  z-index: 88888;
-  opacity:1;
-  transition: opacity 400ms ease-in;
-  pointer-events: auto;
+  width: 400px;
 
-  > div {
-    width: 400px;
-    position: relative;
-    margin: 10% auto;
-    padding: 0px 0px 20px 0px;
-    border-radius: 10px;
-    box-shadow: 5px 5px 22px 5px rgba(0,0,0,0.2);
+  .files {
+    float: right;
+    width: 170px;
+    padding: 0px 10px 0px 10px;      
 
-    background: linear-gradient(#777, #999);
-    overflow: hidden; /* forces div to contain floated elements */
-
-    .heading {
-      font-size: 20px;
-      padding: 10px;
-      width: 100%;
-      background-color: #444;
+    .new {
+      height: 56px;
     }
 
-    .files {
-      float: right;
-      width: 180px;
-      width: 170px;
-      padding: 0px 20px 0px 10px;      
-
-      .new {
-        height: 56px;
-      }
-
-      .list {
-        height: 250px;
-        overflow-x: hidden;
-        overflow-y: auto;
-      }
-
+    .list {
+      height: 250px;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
-    .folders {
-      float: left;
-      width: 170px;
-      padding: 0px 10px 0px 20px;
+  }
 
-      .new {
-        height: 56px;
-      }
+  .folders {
+    float: left;
+    width: 170px;
+    padding: 0px 10px 0px 10px;
 
-      .list {
-        height: 250px;
-        overflow-x: hidden;
-        overflow-y: auto;
-      }      
-    } 
+    .new {
+      height: 56px;
+    }
 
-    button {
-      margin-top: 5px;
-      margin-right: 5px;
-    }   
-  }  
+    .list {
+      height: 250px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }      
+  } 
+
+  button {
+    margin-top: 5px;
+    margin-right: 5px;
+  }   
 }
 
 .newfolderdialog {
-  position: fixed;
-  font-family: Arial, Helvetica, sans-serif;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  //background: rgba(0, 0, 0, 0.8);
-  z-index: 99999;
-  opacity:1;
-  transition: opacity 400ms ease-in;
-  pointer-events: auto;
-
-  > div {
-    width: 300px;
-    height: 64px;
-    position: relative;
-    margin: 20% auto;
-    padding: 20px 20px 20px 20px;
-    border-radius: 10px;
-    box-shadow: 5px 5px 22px 5px rgba(0,0,0,0.2);
-    background: linear-gradient(#777, #999);
-    overflow: hidden; /* forces div to contain floated elements */
-  }
+  width: 300px;
+  height: 110px;
 } 
 
 
