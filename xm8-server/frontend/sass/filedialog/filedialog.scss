@@ -1,6 +1,11 @@
 .filedialog {
   width: 400px;
 
+  .selected{
+    color: #0f0;
+    text-shadow: 0 0 3px #0f0;
+  }
+
   .files {
     float: right;
     width: 170px;
@@ -25,6 +30,11 @@
 
     .new {
       height: 56px;
+      width: 130px;
+      padding: 5px;
+      padding-left: 10px;
+      border-radius: 5px;
+      border: 1px solid #5e6771;
     }
 
     .list {
@@ -44,8 +54,3 @@
   width: 300px;
   height: 110px;
 } 
-
-
-
-
-

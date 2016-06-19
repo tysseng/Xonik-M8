@@ -16,8 +16,11 @@ const EditFolderForm = ({selectedFolder, onNewFolderSave, onNewFolderOpen, onNew
 
   return (
     <div className="new"> 
-      <button onClick={onNewFolderOpen}>New folder</button>
-      <button disabled={selectedFolder.undeletable} onClick={() => onFolderDeleteClick(selectedFolder.id)}>Delete folder</button>
+      <div>
+        Folder
+      </div>
+      <button onClick={onNewFolderOpen}>New</button>
+      <button disabled={selectedFolder.undeletable} onClick={() => onFolderDeleteClick(selectedFolder.id)}>Delete</button>
       {
         showNewFolderDialog && 
         <ModalBox heading='Create new folder' boxClass='newfolderdialog'>    

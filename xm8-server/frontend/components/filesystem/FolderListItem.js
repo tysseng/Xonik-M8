@@ -2,13 +2,13 @@ import React from 'react';
 import _ from 'lodash';
 
 const FolderListItem = ({folder, selectedFolder, onFolderClick, onFolderDeleteClick}) => {
-  let style = folder.id === selectedFolder.id ? {fontWeight: 'bold'} : {};
+  let className = folder.id === selectedFolder.id ? 'selected' : '';
 
   let folders = _.sortBy(folder.folders, 'name');
   return (
     <li>
       <div>
-        <span onClick={() => onFolderClick(folder.id)} style={style}>{folder.name}</span>
+        <span onClick={() => onFolderClick(folder.id)} className={className}>{folder.name}</span>
       </div>
       <div>
         <ul>

@@ -2,10 +2,10 @@ import React from 'react';
 import _ from 'lodash';
 
 const FileListItem = ({file, selectedFilename, onFileClick, onFolderDeleteClick}) => {
-  let style = file.name === selectedFilename ? {fontWeight: 'bold'} : {};
+  let className = file.name === selectedFilename ? 'selected' : '';
   return (
     <li>
-      <span onClick={() => onFileClick(file.id, file.version, file.name)} style={style}>{file.name}</span>
+      <span onClick={() => onFileClick(file.id, file.version, file.name)} className={className}>{file.name}</span>
     </li>
   )
 }

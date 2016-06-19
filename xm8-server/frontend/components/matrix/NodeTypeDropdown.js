@@ -3,7 +3,7 @@ import nodeTypes from '../../../shared/matrix/NodeTypes.js';
 
 const NodeTypeDropdown = ({id, value, onNodeTypeChange}) => (
   <div>
-    <label htmlFor="nodeType">Node type</label>
+    <label htmlFor="nodeType">Type</label>
     <div className="dropdownBlock">
       <select id={id} value={value} onChange={(e) => (onNodeTypeChange(e.target.value))}>
         {nodeTypes.list.map(function(nodeType){
