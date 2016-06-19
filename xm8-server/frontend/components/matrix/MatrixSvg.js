@@ -8,7 +8,6 @@
 // TODO: Show reachable
 // SELECT multiple by starting a drag outside a node
 // TODO: Prevent node names from being selectable
-// TODO: highlight link icon on click
 // TODO: Make it possible to select node type from link dialog
 // TODO: Show current parameter value in link box
 // TODO: Reset nodes selected for linking when file dialog opens (use mode for file dialog opening?)

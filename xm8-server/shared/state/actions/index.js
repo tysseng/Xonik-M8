@@ -118,12 +118,12 @@ export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
 }
 
 export const createNewLink = (fromNodeId, toNodeId, toParamId) => {
+
   return {
-    type: 'NEW_LINK',
-    target: 'SERVER',
-    fromNodeId,
-    toNodeId,
-    toParamId,
+    type: 'NEW_LINK',  
+    paramValue: fromNodeId,
+    nodeId: toNodeId,
+    paramId: toParamId,
     target: 'BOTH'
   }
 }

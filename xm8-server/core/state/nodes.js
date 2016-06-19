@@ -18,6 +18,13 @@ const getEmptyParam = (id, type) => Map({
   unit: ""
 })
 
+const getParam = (id, type, value, unit) => Map({
+  id: id,
+  type: type,    
+  value: value,
+  unit: unit
+})
+
 const getEmptyParams = (typeId) => {
   let definition = nodeTypes.idMap[typeId];
   let params = List();
@@ -137,6 +144,9 @@ const param = (state, action) => {
       return state.set('value', value);
     case 'CHANGE_NODE_PARAM_UNIT':    
       return state.set('unit', action.paramUnit);
+    case 'NEW_LINK':
+      let newLinkParamValue = createLink(action);
+      return state.merge(getParam(action.paramId, paramTypes.map.LINK.id, newLinkParamValue, ''));
     case 'DELETE_NODE': 
       // check if deleted node is the value of this parameter
       if(isLink(state.get('type')) && getFromNodeId(state) == action.nodeId){
@@ -170,6 +180,7 @@ const node = (state, action) => {
         type: action.typeId,
         params: getEmptyParams(action.typeId)
       }));
+    case 'NEW_LINK':
     case 'CHANGE_NODE_PARAM_TYPE':
     case 'CHANGE_NODE_PARAM_VALUE':
     case 'CHANGE_NODE_PARAM_UNIT':
@@ -215,7 +226,8 @@ const nodes = (
         state = state.updateIn([currentNode.get('id')], aNode => node(aNode, action));
       });
 
-      return state.delete(action.nodeId);      
+      return state.delete(action.nodeId);   
+    case 'NEW_LINK':   
     case 'CHANGE_NODE_PARAM_VALUE':
       // add or remove consumer link
       if(isLink(action.paramType)){
