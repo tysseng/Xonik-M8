@@ -11,8 +11,12 @@
   }
   .paramBlock {
     .paramValue {
+      position: relative;
+      top: 1px;
       width: 80px;
       margin-right: 5px;
+      margin-left: 1px;
+      margin-top: 1px;
     }
   }
 }
