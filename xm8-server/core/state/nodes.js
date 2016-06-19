@@ -11,12 +11,19 @@ const isLink = (type) => {
   return type === paramTypes.map.LINK.id;
 }
 
-const getEmptyParam = (id, type) => Map({
-  id: id,
-  type: type,    
-  value: "",
-  unit: ""
-})
+const getEmptyParam = (id, type) => {
+  let unit = '';
+  if(type === paramTypes.map.CONSTANT.id){
+    unit = 0;
+  }
+
+  return Map({
+    id: id,
+    type: type,    
+    value: "",
+    unit: unit
+  });
+}
 
 const getParam = (id, type, value, unit) => Map({
   id: id,

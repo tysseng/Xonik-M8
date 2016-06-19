@@ -13,43 +13,43 @@ const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate, onNodeTypeChange}) 
 
 
   return ( 
-    <ModalBox id='someBox' heading='Connect nodes' boxClass='linkdialog'>
-        {toNode.type === "-1" && 
-          <div>
-            <div>Before linking {fromNode.name} and {toNode.name} you have to select the type for {toNode.name}. What do you want it to be?</div>
-            <div>
-              <NodeTypeDropdown id="nodeType" value={toNode.type} 
-                onNodeTypeChange={
-                  (typeId) => { 
-                    onNodeTypeChange(toNode.id, typeId);
-                  }
-              }/>
-            </div>
-          </div>
-        }
-        {
-          toNode.type != '-1' && 
-          <div>
-            <div>What parameter of {toNode.name} do you want to send the output of {fromNode.name} to?</div>          
-            <div className="parameters">          
-              {        
-                nodeType.params.map((parameterDefinition) => { 
-                  let paramId = parameterDefinition.id;
-                  let name = parameterDefinition.name;                
-                  let parameter = toNode.params[paramId];                 
-                  return (
-                    <div className="parameter" onClick={() => onCreate(linkDialog.fromNodeId, linkDialog.toNodeId, parameterDefinition.id)}>
-                      <ParameterDescription name={name} parameter={parameter} nodes={nodes}/>
-                    </div>
-                  ) 
-                })
-              }
-            </div>
-          </div>
-        }
+    <ModalBox heading='Connect nodes' boxClass='linkdialog'>
+      {toNode.type === "-1" && 
         <div>
-          <button type="button" onClick={onCancel}>Cancel</button>
+          <div>Before linking {fromNode.name} and {toNode.name} you have to select the type for {toNode.name}. What do you want it to be?</div>
+          <div>
+            <NodeTypeDropdown id="nodeType" value={toNode.type} 
+              onNodeTypeChange={
+                (typeId) => { 
+                  onNodeTypeChange(toNode.id, typeId);
+                }
+            }/>
+          </div>
         </div>
+      }
+      {
+        toNode.type != '-1' && 
+        <div>
+          <div>What parameter of {toNode.name} do you want to send the output of {fromNode.name} to?</div>          
+          <div className="parameters">          
+            {        
+              nodeType.params.map((parameterDefinition) => { 
+                let paramId = parameterDefinition.id;
+                let name = parameterDefinition.name;                
+                let parameter = toNode.params[paramId];                 
+                return (
+                  <div className="parameter" onClick={() => onCreate(linkDialog.fromNodeId, linkDialog.toNodeId, parameterDefinition.id)}>
+                    <ParameterDescription name={name} parameter={parameter} nodes={nodes} userClassName='button'/>
+                  </div>
+                ) 
+              })
+            }
+          </div>
+        </div>
+      }
+      <div>
+        <button type="button" onClick={onCancel}>Cancel</button>
+      </div>
     </ModalBox>
   )
 }

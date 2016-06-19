@@ -30,8 +30,24 @@
 
 .linkdialog {
   width: 400px;
+
+  .parameters{
+    margin-top: 10px;
+  }
+
   button {
     margin-top: 15px;
     margin-right: 5px;
   }   
+  .parameterDescription{
+    width: 350px;
+    height: 30px;
+    margin-bottom: 5px;    
+
+    .value{    
+      font-size: 10px;
+      color: #818d98;
+    }
+  }
+
 }

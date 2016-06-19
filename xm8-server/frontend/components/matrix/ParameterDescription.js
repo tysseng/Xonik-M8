@@ -7,7 +7,8 @@ import {unitsById} from '../../../shared/matrix/ParameterUnits.js';
 const ParameterDescription = ({
   name,
   parameter,
-  nodes
+  nodes,
+  userClassName
 }) => {
   let value=parameter.value;
   let type=parameter.type;
@@ -15,8 +16,6 @@ const ParameterDescription = ({
   let valid=parameter.valid;
 
   let body;
-
-  console.log(inputsById)
 
   switch(type){
     case "unused":
@@ -42,8 +41,13 @@ const ParameterDescription = ({
       break;
   }
 
+  let classNameString = "parameterDescription";
+  if(userClassName){
+    classNameString += ' ' + userClassName;
+  }
+
   return (
-    <div className="parameterToString">
+    <div className={classNameString}>
       <div className="name">{name}</div>
       <div className="value">{body}</div>
     </div>
