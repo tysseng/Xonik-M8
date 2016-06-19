@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 
 import MatrixCenterColumn from './MatrixCenterColumn';
-import { selectNode, selectLink, createNewNode, createNewLink, deleteNode, deleteLink, toggleAutoUpdate } from '../../../shared/state/actions';
+import { selectNode, selectLink, createNewNode, createNewLink, deleteNode, deleteLink, toggleAutoUpdate, changeNodeType } from '../../../shared/state/actions';
 import { startNodeMove, moveNode, setLinkFromNodeId, setLinkToNodeId, cancelLinkCreation } from '../../../shared/state/actions/matrixvisualization';
 import { toggleMode } from '../../../shared/state/actions/matrixgui';
 
@@ -47,7 +47,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setLinkFromNode: (nodeId) => dispatch(setLinkFromNodeId(nodeId)),
     setLinkToNode: (nodeId) => dispatch(setLinkToNodeId(nodeId)),
     cancelLinkCreation: (nodeId) => dispatch(cancelLinkCreation(nodeId)),
-    createLink: (fromId, toId, propertyId) => dispatch(createNewLink(fromId, toId, propertyId))
+    createLink: (fromId, toId, propertyId) => dispatch(createNewLink(fromId, toId, propertyId)),
+    onNodeTypeChange: (nodeId, typeId) => dispatch(changeNodeType(nodeId, typeId))    
   }
 }
 

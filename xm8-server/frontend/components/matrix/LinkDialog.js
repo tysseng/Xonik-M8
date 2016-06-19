@@ -1,7 +1,9 @@
 import nodeTypes from '../../../shared/matrix/NodeTypes.js';
 import ParameterDescription from './ParameterDescription';
+import NodeTypeDropdown from './NodeTypeDropdown';
+import ModalBox from '../framework/ModalBox';     
 
-const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate}) => {
+const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate, onNodeTypeChange}) => {
 
   let fromNode = nodes[linkDialog.fromNodeId];
   let toNode = nodes[linkDialog.toNodeId];
@@ -11,10 +13,20 @@ const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate}) => {
 
 
   return ( 
-    <div className="linkdialog">
-      <div className="modalBox">
-        <div className="heading">Connect nodes</div>
-        {toNode.type === "-1" && <div>Sorry, you have to select a node type for {toNode.name} before you can connect it to {fromNode.name}</div>}
+    <ModalBox id='someBox' heading='Connect nodes' boxClass='linkdialog'>
+        {toNode.type === "-1" && 
+          <div>
+            <div>Before linking {fromNode.name} and {toNode.name} you have to select the type for {toNode.name}. What do you want it to be?</div>
+            <div>
+              <NodeTypeDropdown id="nodeType" value={toNode.type} 
+                onNodeTypeChange={
+                  (typeId) => { 
+                    onNodeTypeChange(toNode.id, typeId);
+                  }
+              }/>
+            </div>
+          </div>
+        }
         {
           toNode.type != '-1' && 
           <div>
@@ -38,8 +50,7 @@ const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate}) => {
         <div>
           <button type="button" onClick={onCancel}>Cancel</button>
         </div>
-      </div>
-    </div>
+    </ModalBox>
   )
 }
 
