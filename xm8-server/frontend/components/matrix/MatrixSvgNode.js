@@ -3,6 +3,7 @@ import d3 from 'd3';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
 import {Component} from 'react';
+import NodeIcon from './NodeIcon';
 
 class MatrixSvgNode extends Component {
   constructor(props) {
@@ -53,6 +54,7 @@ class MatrixSvgNode extends Component {
     return (
       <g className='node' key={'nodegroup' + node.id}>
         <rect ref='svgNode' data-node-id={node.id} key={'node' + node.id} x={node.vis.x} y={node.vis.y} rx="10" ry="10" width="40" height="40" className={className}/>
+        <NodeIcon node={node} x={node.vis.x + 20 } y={node.vis.y + 24}/> 
         <text key={'label' + node.id} textAnchor="middle" x={node.vis.x + 20 } y={node.vis.y + 52} className='label'>{node.name}</text>
       </g>
     );

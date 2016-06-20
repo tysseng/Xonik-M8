@@ -13,6 +13,7 @@
 // TODO: Change color of small icons
 // TODO: Add node icons
 // TODO: Add call to action-color to main buttons
+// TODO: Click outside of a note should close node/link
 
 import d3 from 'd3';
 
