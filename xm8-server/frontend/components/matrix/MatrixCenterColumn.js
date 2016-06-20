@@ -16,9 +16,6 @@ const MatrixCenterColumn = ({
       {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/matrix/save' loadUrl = '/matrix/load'/> } 
       {linkDialog.show && <LinkDialog nodes={nodes} linkDialog={linkDialog} onCancel={cancelLinkCreation} onCreate={createLink} onNodeTypeChange={onNodeTypeChange}/> }    
 
-      <input id="autoUpdate" type="checkbox" checked={shouldAutoUpdate} onChange={(e) => toggleAutoUpdate(e.target.checked)}/>
-      <label htmlFor="autoUpdate">Auto update synth voice</label><br/>
-
       <MatrixSvg 
         nodes={nodes} 
         links={links} 
@@ -34,6 +31,10 @@ const MatrixCenterColumn = ({
         onLinkClick={onLinkClick}
         setLinkFromNode={setLinkFromNode}
         setLinkToNode={setLinkToNode}/>
+
+      <input id="autoUpdate" type="checkbox" checked={shouldAutoUpdate} onChange={(e) => toggleAutoUpdate(e.target.checked)}/>
+      <label htmlFor="autoUpdate">Auto update synth voice</label><br/>
+        
     </div>
   )
 }
