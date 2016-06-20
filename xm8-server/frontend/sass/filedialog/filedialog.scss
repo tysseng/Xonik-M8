@@ -19,6 +19,10 @@
       height: 250px;
       overflow-x: hidden;
       overflow-y: auto;
+
+      li:hover {
+        color: #fff;
+      }
     }
 
   }
@@ -41,7 +45,14 @@
       height: 250px;
       overflow-x: hidden;
       overflow-y: auto;
-    }      
+      li:hover {
+        color: #fff;
+      }      
+    }  
+    // reset hover color in multilevel lists
+    ul {
+      color: #aeb6bd;
+    }    
   } 
 
   button {

@@ -5,7 +5,7 @@ let nodeTypes = require('../../../shared/matrix/NodeTypes.js').idMap;
 
 const NodeList = ({nodes, onNodeClick, onDeleteClick}) => {
   return (
-    <div>
+    <div className='configPane nodeList'>
       <div className="heading">Nodes</div>
 
       <ul>

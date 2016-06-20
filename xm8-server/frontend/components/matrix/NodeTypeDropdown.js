@@ -1,5 +1,6 @@
-import React from 'react'
-import nodeTypes from '../../../shared/matrix/NodeTypes.js';
+import React from 'react';
+import nodeTypes from '../../../shared/matrix/NodeTypes';
+import MiniIcon from '../framework/MiniIcon';
 
 const NodeTypeDropdown = ({id, value, onNodeTypeChange}) => (
   <div>
@@ -10,7 +11,7 @@ const NodeTypeDropdown = ({id, value, onNodeTypeChange}) => (
           return <option key={nodeType.id} value={nodeType.id}>{nodeType.name}</option>
         })}
       </select>
-      <img className="miniicon" src="img/icons/question.svg"/>
+      <MiniIcon label="Help" icon="question.svg"/>
     </div>
 
     {false && <p>

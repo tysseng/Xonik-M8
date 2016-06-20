@@ -7,7 +7,7 @@ import NodeLinkListContainer from './NodeLinkListContainer';
 const MatrixRightColumn = ({links}) => {    
   return (  
     <div>
-      <NodeFormContainer/>
+      <NodeFormContainer/>    
       <LinkFormContainer/>
       <NodeLinkListContainer links={links}/>
     </div>    

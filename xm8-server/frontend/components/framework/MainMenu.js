@@ -1,5 +1,5 @@
 import React from 'react'
-import MenuItem from '../matrix/MenuItem'
+import MenuItem from './MenuItem'
 
 const MainMenu = () => {    
   return (

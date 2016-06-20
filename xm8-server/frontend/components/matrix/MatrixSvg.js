@@ -10,9 +10,9 @@
 // TODO: Prevent node names from being selectable
 // TODO: Reset nodes selected for linking when file dialog opens (use mode for file dialog opening?)
 // TODO: Show link name next to link, make configurable if default for a param is to show or not, and make switchable show name/not
-// TODO: Hover on icons and filenames/folders
 // TODO: Change color of small icons
-// TODO: Shape icons
+// TODO: Add node icons
+// TODO: Add call to action-color to main buttons
 
 import d3 from 'd3';
 

@@ -1,4 +1,4 @@
-import MenuItem from './MenuItem';
+import MenuItem from '../framework/MenuItem';
 
 const MatrixLeftMenu = ({mode, selectedNodeId, selectedLinkId, onPatchSave, onPatchLoad, selectedFileDetails, onDelete, onCreate, onModeChange, onUpdateVoice, shouldAutoUpdate}) => {    
   
