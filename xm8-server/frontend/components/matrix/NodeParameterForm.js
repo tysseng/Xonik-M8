@@ -47,11 +47,11 @@ const NodeParameterForm = ({
   }
 
   // show validation errors
-  let color = valid ? {} : {color: '#ff0000'};
+  let invalidClass = valid ? '' : 'invalid';
 
   return (
-    <span style={color}>
-      <label>{name}</label>
+    <span>
+      <label>{name}{!valid && <span className={invalidClass}> (incomplete)</span>}</label>
       <div>
         <NodeParameterTypeDropdown value={type} onParameterTypeChange={onTypeChange}/> {body}
       </div>
