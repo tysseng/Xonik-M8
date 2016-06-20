@@ -67,22 +67,22 @@ button,
 
   background: linear-gradient(#61646b 3%, #494b50 4%, #242529 100%);
   box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+
+  &:hover {
+    color: #fff;
+    background: linear-gradient(#787d87 3%, #60646c 4%, #242529 100%);
+  }
+
+  &:active {
+    background-position: 0 top;
+    position: relative;
+    top: 1px;
+    color: #fff;
+    padding: 6px 12px 4px;
+    background: linear-gradient(#18191b 3%, #242529 51%, #20191b 100%);
+    box-shadow: 1px 1px 1px rgba(255,255,255,0.1);
+  }
 }
-button:hover,
-.button:hover {
-  color: #fff;
-  background: linear-gradient(#787d87 3%, #60646c 4%, #242529 100%);
-}
-button:active,
-.button:active {
-  background-position: 0 top;
-  position: relative;
-  top: 1px;
-  color: #fff;
-  padding: 6px 12px 4px;
-  background: linear-gradient(#18191b 3%, #242529 51%, #20191b 100%);
-  box-shadow: 1px 1px 1px rgba(255,255,255,0.1);
-}  
 
 input {
   box-sizing: border-box;

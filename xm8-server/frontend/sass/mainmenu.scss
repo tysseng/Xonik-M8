@@ -55,7 +55,18 @@ http://www.flaticon.com/packs/multimedia-set
     font-size: 16px;
     padding-top: 1px;
   }
+
+  &:hover {
+    .image {
+      fill: #fff;
+    }
+    .name {
+      color: #fff;
+    }
+  }  
 }
+
+
 
 .leftcolumn{
   position: relative;
