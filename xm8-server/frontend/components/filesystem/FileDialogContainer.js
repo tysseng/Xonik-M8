@@ -2,13 +2,8 @@
 
 // TODO: Move mapping and state functionality to common class together with dispatchers.
 // TODO: Warn on load if current state is not saved (or save current state)
-
-
 // TODO: Autoscroll to make selected file/folder visible
 // TODO: Add swipe-scroll to files/folders
-// TODO: Add in-field naming ("filename, folder name");
-// TODO: Prevent word-wrap in names
-// TODO: BEtter styling
 // TODO: Flytte ut filename form
 
 import React from 'react';

@@ -1,14 +1,18 @@
+.dropdownBlock {
+  display: flex;
+  align-items: center;
+  .miniicon {
+    margin-left: 10px;
+    position: relative;
+    top: 1px;  
+  }
+}
+
 .nodeForm {
   .nodeBlock {
     margin-bottom: 20px;
   }
-  .dropdownBlock {
-    display: flex;
-    align-items: center;
-    .miniicon {
-      margin-left: 10px;
-    }
-  }
+
   .paramBlock {
     .paramValue {
       position: relative;
@@ -34,7 +38,7 @@
     display: block;
     clear: both;
   }  
-  
+
   .miniicon{
     float:right;
     margin-top: 1px;
@@ -100,13 +104,6 @@
       color: #fff;
     }
   }  
-}
-
-.nodeType {
-  .miniicon {
-    position: relative;
-    top: -2px;  
-  }
 }
 
 .linkdialog {
