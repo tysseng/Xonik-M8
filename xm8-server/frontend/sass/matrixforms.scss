@@ -38,8 +38,26 @@
     float:right;
     margin-top: 1px;
     margin-right: 18px;
-
   }
+  .linkdescription{
+    margin-bottom: 5px;
+
+    .name {
+      display: none;
+    }
+    .value{    
+      font-size: 10px;
+      color: #818d98;
+    }
+
+    &:hover {
+      color: #818d98;
+
+      .value {
+        color: #818d98;
+      }
+    }  
+  }  
 }
 
 .nodeList{
@@ -54,15 +72,29 @@
     margin:0;
     padding:0; 
   }
+
   li{
     margin-bottom: 5px;
-    &:hover{
-      color: #fff;
-    }
   }
+
   .miniicon{
     float:right;
   }
+}
+
+.linkdescription{
+  .value{    
+    font-size: 10px;
+    color: #818d98;
+  }
+
+  &:hover {
+    color: #fff;
+
+    .value {
+      color: #fff;
+    }
+  }  
 }
 
 .nodeType {

@@ -1,6 +1,9 @@
 import MiniIcon from '../framework/MiniIcon';
+import LinkDescription from './LinkDescription';
+import paramTypes from '../../../shared/matrix/ParameterTypes.js';
 
 let nodeTypes = require('../../../shared/matrix/NodeTypes.js').idMap;
+
 
 const NodeList = ({links, nodes, onLinkClick, onDeleteClick}) => {
   return (
@@ -9,16 +12,12 @@ const NodeList = ({links, nodes, onLinkClick, onDeleteClick}) => {
       <div className="contents">
         <ul>
           {links.map(link => {
-
-            console.log(nodes);
-
-            let fromNode = nodes[link.from];
-            let toNode = nodes[link.to];
-
             return (
               <li key={link.id}>
-                <MiniIcon label="Delete" icon="garbage.svg" onClick={() => onDeleteClick(link.id, link.from, link.to, link.toParam)}/>                
-                <span onClick={() => onLinkClick(link.id)}>{link.name} - From {fromNode.name} to param {link.toParam} of {toNode.name}&nbsp;</span>                
+                <MiniIcon label="Delete" icon="garbage.svg" onClick={() => onDeleteClick(link.id, link.from, link.to, link.toParam)}/>  
+                <div className='link' onClick={() => onLinkClick(link.id)}> 
+                  <LinkDescription link={link} nodes={nodes}/>
+                </div>
               </li>            
             )
           })}    

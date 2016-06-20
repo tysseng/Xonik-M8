@@ -24,7 +24,8 @@ const mapStateToProps = (state, ownProps) => {
   let link = links[selecedLinkId];
   
   return {
-    link
+    link,
+    nodes
   }
 }
 
