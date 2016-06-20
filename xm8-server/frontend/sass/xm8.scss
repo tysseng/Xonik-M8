@@ -144,6 +144,18 @@ input:focus {
     }
 }
 
+::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #494b50;    
+    -webkit-border-radius: 6px;
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+
 @import 'grid';
 @import 'filedialog/filedialog';
 @import 'mainmenu';
