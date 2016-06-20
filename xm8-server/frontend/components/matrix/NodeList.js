@@ -10,12 +10,16 @@ const NodeList = ({nodes, onNodeClick, onDeleteClick}) => {
         <ul>
           {Object.values(nodes).map(node => {
             let nodeTypeDefinition = nodeTypes[node.type];
-            let type = nodeTypeDefinition ? "(" + nodeTypeDefinition.name + ")": "(Type not selected)";
+            let type = nodeTypeDefinition ? nodeTypeDefinition.name : "Type not selected";
+
             let color = node.valid ? {} : {color: '#ff0000'};
             return (
               <li key={node.id}>
                 <MiniIcon label="Delete" icon="garbage.svg" onClick={() => onDeleteClick(node.id)}/>
-                <span onClick={() => onNodeClick(node.id)}>{node.name} {type} {!node.valid && <span className='invalid'> (!)</span>} </span>                
+                <div className='nodedescription' onClick={() => onNodeClick(node.id)}>
+                  <div className='name'>{node.name}</div>
+                  <div className='value'>{type} {!node.valid && <span className='invalid'> (incomplete)</span>}</div>
+                </div>
               </li>
             )
           })}    

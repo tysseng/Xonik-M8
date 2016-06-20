@@ -38,8 +38,11 @@
     float:right;
     margin-top: 1px;
     margin-right: 18px;
-  }
-  .linkdescription{
+  }  
+}
+
+.linkForm {  
+  .linkdescription{  
     margin-bottom: 5px;
 
     .name {
@@ -74,7 +77,7 @@
   }
 
   li{
-    margin-bottom: 5px;
+    margin-bottom: 7px;   
   }
 
   .miniicon{
@@ -82,7 +85,8 @@
   }
 }
 
-.linkdescription{
+.linkdescription,
+.nodedescription{
   .value{    
     font-size: 10px;
     color: #818d98;
