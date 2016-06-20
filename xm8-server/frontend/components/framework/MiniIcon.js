@@ -1,16 +1,15 @@
 const MiniIcon = ({label, icon, onClick, selected, target = "Capa_1"}) => {
 
-  let svgClassName = "miniicon";
-  let labelClassName = "miniicon";
+  let svgClassName = "image";
+  let labelClassName = "name";
   if(selected){
     svgClassName += " selected";
     labelClassName += " selected";
   }
-
   return (
-    <span>
+    <span className='miniicon'>
       <svg className={svgClassName} onClick={onClick}>
-        <filter id="drop-shadow"  x="-30%" y="-30%" width="150%" height="150%">
+        <filter id="drop-shadow-miniicon"  x="-30%" y="-30%" width="150%" height="150%">
           <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/>
           <feColorMatrix result="bluralpha" type="matrix" values=
                   "1 0 0 0   0

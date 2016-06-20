@@ -8,7 +8,7 @@ const NodeLinkList = ({nodes, links, selectedNodeId, selectedLinkId, onNodeClick
     {!selectedNodeId && !selectedLinkId &&
       <div>
         <NodeList nodes={nodes} onNodeClick={onNodeClick} onDeleteClick={onNodeDeleteClick}/>
-        <LinkList links={links} onLinkClick={onLinkClick} onDeleteClick={onLinkDeleteClick}/>
+        <LinkList links={links} nodes={nodes} onLinkClick={onLinkClick} onDeleteClick={onLinkDeleteClick}/>
       </div>
     }
     </div>

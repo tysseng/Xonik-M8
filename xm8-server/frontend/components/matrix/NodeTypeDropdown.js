@@ -3,7 +3,7 @@ import nodeTypes from '../../../shared/matrix/NodeTypes';
 import MiniIcon from '../framework/MiniIcon';
 
 const NodeTypeDropdown = ({id, value, onNodeTypeChange}) => (
-  <div>
+  <div className="nodeType">
     <label htmlFor="nodeType">Type</label>
     <div className="dropdownBlock">
       <select id={id} value={value} onChange={(e) => (onNodeTypeChange(e.target.value))}>

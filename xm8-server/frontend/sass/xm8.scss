@@ -10,10 +10,23 @@ body {
 }
 
 .miniicon {
-  height: 16px;
-  width: 16px;
-  fill: #aeb6bd;
-  filter: url(#drop-shadow);
+  .image{
+    height: 16px;
+    width: 16px;
+    fill: #aeb6bd;
+    filter: url(#drop-shadow-miniicon);
+
+    &.selected{
+      fill: #0f0;
+      filter: url(#glow);
+    }
+  }
+
+  &:hover {
+    .image {
+      fill: #fff;
+    }
+  }   
 }
 
 .modal {

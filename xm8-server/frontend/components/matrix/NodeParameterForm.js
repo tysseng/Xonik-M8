@@ -46,12 +46,9 @@ const NodeParameterForm = ({
       break;
   }
 
-  // show validation errors
-  let invalidClass = valid ? '' : 'invalid';
-
   return (
     <span>
-      <label>{name}{!valid && <span className={invalidClass}> (incomplete)</span>}</label>
+      <label>{name}{!valid && <span className='invalid'> (incomplete)</span>}</label>
       <div>
         <NodeParameterTypeDropdown value={type} onParameterTypeChange={onTypeChange}/> {body}
       </div>

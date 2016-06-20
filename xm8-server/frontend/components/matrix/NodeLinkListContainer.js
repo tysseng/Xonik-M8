@@ -13,8 +13,8 @@ const isLink = (type) => {
 
 // TODO: This should be done higher up in the tree to prevent doing it twice!
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.nodes.toIndexedSeq().toJS();
-
+  //let nodes = state.nodes.toIndexedSeq().toJS();
+  let nodes = state.nodes.toJS();
 
   return {
     links: ownProps.links,  
