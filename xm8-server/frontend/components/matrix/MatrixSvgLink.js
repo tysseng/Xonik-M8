@@ -11,7 +11,8 @@ class MatrixSvgLink extends Component {
   componentDidMount() {
     let svgLink = d3.select(this.refs.svgLink);
 
-    svgLink.on('click', () => {
+    svgLink.on('mousedown', () => {
+      d3.event.stopPropagation();
       let linkClicked = svgLink[0][0];
       let linkId = linkClicked.getAttribute('data-link-id')
       this.props.onClick(linkId);

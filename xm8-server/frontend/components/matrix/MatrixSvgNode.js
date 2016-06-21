@@ -14,6 +14,7 @@ class MatrixSvgNode extends Component {
     let svgNode = d3.select(this.refs.svgNode);
 
     svgNode.on('mousedown', () => {
+        d3.event.stopPropagation();
         // set starting point for moving node
         let [x, y] = d3.mouse(document.getElementById(this.props.drawingAreaId));
 

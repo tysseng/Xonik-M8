@@ -10,7 +10,9 @@
 // TODO: Change color of small icons
 // TODO: Add node icons
 // TODO: Add call to action-color to main buttons
-// TODO: Click outside of a node should close node/link
+
+
+// TODO: Show inputs and outputs. Group by function (VCO1, vco2, vol env, filter env osv). Display as name only, no custom name. Show only used (?)
 
 import d3 from 'd3';
 
@@ -33,8 +35,8 @@ class MatrixSvg extends Component {
     this.svg = d3.select(this.refs.svg);
 
     this.svg.on('mousedown', () => {
-      this.updateMousePos();
-     
+      // deselect any nodes/links if clicking outside node/link
+      this.onNodeClick('', 0, 0);
     });
     this.svg.on('touchstart', () => {
         this.updateTouchPos();
