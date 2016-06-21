@@ -2,7 +2,6 @@
 // TODO: Make canvas scalable, keep inputs/outputs on the left/right/side.
 // Make it possible to reorder inputs/outputs vertically, make them snap in place.
 
-// TODO: Make it possible to click next to a property (link) to give it a name (...)-icon
 // TODO: List from-to-node in node details box. make clickable.
 // TODO: List consumers, make clickable
 // TODO: Show reachable

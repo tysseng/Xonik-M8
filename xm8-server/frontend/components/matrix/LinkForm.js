@@ -1,15 +1,19 @@
 import MiniIcon from '../framework/MiniIcon';
 import LinkDescription from './LinkDescription';
-const LinkFormComponent = ({link, nodes, onLinkNameChange, onCloseDialog}) => {
+const LinkFormComponent = ({link, nodes, onLinkNameChange, onCloseDialog, toggleLinkNameInGraph}) => {
 
   if(!link) return null;
+
+  console.log(link.showNameInGraph)
 
   return <form className="linkForm configPane">
     <div className="heading">Link properties<MiniIcon label="Close" icon="cancel.svg" onClick={onCloseDialog}/></div>
     <div className="contents">
       <LinkDescription link={link} nodes={nodes}/> 
       <label htmlFor="linkName">Name</label>         
-      <input id="linkName" type="text" onChange={(e) => onLinkNameChange(link.to, link.toParam,  e.target.value)} value={link.name}/>
+      <input id="linkName" type="text" onChange={(e) => onLinkNameChange(link.to, link.toParam,  e.target.value)} value={link.name}/>      
+      <br/>
+      <input id="showInGraph" type="checkbox" onChange={(e) => toggleLinkNameInGraph(link.to, link.toParam,  !link.showNameInGraph)} checked={link.showNameInGraph}/><label className='small' htmlFor="showInGraph">Show name along link in graph</label>
     </div>    
   </form>
 

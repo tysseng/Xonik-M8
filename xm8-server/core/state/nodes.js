@@ -65,7 +65,8 @@ const createLink = (action) => {
     from: action.paramValue,
     to: action.nodeId,
     toParam: action.paramId,
-    name: ''
+    name: '',
+    showNameInGraph: true
   });
 
   console.log("Linking output of node " + action.paramValue + " to param " + action.paramId + " of node " + action.nodeId);
@@ -143,6 +144,8 @@ const param = (state, action) => {
       return state.set('value', "");
     case 'CHANGE_LINK_NAME':  
       return state.setIn(['value', 'name'], action.name);
+    case 'TOGGLE_LINK_NAME_IN_GRAPH':  
+      return state.setIn(['value', 'showNameInGraph'], action.visible);
     case 'CHANGE_NODE_PARAM_TYPE':
       return state.merge(getEmptyParam(action.paramId, action.paramType));
     case 'CHANGE_NODE_PARAM_VALUE':
@@ -175,6 +178,7 @@ const node = (state, action) => {
       }
       return state;
     case 'CHANGE_LINK_NAME':
+    case 'TOGGLE_LINK_NAME_IN_GRAPH':      
       return state.updateIn(['params', action.toParamId], aParam => param(aParam, action));
     case 'NEW_NODE':
       return validateNode(getEmptyNode('' + nextAvailableNodeId++));
@@ -222,6 +226,7 @@ const nodes = (
       state = state.updateIn([action.fromNodeId], aNode => node(aNode, action));
       return state.updateIn([action.toNodeId], aNode => node(aNode, action));
     case 'CHANGE_LINK_NAME':
+    case 'TOGGLE_LINK_NAME_IN_GRAPH':      
       return state.updateIn([action.toNodeId], aNode => node(aNode, action));    
     case 'NEW_NODE': 
       let nodeId = '' + nextAvailableNodeId;

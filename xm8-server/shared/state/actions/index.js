@@ -138,6 +138,16 @@ export const changeLinkName = (toNodeId, toParamId, name) => {
   }
 }
 
+export const toggleLinkNameInGraph = (toNodeId, toParamId, visible) => {
+  return {
+    type: 'TOGGLE_LINK_NAME_IN_GRAPH',
+    toNodeId, 
+    toParamId,
+    visible,
+    target: 'SERVER'
+  }
+}
+
 
 export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
   return {

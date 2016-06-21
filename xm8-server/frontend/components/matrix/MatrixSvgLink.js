@@ -40,12 +40,14 @@ class MatrixSvgLink extends Component {
 
     return (
       <g ref='svgLink' data-link-id={link.id}>
-        <path id={'svg-link-' + link.id} d={'M' + x1 +' ' + y1 + ' L' + x2 + ' ' + y2} className={className} />              
-        <text dy='-3' textAnchor="middle" className='linkLabel'>
-          <textPath startOffset="50%" xlinkHref={'#svg-link-' + link.id}>
-            {linkName}
-          </textPath>
-        </text>                
+        <path id={'svg-link-' + link.id} d={'M' + x1 +' ' + y1 + ' L' + x2 + ' ' + y2} className={className} /> 
+        {link.showNameInGraph &&              
+          <text dy='-3' textAnchor="middle" className='linkLabel'>
+            <textPath startOffset="50%" xlinkHref={'#svg-link-' + link.id}>
+              {linkName}
+            </textPath>
+          </text>                
+        }
       </g>
     );
   }
