@@ -13,7 +13,7 @@
 // TODO: Change color of small icons
 // TODO: Add node icons
 // TODO: Add call to action-color to main buttons
-// TODO: Click outside of a note should close node/link
+// TODO: Click outside of a node should close node/link
 
 import d3 from 'd3';
 
@@ -21,6 +21,7 @@ import React from 'react';
 import {Component} from 'react';
 import _ from 'lodash';
 import MatrixSvgNode from './MatrixSvgNode';
+import MatrixSvgLink from './MatrixSvgLink';
 
 class MatrixSvg extends Component {
   constructor(props) {
@@ -35,14 +36,6 @@ class MatrixSvg extends Component {
     this.svg = d3.select(this.refs.svg);
 
     this.svg.on('mousedown', () => {
-
-      let links = this.svg.selectAll('line');
-      links.on('click', (d, i) => {
-        let linkClicked = links[0][i];
-        let linkId = linkClicked.getAttribute('data-link-id')
-        this.props.onLinkClick(linkId);
-      });
-
       this.updateMousePos();
      
     });
@@ -119,16 +112,9 @@ class MatrixSvg extends Component {
     }
   }
 
-  getClassName(defaultName, id, selected){
 
-    let className = defaultName;
-    if(selected){
-      className += ' selected';
-    }
-    return className;
-  }
 
-  render() {
+  render() {    
 
     return (
       <div>
@@ -152,19 +138,20 @@ class MatrixSvg extends Component {
               <feMergeNode in="offsetBlur"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
-          </filter>               
-          {this.props.links.map(link => {
-            let isSelected = this.isLinkSelected(link, this.props);
-            let className = this.getClassName('link', link.id, isSelected);
+          </filter>              
 
+          {this.props.links.map(link => {
             return (
-              <line data-link-id={link.id} key={'link' + link.id} x1={link.vis.from.x + 20} y1={link.vis.from.y + 20} x2={link.vis.to.x + 20} y2={link.vis.to.y + 20} className={className} />
+              <MatrixSvgLink 
+              selected={this.isLinkSelected(link, this.props)} 
+              link={link} nodes={this.props.nodes}
+              key={'linkgroup' + link.id}
+              onClick={this.props.onLinkClick}/>
             )
           })}                      
-          {Object.values(this.props.nodes).map(node => {
-            let isSelected = this.isNodeSelected(node, this.props);
-            let className = this.getClassName('nodebox', node.id, isSelected, node.valid);
 
+          {Object.values(this.props.nodes).map(node => {            
+            let isSelected = this.isNodeSelected(node, this.props);
             return (
               <MatrixSvgNode key={node.id} 
                 mode={this.props.mode}

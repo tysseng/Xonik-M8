@@ -11,13 +11,13 @@ class MatrixSvgNode extends Component {
   }
 
   componentDidMount() {
-    this.svgNode = d3.select(this.refs.svgNode);
+    let svgNode = d3.select(this.refs.svgNode);
 
-    this.svgNode.on('mousedown', () => {
+    svgNode.on('mousedown', () => {
         // set starting point for moving node
         let [x, y] = d3.mouse(document.getElementById(this.props.drawingAreaId));
 
-        let selectedNode = this.svgNode.select('.nodebox')[0][0];    
+        let selectedNode = svgNode.select('.nodebox')[0][0];    
 
         // TODO: This is state, but not state that will survive a refresh gracefully...
         let offsetX = x - selectedNode.getAttribute('x');
@@ -29,16 +29,16 @@ class MatrixSvgNode extends Component {
 
     });
 
-    this.svgNode.on('mouseup', () => {
+    svgNode.on('mouseup', () => {
       if(this.props.mode === 'move_node'){
         this.props.onNodeMoveEnded();
       }
     });
   }
 
-  getClassName(defaultName, id, selected, valid){
+  getClassName(selected, valid){
 
-    let className = defaultName;
+    let className = 'nodebox';
     if(selected){
       className += ' selected';
     }
@@ -50,7 +50,7 @@ class MatrixSvgNode extends Component {
 
   render() {
     let node = this.props.node;    
-    let className = this.getClassName('nodebox', node.id, this.props.selected, node.valid);
+    let className = this.getClassName(this.props.selected, node.valid);
 
     return (
       <g className='node' key={'nodegroup' + node.id} ref='svgNode'>
