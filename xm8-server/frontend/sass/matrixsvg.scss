@@ -45,11 +45,26 @@
     &.selected {
       stroke: #0f0;
       filter: url(#glow);
-    }    
+    }       
   }
 
   .linkLabel {
-      font-size: 10px;
-      fill: #aeb6bd;
-    }
+    font-size: 10px;
+    fill: #aeb6bd;
+
+   
+  }
+
+  textpath,
+  text {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+  }
+
+  textpath::selection,
+  text::selection {
+    background: none;
+  }   
 }

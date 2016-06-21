@@ -6,9 +6,7 @@
 // TODO: List consumers, make clickable
 // TODO: Show reachable
 // SELECT multiple by starting a drag outside a node
-// TODO: Prevent node names from being selectable
 // TODO: Reset nodes selected for linking when file dialog opens (use mode for file dialog opening?)
-// TODO: Show link name next to link, make configurable if default for a param is to show or not, and make switchable show name/not
 // TODO: Change color of small icons
 // TODO: Add node icons
 // TODO: Add call to action-color to main buttons
