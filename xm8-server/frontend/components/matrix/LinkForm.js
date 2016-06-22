@@ -4,8 +4,6 @@ const LinkFormComponent = ({link, nodes, onLinkNameChange, onCloseDialog, toggle
 
   if(!link) return null;
 
-  console.log(link.showNameInGraph)
-
   return <form className="linkForm configPane">
     <div className="heading">Link properties<MiniIcon label="Close" icon="cancel.svg" onClick={onCloseDialog}/></div>
     <div className="contents">

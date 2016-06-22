@@ -11,6 +11,8 @@
 // TODO: Add node icons
 // TODO: Add call to action-color to main buttons
 
+// TODO: Make background draggable
+
 
 // TODO: Show inputs and outputs. Group by function (VCO1, vco2, vol env, filter env osv). Display as name only, no custom name. Show only used (?)
 
@@ -116,7 +118,7 @@ class MatrixSvg extends Component {
   render() {    
 
     return (
-      <div>
+      <div className="matrixSvgContainer">
         <svg ref="svg" className='matrixSvg' id='matrixSvg' width='700' height='700'>
           <filter id="glow" x="-30%" y="-30%" width="150%" height="150%">
             <feGaussianBlur stdDeviation="5" result="coloredBlur"/>

@@ -10,8 +10,6 @@ import { toggleMode } from '../../../shared/state/actions/matrixgui';
 
 // TODO: Don't update if net does not validate (or send error message)
 
-
-
 const mapStateToProps = (state, ownProps) => {
   let nodes = state.nodes.toJS();
   let shouldAutoUpdate = state.matrix.get('shouldAutoUpdate');

@@ -32,11 +32,13 @@ const MatrixCenterColumn = ({
         setLinkFromNode={setLinkFromNode}
         setLinkToNode={setLinkToNode}/>
 
+
       <input id="autoUpdate" type="checkbox" checked={shouldAutoUpdate} onChange={(e) => toggleAutoUpdate(e.target.checked)}/>
       <label htmlFor="autoUpdate">Auto update synth voice</label><br/>
         
     </div>
   )
+
 }
 
 export default MatrixCenterColumn;
