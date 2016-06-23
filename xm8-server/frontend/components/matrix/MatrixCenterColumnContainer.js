@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import { getLinks } from './LinkFunctions';
 
 
 import MatrixCenterColumn from './MatrixCenterColumn';
@@ -15,7 +15,7 @@ const mapStateToProps = (state, ownProps) => {
   let shouldAutoUpdate = state.matrix.get('shouldAutoUpdate');
 
   return {
-    links: ownProps.links,
+    links: getLinks(nodes),
     nodes,
     shouldAutoUpdate,
     mode: state.matrix.get('mode'),

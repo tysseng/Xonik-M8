@@ -26,8 +26,7 @@ export default (app, ws) => {
   store.subscribe(
     () => {
       //console.log("Sending updated state to clients");
-      //console.log(JSON.stringify(store.getState()));
-
+      console.log(JSON.stringify(store.getState().nodes, null, 2));  
       tools.sendToAllClients(ws.getWss(root), null, JSON.stringify(store.getState()));
     }
   );

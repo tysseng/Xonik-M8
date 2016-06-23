@@ -159,7 +159,7 @@ const param = (state, action) => {
       return state.merge(getParam(action.paramId, paramTypes.map.LINK.id, newLinkParamValue, ''));
     case 'DELETE_NODE': 
       // check if deleted node is the value of this parameter
-      if(isLink(state.get('type')) && getFromNodeId(state) == action.nodeId){
+      if(isLink(state.get('type')) && getFromNodeId(state) === action.nodeId){
         return state.set('value', "");        
       }
       return state;
@@ -232,9 +232,8 @@ const nodes = (
       let nodeId = '' + nextAvailableNodeId;
       return state.set(nodeId, node(undefined, action));
     case 'DELETE_NODE':
-
       // check if deleted node is the value of any parameter of any node
-      _.each(state.toIndexedSeq().toArray(), (currentNode) => {  
+      _.each(state.toIndexedSeq().toArray(), (currentNode) => {
         state = state.updateIn([currentNode.get('id')], aNode => node(aNode, action));
       });
 

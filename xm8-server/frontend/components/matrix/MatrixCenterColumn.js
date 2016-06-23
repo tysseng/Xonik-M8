@@ -9,6 +9,7 @@ const MatrixCenterColumn = ({
   nodes, links, mode, selectedNodeId, selectedLinkId, shouldAutoUpdate, linkDialog, offsetX, offsetY,
   showFileDialog, toggleAutoUpdate, onNodeMove, onNodeClick, onNodeMoveEnded, onNodeDeleteClick, onLinkClick, onLinkDeleteClick, onCreateNewNode,
   setLinkFromNode, setLinkToNode, cancelLinkCreation, createLink, onNodeTypeChange}) => {
+
   return ( 
     <div>
 

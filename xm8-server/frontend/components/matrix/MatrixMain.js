@@ -10,10 +10,10 @@ const MatrixMain = ({links}) => {
         <MatrixLeftMenuContainer/>
       </div>
       <div className="rightcolumn">
-        <MatrixRightColumn links={links}/>        
+        <MatrixRightColumn/>        
       </div>
       <div className="centercolumn">
-        <MatrixCenterColumnContainer links={links}/>
+        <MatrixCenterColumnContainer/>
       </div>
     </div>
   ) 

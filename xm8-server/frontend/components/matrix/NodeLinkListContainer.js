@@ -1,23 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import { getLinks } from './LinkFunctions';
 
 
 import NodeLinkList from './NodeLinkList';
 import { selectNode, selectLink, deleteNode, deleteLink } from '../../../shared/state/actions';
-import paramTypes from '../../../shared/matrix/ParameterTypes.js';
 
-const isLink = (type) => {
-  return type === paramTypes.map.LINK.id;
-}
-
-// TODO: This should be done higher up in the tree to prevent doing it twice!
 const mapStateToProps = (state, ownProps) => {
-  //let nodes = state.nodes.toIndexedSeq().toJS();
   let nodes = state.nodes.toJS();
 
   return {
-    links: ownProps.links,  
+    links: getLinks(nodes),
     nodes,
     selectedNodeId: state.matrix.get('selectedNode'),
     selectedLinkId: state.matrix.get('selectedLink')
