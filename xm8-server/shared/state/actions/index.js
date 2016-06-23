@@ -189,3 +189,13 @@ export const matrixRedo = () => {
     type: 'MATRIX_REDO'
   }
 }
+
+// this action is not explicitly treated by the reducer, but it adds an entry in the
+// undo history.
+export const matrixUndoPointPositionChanged = () => {
+  return {
+    type: 'MATRIX_SET_UNDO_POINT',
+    isUndoable: true,
+    undoDescription: 'Move node'
+  }
+}
