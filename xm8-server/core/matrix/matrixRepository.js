@@ -7,6 +7,7 @@ import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
 
+import {undo, redo} from '../../shared/state/undobuffer.js';
 import {loadNodesFromFile, setLoadedPatchFileDetails} from '../../shared/state/actions';
 import {filetypes} from '../../shared/FileTypes';
 import {saveFile, loadFile} from '../persistence/fileRepo';

@@ -1,6 +1,6 @@
 import MenuItem from '../framework/MenuItem';
 
-const MatrixLeftMenu = ({mode, selectedNodeId, selectedLinkId, onPatchSave, onPatchLoad, selectedFileDetails, onDelete, onCreate, onModeChange, onUpdateVoice, shouldAutoUpdate}) => {    
+const MatrixLeftMenu = ({mode, selectedNodeId, selectedLinkId, onPatchSave, onPatchLoad, selectedFileDetails, onDelete, onCreate, onModeChange, onUpdateVoice, onUndo, onRedo, shouldAutoUpdate}) => {    
   
   //<button onClick={() => onPatchSaveAs(selectedFileDetails)}>Save as</button>
   let linkButtonMode = (mode === 'create_link' ? 'default' : 'create_link');
@@ -13,8 +13,8 @@ const MatrixLeftMenu = ({mode, selectedNodeId, selectedLinkId, onPatchSave, onPa
         <MenuItem label="Delete" icon="garbage.svg" onClick={() => onDelete(selectedNodeId, selectedLinkId)}/>
       </div>
       <div className="leftMenu">
-        <MenuItem label="Undo" icon="circular-arrow-1.svg" onClick={() => console.log("undo")}/>
-        <MenuItem label="Redo" icon="circular-arrow.svg" onClick={() => console.log("redo")}/>
+        <MenuItem label="Undo" icon="circular-arrow-1.svg" onClick={onUndo}/>
+        <MenuItem label="Redo" icon="circular-arrow.svg" onClick={onRedo}/>
       </div>
       <div className="leftMenu">
         <MenuItem label="Update voice" icon="reload-1.svg" onClick={onUpdateVoice} disabled={shouldAutoUpdate}/>

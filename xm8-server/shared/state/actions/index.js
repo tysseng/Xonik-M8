@@ -56,7 +56,9 @@ export const selectLink = (linkId) => {
 export const createNewNode = () => {
   return {
     type: 'NEW_NODE',
-    target: 'SERVER'
+    target: 'SERVER',
+    isUndoable: true,
+    undoDescription: 'Create new node'
   }
 }
 
@@ -64,7 +66,9 @@ export const deleteNode = (nodeId) => {
   return {
     type: 'DELETE_NODE',
     nodeId: nodeId,
-    target: 'BOTH'
+    target: 'BOTH',
+    isUndoable: true,
+    undoDescription: 'Delete node'
   }
 }
 
@@ -82,7 +86,9 @@ export const changeNodeType = (nodeId, typeId) => {
     type: 'CHANGE_NODE_TYPE',
     nodeId: nodeId,
     typeId: typeId,
-    target: 'SERVER'
+    target: 'SERVER',    
+    isUndoable: true,
+    undoDescription: 'Change node type'
   }
 }
 
@@ -92,7 +98,9 @@ export const changeNodeParamType = (nodeId, paramId, paramType) => {
     nodeId: nodeId,
     paramId: paramId,
     paramType: paramType,
-    target: 'SERVER'
+    target: 'SERVER',    
+    isUndoable: true,
+    undoDescription: 'Change parameter type'
   }
 }
 
@@ -103,7 +111,9 @@ export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue) =>
     paramId: paramId,
     paramType: paramType,
     paramValue: paramValue,
-    target: 'SERVER'
+    target: 'SERVER',    
+    isUndoable: true,
+    undoDescription: 'Change parameter value'
   }
 }
 
@@ -113,7 +123,9 @@ export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
     nodeId: nodeId,
     paramId: paramId,
     paramUnit: paramUnit,
-    target: 'SERVER'
+    target: 'SERVER',    
+    isUndoable: true,
+    undoDescription: 'Change unit'
   }
 }
 
@@ -124,7 +136,9 @@ export const createNewLink = (fromNodeId, toNodeId, toParamId) => {
     paramValue: fromNodeId,
     nodeId: toNodeId,
     paramId: toParamId,
-    target: 'BOTH'
+    target: 'BOTH',    
+    isUndoable: true,
+    undoDescription: 'Link nodes'
   }
 }
 
@@ -144,7 +158,9 @@ export const toggleLinkNameInGraph = (toNodeId, toParamId, visible) => {
     toNodeId, 
     toParamId,
     visible,
-    target: 'SERVER'
+    target: 'SERVER',    
+    isUndoable: true,
+    undoDescription: 'Toggle link name visibility'
   }
 }
 
@@ -156,6 +172,20 @@ export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
     fromNodeId, 
     toNodeId, 
     toParamId,
-    target: 'BOTH'
+    target: 'BOTH',    
+    isUndoable: true,
+    undoDescription: 'Delete link'
+  }
+}
+
+export const matrixUndo = () => {
+  return {
+    type: 'MATRIX_UNDO'
+  }
+}
+
+export const matrixRedo = () => {
+  return {
+    type: 'MATRIX_REDO'
   }
 }

@@ -1,8 +1,10 @@
+import isInteger from 'is-integer';
+
 let undobuffer = {
   groups: {}
 }
 
-export const push = (groupId, description, state) => {
+export const pushToUndobuffer = (groupId, description, state) => {
   if(!undobuffer.groups[groupId]){
     undobuffer.groups[groupId] = {
       position: -1,
@@ -12,46 +14,55 @@ export const push = (groupId, description, state) => {
 
   let group = undobuffer.groups[groupId];
 
+  group.position += 1;
+
   // trunkate buffer, a new push should make
   // redo impossible.
+  group.contents.length = group.position;
 
-  group.contents.length = group.position+1;
-
-  group.contents.push({
+  let undoElement = {
     description,
     state
-  });
+  };
+
+  console.log("pushing state to pos " + group.position, undoElement);
+
+  group.contents.push(undoElement);
 
 }
 
-export const undo = (groupId, undoToPosition) => {
+export const undo = (groupId, state, undoToPosition) => {
 
   let group = undobuffer.groups[groupId];
 
-  if(position > -1){
-    if(Number.isInteger(undoToPosition)){
-      group.position = undoToPosition;
-      return group.contents[undoToPosition];
-    } else {
-      return group[position--];
-    }
+  if(!isInteger(undoToPosition)){      
+    undoToPosition = group.position - 1;
   }
+
+  if(undoToPosition > -1){
+    group.position = undoToPosition;
+    console.log(" undoing to position " + group.position, group.contents[group.position]);
+    return group.contents[group.position].state;
+  }
+
+  return state;
 }
 
-export const redo = (groupId, redoToPosition) => {
+export const redo = (groupId, state, redoToPosition) => {
 
   let group = undobuffer.groups[groupId];
 
-    if(Number.isInteger(redoToPosition)){
-      if(redoToPosition < group.contents.length ){
-      group.position = redoToPosition;
-      return group.contents[redoToPosition];
-    } else {
-      if(position <= group.contents.length - 1){
-        return group[position++];
-      }
-    }
+  if(!isInteger(redoToPosition)){
+    redoToPosition = group.position + 1;
   }
+
+  if(redoToPosition < group.contents.length ){
+    group.position = redoToPosition;
+    console.log(" redoing to position " + group.position, group.contents[group.position]);
+    return group.contents[group.position].state;
+  } 
+  
+  return state;
 }
 
 export const buffer = (groupId) => {

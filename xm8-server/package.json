@@ -26,6 +26,7 @@
     "express": "^4.13.4",
     "express-ws": "^0.2.6",
     "immutable": "^3.8.1",
+    "is-integer": "^1.0.6",
     "jsonfile": "^2.3.0",
     "lodash": "^4.12.0",
     "node-sass": "^3.7.0",
