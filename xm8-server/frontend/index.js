@@ -9,7 +9,8 @@ import remoteActionMiddleware from './remoteActionMiddleware';
 import initWsclientForState from './wsclient-state.js';
 import guiReducers from './reducers';
 
-import App from './components/App';
+import MainMenu from './components/framework/MainMenu';
+import MatrixPage from './components/matrix/MatrixPageContainer';
 import NotFound from './components/NotFound';
 import Network from './components/Network';
 
@@ -31,16 +32,7 @@ const AppWrapper = React.createClass({
   render() {
     return (
       <div>
-        {/* change the <a>s to <Link>s */}
-        <ul>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/inbox">Inbox</Link></li>
-        </ul>
-
-        {/*
-          next we replace `<Child>` with `this.props.children`
-          the router will figure out the children for us
-        */}
+        <MainMenu/>
         {this.props.children}
       </div>
     )
@@ -51,9 +43,14 @@ render(
   <Provider store={store}>
     <Router history={browserHistory}>      
       <Route path="/" component={AppWrapper}>
-        <IndexRoute component={App}/>
-        <Route path="about" component={App}/>
-        <Route path="inbox" component={NotFound}/>
+        <IndexRoute component={MatrixPage}/>
+        <Route path="home" component={MatrixPage}/>
+        <Route path="patches" component={MatrixPage}/>
+        <Route path="control" component={NotFound}/>
+        <Route path="files" component={NotFound}/>
+        <Route path="settings" component={NotFound}/>
+        <Route path="network" component={NotFound}/>
+        <Route path="trash" component={NotFound}/>
       </Route>    
     </Router>
   </Provider>,

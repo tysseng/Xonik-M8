@@ -1,16 +1,31 @@
 import React from 'react'
 import MenuItem from './MenuItem'
+import { Link } from 'react-router';
 
 const MainMenu = () => {    
   return (
     <div className="mainmenu">
-      <MenuItem label="Home" icon="house.svg" onClick={() => console.log("Home")}/>
-      <MenuItem label="Patches" icon="network.svg" onClick={() => console.log("Patches")} selected={true}/>
-      <MenuItem label="Control" icon="settings.svg" onClick={() => console.log("Control")}/>
-      <MenuItem label="Files" icon="folder.svg" onClick={() => console.log("Files")}/>
-      <MenuItem label="Settings" icon="settings-1.svg" onClick={() => console.log("Settings")}/>
-      <MenuItem label="Network" icon="wifi-2.svg" onClick={() => console.log("Network")}/>
-      <MenuItem label="Trash" icon="garbage.svg" onClick={() => console.log("Trash")}/>
+      <Link to="/home" activeClassName="selected">
+        <MenuItem label="Home" icon="house.svg" onClick={() => console.log("Home")}/>
+      </Link> 
+      <Link to="/patches" activeClassName="selected">
+        <MenuItem label="Patches" icon="network.svg" onClick={() => console.log("Patches")} selected={true}/>
+      </Link>
+      <Link to="/control" activeClassName="selected">
+        <MenuItem label="Control" icon="settings.svg" onClick={() => console.log("Control")}/>
+      </Link>
+      <Link to="/files" activeClassName="selected">
+        <MenuItem label="Files" icon="folder.svg" onClick={() => console.log("Files")}/>
+      </Link>
+      <Link to="/settings" activeClassName="selected">
+        <MenuItem label="Settings" icon="settings-1.svg" onClick={() => console.log("Settings")}/>
+      </Link>
+      <Link to="/network" activeClassName="selected">
+        <MenuItem label="Network" icon="wifi-2.svg" onClick={() => console.log("Network")}/>
+      </Link>
+      <Link to="/trash" activeClassName="selected">
+        <MenuItem label="Trash" icon="garbage.svg" onClick={() => console.log("Trash")}/>
+      </Link>
     </div>
   ) 
 }

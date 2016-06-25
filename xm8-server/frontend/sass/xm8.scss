@@ -165,6 +165,11 @@ label.small {
   font-size: 10px;
 }
 
+// We'll do our own link colors, thank you very much.
+a {
+  color: inherit;
+}
+
 @import 'grid';
 @import 'filedialog/filedialog';
 @import 'mainmenu';

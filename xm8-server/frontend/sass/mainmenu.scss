@@ -41,17 +41,9 @@ http://www.flaticon.com/packs/multimedia-set
     height: 30px;
     width: 30px;
     filter: url(#drop-shadow);
-    &.selected{
-      fill: #0f0;
-      filter: url(#glow);
-    }
   }
 
   .name{
-    &.selected{
-      text-shadow: 0 0 3px #0f0;
-      color: #0f0;
-    }
     font-size: 16px;
     padding-top: 1px;
   }
@@ -66,6 +58,17 @@ http://www.flaticon.com/packs/multimedia-set
   }  
 }
 
+// when enclosing link is selected
+.selected {
+  .image{
+    fill: #0f0;
+    filter: url(#glow);
+  } 
+  .name{
+    color: #0f0;
+    text-shadow: 0 0 3px #0f0;
+  }  
+}
 
 
 .leftcolumn{

@@ -1,11 +1,13 @@
+import { Link } from 'react-router';
+
 const MenuItem = ({label, icon, onClick, selected, target = "Capa_1"}) => {
 
   let svgClassName = "image";
-  let labelClassName = "name";
+  let labelClassName = "name";/*
   if(selected){
     svgClassName += " selected";
     labelClassName += " selected";
-  }
+  }*/
 
   return (
     <span className="menuicon">
