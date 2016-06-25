@@ -43,7 +43,7 @@ app.use(express.static('web/static'));
 // start page
 app.get('/', function (req, res) {
   console.log("Redirecting to start page");
-  res.redirect("/xm8-gui.html");
+  res.redirect("/app");
 });
 
 //web socket routes
