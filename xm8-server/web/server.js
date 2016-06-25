@@ -40,12 +40,6 @@ app.use(
 // static files location
 app.use(express.static('web/static'));
 
-// start page
-app.get('/', function (req, res) {
-  console.log("Redirecting to start page");
-  res.redirect("/app");
-});
-
 //web socket routes
 stateRoute(app, ws);
 //controllerRoute(app, ws);
