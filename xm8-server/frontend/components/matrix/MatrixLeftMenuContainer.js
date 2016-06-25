@@ -7,7 +7,7 @@ import { toggleMode } from '../../../shared/state/actions/matrixgui';
 
 const forceUpdate = () => {
   $.ajax({
-    url: '/matrix/publish',
+    url: '/api/matrix/publish',
     type: 'PUT',
     success: function(response) {
       console.log(response);

@@ -6,7 +6,7 @@ import {subscribe} from '../../shared/state/redux-subscribe.js';
 // receive actions and send state
 export default (app, ws) => {
 
-  var root = "/state";
+  var root = "/api/state";
 
   const sendPartialState = change => {
       console.log(JSON.stringify(change.next, null, 2));  

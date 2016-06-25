@@ -11,6 +11,8 @@ import express from 'express';
 import express_ws from 'express-ws';
 import bodyParser from 'body-parser';
 import sass from 'node-sass-middleware';
+import path from 'path';
+
 
 //import wifiRoutes from './routes/wifi';
 import matrixRoutes from './routes/matrix';
@@ -44,9 +46,14 @@ app.use(express.static('web/static'));
 stateRoute(app, ws);
 //controllerRoute(app, ws);
 
-//app.use('/wifi', wifiRoutes);
-app.use('/matrix', matrixRoutes);
-app.use('/voice', voiceRoutes);
+//app.use('/app/wifi', wifiRoutes);
+app.use('/api/matrix', matrixRoutes);
+app.use('/api/voice', voiceRoutes);
+
+// handle every other route with index.html, this lets react do the routing
+app.get('*', function (request, response){
+  response.sendFile(path.resolve(__dirname, 'static', 'index.html'))
+})
 
 // Capture all requests not yet handled and redirect them to the captive portal
 // page as they may origin from wifi logon.

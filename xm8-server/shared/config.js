@@ -15,8 +15,8 @@ let config = {
   frontend: {
     serverAddr: 'ws://10.0.1.123:8001',
     endpoints: {
-      controllers: '/controller',
-      state: '/state'
+      controllers: '/api/controller',
+      state: '/api/state'
     }
   },  
   spi: {
