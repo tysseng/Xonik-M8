@@ -3,7 +3,7 @@ import MatrixLeftMenuContainer from './MatrixLeftMenuContainer';
 import MatrixRightColumn from './MatrixRightColumn';
 import MatrixCenterColumnContainer from './MatrixCenterColumnContainer';
 
-const MatrixMain = ({links}) => {    
+const MatrixMain = () => {    
   return (  
     <div>
       <div className="leftcolumn">

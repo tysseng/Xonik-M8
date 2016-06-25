@@ -10,9 +10,17 @@ import initWsclientForState from './wsclient-state.js';
 import guiReducers from './reducers';
 
 import MainMenu from './components/framework/MainMenu';
+
+import HomePage from './components/home/HomePage';
 import MatrixPage from './components/matrix/MatrixPageContainer';
+import ControlPage from './components/control/ControlPage';
+import FilesPage from './components/files/FilesPage';
+import SettingsPage from './components/settings/SettingsPage';
+import NetworkPage from './components/network/NetworkPage';
+import TrashPage from './components/trash/TrashPage';
+
+
 import NotFound from './components/NotFound';
-import Network from './components/Network';
 
 import ws from './wsclient-state.js';
 
@@ -44,13 +52,14 @@ render(
     <Router history={browserHistory}>      
       <Route path="/" component={AppWrapper}>
         <IndexRoute component={MatrixPage}/>
-        <Route path="home" component={MatrixPage}/>
+        <Route path="home" component={HomePage}/>
         <Route path="patches" component={MatrixPage}/>
-        <Route path="control" component={NotFound}/>
-        <Route path="files" component={NotFound}/>
-        <Route path="settings" component={NotFound}/>
-        <Route path="network" component={NotFound}/>
-        <Route path="trash" component={NotFound}/>
+        <Route path="control" component={ControlPage}/>
+        <Route path="files" component={FilesPage}/>
+        <Route path="settings" component={SettingsPage}/>
+        <Route path="network" component={NetworkPage}/>
+        <Route path="trash" component={TrashPage}/>
+        <Route path="*" component={NotFound}/>        
       </Route>    
     </Router>
   </Provider>,
