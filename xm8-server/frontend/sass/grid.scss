@@ -5,6 +5,12 @@
 .centercolumn{
   float:none;
   overflow: hidden;
+
+  ::-webkit-scrollbar-corner,
+  ::-webkit-scrollbar
+  { 
+    background: transparent;  
+  }  
 }
 .rightcolumn{
   float: right;

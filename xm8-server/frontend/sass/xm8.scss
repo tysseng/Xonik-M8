@@ -147,7 +147,12 @@ input:focus {
 ::-webkit-scrollbar {
     height: 12px;
     width: 12px;
-    background: transparent;
+}
+
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar
+{ 
+  background: url('/img/transparent_grainy_background.png'), #313135;  
 }
 
 ::-webkit-scrollbar-thumb {
