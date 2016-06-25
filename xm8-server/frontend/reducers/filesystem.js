@@ -16,7 +16,10 @@ const filesystem = (
   action) => {
   switch (action.type){
     case 'SET_STATE':
-      return state.merge(action.state.filesystem);
+      if(action.state.filesystem){
+        return state.merge(action.state.filesystem);
+      }
+      return state;      
     default: 
       return state;
   }

@@ -5,7 +5,6 @@ function sendToAllClients(wss, source, message){
       if(client === source){
         console.log("Not sending message back to its origin");
       } else {
-        console.log("Sending message to gui " + client);
         client.send(message);        
       }
     } catch (ex){

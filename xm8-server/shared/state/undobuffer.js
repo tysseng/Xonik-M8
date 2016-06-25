@@ -25,8 +25,6 @@ export const pushToUndobuffer = (groupId, description, state) => {
     state
   };
 
-  console.log("pushing state to pos " + group.position, undoElement);
-
   group.contents.push(undoElement);
 
 }
@@ -41,7 +39,6 @@ export const undo = (groupId, state, undoToPosition) => {
 
   if(undoToPosition > -1){
     group.position = undoToPosition;
-    console.log(" undoing to position " + group.position, group.contents[group.position]);
     return group.contents[group.position].state;
   }
 

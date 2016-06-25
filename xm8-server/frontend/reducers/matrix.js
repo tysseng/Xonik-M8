@@ -54,7 +54,10 @@ const matrix = (
     case 'NEW_LINK':
       return closeLinkDialog(state);
     case 'SET_STATE':
-      return state.merge(action.state.matrix);
+      if(action.state.matrix){
+        return state.merge(action.state.matrix);
+      }
+      return state;      
     default: 
       return state;
   }

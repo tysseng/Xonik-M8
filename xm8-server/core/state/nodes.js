@@ -209,7 +209,6 @@ const node = (state, action) => {
       }    
       return validateNode(state);  
     case 'NODE_MOVE':    
-      console.log(action)
       return state.setIn(['vis','x'], action.x).setIn(['vis','y'], action.y);  
     default: 
       return state;
@@ -283,7 +282,6 @@ const undoWrapper = (state, action) => {
   if(action.isUndoable){
     pushToUndobuffer("matrix", action.undoDescription, state);
   }
-  console.log(state);
   return state;
 }
 

@@ -51,7 +51,7 @@ function subscribeMiddleware ({dispatch, getState}) {
           const next = nextState[path];
 
           if (prev !== next) {
-            _.each(subscriptions[path], fn => dispatch(fn({path, prev, next})));
+            _.each(subscriptions[path], callback  => callback({path, prev, next}));
           }
         });
 
