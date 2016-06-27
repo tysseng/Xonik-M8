@@ -1,0 +1,94 @@
+/* Vertical range slider. Slider is scalable using font size */
+.range{
+
+  $input-h: 2em;
+
+  $track-h: .5em;
+
+  $thumb-d: 1.5em;
+
+  @mixin track() {
+    border: none;
+    height: $track-h;
+    border-radius: $track-h/2;
+    box-shadow: 
+      inset -.125em .125em .125em #1c1c1c, 
+      inset 1px -1px 1px #4a4a4a;
+    background: #23292f;
+  }
+
+  @mixin thumb() {
+    border: none;
+    width: $thumb-d; height: $thumb-d;
+    border-radius: 50%;
+    background-size: 35% 65%, 65% 65%, 100% 100%, 65% 65%;
+    background: 
+      radial-gradient(#{at 80% 50%}, #777, rgba(#777, 0) 70%) no-repeat 100% 50%, 
+      radial-gradient(#{at 50% 50%}, #777, rgba(#777, 0) 70%) no-repeat -65% 90%, 
+      radial-gradient(rgba(#fff, 0) 32%, #fff 35%), 
+      linear-gradient(90deg, #f0984d, #bf7145) no-repeat 50% 50%;    
+  }
+
+  display: inline-block;
+  font: 1em/2 verdana, sans-serif;
+  text-align: center;
+  
+  &.horizontal{
+    /* Bounding box size, includes indicator lines width */
+    width: 15em;
+    height: 2em;
+
+    /* Indicator lines */
+    background: linear-gradient(-90deg, 
+      #222 1px, #555 1px, #555 2px, transparent 2px) 
+      (15em/2 + .125em/2) 0;
+    background-size: 1.75em 1px; 
+  }
+
+  &.vertical {
+    /* Bounding box size, includes indicator lines width */
+    width: 2em;
+    height: 15em;
+
+    /* Indicator lines */
+    background: linear-gradient(180deg, 
+      #222 1px, #555 1px, #555 2px, transparent 2px) 
+      0 (15em/2 + .125em/2);
+    background-size: 1px 1.75em;  
+
+    /* Rotate and reposition element within wrapping div */
+    input[type='range']{      
+      transform: rotate(270deg) translateY(-12.5em) translateX(1.6em);
+      transform-origin: bottom right;      
+    }   
+  }
+
+  input[type='range']{
+    /* Size must be opposite of wrapping div size as element is rotated */
+    width: 14.5em;
+    height: 2em;
+
+    /* Disable default range element styling */
+    &, 
+    &::-webkit-slider-runnable-track, 
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+    }
+
+    /* add new range element styling */
+    &::-webkit-slider-runnable-track {
+      @include track();
+    }
+    
+    &::-webkit-slider-thumb {
+      margin-top: ($track-h - $thumb-d)/2;
+      @include thumb();
+    }  
+
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;    
+  }  
+}
