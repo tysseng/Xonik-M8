@@ -2,7 +2,7 @@ import ControlCenterColumnContainer from './ControlCenterColumnContainer';
 
 const ControlPage = () => {    
   return (  
-    <div>
+    <div id="controlPage">
       <div className="leftcolumn">
         Left
       </div>

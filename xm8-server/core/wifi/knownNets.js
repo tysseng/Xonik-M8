@@ -1,8 +1,9 @@
 var config = require('../../shared/config.js');
 var jsonfile = require('jsonfile');
+import fs from 'fs';
 var _ = require('lodash');
 var utils = require('./utils.js');
-
+  
 var knownNets = [];
 
 function get(ssid){
@@ -70,8 +71,24 @@ function save(){
   });
 }
 
+const fileExists = (filepath) => {
+  try{
+    return fs.statSync(filepath).isFile();
+  } catch (err){
+    if(err.code == 'ENOENT'){
+      return false;
+    } else {
+      throw err;
+    }
+  }
+}
+
 function load(success){
   console.log("Going to load persisted networks");
+  if(!fileExists(config.wifi.files.persistedNets)){
+    console.log("No persisted networks found");
+    return;
+  }
   jsonfile.readFile(config.wifi.files.persistedNets, function(err, obj){
     if(err){
       console.log("Could not load persisted networks");

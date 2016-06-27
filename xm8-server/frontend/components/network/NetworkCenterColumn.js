@@ -1,13 +1,37 @@
 import React from 'react';
 
-const NetworkCenterColumn = () => {
+const NetworkCenterColumn = ({currentNetwork, builtInNetwork, knownNetworks, availableNetworks}) => {
 
   return ( 
     <div>
-      <div>Current network</div>
-      <div>Build-in network</div>
-      <div>Known networks</div>
-      <div>Available networks</div>  
+      <div>
+        <h2>Current network</h2>
+        <div>{currentNetwork.no}</div>
+      </div>
+      <div>
+        <h2>Built-in network</h2>
+        <div>{builtInNetwork.no}</div>
+      </div>
+      <div>
+        <h2>Known networks</h2>
+        <div>
+        {
+          knownNetworks.map(net => {
+            return <div>A network</div>;
+          })
+        }
+        </div>
+      </div>       
+      <div>
+        <h2>Available networks</h2>
+        <div>
+        {
+          availableNetworks.map(net => {
+            return <div>A network</div>
+          })
+        }
+        </div>
+      </div>      
             
     </div>
   )

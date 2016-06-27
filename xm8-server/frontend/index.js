@@ -47,6 +47,9 @@ const AppWrapper = React.createClass({
   }
 })
 
+//BrowserHistory.listen(location => dispatch(routeLocationDidUpdate(location)));
+//http://stackoverflow.com/questions/31268740/firing-redux-actions-in-response-to-route-transitions-in-react-router
+
 render(
   <Provider store={store}>
     <Router history={browserHistory}>      
