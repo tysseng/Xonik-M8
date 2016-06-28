@@ -1,38 +1,77 @@
+// TODO: Controllers should have default send/receive midi messages (?)
+// TODO: Send panel cc should be toggleable.
+
 let panelControllers = {
-  VCO_1_PITCH: {
+  OSC_1_PITCH: {
     id: '0',
-    defaultName: "VCO 1 pitch",
-    defaultShortName: 'pitch',
+    name: {
+      full: "Osc 1 pitch",
+      short: 'pitch'
+    },
     type: 'POT'
   },
-  VCO_2_PITCH: {
+  OSC_1_SQUARE: {
+    id: '0',
+    name: {
+      full: "Osc 1 square",
+      short: 'square'
+    },
+    type: 'POT'
+  },
+  OSC_1_SAW: {
+    id: '0',
+    name: {
+      full: "Osc 1 saw",
+      short: 'saw'
+    },
+    type: 'POT'
+  },
+  OSC_1_TRIANGLE: {
+    id: '0',
+    name: {
+      full: "Osc 1 triangle",
+      short: 'triangle'
+    },
+    type: 'POT'
+  },    
+  OSC_2_PITCH: {
     id: '1',
-    defaultName: "VCO 2 pitch",
-    defaultShortName: 'pitch',
+    name: {
+      full: "Osc 1 pitch",
+      short: 'pitch'
+    },
     type: 'POT'    
   },  
-  VCO_3_PITCH: {
+  OSC_3_PITCH: {
     id: '2', 
-    defaultName: "VCO 3 pitch",
-    defaultShortName: 'pitch',
+    name: {
+      full: "Osc 1 pitch",
+      short: 'pitch'
+    },
     type: 'POT'    
   },  
   FILTER_1_CUTOFF: {
     id: '3', 
-    defaultName: "Filter 1 cut-off",
-    defaultShortName: 'cut-off',
+    name: {
+      full: "Filter 1 cut-off",
+      short: 'cut-off'
+    },
     type: 'POT'    
   },
   FILTER_1_RESONANCE: {
     id: '4', 
-    defaultName: "Filter 1 resonance",
-    defaultShortName: 'resonance',
+    name: {
+      full: "Filter 1 resonance",
+      short: 'resonance'
+    },
     type: 'POT'    
   },
   FILTER_1_SLOPE: {
     id: '5', 
-    defaultName: "Filter 1 slope",
-    defaultShortName: 'slope',
+    name: {
+      full: "Filter 1 slope",
+      short: 'slope'
+    },    
     type: 'SWITCH',
     options: [
       {id: '0', label: '12 dB'},
@@ -41,45 +80,81 @@ let panelControllers = {
   },
   FILTER_1_MODE: {
     id: '6', 
-    defaultName: "Filter 1 mode",
-    defaultShortName: 'mode',
+    name: {
+      full: "Filter 1 mode",
+      short: 'mode'
+    },       
     type: 'SWITCH',
     options: [
       {id: '0', label: 'HP'},
       {id: '1', label: 'BP'},
       {id: '1', label: 'LP'}
     ]
-  } 
+  },
+  AMP_ENV_ATTACK: {
+    id: '4', 
+    name: {
+      full: "Amp attack",
+      short: 'attack'
+    },
+    type: 'POT'    
+  },
+  AMP_ENV_DECAY: {
+    id: '4', 
+    name: {
+      full: "Amp decay",
+      short: 'decay'
+    },
+    type: 'POT'    
+  },
+  AMP_ENV_SUSTAIN: {
+    id: '4', 
+    name: {
+      full: "Amp sustain",
+      short: 'sustain'
+    },
+    type: 'POT'    
+  },
+  AMP_ENV_RELEASE: {
+    id: '4', 
+    name: {
+      full: "Amp release",
+      short: 'release'
+    },
+    type: 'POT'    
+  },
+  FILTER_1_ENV_ATTACK: {
+    id: '4', 
+    name: {
+      full: "Filter 1 attack",
+      short: 'attack'
+    },
+    type: 'POT'    
+  },
+  FILTER_1_ENV_DECAY: {
+    id: '4', 
+    name: {
+      full: "Filter 1 decay",
+      short: 'decay'
+    },
+    type: 'POT'    
+  },
+  FILTER_1_ENV_SUSTAIN: {
+    id: '4', 
+    name: {
+      full: "Filter 1 sustain",
+      short: 'sustain'
+    },
+    type: 'POT'    
+  },
+  FILTER_1_ENV_RELEASE: {
+    id: '4', 
+    name: {
+      full: "Filter 1 release",
+      short: 'release'
+    },
+    type: 'POT'    
+  }  
 };
 
-let controllerGroups = {
-  VCO1: {
-    name: 'VCO 1',
-    controllers: [
-      panelControllers.VCO_1_PITCH    
-    ]
-  },
-  VCO2: {
-    name: 'VCO 2',
-    controllers: [
-      panelControllers.VCO_2_PITCH   
-    ]
-  },
-  VCO3: {
-    name: 'VCO 3',
-    controllers: [
-      panelControllers.VCO_3_PITCH
-    ]
-  },
-  VCF1: {
-    name: 'VCF 1',
-    controllers: [
-      panelControllers.FILTER_1_CUTOFF,
-      panelControllers.FILTER_1_RESONANCE,
-      panelControllers.FILTER_1_SLOPE,
-      panelControllers.FILTER_1_MODE
-    ]
-  }
-}
-
-export { panelControllers, controllerGroups };
+export { panelControllers };
