@@ -21,52 +21,62 @@
     border: none;
     width: $thumb-d; height: $thumb-d;
     border-radius: 50%;
-    background-size: 35% 65%, 65% 65%, 100% 100%, 65% 65%;
     background: 
       radial-gradient(#{at 80% 50%}, #777, rgba(#777, 0) 70%) no-repeat 100% 50%, 
       radial-gradient(#{at 50% 50%}, #777, rgba(#777, 0) 70%) no-repeat -65% 90%, 
       radial-gradient(rgba(#fff, 0) 32%, #fff 35%), 
-      linear-gradient(90deg, #f0984d, #bf7145) no-repeat 50% 50%;    
+      
+      linear-gradient(90deg, #99ff66, #99cc00) no-repeat 50% 50%;    
+      //linear-gradient(90deg, #f0984d, #bf7145) no-repeat 50% 50%;    
+    background-size: 35% 65%, 65% 65%, 100% 100%, 65% 65%;
   }
 
   display: inline-block;
   font: 1em/2 verdana, sans-serif;
   text-align: center;
   
-  &.horizontal{
+  .horizontal{
+
     /* Bounding box size, includes indicator lines width */
     width: 15em;
-    height: 2em;
+    height: 3em;
 
     /* Indicator lines */
     background: linear-gradient(-90deg, 
       #222 1px, #555 1px, #555 2px, transparent 2px) 
       (15em/2 + .125em/2) 0;
-    background-size: 1.75em 1px; 
+    background-size: 1.65em 1px; 
   }
 
-  &.vertical {
+  .vertical {
+    margin-left: 7px;
+    margin-right: 7px;
+
     /* Bounding box size, includes indicator lines width */
-    width: 2em;
+    width: 3em;
     height: 15em;
 
     /* Indicator lines */
     background: linear-gradient(180deg, 
       #222 1px, #555 1px, #555 2px, transparent 2px) 
-      0 (15em/2 + .125em/2);
-    background-size: 1px 1.75em;  
+      0 (15em/2 + .3em/2);
+    background-size: 1px 1.65em;  
 
     /* Rotate and reposition element within wrapping div */
     input[type='range']{      
-      transform: rotate(270deg) translateY(-12.5em) translateX(1.6em);
+      transform: rotate(270deg) translateY(-11.5em) translateX(2.6em);
       transform-origin: bottom right;      
     }   
   }
 
   input[type='range']{
+    &:focus{
+      outline: none;
+    }
+    
     /* Size must be opposite of wrapping div size as element is rotated */
     width: 14.5em;
-    height: 2em;
+    height: 3em;
 
     /* Disable default range element styling */
     &, 
@@ -91,4 +101,8 @@
     font: inherit;
     cursor: pointer;    
   }  
+
+  label {
+    font-size: 0.8em;
+  }
 }

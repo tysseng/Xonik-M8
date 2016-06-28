@@ -1,8 +1,17 @@
-@import 'verticalrange';
-@import 'horizontalrange';
+@import 'range';
 
 #controlPage{
   .centercolumn{
-    height: 500px;
+    height: 100%;
   }
+}
+
+.faderRow{
+  display: block;
+  margin-bottom: 10px;
+}
+
+.faderGroup{
+  display: inline;
+  margin-right: 30px;
 }
