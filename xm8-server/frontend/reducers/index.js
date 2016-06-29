@@ -5,6 +5,7 @@ import matrix from './matrix';
 import network from './network';
 import filesystem from './filesystem';
 import filedialog from './filedialog';
+import inputs from './inputs';
 
 const guiReducers = combineReducers({
   nodes,
@@ -12,7 +13,8 @@ const guiReducers = combineReducers({
   matrix,
   filedialog,
   filesystem,
-  network
+  network,
+  inputs
 });
 
 export default guiReducers;

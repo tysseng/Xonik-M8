@@ -76,8 +76,12 @@ let inputs = [
 // TODO: Keep controller values separate from controller definitions in state, to eliminate the need to traverse/deep update
 // state.
 
+// add a sort order key to be able to sort inputsById later
+let sortKey = 0;
+
 let inputsById = {};
 _.each(inputs, input => {
+  input.sortKey = sortKey++;
   inputsById[input.id] = input;
 });
 
@@ -85,25 +89,25 @@ let inputGroups = [
   {
     name: 'Oscillator 1',
     type: 'group',
-    children: [OSC_1_SQUARE, OSC_1_SAW, OSC_1_TRIANGLE]
+    children: [OSC_1_SQUARE.id, OSC_1_SAW.id, OSC_1_TRIANGLE.id]
   },  
   {
     name: 'Filter 1',
     type: 'group',
-    children: [FILTER_1_CUTOFF, FILTER_1_RESONANCE, FILTER_1_SLOPE, FILTER_1_RESONANCE]
+    children: [FILTER_1_CUTOFF.id, FILTER_1_RESONANCE.id, FILTER_1_SLOPE.id, FILTER_1_RESONANCE.id]
   },  
   {
     name: 'Amplifier envelope',
     type: 'group',
-    children: [AMP_ENV_ATTACK, AMP_ENV_DECAY, AMP_ENV_SUSTAIN, AMP_ENV_RELEASE]
+    children: [AMP_ENV_ATTACK.id, AMP_ENV_DECAY.id, AMP_ENV_SUSTAIN.id, AMP_ENV_RELEASE.id]
   },
   {
     name: 'Filter 1 envelope',
     type: 'group',
-    children: [FILTER_1_ENV_ATTACK, FILTER_1_ENV_DECAY, FILTER_1_ENV_SUSTAIN, FILTER_1_ENV_RELEASE]
+    children: [FILTER_1_ENV_ATTACK.id, FILTER_1_ENV_DECAY.id, FILTER_1_ENV_SUSTAIN.id, FILTER_1_ENV_RELEASE.id]
   }    
 ];
 
-export {inputsById, inputGroups}; 
+export {inputsById, inputGroups, inputs}; 
 
 export default inputs;

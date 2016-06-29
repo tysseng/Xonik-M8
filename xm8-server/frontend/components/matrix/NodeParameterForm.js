@@ -12,6 +12,7 @@ const NodeParameterForm = ({
   parameter,
   currentnode,
   nodes,
+  inputs,
   onValueChange, 
   onTypeChange,
   onUnitChange
@@ -28,7 +29,7 @@ const NodeParameterForm = ({
       body = "";
       break;
     case "input":
-      body = <InputLinkDropdown onInputLinkChange={(value) => onValueChange(value)} value={value}/>;
+      body = <InputLinkDropdown onInputLinkChange={(value) => onValueChange(value)} value={value} inputs={inputs}/>;
       break;
     case "output":
       body = <OutputLinkDropdown onOutputLinkChange={(value) => onValueChange(value)} value={value}/>;

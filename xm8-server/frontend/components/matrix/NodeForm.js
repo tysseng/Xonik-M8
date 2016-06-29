@@ -9,7 +9,7 @@ import MiniIcon from '../framework/MiniIcon';
 
 import nodeTypes from '../../../shared/matrix/NodeTypes.js';
 
-const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange, onCloseDialog }) => {
+const NodeFormComponent = ({ node, nodes, inputs, onNodeNameChange, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange, onCloseDialog }) => {
 
   if(!node){
     return null;
@@ -46,6 +46,7 @@ const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, on
               parameter={parameter}
               currentnode={node}
               nodes={nodes}
+              inputs={inputs}
               onTypeChange={(typeId) => onParameterTypeChange(node.id, paramId, typeId)}
               onValueChange={(value) => onParameterValueChange(node.id, paramId, parameter.type, value)}
               onUnitChange={(unit) => onParameterUnitChange(node.id, paramId, unit)}/> 
