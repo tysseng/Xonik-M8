@@ -1,38 +1,14 @@
 import React from 'react';
 import Fader from './Fader';
+import ControllerGroup from './ControllerGroup';
 
-const ControlCenterColumn = () => {
-
+const ControlCenterColumn = ({groups, inputs}) => {
   return ( 
     <div>
       <div>Controls</div>
-      <div className="faderRow">
-        <div className="faderGroup">
-          <Fader value={0} label='Attack'/>
-          <Fader value={10} label='Decay'/>
-          <Fader value={32} label='Sustain'/>        
-          <Fader value={20} label='Release'/>
-        </div>
-        <div className="faderGroup">
-          <Fader value={0} label='Attack'/>
-          <Fader value={10} label='Decay'/>
-          <Fader value={32} label='Sustain'/>        
-          <Fader value={20} label='Release'/>
-        </div>
-      </div>
-      <div className="faderRow">  
-        <div className="faderGroup">
-          <Fader value={0} label='Attack'/>
-          <Fader value={10} label='Decay'/>
-          <Fader value={32} label='Sustain'/>        
-          <Fader value={20} label='Release'/>
-        </div>
-        <div className="faderGroup">
-          <Fader value={0} label='Attack'/>
-          <Fader value={10} label='Decay'/>
-          <Fader value={32} label='Sustain'/>        
-          <Fader value={20} label='Release'/>
-        </div>
+      <div className="controllerRow">
+        <ControllerGroup group={groups.AMP_ENV} inputs={inputs}/>
+        <ControllerGroup group={groups.FILTER_1_ENV} inputs={inputs}/>
       </div>
     </div>
   )

@@ -3,8 +3,8 @@ import _ from 'lodash';
 
 const inputs = (
   state = Map({
-    byId: OrderedMap(),
-    groups: List()
+    byId: Map(),
+    groups: Map()
   }),
   action) => {
 

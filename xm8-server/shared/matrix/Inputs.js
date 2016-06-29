@@ -33,24 +33,24 @@ const getInput = (id, type, controller) => {
   }
 }
 
-let OSC_1_SQUARE = getInput('OSC_1_SQUARE', 'range', panelControllers.OSC_1_SQUARE);
-let OSC_1_SAW = getInput('OSC_1_SAW', 'range', panelControllers.OSC_1_SAW);
-let OSC_1_TRIANGLE = getInput('OSC_1_TRIANGLE', 'range', panelControllers.OSC_1_TRIANGLE);
+let OSC_1_SQUARE = getInput('OSC_1_SQUARE', 'vertical_range', panelControllers.OSC_1_SQUARE);
+let OSC_1_SAW = getInput('OSC_1_SAW', 'vertical_range', panelControllers.OSC_1_SAW);
+let OSC_1_TRIANGLE = getInput('OSC_1_TRIANGLE', 'vertical_range', panelControllers.OSC_1_TRIANGLE);
 
-let FILTER_1_CUTOFF = getInput('FILTER_1_CUTOFF', 'range', panelControllers.FILTER_1_CUTOFF);
-let FILTER_1_RESONANCE = getInput('FILTER_1_RESONANCE', 'range', panelControllers.FILTER_1_RESONANCE);
-let FILTER_1_SLOPE = getInput('FILTER_1_SLOPE', 'switch', panelControllers.FILTER_1_SLOPE);
-let FILTER_1_MODE = getInput('FILTER_1_MODE', 'switch', panelControllers.FILTER_1_MODE);
+let FILTER_1_CUTOFF = getInput('FILTER_1_CUTOFF', 'vertical_range', panelControllers.FILTER_1_CUTOFF);
+let FILTER_1_RESONANCE = getInput('FILTER_1_RESONANCE', 'vertical_range', panelControllers.FILTER_1_RESONANCE);
+let FILTER_1_SLOPE = getInput('FILTER_1_SLOPE', 'vertical_range', panelControllers.FILTER_1_SLOPE);
+let FILTER_1_MODE = getInput('FILTER_1_MODE', 'vertical_range', panelControllers.FILTER_1_MODE);
 
-let AMP_ENV_ATTACK = getInput('AMP_ENV_ATTACK', 'range', panelControllers.AMP_ENV_ATTACK);
-let AMP_ENV_DECAY = getInput('AMP_ENV_DECAY', 'range', panelControllers.AMP_ENV_DECAY);
-let AMP_ENV_SUSTAIN = getInput('AMP_ENV_SUSTAIN', 'range', panelControllers.AMP_ENV_SUSTAIN);
-let AMP_ENV_RELEASE = getInput('AMP_ENV_RELEASE', 'range', panelControllers.AMP_ENV_RELEASE);
+let AMP_ENV_ATTACK = getInput('AMP_ENV_ATTACK', 'vertical_range', panelControllers.AMP_ENV_ATTACK);
+let AMP_ENV_DECAY = getInput('AMP_ENV_DECAY', 'vertical_range', panelControllers.AMP_ENV_DECAY);
+let AMP_ENV_SUSTAIN = getInput('AMP_ENV_SUSTAIN', 'vertical_range', panelControllers.AMP_ENV_SUSTAIN);
+let AMP_ENV_RELEASE = getInput('AMP_ENV_RELEASE', 'vertical_range', panelControllers.AMP_ENV_RELEASE);
 
-let FILTER_1_ENV_ATTACK = getInput('FILTER_1_ENV_ATTACK', 'range', panelControllers.FILTER_1_ENV_ATTACK);
-let FILTER_1_ENV_DECAY = getInput('FILTER_1_ENV_DECAY', 'range', panelControllers.FILTER_1_ENV_DECAY);
-let FILTER_1_ENV_SUSTAIN = getInput('FILTER_1_ENV_SUSTAIN', 'range', panelControllers.FILTER_1_ENV_SUSTAIN);
-let FILTER_1_ENV_RELEASE = getInput('FILTER_1_ENV_RELEASE', 'range', panelControllers.FILTER_1_ENV_RELEASE);
+let FILTER_1_ENV_ATTACK = getInput('FILTER_1_ENV_ATTACK', 'vertical_range', panelControllers.FILTER_1_ENV_ATTACK);
+let FILTER_1_ENV_DECAY = getInput('FILTER_1_ENV_DECAY', 'vertical_range', panelControllers.FILTER_1_ENV_DECAY);
+let FILTER_1_ENV_SUSTAIN = getInput('FILTER_1_ENV_SUSTAIN', 'vertical_range', panelControllers.FILTER_1_ENV_SUSTAIN);
+let FILTER_1_ENV_RELEASE = getInput('FILTER_1_ENV_RELEASE', 'vertical_range', panelControllers.FILTER_1_ENV_RELEASE);
 
 
 let inputs = [
@@ -87,27 +87,38 @@ _.each(inputs, input => {
 
 let inputGroups = [  
   {
+    id: 'OSC_1',
     name: 'Oscillator 1',
     type: 'group',
     children: [OSC_1_SQUARE.id, OSC_1_SAW.id, OSC_1_TRIANGLE.id]
   },  
   {
+    id: 'FILTER_1',
     name: 'Filter 1',
     type: 'group',
     children: [FILTER_1_CUTOFF.id, FILTER_1_RESONANCE.id, FILTER_1_SLOPE.id, FILTER_1_RESONANCE.id]
   },  
   {
+    id: 'AMP_ENV',
     name: 'Amplifier envelope',
     type: 'group',
     children: [AMP_ENV_ATTACK.id, AMP_ENV_DECAY.id, AMP_ENV_SUSTAIN.id, AMP_ENV_RELEASE.id]
   },
   {
+    id: 'FILTER_1_ENV',
     name: 'Filter 1 envelope',
     type: 'group',
     children: [FILTER_1_ENV_ATTACK.id, FILTER_1_ENV_DECAY.id, FILTER_1_ENV_SUSTAIN.id, FILTER_1_ENV_RELEASE.id]
   }    
 ];
 
-export {inputsById, inputGroups, inputs}; 
+sortKey = 0;
+let inputGroupsById = {};
+_.each(inputGroups, group => {
+  group.sortKey = sortKey++;
+  inputGroupsById[group.id] = group;
+});
+
+export {inputs, inputsById, inputGroups, inputGroupsById}; 
 
 export default inputs;
