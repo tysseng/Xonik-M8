@@ -9,7 +9,7 @@ export default (app, ws) => {
   var root = "/api/state";
 
   const sendPartialState = change => {
-      console.log(JSON.stringify(change.next, null, 2));  
+      //console.log(JSON.stringify(change.next, null, 2));  
 
       let fullState = {[change.path]: change.next};
 

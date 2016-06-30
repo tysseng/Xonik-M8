@@ -29,7 +29,8 @@ const getInput = (id, type, controller) => {
     type,
     panelController: controller,
     name: controller.name,
-    midi: controller.midi
+    midi: controller.midi,
+    value: 0
   }
 }
 

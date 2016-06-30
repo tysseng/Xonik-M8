@@ -2,8 +2,9 @@ export const loadFilesystem = () => {
   return {
     type: 'FILESYSTEM_LOAD_FROM_DISK',
     target: 'SERVER'
-  }  
+  };  
 }
+
 export const newFolder = (name, parentId) => {
   return {
     type: 'FOLDER_NEW',

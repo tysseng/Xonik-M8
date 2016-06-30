@@ -2,6 +2,8 @@ import {OrderedMap, Map, Iterable, fromJS} from 'immutable';
 import _ from 'lodash';
 import {inputsById, inputGroupsById} from '../../shared/matrix/inputs';
 
+//TODO: Put values in separate map
+
 const groups = (state,action) => {
 
   switch(action.type){
@@ -10,8 +12,9 @@ const groups = (state,action) => {
 }
 
 const byId = (state, action) => {
-
   switch(action.type){
+    case 'CONTROLLER_CHANGE':
+      return state.setIn([action.id, 'value'], action.value);
   } 
   return state;
 }
@@ -24,6 +27,8 @@ const root = (
   action) => {
 
   switch(action.type){
+    case 'CONTROLLER_CHANGE':
+      return state.updateIn(['byId'], (inputByIdMap) => byId(inputByIdMap, action));
   } 
   return state;
 }
