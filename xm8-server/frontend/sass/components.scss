@@ -1,0 +1,28 @@
+.configPane{
+  position: relative;
+  
+  border-radius: 10px;
+  border-top: 1px solid #5e6771;
+  border-left: 1px solid #525B68;
+  box-shadow: 5px 5px 22px 5px rgba(0,0,0,0.2);
+  background: url('/img/transparent_grainy_background.png'), linear-gradient(#3a3b3f, #313236);
+  overflow: hidden;
+
+  .heading {
+    font-size: 20px;
+    padding: 5px 10px 5px 10px;
+    width: 100%;
+    background-color: #494b50;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.26);
+  }
+
+  .contents {
+    padding: 10px;
+  }
+
+  .miniicon{
+    float:right;
+    margin-top: 1px;
+    margin-right: 18px;
+  }    
+}

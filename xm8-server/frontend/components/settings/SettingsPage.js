@@ -1,4 +1,6 @@
-import SettingsCenterColumnContainer from './SettingsCenterColumnContainer';
+//import SettingsCenterColumnContainer from './SettingsCenterColumnContainer';
+import InputsCenterColumnContainer from '../inputs/InputsCenterColumnContainer';
+import InputFormContainer from '../inputs/InputFormContainer';
 
 const SettingsPage = () => {    
   return (  
@@ -7,10 +9,10 @@ const SettingsPage = () => {
         Left
       </div>
       <div className="rightcolumn">
-        Right
+        <InputFormContainer/>
       </div>
       <div className="centercolumn">
-        <SettingsCenterColumnContainer/>
+        <InputsCenterColumnContainer/>
       </div>
     </div>
   ) 

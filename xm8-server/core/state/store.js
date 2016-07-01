@@ -4,6 +4,7 @@ import matrix from './matrix';
 import network from './network';
 import filesystem from './filesystem';
 import inputs from './inputs';
+import controllers from './controllers';
 import reduxSubscribeMiddleware from '../../shared/state/redux-subscribe';
 
 const serverReducers = combineReducers({
@@ -11,7 +12,8 @@ const serverReducers = combineReducers({
   matrix,
   filesystem,
   network,
-  inputs
+  inputs,
+  controllers
 });
 
 const createStoreWithMiddleware = applyMiddleware(reduxSubscribeMiddleware)(createStore);
