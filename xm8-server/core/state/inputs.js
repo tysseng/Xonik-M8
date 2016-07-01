@@ -24,8 +24,6 @@ const input = (state, action) => {
 
 const byId = (state, action) => {
   switch(action.type){
-    case 'CONTROLLER_CHANGE':
-      return state.setIn([action.id, 'value'], action.value);
     case inputActionTypes.INPUTCONFIG_RENAME:        
     case inputActionTypes.INPUTCONFIG_RENAME_SHORT:
       return state.updateIn([action.inputId], inputElem => input(inputElem, action)); 
@@ -41,7 +39,6 @@ const root = (
   action) => {
 
   switch(action.type){
-    case 'CONTROLLER_CHANGE':
     case inputActionTypes.INPUTCONFIG_RENAME:        
     case inputActionTypes.INPUTCONFIG_RENAME_SHORT:
       return state.updateIn(['byId'], (inputByIdMap) => byId(inputByIdMap, action));

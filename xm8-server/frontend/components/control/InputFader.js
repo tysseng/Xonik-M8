@@ -7,6 +7,11 @@ const mapStateToProps = (state, ownProps) => {
 
   let {type, value, name, min, max, step} = ownProps.input;
 
+  // get default value if value is not yet in state. should probably be moved to state initialisation
+  if(ownProps.value !== undefined){
+    value = ownProps.value;
+  }
+
   return {
     value,
     label: name.short,

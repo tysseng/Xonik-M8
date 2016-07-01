@@ -35,6 +35,7 @@ export default (app, ws) => {
   store.dispatch(subscribe('matrix', 'frontend', sendPartialState));
   store.dispatch(subscribe('filesystem', 'frontend', sendPartialState));
   store.dispatch(subscribe('inputs', 'frontend', sendPartialState));
+  store.dispatch(subscribe('controllers', 'frontend', sendPartialState));
 
   // Send state updates to all clients whenever state changes.
   /*store.subscribe(

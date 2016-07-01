@@ -2,10 +2,7 @@ import {OrderedMap, Map, List, fromJS} from 'immutable';
 import _ from 'lodash';
 
 const inputs = (
-  state = Map({
-    byId: Map(),
-    groups: Map()
-  }),
+  state = Map(),
   action) => {
 
   switch(action.type){

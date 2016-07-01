@@ -1,34 +1,14 @@
 import {OrderedMap, Map, Iterable, fromJS} from 'immutable';
 import _ from 'lodash';
-import {inputsById, inputGroupsById} from '../../shared/matrix/inputs';
-
-//TODO: Put values in separate map
-
-const groups = (state,action) => {
-
-  switch(action.type){
-  } 
-  return state;
-}
-
-const byId = (state, action) => {
-  switch(action.type){
-    case 'CONTROLLER_CHANGE':
-      return state.setIn([action.id, 'value'], action.value);
-  } 
-  return state;
-}
+import inputActionTypes from '../../shared/state/actions/inputsActionTypes';
 
 const root = (
-  state = Map({
-    byId: fromJS(inputsById),
-    groups: fromJS(inputGroupsById)
-  }),
+  state = Map(),
   action) => {
 
   switch(action.type){
-    case 'CONTROLLER_CHANGE':
-      return state.updateIn(['byId'], (inputByIdMap) => byId(inputByIdMap, action));
+    case inputActionTypes.CONTROLLER_CHANGE:
+      return state.set(action.id, action.value);
   } 
   return state;
 }
