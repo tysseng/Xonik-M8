@@ -1,0 +1,39 @@
+import React from 'react'
+import MidiCCMessageDropdown from '../midi/MidiCCMessageDropdown';
+import MidiStatusMessageDropdown from '../midi/MidiStatusMessageDropdown';
+
+const MidiForm = ({
+  midiStatus,
+  midiData1,
+  highRes,
+  name,
+  onStatusChange,
+  onData1Change,
+  onResolutionChange
+}) => {
+  let body;
+
+  switch(midiStatus){
+    case 0xB0: //CC
+      body = <MidiCCMessageDropdown 
+                value={midiData1} 
+                highRes={highRes} 
+                onCCChange={(e) => onData1Change(e.target.value)} 
+                onResolutionChange={(e) => onResolutionChange(e.target.value)}/>;
+      break;
+    default:
+      body = <input type="text" value={midiData1} onChange={(e) => onData1Change(e.target.value)}/>;
+      break;
+  }
+
+  return (
+    <span>
+      <label>{name}</label>
+      <div>
+        <MidiStatusMessageDropdown value={midiStatus} onStatusChange={(e) => onStatusChange(e.target.value)}/> {body}
+      </div>
+    </span>
+  )
+}
+
+export default MidiForm;

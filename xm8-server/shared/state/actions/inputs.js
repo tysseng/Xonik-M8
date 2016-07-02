@@ -36,3 +36,57 @@ export const renameShort = (inputId, name) => {
   }
 }
 
+export const updateMidiReceiveStatus = (inputId, value) => {
+  return {
+    type: types.INPUTCONFIG_UPDATE_MIDI_RECEIVE_STATUS,
+    inputId,
+    value,
+    target: 'SERVER'
+  }
+}
+
+export const updateMidiReceiveData1 = (inputId, value) => {
+  return {
+    type: types.INPUTCONFIG_UPDATE_MIDI_RECEIVE_DATA_1,
+    inputId,
+    value,
+    target: 'SERVER'
+  }
+}
+
+export const updateMidiTransmitStatus = (inputId, value) => {
+  return {
+    type: types.INPUTCONFIG_UPDATE_MIDI_TRANSMIT_STATUS,
+    inputId,
+    value,
+    target: 'SERVER'
+  }
+}
+
+export const updateMidiTransmitData1 = (inputId, value) => {
+  return {
+    type: types.INPUTCONFIG_UPDATE_MIDI_TRANSMIT_DATA_1,
+    inputId,
+    value,
+    target: 'SERVER'
+  }
+}
+
+export const updateMidiTransmitResolution = (inputId, value) => {
+  return {
+    type: types.INPUTCONFIG_UPDATE_MIDI_TRANSMIT_HIRES,
+    inputId,
+    value,
+    target: 'SERVER'
+  }
+}
+
+export const updateMidiReceiveResolution = (inputId, value) => {
+  return {
+    type: types.INPUTCONFIG_UPDATE_MIDI_RECEIVE_HIRES,
+    inputId,
+    value,
+    target: 'SERVER'
+  }
+}
+

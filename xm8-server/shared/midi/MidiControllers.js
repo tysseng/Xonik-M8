@@ -1,4 +1,4 @@
-module.exports = [
+const controllers = [
   {id: 0, name: "Bank select", hiRes: true},
   {id: 1, name: "Mod wheel", hiRes: true},
   {id: 2, name: "Breath controller", hiRes: true},
@@ -95,3 +95,12 @@ module.exports = [
   {id: 118, name: "", hiRes: false}, 
   {id: 119, name: "", hiRes: false}
 ];
+
+let controllersById = {}
+_.each(controllers, controller => {
+  controllersById[controller.id] = controller;
+});
+
+export {controllersById};
+export default controllers;
+

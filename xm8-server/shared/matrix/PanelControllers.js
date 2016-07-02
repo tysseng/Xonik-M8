@@ -8,7 +8,9 @@ let panelControllers = {
       full: "Osc 1 pitch",
       short: 'pitch'
     },
-    type: 'POT'
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+
   },
   OSC_1_SQUARE: {
     id: '0',
@@ -16,7 +18,8 @@ let panelControllers = {
       full: "Osc 1 square",
       short: 'square'
     },
-    type: 'POT'
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },
   OSC_1_SAW: {
     id: '0',
@@ -24,7 +27,8 @@ let panelControllers = {
       full: "Osc 1 saw",
       short: 'saw'
     },
-    type: 'POT'
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },
   OSC_1_TRIANGLE: {
     id: '0',
@@ -32,7 +36,8 @@ let panelControllers = {
       full: "Osc 1 triangle",
       short: 'triangle'
     },
-    type: 'POT'
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },    
   OSC_2_PITCH: {
     id: '1',
@@ -40,7 +45,8 @@ let panelControllers = {
       full: "Osc 1 pitch",
       short: 'pitch'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}  
   },  
   OSC_3_PITCH: {
     id: '2', 
@@ -48,7 +54,8 @@ let panelControllers = {
       full: "Osc 1 pitch",
       short: 'pitch'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}  
   },  
   FILTER_1_CUTOFF: {
     id: '3', 
@@ -56,7 +63,8 @@ let panelControllers = {
       full: "Filter 1 cut-off",
       short: 'cut-off'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },
   FILTER_1_RESONANCE: {
     id: '4', 
@@ -64,7 +72,8 @@ let panelControllers = {
       full: "Filter 1 resonance",
       short: 'resonance'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },
   FILTER_1_SLOPE: {
     id: '5', 
@@ -73,6 +82,7 @@ let panelControllers = {
       short: 'slope'
     },    
     type: 'SWITCH',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}},
     options: [
       {id: '0', label: '12 dB'},
       {id: '1', label: '24 dB'}
@@ -85,6 +95,7 @@ let panelControllers = {
       short: 'mode'
     },       
     type: 'SWITCH',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}},
     options: [
       {id: '0', label: 'HP'},
       {id: '1', label: 'BP'},
@@ -97,7 +108,8 @@ let panelControllers = {
       full: "Amp attack",
       short: 'attack'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}   
   },
   AMP_ENV_DECAY: {
     id: '4', 
@@ -105,7 +117,8 @@ let panelControllers = {
       full: "Amp decay",
       short: 'decay'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },
   AMP_ENV_SUSTAIN: {
     id: '4', 
@@ -113,7 +126,8 @@ let panelControllers = {
       full: "Amp sustain",
       short: 'sustain'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },
   AMP_ENV_RELEASE: {
     id: '4', 
@@ -121,7 +135,8 @@ let panelControllers = {
       full: "Amp release",
       short: 'release'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },
   FILTER_1_ENV_ATTACK: {
     id: '4', 
@@ -129,7 +144,8 @@ let panelControllers = {
       full: "Filter 1 attack",
       short: 'attack'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },
   FILTER_1_ENV_DECAY: {
     id: '4', 
@@ -137,7 +153,8 @@ let panelControllers = {
       full: "Filter 1 decay",
       short: 'decay'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },
   FILTER_1_ENV_SUSTAIN: {
     id: '4', 
@@ -145,7 +162,8 @@ let panelControllers = {
       full: "Filter 1 sustain",
       short: 'sustain'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   },
   FILTER_1_ENV_RELEASE: {
     id: '4', 
@@ -153,7 +171,8 @@ let panelControllers = {
       full: "Filter 1 release",
       short: 'release'
     },
-    type: 'POT'    
+    type: 'POT',
+    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
   }  
 };
 
