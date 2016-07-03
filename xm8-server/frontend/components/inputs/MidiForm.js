@@ -18,8 +18,8 @@ const MidiForm = ({
       body = <MidiCCMessageDropdown 
                 value={midiData1} 
                 highRes={highRes} 
-                onCCChange={(e) => onData1Change(e.target.value)} 
-                onResolutionChange={(e) => onResolutionChange(e.target.value)}/>;
+                onCCChange={onData1Change} 
+                onResolutionChange={onResolutionChange}/>;
       break;
     default:
       body = <input type="text" value={midiData1} onChange={(e) => onData1Change(e.target.value)}/>;

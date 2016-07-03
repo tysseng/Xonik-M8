@@ -33,7 +33,7 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
             name='Midi transmit' 
             onStatusChange={(value) => onTransmitStatusChange(input.id, value)}  
             onData1Change={(value) => onTransmitData1Change(input.id, value)}
-            onResolutionChange={(value) => onTransmitResolutionChange(input.id, value === 'on')}/>
+            onResolutionChange={(value) => onTransmitResolutionChange(input.id, value)}/>
 
           <MidiForm 
             midiStatus={input.midi.receive.status} 
@@ -42,7 +42,7 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
             name='Midi receive' 
             onStatusChange={(value) => onReceiveStatusChange(input.id, value)}  
             onData1Change={(value) => onReceiveData1Change(input.id, value)}
-            onResolutionChange={(value) => onReceiveResolutionChange(input.id, value === 'on')}/>
+            onResolutionChange={(value) => onReceiveResolutionChange(input.id, value)}/>
         </div>
       </div>    
     </form>

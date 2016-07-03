@@ -24,6 +24,11 @@ import _ from 'lodash';
 import { panelControllers } from "./PanelControllers";
 
 const getInput = (id, type, controller) => {
+
+  let midi = controller.midi;
+  midi.transmit.hires = false;
+  midi.receive.hires = false;
+
   return {
     id,
     type,

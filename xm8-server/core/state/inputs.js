@@ -53,7 +53,6 @@ const root = (
     groups: fromJS(inputGroupsById)
   }),
   action) => {
-  console.log(action)
   switch(action.type){
     case inputActionTypes.INPUTCONFIG_RENAME:        
     case inputActionTypes.INPUTCONFIG_RENAME_SHORT:
