@@ -27,6 +27,7 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
         </div>
         <div>
           <MidiForm 
+            id='midi_transmit'
             midiStatus={input.midi.transmit.status} 
             midiData1={input.midi.transmit.data1} 
             highRes={input.midi.transmit.hires}
@@ -36,6 +37,7 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
             onResolutionChange={(value) => onTransmitResolutionChange(input.id, value)}/>
 
           <MidiForm 
+            id='midi_receive'
             midiStatus={input.midi.receive.status} 
             midiData1={input.midi.receive.data1} 
             highRes={input.midi.receive.hires}

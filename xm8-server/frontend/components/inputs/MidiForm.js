@@ -3,6 +3,7 @@ import MidiCCMessageDropdown from '../midi/MidiCCMessageDropdown';
 import MidiStatusMessageDropdown from '../midi/MidiStatusMessageDropdown';
 
 const MidiForm = ({
+  id,
   midiStatus,
   midiData1,
   highRes,
@@ -16,6 +17,7 @@ const MidiForm = ({
   switch(midiStatus){
     case 0xB0: //CC
       body = <MidiCCMessageDropdown 
+                id={id + '_cc'}
                 value={midiData1} 
                 highRes={highRes} 
                 onCCChange={onData1Change} 

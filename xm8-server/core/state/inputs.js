@@ -20,13 +20,13 @@ const input = (state, action) => {
       return state.setIn(['midi', 'receive', 'status'], parseInt(action.value));  
     case inputActionTypes.INPUTCONFIG_UPDATE_MIDI_RECEIVE_DATA_1:
       return state.setIn(['midi', 'receive', 'data1'], parseInt(action.value));
+    case inputActionTypes.INPUTCONFIG_UPDATE_MIDI_RECEIVE_HIRES:  
+      return state.setIn(['midi', 'receive', 'hires'], action.value);
     case inputActionTypes.INPUTCONFIG_UPDATE_MIDI_TRANSMIT_STATUS:    
       return state.setIn(['midi', 'transmit', 'status'], parseInt(action.value));
     case inputActionTypes.INPUTCONFIG_UPDATE_MIDI_TRANSMIT_DATA_1:    
       return state.setIn(['midi', 'transmit', 'data1'], parseInt(action.value));
     case inputActionTypes.INPUTCONFIG_UPDATE_MIDI_TRANSMIT_HIRES:  
-      return state.setIn(['midi', 'transmit', 'hires'], action.value);
-    case inputActionTypes.INPUTCONFIG_UPDATE_MIDI_RECEIVE_HIRES:  
       return state.setIn(['midi', 'transmit', 'hires'], action.value);
   }
   return state;
