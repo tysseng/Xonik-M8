@@ -23,11 +23,98 @@ NB: The hardware id should not be a configurable value. It should be assigned au
 import _ from 'lodash';
 import { panelControllers } from "./PanelControllers";
 
+/*
+const getOptions = (controller) => {
+
+  if(!controller.options){
+    return [];
+  }
+
+  let options = [];
+  let optionsLength = controller.options.length;  
+  let optionWidth = Math.floor(65536 / optionsLength);
+  let optionWidthMidi = Math.floor(128 / optionsLength);
+
+  let max = 65535;
+  let maxMidi = 127;
+
+  let lower = 0;
+  let lowermidi = 0;
+
+  let currentOption = 1;
+
+  // Send will always send lower values, while receive is valid for any value within lower-upper range.
+  _.each(controller.options, option => {
+
+    let upper = (currentOption < optionsLength) ? currentOption * optionWidth - 1 : max;
+    let uppermidi = (currentOption < optionsLength) ? currentOption * optionWidthMidi - 1 : maxMidi;
+
+    console.log("norm", options.label, lower, upper);
+    console.log("midi", options.label, lowermidi, uppermidi)
+
+    options.push({
+      id: option.id,
+      label: option.label,
+      lower,
+      upper,
+      lowermidi,
+      uppermidi
+    });
+
+    currentOption++;
+    lower = upper + 1;
+    lowermidi = uppermidi + 1;
+  });  
+
+  return options;
+}*/
+
+const getOptions = (controller) => {
+
+  if(!controller.options){
+    return [];
+  }
+
+  let options = [];
+  let optionsLength = controller.options.length;  
+  let optionWidth = Math.floor(65536 / optionsLength);
+  let optionWidthMidi = Math.floor(128 / optionsLength);
+
+  let value = 0;
+  let valuemidi = 0;
+
+  let currentOption = 0;
+
+  // Send will always send the defined value
+  // Receive will interpret anything from an option's value and to the next option's value -1 as the option.
+  // Receive will interpret anything between 0 and the first option's value as the first option.
+  _.each(controller.options, option => {
+
+    value = currentOption * optionWidth;
+    valuemidi = currentOption * optionWidthMidi;
+
+    options.push({
+      index: currentOption,
+      id: option.id,
+      label: option.label,
+      value,
+      valuemidi
+    });
+
+    currentOption++;
+
+  });  
+
+  return options;
+}
+
 const getInput = (id, type, controller) => {
 
   let midi = controller.midi;
   midi.transmit.hires = false;
   midi.receive.hires = false;
+
+
 
   return {
     id,
@@ -35,7 +122,8 @@ const getInput = (id, type, controller) => {
     panelController: controller,
     name: controller.name,
     midi: controller.midi,
-    value: 0
+    value: 0,
+    options: getOptions(controller)
   }
 }
 

@@ -3,7 +3,8 @@ import _ from 'lodash';
 import MiniIcon from '../framework/MiniIcon';
 
 import inputTypes from '../../../shared/inputs/InputTypes';
-import MidiForm from './MidiForm'
+import MidiForm from './MidiForm';
+import InputOptions from './InputOptions';
 
 const InputForm = ({ input, onCloseDialog, rename, renameShort, 
   onTransmitStatusChange, onTransmitData1Change, onTransmitResolutionChange,
@@ -46,6 +47,7 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
             onData1Change={(value) => onReceiveData1Change(input.id, value)}
             onResolutionChange={(value) => onReceiveResolutionChange(input.id, value)}/>
         </div>
+        <InputOptions options={input.options}/>
       </div>    
     </form>
   )

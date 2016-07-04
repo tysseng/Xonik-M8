@@ -99,7 +99,7 @@ let panelControllers = {
     options: [
       {id: '0', label: 'HP'},
       {id: '1', label: 'BP'},
-      {id: '1', label: 'LP'}
+      {id: '2', label: 'LP'}
     ]
   },
   AMP_ENV_ATTACK: {
