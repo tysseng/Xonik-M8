@@ -8,9 +8,13 @@ const MidiForm = ({
   midiData1,
   highRes,
   name,
+  send,
+  receive,
   onStatusChange,
   onData1Change,
-  onResolutionChange
+  onResolutionChange,
+  onSendChange,
+  onReceiveChange
 }) => {
   let body;
 
@@ -33,6 +37,8 @@ const MidiForm = ({
       <label>{name}</label>
       <div>
         <MidiStatusMessageDropdown value={midiStatus} onStatusChange={(e) => onStatusChange(e.target.value)}/> {body}
+        <div><input id={id + '_send'} type='checkbox' checked={send} onChange={(e) => onSendChange(e.target.checked)}/><label htmlFor={id + '_send'}>Send midi</label></div>
+        <div><input id={id + '_receive'} type='checkbox' checked={receive} onChange={(e) => onReceiveChange(e.target.checked)}/><label htmlFor={id + '_receive'}>Receive midi</label></div>
       </div>
     </span>
   )

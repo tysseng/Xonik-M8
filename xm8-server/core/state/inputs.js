@@ -1,12 +1,31 @@
 import {OrderedMap, Map, Iterable, fromJS} from 'immutable';
 import _ from 'lodash';
-import {inputsById, inputGroupsById, getEmptyOption} from '../../shared/matrix/inputs';
+import {inputsById, inputGroupsById, getEmptyOption, getStepPositions} from '../../shared/matrix/inputs';
 import inputActionTypes from '../../shared/state/actions/inputsActionTypes';
 
 const groups = (state,action) => {
 
   switch(action.type){
   } 
+  return state;
+}
+
+const updateOptionsValues = (state, action, field) => {
+  let numberOfSteps = state.get('options').size;
+  let {centered, endToEnd, includeNegative} = action;
+
+  // calculate new values for the current number of options
+  let positions = getStepPositions(numberOfSteps, centered, endToEnd, includeNegative);
+  let position = 0;
+
+  // loop over options and update their values
+  let options = state.get('options').toArray();
+  _.each(options, option =>{
+    let value = field === 'value' ? positions[position].value : positions[position].valuemidi
+    state = state.setIn(['options', option.get('index'), field], value);
+    position++;
+  })
+
   return state;
 }
 
@@ -21,8 +40,12 @@ const input = (state, action) => {
     case inputActionTypes.INPUTCONFIG_DELETE_OPTION:      
       return state.deleteIn(['options', action.index]);
     case inputActionTypes.INPUTCONFIG_NEW_OPTION:   
-      let option = getEmptyOption(state.toJS());   
+      let option = getEmptyOption(state.toJS());      
       return state.setIn(['options', option.index], fromJS(option));
+    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:
+      return updateOptionsValues(state, action, 'value');
+    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
+      return updateOptionsValues(state, action, 'valuemidi');
   }
   return state;
 }
@@ -33,7 +56,9 @@ const byId = (state, action) => {
     case inputActionTypes.INPUTCONFIG_RENAME:        
     case inputActionTypes.INPUTCONFIG_RENAME_SHORT:
     case inputActionTypes.INPUTCONFIG_DELETE_OPTION:    
-    case inputActionTypes.INPUTCONFIG_NEW_OPTION:    
+    case inputActionTypes.INPUTCONFIG_NEW_OPTION:   
+    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES: 
+    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
       return state.updateIn([action.inputId], inputElem => input(inputElem, action));         
   } 
   return state;
@@ -50,7 +75,9 @@ const root = (
     case inputActionTypes.INPUTCONFIG_RENAME:        
     case inputActionTypes.INPUTCONFIG_RENAME_SHORT:   
     case inputActionTypes.INPUTCONFIG_DELETE_OPTION:
-    case inputActionTypes.INPUTCONFIG_NEW_OPTION:    
+    case inputActionTypes.INPUTCONFIG_NEW_OPTION:
+    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:  
+    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:   
       return state.updateIn(['byId'], (inputByIdMap) => byId(inputByIdMap, action));
   } 
   return state;

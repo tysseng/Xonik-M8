@@ -92,36 +92,68 @@ export const getEmptyOption = (controller) => {
   };
 }
 
+// if centered is true, position is centered within step range.
+// if endToEnd is true, the full scale is used, first step is = 0 and last step is max value.
+// i.e. if range is split into two positions, midi will have values
+// - centered=false: 0, 64
+// - centered=true: 32, 96
+// - endToEnd=true: 0, 127
+// - includeNegative=true: first value = -32768 and midi value has value=0 at midivalue=64 since we cannot send negative midi values.
+//
+// PS: combining centered and endToEnd makes no sense
+export const getStepPositions = (numberOfSteps, centered = false, endToEnd = false, includeNegative = false) => {
+  let positions = [];
+
+  let start = includeNegative ? -32768 : 0;
+  let end = 32767;
+  let offset = centered ? 0.5 : 0;
+  let range = endToEnd ? Math.floor(end - 1 - start) : Math.floor(end - start);
+  let partitions = endToEnd ? numberOfSteps -1 : numberOfSteps;
+
+  let stepWidth = range / partitions;
+  let stepWidthMidi = Math.floor(128 / partitions);
+
+  let value = 0;
+  let valuemidi = 0;
+
+  for(let i=0; i<numberOfSteps; i++){
+    positions.push({
+      value: start + Math.floor((i + offset) * stepWidth),
+      valuemidi: Math.floor((i + offset) * stepWidthMidi)
+    });
+  } 
+
+  // last step is max value if endToEnd is chosen
+  if(endToEnd){
+    positions[numberOfSteps-1] = {
+      value: 32767,
+      valuemidi: 127
+    };    
+  }
+
+  return positions;
+}
+
 const getOptions = (controller) => {
 
   if(!controller.options){
     return {};
   }
 
+  let steps = getStepPositions(controller.options.length);
   let options = {};
-  let optionsLength = controller.options.length;  
-  let optionWidth = Math.floor(65536 / optionsLength);
-  let optionWidthMidi = Math.floor(128 / optionsLength);
-
-  let value = 0;
-  let valuemidi = 0;
-
   let currentOption = 0;
 
   // Send will always send the defined value
   // Receive will interpret anything from an option's value and to the next option's value -1 as the option.
   // Receive will interpret anything between 0 and the first option's value as the first option.
   _.each(controller.options, option => {
-
-    value = currentOption * optionWidth;
-    valuemidi = currentOption * optionWidthMidi;
-
     options['' + currentOption] = {
       index: '' + currentOption,
       id: option.id,
       label: option.label,
-      value,
-      valuemidi
+      value: steps[currentOption].value,
+      valuemidi: steps[currentOption].valuemidi
     };
 
     currentOption++;
@@ -135,13 +167,15 @@ const getInput = (id, type, controller) => {
 
   let midi = controller.midi;
   midi.hires = false;
+  midi.send = true;
+  midi.receive = true;
 
   return {
     id,
     type,
     panelController: controller,
     name: controller.name,
-    midi: controller.midi,
+    midi: midi,
     value: 0,
     options: getOptions(controller)
   }

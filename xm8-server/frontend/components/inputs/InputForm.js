@@ -11,8 +11,10 @@ import InputOptions from './InputOptions';
 
 const InputForm = ({ input, onCloseDialog, rename, renameShort, 
   onStatusChange, onData1Change, onResolutionChange,
+  onSendChange, onReceiveChange,
   onOptionLabelChange, onOptionValueMidiChange, onOptionValueChange,
-  onOptionDelete, onOptionNew }) => {
+  onOptionDelete, onOptionNew,
+  onSpreadValues, onSpreadValuesMidi }) => {
 
   if(!input){
     return null;
@@ -37,9 +39,13 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
             midiData1={input.midi.data1} 
             highRes={input.midi.hires}
             name='Midi' 
+            send={input.midi.send}
+            receive={input.midi.receive}
             onStatusChange={(value) => onStatusChange(input.id, value)}  
             onData1Change={(value) => onData1Change(input.id, value)}
-            onResolutionChange={(value) => onResolutionChange(input.id, value)}/>
+            onResolutionChange={(value) => onResolutionChange(input.id, value)}
+            onSendChange={(value) => onSendChange(input.id, value)}
+            onReceiveChange={(value) => onReceiveChange(input.id, value)}/>
         </div>
         <InputOptions 
           options={input.options} 
@@ -47,7 +53,9 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
           onValueMidiChange={(index, value) => onOptionValueMidiChange(input.id, index, value)} 
           onValueChange={(index, value) => onOptionValueChange(input.id, index, value)}
           onDelete={index => onOptionDelete(input.id, index)}
-          onNew={() => onOptionNew(input.id)}/>
+          onNew={() => onOptionNew(input.id)}
+          onSpreadValues={() => onSpreadValues(input.id)} 
+          onSpreadValuesMidi={() => onSpreadValuesMidi(input.id)}/>
       </div>   
       <div>Scale (cents, octaves etc)</div>
       <div>Intervals - every 2 semitones - or - 12 total steps</div> 

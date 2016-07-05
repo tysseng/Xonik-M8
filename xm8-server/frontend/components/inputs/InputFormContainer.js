@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectInput, rename, renameShort, updateField, deleteOption, newOption } from '../../../shared/state/actions/inputs';
+import { selectInput, rename, renameShort, updateField, deleteOption, newOption, spreadOptionValues, spreadOptionValuesMidi } from '../../../shared/state/actions/inputs';
 import InputForm from './InputForm'
 
 const mapStateToProps = (state, ownProps) => {
@@ -23,11 +23,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onStatusChange: (id, value) => dispatch(updateField(id, ['midi', 'status'], parseInt(value))),
     onData1Change: (id, value) => dispatch(updateField(id, ['midi', 'data1'], parseInt(value))),
     onResolutionChange: (id, value) => dispatch(updateField(id, ['midi', 'hires'], value)),
+    onSendChange: (id, value) => dispatch(updateField(id, ['midi', 'send'], value)),
+    onReceiveChange: (id, value) => dispatch(updateField(id, ['midi', 'receive'], value)),
     onOptionLabelChange: (id, index, value) => dispatch(updateField(id, ['options', index, 'label'], value)),
     onOptionValueMidiChange: (id, index, value) => dispatch(updateField(id, ['options', index, 'valuemidi'], value)),
     onOptionValueChange: (id, index, value) => dispatch(updateField(id, ['options', index, 'value'], value)),
     onOptionDelete: (id, index) => dispatch(deleteOption(id, index)),
-    onOptionNew: (id) => dispatch(newOption(id))
+    onOptionNew: (id) => dispatch(newOption(id)),
+    onSpreadValues: (id) => dispatch(spreadOptionValues(id, false, false, false)),
+    onSpreadValuesMidi: (id) => dispatch(spreadOptionValuesMidi(id, false, false, false))
   }
 }
 

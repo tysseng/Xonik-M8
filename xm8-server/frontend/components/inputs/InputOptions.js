@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import InputOption from './InputOption';
 
-const InputOptions = ({ options, onLabelChange, onValueMidiChange, onValueChange, onDelete, onNew  }) => {
+const InputOptions = ({ options, onLabelChange, onValueMidiChange, onValueChange, onDelete, onNew, onSpreadValues, onSpreadValuesMidi  }) => {
 
   if(!options){
     return null;
@@ -19,7 +19,7 @@ const InputOptions = ({ options, onLabelChange, onValueMidiChange, onValueChange
           {Object.values(options).map(option => {
             return <InputOption option={option} onLabelChange={onLabelChange} onValueMidiChange={onValueMidiChange} onValueChange={onValueChange} onDelete={onDelete}/>
           })}
-          <tr><td></td><td>Uniform</td><td>Uniform</td></tr>
+          <tr><td></td><td><button type='button' onClick={onSpreadValues}>Spread</button></td><td><button type='button' onClick={onSpreadValuesMidi}>Spread</button></td></tr>
         </tbody>
       </table>
       <button type='button' onClick={onNew}>Add new</button>
