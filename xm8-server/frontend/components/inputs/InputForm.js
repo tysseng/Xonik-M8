@@ -10,13 +10,13 @@ import MidiForm from './MidiForm';
 import InputOptions from './InputOptions';
 
 const InputForm = ({ input, onCloseDialog, rename, renameShort, 
-  onStatusChange, onData1Change, onResolutionChange }) => {
+  onStatusChange, onData1Change, onResolutionChange,
+  onOptionLabelChange, onOptionValueMidiChange, onOptionValueChange,
+  onOptionDelete, onOptionNew }) => {
 
   if(!input){
     return null;
   }
-
-  console.log("input", input)
 
   return (
 
@@ -41,7 +41,13 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
             onData1Change={(value) => onData1Change(input.id, value)}
             onResolutionChange={(value) => onResolutionChange(input.id, value)}/>
         </div>
-        <InputOptions options={input.options}/>
+        <InputOptions 
+          options={input.options} 
+          onLabelChange={(index, value) => onOptionLabelChange(input.id, index, value)} 
+          onValueMidiChange={(index, value) => onOptionValueMidiChange(input.id, index, value)} 
+          onValueChange={(index, value) => onOptionValueChange(input.id, index, value)}
+          onDelete={index => onOptionDelete(input.id, index)}
+          onNew={() => onOptionNew(input.id)}/>
       </div>   
       <div>Scale (cents, octaves etc)</div>
       <div>Intervals - every 2 semitones - or - 12 total steps</div> 

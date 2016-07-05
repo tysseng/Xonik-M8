@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectInput, rename, renameShort, updateField } from '../../../shared/state/actions/inputs';
+import { selectInput, rename, renameShort, updateField, deleteOption, newOption } from '../../../shared/state/actions/inputs';
 import InputForm from './InputForm'
 
 const mapStateToProps = (state, ownProps) => {
@@ -22,7 +22,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     renameShort: (id, name) => dispatch(renameShort(id, name)),
     onStatusChange: (id, value) => dispatch(updateField(id, ['midi', 'status'], parseInt(value))),
     onData1Change: (id, value) => dispatch(updateField(id, ['midi', 'data1'], parseInt(value))),
-    onResolutionChange: (id, value) => dispatch(updateField(id, ['midi', 'hires'], value))
+    onResolutionChange: (id, value) => dispatch(updateField(id, ['midi', 'hires'], value)),
+    onOptionLabelChange: (id, index, value) => dispatch(updateField(id, ['options', index, 'label'], value)),
+    onOptionValueMidiChange: (id, index, value) => dispatch(updateField(id, ['options', index, 'valuemidi'], value)),
+    onOptionValueChange: (id, index, value) => dispatch(updateField(id, ['options', index, 'value'], value)),
+    onOptionDelete: (id, index) => dispatch(deleteOption(id, index)),
+    onOptionNew: (id) => dispatch(newOption(id))
   }
 }
 

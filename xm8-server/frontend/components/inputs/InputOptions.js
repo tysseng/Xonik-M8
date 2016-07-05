@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import InputOption from './InputOption';
 
-const InputOptions = ({ options }) => {
+const InputOptions = ({ options, onLabelChange, onValueMidiChange, onValueChange, onDelete, onNew  }) => {
 
   if(!options){
     return null;
@@ -16,13 +16,13 @@ const InputOptions = ({ options }) => {
           <tr><th>Label</th><th>Value</th><th>Midi</th></tr>
         </thead>
         <tbody>          
-          {options.map(option => {
-            return <InputOption option={option}/>
+          {Object.values(options).map(option => {
+            return <InputOption option={option} onLabelChange={onLabelChange} onValueMidiChange={onValueMidiChange} onValueChange={onValueChange} onDelete={onDelete}/>
           })}
           <tr><td></td><td>Uniform</td><td>Uniform</td></tr>
         </tbody>
       </table>
-      <div>Add new</div>
+      <button type='button' onClick={onNew}>Add new</button>
     </div>    
   )
 }

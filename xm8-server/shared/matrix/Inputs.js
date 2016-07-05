@@ -69,13 +69,36 @@ const getOptions = (controller) => {
   return options;
 }*/
 
+const getNextIndex = (options) => {
+  let highest = 0;
+  _.each(options, option => {
+    let index = parseInt(option.index);
+    if(index > highest){
+      highest = index;
+    }
+  });
+  return highest + 1;  
+}
+
+export const getEmptyOption = (controller) => {
+
+  let index = getNextIndex(controller.options);
+  return {
+    index: '' + index,
+    id: '',
+    label: '',
+    value: '',
+    valuemidi: ''
+  };
+}
+
 const getOptions = (controller) => {
 
   if(!controller.options){
-    return [];
+    return {};
   }
 
-  let options = [];
+  let options = {};
   let optionsLength = controller.options.length;  
   let optionWidth = Math.floor(65536 / optionsLength);
   let optionWidthMidi = Math.floor(128 / optionsLength);
@@ -93,13 +116,13 @@ const getOptions = (controller) => {
     value = currentOption * optionWidth;
     valuemidi = currentOption * optionWidthMidi;
 
-    options.push({
-      index: currentOption,
+    options['' + currentOption] = {
+      index: '' + currentOption,
       id: option.id,
       label: option.label,
       value,
       valuemidi
-    });
+    };
 
     currentOption++;
 

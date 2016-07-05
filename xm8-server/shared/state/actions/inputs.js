@@ -46,3 +46,23 @@ export const updateField = (inputId, fieldPath, value) => {
   }
 }
 
+export const deleteOption = (inputId, index) => {
+  return {
+    type: types.INPUTCONFIG_DELETE_OPTION,
+    inputId,
+    index,
+    target: 'SERVER'
+  }
+}
+
+export const newOption = (inputId) => {
+  return {
+    type: types.INPUTCONFIG_NEW_OPTION,
+    inputId,
+    target: 'SERVER'
+  }
+}
+
+
+
+
