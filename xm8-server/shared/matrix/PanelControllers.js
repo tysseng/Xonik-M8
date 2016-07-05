@@ -9,7 +9,7 @@ let panelControllers = {
       short: 'pitch'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
 
   },
   OSC_1_SQUARE: {
@@ -19,7 +19,7 @@ let panelControllers = {
       short: 'square'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },
   OSC_1_SAW: {
     id: '0',
@@ -28,7 +28,7 @@ let panelControllers = {
       short: 'saw'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },
   OSC_1_TRIANGLE: {
     id: '0',
@@ -37,7 +37,7 @@ let panelControllers = {
       short: 'triangle'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },    
   OSC_2_PITCH: {
     id: '1',
@@ -46,7 +46,7 @@ let panelControllers = {
       short: 'pitch'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}  
+    midi: {status: 0xB0}  
   },  
   OSC_3_PITCH: {
     id: '2', 
@@ -55,7 +55,7 @@ let panelControllers = {
       short: 'pitch'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}  
+    midi: {status: 0xB0}  
   },  
   FILTER_1_CUTOFF: {
     id: '3', 
@@ -64,7 +64,7 @@ let panelControllers = {
       short: 'cut-off'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },
   FILTER_1_RESONANCE: {
     id: '4', 
@@ -73,7 +73,7 @@ let panelControllers = {
       short: 'resonance'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },
   FILTER_1_SLOPE: {
     id: '5', 
@@ -82,7 +82,7 @@ let panelControllers = {
       short: 'slope'
     },    
     type: 'SWITCH',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}},
+    midi: {status: 0xB0},
     options: [
       {id: '0', label: '12 dB'},
       {id: '1', label: '24 dB'}
@@ -95,7 +95,7 @@ let panelControllers = {
       short: 'mode'
     },       
     type: 'SWITCH',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}},
+    midi: {status: 0xB0},
     options: [
       {id: '0', label: 'HP'},
       {id: '1', label: 'BP'},
@@ -109,7 +109,7 @@ let panelControllers = {
       short: 'attack'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}   
+    midi: {status: 0xB0}   
   },
   AMP_ENV_DECAY: {
     id: '4', 
@@ -118,7 +118,7 @@ let panelControllers = {
       short: 'decay'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },
   AMP_ENV_SUSTAIN: {
     id: '4', 
@@ -127,7 +127,7 @@ let panelControllers = {
       short: 'sustain'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },
   AMP_ENV_RELEASE: {
     id: '4', 
@@ -136,7 +136,7 @@ let panelControllers = {
       short: 'release'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },
   FILTER_1_ENV_ATTACK: {
     id: '4', 
@@ -145,7 +145,7 @@ let panelControllers = {
       short: 'attack'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },
   FILTER_1_ENV_DECAY: {
     id: '4', 
@@ -154,7 +154,7 @@ let panelControllers = {
       short: 'decay'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },
   FILTER_1_ENV_SUSTAIN: {
     id: '4', 
@@ -163,7 +163,7 @@ let panelControllers = {
       short: 'sustain'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   },
   FILTER_1_ENV_RELEASE: {
     id: '4', 
@@ -172,7 +172,7 @@ let panelControllers = {
       short: 'release'
     },
     type: 'POT',
-    midi: {transmit: {status: 0xB0}, receive: {status: 0xB0}}
+    midi: {status: 0xB0}
   }  
 };
 

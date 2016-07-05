@@ -1,3 +1,6 @@
+//TODO: Add 'not selected' to midi dropdowns
+//TODO: Add 'transmit midi', 'receive midi' checkboxes
+
 import _ from 'lodash';
 
 import MiniIcon from '../framework/MiniIcon';
@@ -7,12 +10,13 @@ import MidiForm from './MidiForm';
 import InputOptions from './InputOptions';
 
 const InputForm = ({ input, onCloseDialog, rename, renameShort, 
-  onTransmitStatusChange, onTransmitData1Change, onTransmitResolutionChange,
-  onReceiveStatusChange, onReceiveData1Change, onReceiveResolutionChange}) => {
+  onStatusChange, onData1Change, onResolutionChange }) => {
 
   if(!input){
     return null;
   }
+
+  console.log("input", input)
 
   return (
 
@@ -28,27 +32,19 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
         </div>
         <div>
           <MidiForm 
-            id='midi_transmit'
-            midiStatus={input.midi.transmit.status} 
-            midiData1={input.midi.transmit.data1} 
-            highRes={input.midi.transmit.hires}
-            name='Midi transmit' 
-            onStatusChange={(value) => onTransmitStatusChange(input.id, value)}  
-            onData1Change={(value) => onTransmitData1Change(input.id, value)}
-            onResolutionChange={(value) => onTransmitResolutionChange(input.id, value)}/>
-
-          <MidiForm 
-            id='midi_receive'
-            midiStatus={input.midi.receive.status} 
-            midiData1={input.midi.receive.data1} 
-            highRes={input.midi.receive.hires}
-            name='Midi receive' 
-            onStatusChange={(value) => onReceiveStatusChange(input.id, value)}  
-            onData1Change={(value) => onReceiveData1Change(input.id, value)}
-            onResolutionChange={(value) => onReceiveResolutionChange(input.id, value)}/>
+            id='midi'
+            midiStatus={input.midi.status} 
+            midiData1={input.midi.data1} 
+            highRes={input.midi.hires}
+            name='Midi' 
+            onStatusChange={(value) => onStatusChange(input.id, value)}  
+            onData1Change={(value) => onData1Change(input.id, value)}
+            onResolutionChange={(value) => onResolutionChange(input.id, value)}/>
         </div>
         <InputOptions options={input.options}/>
-      </div>    
+      </div>   
+      <div>Scale (cents, octaves etc)</div>
+      <div>Intervals - every 2 semitones - or - 12 total steps</div> 
     </form>
   )
 }

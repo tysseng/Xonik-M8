@@ -2,7 +2,7 @@ const channelVoiceMessages = [
   {id: 0x80, name: "Note off"},
   {id: 0x90, name: "Note on"},
   {id: 0xA0, name: "Polyphonic key pressure"}, // aftertouch
-  {id: 0xB0, name: "Controller change", selected: true},
+  {id: 0xB0, name: "Control change", selected: true},
   {id: 0xC0, name: "Program change"},
   {id: 0xD0, name: "Channel pressure"}, // aftertouch
   {id: 0xE0, name: "Pitch bend"}

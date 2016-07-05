@@ -10,8 +10,7 @@ const InputOptions = ({ options }) => {
 
   return (
     <div className='inputOptions'>
-      <div>Options</div>
-      <div>Display value as</div>
+      <div>Options</div>      
       <table>
         <thead>
           <tr><th>Label</th><th>Value</th><th>Midi</th></tr>

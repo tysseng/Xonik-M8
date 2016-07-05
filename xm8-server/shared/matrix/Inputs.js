@@ -111,10 +111,7 @@ const getOptions = (controller) => {
 const getInput = (id, type, controller) => {
 
   let midi = controller.midi;
-  midi.transmit.hires = false;
-  midi.receive.hires = false;
-
-
+  midi.hires = false;
 
   return {
     id,
