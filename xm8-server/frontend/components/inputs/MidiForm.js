@@ -28,19 +28,21 @@ const MidiForm = ({
                 onResolutionChange={onResolutionChange}/>;
       break;
     default:
-      body = <input type="text" value={midiData1} onChange={(e) => onData1Change(e.target.value)}/>;
+      body = <span><label>Data byte 1</label><input type="text" value={midiData1} onChange={(e) => onData1Change(e.target.value)}/></span>;
       break;
   }
 
   return (
-    <span>
-      <label>{name}</label>
-      <div>
-        <MidiStatusMessageDropdown value={midiStatus} onStatusChange={(e) => onStatusChange(e.target.value)}/> {body}
-        <div><input id={id + '_send'} type='checkbox' checked={send} onChange={(e) => onSendChange(e.target.checked)}/><label htmlFor={id + '_send'}>Send midi</label></div>
-        <div><input id={id + '_receive'} type='checkbox' checked={receive} onChange={(e) => onReceiveChange(e.target.checked)}/><label htmlFor={id + '_receive'}>Receive midi</label></div>
+    <div className='configPane'>        
+      <div className="heading">Midi</div>
+      <div className='contents'>    
+        <div>
+          <MidiStatusMessageDropdown value={midiStatus} onStatusChange={(e) => onStatusChange(e.target.value)}/> {body}
+          <div><input id={id + '_send'} type='checkbox' checked={send} onChange={(e) => onSendChange(e.target.checked)}/><label htmlFor={id + '_send'}>Send midi</label></div>
+          <div><input id={id + '_receive'} type='checkbox' checked={receive} onChange={(e) => onReceiveChange(e.target.checked)}/><label htmlFor={id + '_receive'}>Receive midi</label></div>
+        </div>
       </div>
-    </span>
+    </div>        
   )
 }
 

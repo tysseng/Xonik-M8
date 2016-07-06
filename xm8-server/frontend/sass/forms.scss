@@ -5,4 +5,15 @@
     display: block;
     clear: both;     
   }
+
+  input[type="checkbox"]{
+    margin-top: 10px;
+  }
+
+  input[type="checkbox"] + label {
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+    display: inline;
+  }
 }

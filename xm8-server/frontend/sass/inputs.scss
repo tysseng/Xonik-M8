@@ -12,7 +12,17 @@
 }
 
 .inputForm {
+  .configPane {
+    margin-bottom: 10px;
+  }
+
+  th{
+    text-align: left;
+    font-weight: normal;
+  }
+
   .inputOptions {
+    th:nth-child(1),    
     .label{
       width: 100px;
     }
