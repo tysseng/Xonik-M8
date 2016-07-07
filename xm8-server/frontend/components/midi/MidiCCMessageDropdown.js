@@ -11,7 +11,8 @@ const MidiCCMessageDropdown = ({id, value, highRes, onCCChange, onResolutionChan
       <label htmlFor={id + '_select'}>Control</label>
       <select id={id + '_select'} value={value} onChange={(e) => onCCChange(e.target.value)}>
         {controllerMessages.map(ccMessage => {
-          return <option key={ccMessage.id} value={ccMessage.id}>{ccMessage.name}</option>
+          let name = ccMessage.id + ' ' + (ccMessage.name ? ccMessage.name : ' (undefined)');
+          return <option key={ccMessage.id} value={ccMessage.id}>{name}</option>
         })}
       </select>
       {showHiRes &&         

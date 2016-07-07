@@ -8,13 +8,20 @@ import MiniIcon from '../framework/MiniIcon';
 import inputTypes from '../../../shared/inputs/InputTypes';
 import MidiForm from './MidiForm';
 import InputOptions from './InputOptions';
+import InputPreview from './InputPreview';
+import PanelControllerDropdown from './PanelControllerDropdown';
+import InputTypesDropdown from './InputTypesDropdown';
 
-const InputForm = ({ input, onCloseDialog, rename, renameShort, 
+import UnitDropdown from '../matrix/ParameterUnitDropdown';
+
+const InputForm = ({ input, inputValue, 
+  onCloseDialog, rename, renameShort, 
   onStatusChange, onData1Change, onResolutionChange,
   onSendChange, onReceiveChange,
   onOptionLabelChange, onOptionValueMidiChange, onOptionValueChange,
   onOptionDelete, onOptionNew,
-  onSpreadValues, onSpreadValuesMidi }) => {
+  onSpreadValues, onSpreadValuesMidi,
+  onScaleChange, onTypeChange, onControllerChange }) => {
 
   if(!input){
     return null;
@@ -31,9 +38,12 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
             <input id="name" type="text" value={input.name.full} onChange={(e) => rename(input.id, e.target.value)}/>
             <label htmlFor="shortname">Short name</label>           
             <input id="shortname" type="text" value={input.name.short} onChange={(e) => renameShort(input.id, e.target.value)}/>
-            <div>Panel controller</div>
-            <div>Show input as</div>
-            <div>Scale (cents, octaves etc)</div>
+            <label>Scale</label> 
+            <UnitDropdown onUnitChange={(value) => onScaleChange(input.id, value)} value={input.scale}/>
+            <label>Display as</label> 
+            <InputTypesDropdown onTypeChange={(value) => onTypeChange(input.id, value)} value={input.type}/>
+            <label>Panel controller</label> 
+            <PanelControllerDropdown value={input.panelController} onControllerChange={(value) => onControllerChange(input.id, value)}/>
             <div>Set interval</div>
             <div>Set number of steps</div>
             <div>Predefined steps</div>
@@ -65,6 +75,8 @@ const InputForm = ({ input, onCloseDialog, rename, renameShort,
         onNew={() => onOptionNew(input.id)}
         onSpreadValues={() => onSpreadValues(input.id)} 
         onSpreadValuesMidi={() => onSpreadValuesMidi(input.id)}/>
+
+      <InputPreview input={input} value={inputValue}/>
     </div>
   )
 }

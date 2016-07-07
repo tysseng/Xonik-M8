@@ -1,11 +1,11 @@
 let inputTypes = [
   {
     id: 'VERTICAL_RANGE',
-    name: 'range (vertical)'
+    name: 'Range (vertical)'
   },
   {
     id: 'HORIZONTAL_RANGE',
-    name: 'range (horizontal)'
+    name: 'Range (horizontal)'
   }  
 ]
 

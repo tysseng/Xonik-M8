@@ -1,5 +1,4 @@
-import React from 'react';
-import InputFader from './InputFader';
+import Controller from './Controller';
 
 const ControllerGroup = ({group, inputs, inputValues}) => {
 
@@ -7,21 +6,13 @@ const ControllerGroup = ({group, inputs, inputValues}) => {
     return null;
   }
 
-
   return (
     <div className="controllerGroup">
       {
         Object.values(group.children).map(inputId => {
           let input = inputs[inputId]; 
           let value = inputValues[inputId];                   
-
-          switch(input.type){
-            case 'vertical_range':
-            case 'horizontal_range':
-              return <InputFader key={input.id} input={input} value={value}/>
-            default:
-              return null;
-          }
+          return <Controller input={input} value={value}/>
         })
       }
     </div>

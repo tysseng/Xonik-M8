@@ -10,8 +10,12 @@ const mapStateToProps = (state, ownProps) => {
   let selectedInputId = state.inputs.get('selectedInput');
   let input = inputs[selectedInputId];
 
+  let controllers = state.controllers.toJS()
+  let inputValue = controllers[selectedInputId];
+
   return {
-    input
+    input,
+    inputValue
   }
 }
 
@@ -20,6 +24,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onCloseDialog: () => {dispatch(selectInput(''))},
     rename: (id, name) => dispatch(rename(id, name)),
     renameShort: (id, name) => dispatch(renameShort(id, name)),
+    onScaleChange: (id, value) => dispatch(updateField(id, ['scale'], value)),
+    onTypeChange: (id, value) => dispatch(updateField(id, ['type'], value)),
+    onControllerChange: (id, value) => dispatch(updateField(id, ['panelController'], value)),
     onStatusChange: (id, value) => dispatch(updateField(id, ['midi', 'status'], parseInt(value))),
     onData1Change: (id, value) => dispatch(updateField(id, ['midi', 'data1'], parseInt(value))),
     onResolutionChange: (id, value) => dispatch(updateField(id, ['midi', 'hires'], value)),

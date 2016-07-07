@@ -18,7 +18,7 @@ const mapStateToProps = (state, ownProps) => {
     min,
     max, 
     step,
-    orientation: type === 'vertical_range' ? 'vertical' : 'horizontal'
+    orientation: type === 'VERTICAL_RANGE' ? 'vertical' : 'horizontal'
   }
 }
 

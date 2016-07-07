@@ -21,7 +21,7 @@ NB: The hardware id should not be a configurable value. It should be assigned au
 ***/
 
 import _ from 'lodash';
-import { panelControllers } from "./PanelControllers";
+import { panelControllersById } from "./PanelControllers";
 
 /*
 const getOptions = (controller) => {
@@ -173,7 +173,7 @@ const getInput = (id, type, controller) => {
   return {
     id,
     type,
-    panelController: controller,
+    panelController: controller.id,
     name: controller.name,
     midi: midi,
     value: 0,
@@ -181,24 +181,25 @@ const getInput = (id, type, controller) => {
   }
 }
 
-let OSC_1_SQUARE = getInput('OSC_1_SQUARE', 'vertical_range', panelControllers.OSC_1_SQUARE);
-let OSC_1_SAW = getInput('OSC_1_SAW', 'vertical_range', panelControllers.OSC_1_SAW);
-let OSC_1_TRIANGLE = getInput('OSC_1_TRIANGLE', 'vertical_range', panelControllers.OSC_1_TRIANGLE);
 
-let FILTER_1_CUTOFF = getInput('FILTER_1_CUTOFF', 'vertical_range', panelControllers.FILTER_1_CUTOFF);
-let FILTER_1_RESONANCE = getInput('FILTER_1_RESONANCE', 'vertical_range', panelControllers.FILTER_1_RESONANCE);
-let FILTER_1_SLOPE = getInput('FILTER_1_SLOPE', 'vertical_range', panelControllers.FILTER_1_SLOPE);
-let FILTER_1_MODE = getInput('FILTER_1_MODE', 'vertical_range', panelControllers.FILTER_1_MODE);
+let OSC_1_SQUARE = getInput('OSC_1_SQUARE', 'VERTICAL_RANGE', panelControllersById.OSC_1_SQUARE);
+let OSC_1_SAW = getInput('OSC_1_SAW', 'VERTICAL_RANGE', panelControllersById.OSC_1_SAW);
+let OSC_1_TRIANGLE = getInput('OSC_1_TRIANGLE', 'VERTICAL_RANGE', panelControllersById.OSC_1_TRIANGLE);
 
-let AMP_ENV_ATTACK = getInput('AMP_ENV_ATTACK', 'vertical_range', panelControllers.AMP_ENV_ATTACK);
-let AMP_ENV_DECAY = getInput('AMP_ENV_DECAY', 'vertical_range', panelControllers.AMP_ENV_DECAY);
-let AMP_ENV_SUSTAIN = getInput('AMP_ENV_SUSTAIN', 'vertical_range', panelControllers.AMP_ENV_SUSTAIN);
-let AMP_ENV_RELEASE = getInput('AMP_ENV_RELEASE', 'vertical_range', panelControllers.AMP_ENV_RELEASE);
+let FILTER_1_CUTOFF = getInput('FILTER_1_CUTOFF', 'VERTICAL_RANGE', panelControllersById.FILTER_1_CUTOFF);
+let FILTER_1_RESONANCE = getInput('FILTER_1_RESONANCE', 'VERTICAL_RANGE', panelControllersById.FILTER_1_RESONANCE);
+let FILTER_1_SLOPE = getInput('FILTER_1_SLOPE', 'VERTICAL_RANGE', panelControllersById.FILTER_1_SLOPE);
+let FILTER_1_MODE = getInput('FILTER_1_MODE', 'VERTICAL_RANGE', panelControllersById.FILTER_1_MODE);
 
-let FILTER_1_ENV_ATTACK = getInput('FILTER_1_ENV_ATTACK', 'vertical_range', panelControllers.FILTER_1_ENV_ATTACK);
-let FILTER_1_ENV_DECAY = getInput('FILTER_1_ENV_DECAY', 'vertical_range', panelControllers.FILTER_1_ENV_DECAY);
-let FILTER_1_ENV_SUSTAIN = getInput('FILTER_1_ENV_SUSTAIN', 'vertical_range', panelControllers.FILTER_1_ENV_SUSTAIN);
-let FILTER_1_ENV_RELEASE = getInput('FILTER_1_ENV_RELEASE', 'vertical_range', panelControllers.FILTER_1_ENV_RELEASE);
+let AMP_ENV_ATTACK = getInput('AMP_ENV_ATTACK', 'VERTICAL_RANGE', panelControllersById.AMP_ENV_ATTACK);
+let AMP_ENV_DECAY = getInput('AMP_ENV_DECAY', 'VERTICAL_RANGE', panelControllersById.AMP_ENV_DECAY);
+let AMP_ENV_SUSTAIN = getInput('AMP_ENV_SUSTAIN', 'VERTICAL_RANGE', panelControllersById.AMP_ENV_SUSTAIN);
+let AMP_ENV_RELEASE = getInput('AMP_ENV_RELEASE', 'VERTICAL_RANGE', panelControllersById.AMP_ENV_RELEASE);
+
+let FILTER_1_ENV_ATTACK = getInput('FILTER_1_ENV_ATTACK', 'VERTICAL_RANGE', panelControllersById.FILTER_1_ENV_ATTACK);
+let FILTER_1_ENV_DECAY = getInput('FILTER_1_ENV_DECAY', 'VERTICAL_RANGE', panelControllersById.FILTER_1_ENV_DECAY);
+let FILTER_1_ENV_SUSTAIN = getInput('FILTER_1_ENV_SUSTAIN', 'VERTICAL_RANGE', panelControllersById.FILTER_1_ENV_SUSTAIN);
+let FILTER_1_ENV_RELEASE = getInput('FILTER_1_ENV_RELEASE', 'VERTICAL_RANGE', panelControllersById.FILTER_1_ENV_RELEASE);
 
 
 let inputs = [
