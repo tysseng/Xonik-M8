@@ -175,6 +175,9 @@ const getInput = (id, type, controller) => {
     value: 0,
     min: '',
     max: '',
+    stepGenerationMode: 'CONTINOUS', // TODO: Turn into constant
+    stepInterval: '',
+    numberOfSteps: '',
     options: getOptions(controller)
   }
 }

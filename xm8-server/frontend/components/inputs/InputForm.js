@@ -12,6 +12,7 @@ import InputPreview from './InputPreview';
 import PanelControllerDropdown from './PanelControllerDropdown';
 import InputTypesDropdown from './InputTypesDropdown';
 import InputRange from './InputRange';
+import InputStepsGeneration from './InputStepsGeneration';
 
 import UnitDropdown from '../matrix/ParameterUnitDropdown';
 
@@ -23,6 +24,7 @@ const InputForm = ({ input, inputValue,
   onOptionDelete, onOptionNew,
   onSpreadValues, onSpreadValuesMidi,
   onScaleChange, onTypeChange, onControllerChange,
+  onStepGenerationModeChange, onStepIntervalChange, onNumberOfStepsChange,
   onMinChange, onMaxChange }) => {
 
   if(!input){
@@ -55,10 +57,12 @@ const InputForm = ({ input, inputValue,
             <InputRange 
               scale={input.scale} min={input.min} max={input.max}
               onMinChange={(value) => onMinChange(input.id, value)} onMaxChange={(value) => onMaxChange(input.id, value)}/>
-
-            <div>Set number of steps</div>
-            <div>Predefined steps</div>
-
+            
+            <InputStepsGeneration
+              input={input}
+              onStepGenerationModeChange={onStepGenerationModeChange}
+              onStepIntervalChange={onStepIntervalChange}
+              onNumberOfStepsChange={onNumberOfStepsChange}/>
           </div>
         </div>
       </div>
@@ -76,7 +80,7 @@ const InputForm = ({ input, inputValue,
         onSendChange={(value) => onSendChange(input.id, value)}
         onReceiveChange={(value) => onReceiveChange(input.id, value)}/>
 
-
+      {input.stepGenerationMode === 'OPTIONS' && (
       <InputOptions
         scale={input.scale}
         options={input.options} 
@@ -87,7 +91,7 @@ const InputForm = ({ input, inputValue,
         onNew={() => onOptionNew(input.id)}
         onSpreadValues={() => onSpreadValues(input)} 
         onSpreadValuesMidi={() => onSpreadValuesMidi(input)}/>
-
+      )}
       <InputPreview input={input} value={inputValue}/>
     </div>
   )
