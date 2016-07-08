@@ -66,7 +66,8 @@ const InputForm = ({ input, inputValue,
         onReceiveChange={(value) => onReceiveChange(input.id, value)}/>
 
 
-      <InputOptions 
+      <InputOptions
+        scale={input.scale}
         options={input.options} 
         onLabelChange={(index, value) => onOptionLabelChange(input.id, index, value)} 
         onValueMidiChange={(index, value) => onOptionValueMidiChange(input.id, index, value)} 

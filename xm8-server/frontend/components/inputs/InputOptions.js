@@ -2,13 +2,11 @@ import _ from 'lodash';
 
 import InputOption from './InputOption';
 
-const InputOptions = ({ options, onLabelChange, onValueMidiChange, onValueChange, onDelete, onNew, onSpreadValues, onSpreadValuesMidi  }) => {
+const InputOptions = ({ scale, options, onLabelChange, onValueMidiChange, onValueChange, onDelete, onNew, onSpreadValues, onSpreadValuesMidi  }) => {
 
   if(!options){
     return null;
   }
-
-
 
   return (
     <div className='configPane'>        
@@ -21,7 +19,7 @@ const InputOptions = ({ options, onLabelChange, onValueMidiChange, onValueChange
             </thead>
             <tbody>          
               {Object.values(options).map(option => {
-                return <InputOption option={option} onLabelChange={onLabelChange} onValueMidiChange={onValueMidiChange} onValueChange={onValueChange} onDelete={onDelete}/>
+                return <InputOption option={option} scale={scale} onLabelChange={onLabelChange} onValueMidiChange={onValueMidiChange} onValueChange={onValueChange} onDelete={onDelete}/>
               })}
               <tr><td></td><td><button type='button' onClick={onSpreadValues}>Spread</button></td><td><button type='button' onClick={onSpreadValuesMidi}>Spread</button></td></tr>
             </tbody>

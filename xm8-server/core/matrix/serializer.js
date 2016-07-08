@@ -3,8 +3,6 @@ var spiType = require('../spi/spiType.js');
 
 function serializeNode(node){
 
-  console.log(node);
-
   var nodeBuffer = new Buffer(spiType.NODE.size);
   nodeBuffer.writeUInt8(spiType.NODE.size, 0);
   nodeBuffer.writeUInt8(spiType.NODE.id, 1);

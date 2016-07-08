@@ -1,18 +1,41 @@
 import _ from 'lodash';
+import roundTo from 'round-to';
 
-// to make the math a bit easier, we pretend that the max positive value is 32768, but in reality is it capped off at 32767
+// The voice controller hardware is using 16bit signed integers to represent the dac values. With this scheme, the max input
+// value is 32767 while the mininum value is -32768. This is a bit of a pain in the ass to work with, so to  make the math a 
+// bit simpler, we pretend that the max positive value is 32768 and instead cap the value to 32767 before sending it to the 
+// voice controller.
+
 const factors = {
-  FRACTION: 32768,
-  PERCENTAGE: 327.68,
-  CENTS: 32768 / 6000, //(5 octaves * 12 semitones * 100 cents)
-  SEMITONES: 32768 / 60,
-  OCTAVES: 32768 / 5,
-  VOLTS: 32768 / 5
+  FRACTION: {
+    mult: 32768,
+    precision: 4
+  },
+  PERCENTAGE: {
+    mult: 327.68,
+    precision: 2
+  },
+  CENTS: {
+    mult: 32768 / 6000, //(5 octaves * 12 semitones * 100 cents)
+    precision: 0
+  }, 
+  SEMITONES: {
+    mult: 32768 / 60,
+    precision: 2
+  }, 
+  OCTAVES: {
+    mult: 32768 / 5,
+    precision: 2
+  }, 
+  VOLTS: {
+    mult: 32768 / 5,
+    precision: 2
+  }, 
 }
 
 // general conversion formulas
-const to = (unit, value) => value / factors[unit];
-const from = (unit, value) => Math.floor(value * factors[unit]);
+const to = (unit, value) => roundTo(value / factors[unit].mult, factors[unit].precision);
+const from = (unit, value) => Math.floor(value * factors[unit].mult);
 
 // validators
 const rangeValidator = (unit, value) => value <= unitsById[unit].max && value >= unitsById[unit].min;
@@ -27,10 +50,7 @@ let units = [
     max: 1, 
     converters: {
       to: value => to('FRACTION', value),
-      from: fraction => { 
-        if(fraction === 1) return 32767;
-        return from('FRACTION', fraction);
-      }
+      from: fraction => from('FRACTION', fraction)
     }, 
     validator: (value) => numberValidator(value) && rangeValidator('FRACTION', value)
   },
@@ -41,10 +61,7 @@ let units = [
     max: 100, 
     converters: {
       to: value => to('PERCENTAGE', value),
-      from: percent => { 
-        if(percent === 100) return 32767;
-        return from('PERCENTAGE', percent);
-      }
+      from: percent => from('PERCENTAGE', percent)      
     }, 
     validator: (value) => numberValidator(value) && rangeValidator('PERCENTAGE', value)
   },
@@ -52,7 +69,7 @@ let units = [
     id: 'CENTS', 
     name: "Cents", 
     min: -6000,
-    max: 5999,
+    max: 6000,
     converters: {
       to: value => to('CENTS', value),
       from: cents => from('CENTS', cents)    
@@ -63,7 +80,7 @@ let units = [
     id: 'SEMITONES',
     name: "Semitones", 
     min: -60,
-    max: 59,    
+    max: 60,    
     converters: {
       to: value => to('SEMITONES', value),
       from: cents => from('SEMITONES', cents)    
@@ -77,10 +94,7 @@ let units = [
     max: 5,    
     converters: {
       to: value => to('OCTAVES', value),
-      from: octaves => { 
-        if(octaves === 5) return 32767;
-        return from('OCTAVES', octaves);
-      }      
+      from: octaves => from('OCTAVES', octaves)
     },      
     validator: (value) => numberValidator(value) && rangeValidator('OCTAVES', value)
   },
@@ -91,10 +105,7 @@ let units = [
     max: 5, 
     converters: {
       to: value => to('VOLTS', value),
-      from: octaves => { 
-        if(octaves === 5) return 32767;
-        return from('VOLTS', octaves);
-      }      
+      from: octaves => from('VOLTS', octaves)
     },      
     validator: (value) => numberValidator(value) && rangeValidator('VOLTS', value)
   },
@@ -113,7 +124,7 @@ let units = [
     id: 'DAC_VALUE', 
     name: "Dac value", 
     min: -32768, 
-    max: 32767, 
+    max: 32768, 
     converters: {
       to: value => value,
       from: value => value,

@@ -22,6 +22,7 @@ NB: The hardware id should not be a configurable value. It should be assigned au
 
 import _ from 'lodash';
 import { panelControllersById } from "./PanelControllers";
+import { unitsById } from "./ParameterUnits";
 
 /*
 const getOptions = (controller) => {
@@ -105,7 +106,7 @@ export const getStepPositions = (numberOfSteps, centered = false, endToEnd = fal
   let positions = [];
 
   let start = includeNegative ? -32768 : 0;
-  let end = 32767;
+  let end = 32768;
   let offset = centered ? 0.5 : 0;
   let range = endToEnd ? Math.floor(end - 1 - start) : Math.floor(end - start);
   let partitions = endToEnd ? numberOfSteps -1 : numberOfSteps;
@@ -117,8 +118,11 @@ export const getStepPositions = (numberOfSteps, centered = false, endToEnd = fal
   let valuemidi = 0;
 
   for(let i=0; i<numberOfSteps; i++){
+
+    let value = start + Math.floor((i + offset) * stepWidth);
+
     positions.push({
-      value: start + Math.floor((i + offset) * stepWidth),
+      value,
       valuemidi: Math.floor((i + offset) * stepWidthMidi)
     });
   } 
@@ -173,6 +177,7 @@ const getInput = (id, type, controller) => {
   return {
     id,
     type,
+    scale: unitsById.DAC_VALUE.id,
     panelController: controller.id,
     name: controller.name,
     midi: midi,
