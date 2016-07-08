@@ -11,6 +11,7 @@ import InputOptions from './InputOptions';
 import InputPreview from './InputPreview';
 import PanelControllerDropdown from './PanelControllerDropdown';
 import InputTypesDropdown from './InputTypesDropdown';
+import InputInterval from './InputInterval';
 
 import UnitDropdown from '../matrix/ParameterUnitDropdown';
 
@@ -21,7 +22,8 @@ const InputForm = ({ input, inputValue,
   onOptionLabelChange, onOptionValueMidiChange, onOptionValueChange,
   onOptionDelete, onOptionNew,
   onSpreadValues, onSpreadValuesMidi,
-  onScaleChange, onTypeChange, onControllerChange }) => {
+  onScaleChange, onTypeChange, onControllerChange,
+  onMinChange, onMaxChange }) => {
 
   if(!input){
     return null;
@@ -36,15 +38,24 @@ const InputForm = ({ input, inputValue,
           <div>
             <label htmlFor="name">Full name</label>           
             <input id="name" type="text" value={input.name.full} onChange={(e) => rename(input.id, e.target.value)}/>
+
             <label htmlFor="shortname">Short name</label>           
             <input id="shortname" type="text" value={input.name.short} onChange={(e) => renameShort(input.id, e.target.value)}/>
-            <label>Scale</label> 
-            <UnitDropdown onUnitChange={(value) => onScaleChange(input.id, value)} value={input.scale}/>
-            <label>Display as</label> 
-            <InputTypesDropdown onTypeChange={(value) => onTypeChange(input.id, value)} value={input.type}/>
+
             <label>Panel controller</label> 
             <PanelControllerDropdown value={input.panelController} onControllerChange={(value) => onControllerChange(input.id, value)}/>
-            <div>Set interval</div>
+
+            <label>Display as</label> 
+            <InputTypesDropdown onTypeChange={(value) => onTypeChange(input.id, value)} value={input.type}/>
+
+            <label>Scale</label> 
+            <UnitDropdown onUnitChange={(value) => onScaleChange(input.id, value)} value={input.scale}/>
+
+            <label>Interval</label>
+            <InputInterval 
+              scale={input.scale} min={input.min} max={input.max}
+              onMinChange={(value) => onMinChange(input.id, value)} onMaxChange={(value) => onMaxChange(input.id, value)}/>
+
             <div>Set number of steps</div>
             <div>Predefined steps</div>
 

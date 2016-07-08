@@ -26,6 +26,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     renameShort: (id, name) => dispatch(renameShort(id, name)),
     onScaleChange: (id, value) => dispatch(updateField(id, ['scale'], value)),
     onTypeChange: (id, value) => dispatch(updateField(id, ['type'], value)),
+    onMinChange: (id, value) => dispatch(updateField(id, ['min'], value)), 
+    onMaxChange:  (id, value) => dispatch(updateField(id, ['max'], value)),
     onControllerChange: (id, value) => dispatch(updateField(id, ['panelController'], value)),
     onStatusChange: (id, value) => dispatch(updateField(id, ['midi', 'status'], parseInt(value))),
     onData1Change: (id, value) => dispatch(updateField(id, ['midi', 'data1'], parseInt(value))),

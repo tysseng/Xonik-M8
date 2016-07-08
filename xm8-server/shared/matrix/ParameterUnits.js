@@ -38,13 +38,34 @@ const hasDecimalPoint = (value) => {
   return value && (typeof value  === 'string' || value instanceof String) && value.endsWith('.')
 }
 
-const startsWithDecimalPoint = (value) => {
-  return value && (typeof value  === 'string' || value instanceof String) && value.startsWith('.')
+const padStartWithZero = (value) => {
+  if(value && (typeof value  === 'string' || value instanceof String)){
+    if(value.startsWith('.')){
+      return '0' + value;
+    } else if(value.startsWith('-.')) {
+      return '-0' + value.substr(1);
+    }
+  }
+  return value; 
+}
+
+const startsWith = (value, start) => {
+  return value && (typeof value  === 'string' || value instanceof String) && value.startsWith(start);
+}
+
+const shouldNotBeFormatted = (value) => {
+  return (
+    startsWith(value, '-') && value.length === 1 || 
+    (startsWith(value, '-.') || startsWith(value, '-0')) && value.length === 2 ||
+    startsWith(value, '-0.') && value.length === 3
+  );
 }
 
 // general conversion formulas
 const to = (unit, value) => {
   if(value === undefined || value === '') return '';
+
+  if(shouldNotBeFormatted(value)) return value;
 
   let convertedValue = roundTo(value / factors[unit].mult, factors[unit].precision);
 
@@ -53,15 +74,23 @@ const to = (unit, value) => {
   if(hasDecimalPoint(value)) {
     convertedValue = convertedValue + '.';
   }    
+
   return convertedValue;
 }
 
 const from = (unit, value) => {
+
+  //TODO: Crop decimal string to current precision level
+
   if(value === undefined || value === '') return '';
 
-  if(startsWithDecimalPoint(value)){
-    value = '0' + value;
-  }
+  if(shouldNotBeFormatted(value)) return value;
+
+  console.log(value);
+
+  value = padStartWithZero(value);
+
+  console.log('conv', value);
 
   let convertedValue = Math.floor(value * factors[unit].mult);
   if(hasDecimalPoint(value)){
