@@ -19,10 +19,12 @@ const updateOptionsValues = (state, action, field) => {
   let position = 0;
 
   // loop over options and update their values
-  let options = state.get('options').toArray();
+  let options = state.get('options').toJS();
+  options = _.sortBy(options, option => option.index);
+
   _.each(options, option =>{
-    let value = field === 'value' ? positions[position].value : positions[position].valuemidi
-    state = state.setIn(['options', option.get('index'), field], value);
+    let value = field === 'value' ? positions[position].value : positions[position].valuemidi;
+    state = state.setIn(['options', option.index, field], value);
     position++;
   })
 

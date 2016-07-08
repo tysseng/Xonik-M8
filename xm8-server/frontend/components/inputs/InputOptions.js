@@ -14,6 +14,7 @@ const InputOptions = ({ scale, options, onLabelChange, onValueMidiChange, onValu
     <div className='configPane'>        
       <div className="heading">Options</div>
       <div className='contents inputOptions'>
+        <button className='addButton' type='button' onClick={onNew}>Add new</button>
         { Object.keys(options).length > 0 && 
           <table>
             <thead>
@@ -26,8 +27,7 @@ const InputOptions = ({ scale, options, onLabelChange, onValueMidiChange, onValu
               <tr><td></td><td><button type='button' onClick={onSpreadValues}>Spread</button></td><td><button type='button' onClick={onSpreadValuesMidi}>Spread</button></td></tr>
             </tbody>
           </table>
-        }
-        <button type='button' onClick={onNew}>Add new</button>
+        }        
       </div>    
     </div>        
   )

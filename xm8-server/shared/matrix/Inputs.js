@@ -84,6 +84,7 @@ const getNextIndex = (options) => {
 export const getEmptyOption = (controller) => {
 
   let index = getNextIndex(controller.options);
+
   return {
     index: '' + index,
     id: '',
