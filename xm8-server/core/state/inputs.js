@@ -12,10 +12,10 @@ const groups = (state,action) => {
 
 const updateOptionsValues = (state, action, field) => {
   let numberOfSteps = state.get('options').size;
-  let {centered, endToEnd, includeNegative} = action;
+  let {centered, endToEnd, includeNegative, min, max} = action;
 
   // calculate new values for the current number of options
-  let positions = getStepPositions(numberOfSteps, centered, endToEnd, includeNegative);
+  let positions = getStepPositions({numberOfSteps, centered, endToEnd, min, max});
   let position = 0;
 
   // loop over options and update their values
