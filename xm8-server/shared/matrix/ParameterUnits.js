@@ -33,9 +33,42 @@ const factors = {
   }, 
 }
 
+
+const hasDecimalPoint = (value) => {
+  return value && (typeof value  === 'string' || value instanceof String) && value.endsWith('.')
+}
+
+const startsWithDecimalPoint = (value) => {
+  return value && (typeof value  === 'string' || value instanceof String) && value.startsWith('.')
+}
+
 // general conversion formulas
-const to = (unit, value) => roundTo(value / factors[unit].mult, factors[unit].precision);
-const from = (unit, value) => Math.floor(value * factors[unit].mult);
+const to = (unit, value) => {
+  if(value === undefined || value === '') return '';
+
+  let convertedValue = roundTo(value / factors[unit].mult, factors[unit].precision);
+
+  // Make sure to keep decimal point after conversion. Without this it will be impossible
+  // to enter a decimal number
+  if(hasDecimalPoint(value)) {
+    convertedValue = convertedValue + '.';
+  }    
+  return convertedValue;
+}
+
+const from = (unit, value) => {
+  if(value === undefined || value === '') return '';
+
+  if(startsWithDecimalPoint(value)){
+    value = '0' + value;
+  }
+
+  let convertedValue = Math.floor(value * factors[unit].mult);
+  if(hasDecimalPoint(value)){
+    convertedValue += '.';
+  }  
+  return convertedValue;
+}
 
 // validators
 const rangeValidator = (unit, value) => value <= unitsById[unit].max && value >= unitsById[unit].min;

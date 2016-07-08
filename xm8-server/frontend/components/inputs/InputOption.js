@@ -2,18 +2,23 @@ import MiniIcon from '../framework/MiniIcon';
 import {unitsById} from '../../../shared/matrix/ParameterUnits'
 
 const onChange = (index, value, converter, callback) => {
+  let convertedValue = '';
+
   if(value){
-    value = converter(value);
+    convertedValue = converter(value);
+
+    //TODO: Crop decimal string to current precision level
   }
-  callback(index, value);
+
+  callback(index, convertedValue);
 }
+
 
 const InputOption = ({ scale, option, onLabelChange, onValueMidiChange, onValueChange, onDelete }) => {
 
   let unit = unitsById[scale];
   let value = unit.converters.to(option.value);
   let from = unit.converters.from;
-
 
   return (
 
