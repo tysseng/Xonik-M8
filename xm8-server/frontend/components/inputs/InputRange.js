@@ -10,7 +10,7 @@ const onChange = (value, converter, callback) => {
   callback(convertedValue);
 }
 
-const InputInterval = ({scale, min, max, onMinChange, onMaxChange}) => {
+const InputRange = ({scale, min, max, onMinChange, onMaxChange}) => {
 
   let unit = unitsById[scale];
   let minConverted = unit.converters.to(min);
@@ -19,11 +19,11 @@ const InputInterval = ({scale, min, max, onMinChange, onMaxChange}) => {
   let from = unit.converters.from;
 
   return (
-    <div className='interval'>
+    <div className='range'>
       <input type='text' value={minConverted} onChange={e => onChange(e.target.value, from, onMinChange)}/>
-      <span>to</span> <input className='interval' type='text' value={maxConverted} onChange={e => onChange(e.target.value, from, onMaxChange)}/>
+      <span>to</span> <input type='text' value={maxConverted} onChange={e => onChange(e.target.value, from, onMaxChange)}/>
     </div>
   )
 }
 
-export default InputInterval;
+export default InputRange;

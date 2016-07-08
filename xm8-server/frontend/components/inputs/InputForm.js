@@ -11,7 +11,7 @@ import InputOptions from './InputOptions';
 import InputPreview from './InputPreview';
 import PanelControllerDropdown from './PanelControllerDropdown';
 import InputTypesDropdown from './InputTypesDropdown';
-import InputInterval from './InputInterval';
+import InputRange from './InputRange';
 
 import UnitDropdown from '../matrix/ParameterUnitDropdown';
 
@@ -51,8 +51,8 @@ const InputForm = ({ input, inputValue,
             <label>Scale</label> 
             <UnitDropdown onUnitChange={(value) => onScaleChange(input.id, value)} value={input.scale}/>
 
-            <label>Interval</label>
-            <InputInterval 
+            <label>Range</label>
+            <InputRange 
               scale={input.scale} min={input.min} max={input.max}
               onMinChange={(value) => onMinChange(input.id, value)} onMaxChange={(value) => onMaxChange(input.id, value)}/>
 
