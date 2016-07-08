@@ -14,6 +14,19 @@ const updateOptionsValues = (state, action, field) => {
   let numberOfSteps = state.get('options').size;
   let {centered, endToEnd, includeNegative, min, max} = action;
 
+  // Make sure defaults are used if values are not set or cannot be parsed, 
+  if(min === '' || isNaN(min)){
+    min = undefined;
+  } else {
+    min = parseInt(min);
+  }
+
+  if(max === '' || isNaN(max)){
+    max = undefined;
+  } else {
+    max = parseInt(max);
+  }
+
   // calculate new values for the current number of options
   let positions = getStepPositions({numberOfSteps, centered, endToEnd, min, max});
   let position = 0;

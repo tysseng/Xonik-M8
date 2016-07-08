@@ -173,6 +173,8 @@ const getInput = (id, type, controller) => {
     name: controller.name,
     midi: midi,
     value: 0,
+    min: '',
+    max: '',
     options: getOptions(controller)
   }
 }

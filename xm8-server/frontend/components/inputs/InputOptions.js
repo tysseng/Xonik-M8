@@ -2,8 +2,6 @@ import _ from 'lodash';
 
 import InputOption from './InputOption';
 
-// TODO: Spread has a bug if deleting and readding element. last element will be spread as the first element.
-
 const InputOptions = ({ scale, options, onLabelChange, onValueMidiChange, onValueChange, onDelete, onNew, onSpreadValues, onSpreadValuesMidi  }) => {
 
   if(!options){

@@ -39,8 +39,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onOptionValueChange: (id, index, value) => dispatch(updateField(id, ['options', index, 'value'], value)),
     onOptionDelete: (id, index) => dispatch(deleteOption(id, index)),
     onOptionNew: (id) => dispatch(newOption(id)),
-    onSpreadValues: (id) => dispatch(spreadOptionValues(id, false, false, false)),
-    onSpreadValuesMidi: (id) => dispatch(spreadOptionValuesMidi(id, false, false, false))
+    onSpreadValues: (input) => dispatch(spreadOptionValues(input.id, false, false, input.min, input.max)),
+    onSpreadValuesMidi: (id) => dispatch(spreadOptionValuesMidi(id, false, false))
   }
 }
 

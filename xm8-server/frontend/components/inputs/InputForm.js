@@ -85,8 +85,8 @@ const InputForm = ({ input, inputValue,
         onValueChange={(index, value) => onOptionValueChange(input.id, index, value)}
         onDelete={index => onOptionDelete(input.id, index)}
         onNew={() => onOptionNew(input.id)}
-        onSpreadValues={() => onSpreadValues(input.id)} 
-        onSpreadValuesMidi={() => onSpreadValuesMidi(input.id)}/>
+        onSpreadValues={() => onSpreadValues(input)} 
+        onSpreadValuesMidi={() => onSpreadValuesMidi(input)}/>
 
       <InputPreview input={input} value={inputValue}/>
     </div>

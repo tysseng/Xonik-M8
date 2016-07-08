@@ -63,18 +63,19 @@ export const newOption = (inputId) => {
   }
 }
 
-export const spreadOptionValues = (inputId, centered, endToEnd, includeNegative) => {
+export const spreadOptionValues = (inputId, centered, endToEnd, min, max) => {
   return {
     type: types.INPUTCONFIG_SPREAD_OPTIONS_VALUES,
     inputId,
     centered, 
     endToEnd,
-    includeNegative,
+    min, 
+    max,
     target: 'SERVER'
   }
 }
 
-export const spreadOptionValuesMidi = (inputId, centered, endToEnd, includeNegative) => {
+export const spreadOptionValuesMidi = (inputId, centered, endToEnd) => {
   return {
     type: types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI,
     inputId,
