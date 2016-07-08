@@ -99,16 +99,14 @@ export const getEmptyOption = (controller) => {
 // - centered=false: 0, 64
 // - centered=true: 32, 96
 // - endToEnd=true: 0, 127
-// - includeNegative=true: first value = -32768 and midi value has value=0 at midivalue=64 since we cannot send negative midi values.
 //
 // PS: combining centered and endToEnd makes no sense
-export const getStepPositions = (numberOfSteps, centered = false, endToEnd = false, includeNegative = false) => {
+export const getStepPositions = ({numberOfSteps, centered = false, min = 0, max = 32768, endToEnd = false}) => {
   let positions = [];
 
-  let start = includeNegative ? -32768 : 0;
-  let end = 32768;
   let offset = centered ? 0.5 : 0;
-  let range = endToEnd ? Math.floor(end - 1 - start) : Math.floor(end - start);
+  let range = endToEnd ? Math.floor(max - min) : Math.floor(max - min);
+  
   let partitions = endToEnd ? numberOfSteps -1 : numberOfSteps;
 
   let stepWidth = range / partitions;
@@ -119,21 +117,13 @@ export const getStepPositions = (numberOfSteps, centered = false, endToEnd = fal
 
   for(let i=0; i<numberOfSteps; i++){
 
-    let value = start + Math.floor((i + offset) * stepWidth);
+    let value = min + Math.floor((i + offset) * stepWidth);
 
     positions.push({
       value,
       valuemidi: Math.floor((i + offset) * stepWidthMidi)
     });
   } 
-
-  // last step is max value if endToEnd is chosen
-  if(endToEnd){
-    positions[numberOfSteps-1] = {
-      value: 32767,
-      valuemidi: 127
-    };    
-  }
 
   return positions;
 }
@@ -144,7 +134,7 @@ const getOptions = (controller) => {
     return {};
   }
 
-  let steps = getStepPositions(controller.options.length);
+  let steps = getStepPositions({numberOfSteps: controller.options.length});
   let options = {};
   let currentOption = 0;
 

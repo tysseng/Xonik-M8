@@ -5,6 +5,73 @@ import {unitsById} from '../../../shared/matrix/ParameterUnits';
 chai.should();
 
 describe('ParameterUnits', function() {
+  describe('convert to - special cases', function() {
+
+    it('should keep -', function() {
+      let unit = unitsById.FRACTION;
+      let converted = unit.converters.to('-')
+      converted.should.equal('-');
+    });
+
+    it('should keep -.', function() {
+      let unit = unitsById.FRACTION;
+      let converted = unit.converters.to('-.')
+      converted.should.equal('-.');
+    });
+
+    it('should keep -0', function() {
+      let unit = unitsById.FRACTION;
+      let converted = unit.converters.to('-0')
+      converted.should.equal('-0');
+    });
+
+    it('should keep -0.', function() {
+      let unit = unitsById.FRACTION;
+      let converted = unit.converters.to('-0.')
+      converted.should.equal('-0.');
+    });        
+  });
+
+  describe('convert from - special cases', function() {
+
+    it('should keep -', function() {
+      let unit = unitsById.FRACTION;
+      let converted = unit.converters.from('-')
+      converted.should.equal('-');
+    });
+
+    it('should keep -.', function() {
+      let unit = unitsById.FRACTION;
+      let converted = unit.converters.from('-.')
+      converted.should.equal('-.');
+    });
+
+    it('should keep -0', function() {
+      let unit = unitsById.FRACTION;
+      let converted = unit.converters.from('-0')
+      converted.should.equal('-0');
+    });
+
+    it('should keep -0.', function() {
+      let unit = unitsById.FRACTION;
+      let converted = unit.converters.from('-0.')
+      converted.should.equal('-0.');
+    });  
+
+    it('should add 0 if value is just .', function() {
+      let unit = unitsById.FRACTION;
+      let converted = unit.converters.from('.')
+      converted.should.equal('0.');
+    });   
+
+    it('should add 0 if value starts with -.', function() {
+      let unit = unitsById.FRACTION;
+      let converted = unit.converters.from('-.1')
+      converted.should.equal(-3277);
+    });   
+
+  });  
+
   describe('convert to fraction', function() {
 
     it('should convert to fraction', function() {
@@ -18,14 +85,6 @@ describe('ParameterUnits', function() {
       let converted = unit.converters.from(0.5)
       converted.should.equal(16384);
     });
-
-    it('should convert from max fraction', function() {
-      let unit = unitsById.FRACTION;
-      let converted = unit.converters.from(1)
-
-      // special case as we cannot correctly represent 32768.
-      converted.should.equal(32767);
-    });    
   });
 
   describe('convert to percentage', function() {
@@ -41,14 +100,6 @@ describe('ParameterUnits', function() {
       let converted = unit.converters.from(50)
       converted.should.equal(16384);
     });
-
-    it('should convert from max percentage', function() {
-      let unit = unitsById.PERCENTAGE;
-      let converted = unit.converters.from(100)
-
-      // special case as we cannot correctly represent 32768.
-      converted.should.equal(32767);
-    });    
   });  
 
   describe('convert to cents', function() {
@@ -64,14 +115,6 @@ describe('ParameterUnits', function() {
       let converted = unit.converters.from(3000)
       converted.should.equal(16384);
     });
-
-    it('should convert from max cents', function() {
-      let unit = unitsById.CENTS;
-      let converted = unit.converters.from(5999)
-
-      // special case as we cannot correctly represent 32768.
-      converted.should.equal(32762);
-    });    
   });    
 
   describe('convert to semitones', function() {
@@ -87,14 +130,6 @@ describe('ParameterUnits', function() {
       let converted = unit.converters.from(30)
       converted.should.equal(16384);
     });
-
-    it('should convert from max semitones', function() {
-      let unit = unitsById.SEMITONES;
-      let converted = unit.converters.from(59)
-
-      // special case as we cannot correctly represent 32768.
-      converted.should.equal(32221);
-    });    
   });   
 
   describe('convert to octaves', function() {
@@ -110,14 +145,6 @@ describe('ParameterUnits', function() {
       let converted = unit.converters.from(2.5)
       converted.should.equal(16384);
     });
-
-    it('should convert from max octaves', function() {
-      let unit = unitsById.OCTAVES;
-      let converted = unit.converters.from(5)
-
-      // special case as we cannot correctly represent 32768.
-      converted.should.equal(32767);
-    });    
   });
 
   describe('convert to volts', function() {
@@ -134,13 +161,6 @@ describe('ParameterUnits', function() {
       converted.should.equal(16384);
     });
 
-    it('should convert from max volts', function() {
-      let unit = unitsById.VOLTS;
-      let converted = unit.converters.from(5)
-
-      // special case as we cannot correctly represent 32768.
-      converted.should.equal(32767);
-    });    
   });
 
   describe('convert to binary', function() {
@@ -161,13 +181,7 @@ describe('ParameterUnits', function() {
       let unit = unitsById.BINARY;
       let converted = unit.converters.to(-32768)
       converted.should.equal(0);
-    });    
-
-    it('should convert from binary false', function() {
-      let unit = unitsById.BINARY;
-      let converted = unit.converters.from(0)
-      converted.should.equal(0);
-    });    
+    });      
   });   
 
   describe('convert to dac value', function() {
@@ -207,19 +221,19 @@ describe('ParameterUnits', function() {
 
     it('cents validators', function() {
       let unit = unitsById.CENTS;
-      unit.validator(6000).should.be.false;
+      unit.validator(6001).should.be.false;
       unit.validator(-6001).should.be.false;
       unit.validator("not a number").should.be.false;
-      unit.validator(5999).should.be.true;
+      unit.validator(6000).should.be.true;
       unit.validator(-6000).should.be.true;
     });   
 
     it('semitones validators', function() {
       let unit = unitsById.SEMITONES;
-      unit.validator(60).should.be.false;
+      unit.validator(61).should.be.false;
       unit.validator(-61).should.be.false;
       unit.validator("not a number").should.be.false;
-      unit.validator(59).should.be.true;
+      unit.validator(60).should.be.true;
       unit.validator(-60).should.be.true;
     });
 
@@ -253,10 +267,10 @@ describe('ParameterUnits', function() {
 
     it('dac value validators', function() {
       let unit = unitsById.DAC_VALUE;
-      unit.validator(32768).should.be.false;
+      unit.validator(32769).should.be.false;
       unit.validator(-32769).should.be.false;
       unit.validator("not a number").should.be.false;
-      unit.validator(32767).should.be.true;
+      unit.validator(32768).should.be.true;
       unit.validator(-32768).should.be.true;
     });
   });  
