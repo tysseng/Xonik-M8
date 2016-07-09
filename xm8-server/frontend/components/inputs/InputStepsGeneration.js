@@ -16,14 +16,16 @@ const InputStepsGeneration = ({ input, onStepGenerationModeChange, onStepInterva
         </RadioGroup>
       </div>
       {input.stepGenerationMode === 'PREDEFINED_INTERVAL' && (
-        <label>Step interval
+        <div>
+          <label>Step interval</label>
           <input type="text" value={input.stepInterval} onChange={(e) => onStepIntervalChange(input.id, e.target.value)}/>
-        </label>
+        </div>
       )}
       {input.stepGenerationMode === 'NUMBER_OF_STEPS' && (
-        <label>Number of steps
+        <div>
+          <label>Number of steps</label>
           <input type="text" value={input.numberOfSteps} onChange={(e) => onNumberOfStepsChange(input.id, e.target.value)}/>
-        </label>
+        </div>        
       )}
     </div>
   );
