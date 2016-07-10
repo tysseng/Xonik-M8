@@ -5,7 +5,7 @@ const Fader = ({label, value, orientation = 'vertical', min = 0, max = 128, step
   <input type='text' width='5' value={value}/>
   
   return (
-    <div className="range">
+    <div className="range" >
       <div className={orientation}>
         <input type='range' min={min} max={max} step={step} value={value} onChange={onChange}/>
       </div>

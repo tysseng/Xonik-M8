@@ -6,13 +6,22 @@ const ControllerGroup = ({group, inputs, inputValues}) => {
     return null;
   }
 
+  let i = 0;
+
   return (
     <div className="controllerGroup">
       {
         Object.values(group.children).map(inputId => {
           let input = inputs[inputId]; 
-          let value = inputValues[inputId];                   
-          return <Controller input={input} value={value}/>
+          let value = inputValues[inputId]; 
+
+          let style = {
+       
+          }
+
+          i++;
+
+          return <Controller input={input} value={value} style={style}/>
         })
       }
     </div>
