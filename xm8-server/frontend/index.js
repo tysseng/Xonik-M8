@@ -15,7 +15,8 @@ import HomePage from './components/home/HomePage';
 import MatrixPage from './components/matrix/MatrixPageContainer';
 import ControlPage from './components/control/ControlPage';
 import FilesPage from './components/files/FilesPage';
-import SettingsPage from './components/settings/SettingsPage';
+//import SettingsPage from './components/settings/SettingsPage';
+import SettingsPage from './components/inputs/InputsPage';
 import NetworkPage from './components/network/NetworkPage';
 import TrashPage from './components/trash/TrashPage';
 

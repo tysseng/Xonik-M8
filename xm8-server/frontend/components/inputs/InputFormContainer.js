@@ -7,6 +7,8 @@ import InputForm from './InputForm'
 const mapStateToProps = (state, ownProps) => {
 
   let inputs = state.inputs.get('byId').toJS();
+  let orderedInputs = _.sortBy(inputs);
+
   let selectedInputId = state.inputs.get('selectedInput');
   let input = inputs[selectedInputId];
 
@@ -14,6 +16,7 @@ const mapStateToProps = (state, ownProps) => {
   let inputValue = controllers[selectedInputId];
 
   return {
+    inputs: orderedInputs,
     input,
     inputValue
   }
@@ -21,7 +24,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onCloseDialog: () => {dispatch(selectInput(''))},
+    onCloseDialog: () => dispatch(selectInput('')),
+    selectInput: (id) => dispatch(selectInput(id)),
     rename: (id, name) => dispatch(rename(id, name)),
     renameShort: (id, name) => dispatch(renameShort(id, name)),
     onScaleChange: (id, value) => dispatch(updateField(id, ['scale'], value)),

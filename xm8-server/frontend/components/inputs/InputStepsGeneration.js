@@ -1,19 +1,15 @@
-import {RadioGroup, Radio} from 'react-radio-group';
-
 const InputStepsGeneration = ({ input, onStepGenerationModeChange, onStepIntervalChange, onNumberOfStepsChange }) => {
-
-  console.log('stepmode', input.stepGenerationMode);
 
   return (
     <div>
       <label>Steps</label>
       <div className="radio">
-        <RadioGroup onChange={(value) => onStepGenerationModeChange(input.id, value)} selectedValue={input.stepGenerationMode}>
-          <label><Radio value='CONTINOUS'/>Continous</label>
-          <label><Radio value='PREDEFINED_INTERVAL'/>Set interval</label>
-          <label><Radio value='NUMBER_OF_STEPS'/>Set number of steps</label>
-          <label><Radio value='OPTIONS'/>Use predefined options</label>
-        </RadioGroup>
+        <select value={input.stepGenerationMode} onChange={(e) => {onStepGenerationModeChange(input.id, e.target.value)}}>
+          <option value='CONTINOUS'>Continous</option>
+          <option value='PREDEFINED_INTERVAL'>Set interval</option>
+          <option value='NUMBER_OF_STEPS'>Set number of steps</option>
+          <option value='OPTIONS'>Use predefined options</option>
+        </select>      
       </div>
       {input.stepGenerationMode === 'PREDEFINED_INTERVAL' && (
         <div>

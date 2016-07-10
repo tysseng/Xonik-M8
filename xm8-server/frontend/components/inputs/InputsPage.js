@@ -1,15 +1,11 @@
-//import SettingsCenterColumnContainer from './SettingsCenterColumnContainer';
 import InputsCenterColumnContainer from '../inputs/InputsCenterColumnContainer';
 import InputFormContainer from '../inputs/InputFormContainer';
 
-const SettingsPage = () => {    
+const InputsPage = () => {    
   return (  
     <div>
       <div className="leftcolumn">
         Left
-      </div>
-      <div className="rightcolumn">
-        
       </div>
       <div className="centercolumn">
         <InputFormContainer/>
@@ -18,4 +14,4 @@ const SettingsPage = () => {
   ) 
 }
 
-export default SettingsPage;  
+export default InputsPage;  

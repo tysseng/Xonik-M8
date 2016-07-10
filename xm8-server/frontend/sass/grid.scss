@@ -17,3 +17,22 @@
   width: 300px;
   padding: 10px;
 }
+
+.tricol-left{
+  float: left;
+  width: 300px;
+  padding: 10px;
+}
+
+.tricol-center{
+  float: none;
+  overflow: hidden;
+  width: 300px;
+  padding: 10px; 
+}
+
+.tricol-right{
+  float: right;
+  width: 300px;
+  padding: 10px;  
+}

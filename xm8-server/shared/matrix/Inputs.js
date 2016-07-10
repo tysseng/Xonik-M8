@@ -165,6 +165,9 @@ const getInput = (id, type, controller) => {
   midi.send = true;
   midi.receive = true;
 
+  let options = getOptions(controller);
+  let optionsLength = Object.keys(options).length;
+
   return {
     id,
     type,
@@ -175,10 +178,10 @@ const getInput = (id, type, controller) => {
     value: 0,
     min: '',
     max: '',
-    stepGenerationMode: 'CONTINOUS', // TODO: Turn into constant
+    stepGenerationMode: optionsLength > 0 ? 'OPTIONS' : 'CONTINOUS', // TODO: Turn into constant
     stepInterval: '',
     numberOfSteps: '',
-    options: getOptions(controller)
+    options
   }
 }
 
