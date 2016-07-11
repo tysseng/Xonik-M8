@@ -4,6 +4,7 @@ import matrix from './matrix';
 import network from './network';
 import filesystem from './filesystem';
 import inputs from './inputs';
+import inputgrid from './inputgrid';
 import controllers from './controllers';
 import reduxSubscribeMiddleware from '../../shared/state/redux-subscribe';
 
@@ -13,6 +14,7 @@ const serverReducers = combineReducers({
   filesystem,
   network,
   inputs,
+  inputgrid,
   controllers
 });
 

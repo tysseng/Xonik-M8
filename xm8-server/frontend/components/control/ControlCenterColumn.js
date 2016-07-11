@@ -1,7 +1,7 @@
 import React from 'react';
 import Fader from './Fader';
 import ControllerGroup from './ControllerGroup';
-import InputGrid from '../inputgrid/InputGrid';
+import InputGridContainer from '../inputgrid/InputGridContainer';
 /*
       <div>Controls</div>
       <div className="controllerRow">
@@ -12,7 +12,7 @@ import InputGrid from '../inputgrid/InputGrid';
 const ControlCenterColumn = ({groups, inputs, inputValues, onControllerChange}) => {
   return ( 
     <div>
-      <InputGrid/>
+      <InputGridContainer/>
 
     </div>
   )

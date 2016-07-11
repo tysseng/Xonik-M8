@@ -25,34 +25,49 @@ function getPosition(el) {
   };
 }
 
-/**
-on mouse down:
-check if over a draggable element
-find grid position by using getEmlementById or similar and using getPosition
-set drag start relative to grid by using getPosition of element (find correct element by traversing upwards to a draggable or grid is reached)
-store which element is dragged and its original position
-
-ondrag:
-calculate drag in em
-if number of ems is not the current position of the stored element, trigger move element event
-
-on mouse up
-deselect element etc.
-**/
-
-const handleClick = e => {
-  console.log("Clicked ", e.pageX, e.pageY, getPosition(e.target).x,e.target.parentElement);
+const findDraggableElement = (el) => {
+  while(el){
+    if(el.hasAttribute('class') && el.getAttribute('class').indexOf('draggable') > -1){
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return undefined;
 }
 
-const handleDrag = e => {
-  console.log("Dragged ", e.pageX, e.pageY, getPosition(e.target).x);
+
+let emSize;
+
+const calculateEmSize = () => { 
+  let grid = document.getElementById('inputgrid');
+  emSize = Number(getComputedStyle(grid, "").fontSize.match(/(\d*(\.\d*)?)px/)[1]);
 }
 
-const InputGrid = () => {
+const onMouseDown = (e, selectElement) => {
+  let clickedElement = findDraggableElement(e.target);
+  if(!clickedElement) return;
 
+  calculateEmSize();
+  selectElement(clickedElement.getAttribute('data-element-id'),  e.pageX, e.pageY);
+}
+
+const handleRelease = e => {
+  console.log("Up ", e.pageX, e.pageY, getPosition(e.target).x,e.target.parentElement);
+}
+
+const handleDrag = (e, dragStart, selectedElement) => {
+  if(selectedElement !== ''){
+    let draggedEmsX = Math.floor((e.pageX - dragStart.x) / emSize);
+    let draggedEmsY = Math.floor((e.pageY - dragStart.y) / emSize);
+
+    console.log("Dragged. Start ", draggedEmsX, draggedEmsY);
+  }
+}
+
+const InputGrid = ({selectedElement, dragStart, selectElement, moveElement, deselectElement}) => {
   return (
-    <div className="grid" onClick={(e) => handleClick(e)} onMouseMove={(e) => handleDrag(e)}>
-      <div className="selected"></div>
+    <div id="inputgrid" className="grid" onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseUp={deselectElement} onMouseMove={(e) => handleDrag(e, dragStart, selectedElement)}>
+      <div className="draggable selected" data-element-id='45'></div>
     </div>
   )
 }
