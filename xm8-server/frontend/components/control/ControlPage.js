@@ -1,16 +1,17 @@
-import ControlCenterColumnContainer from './ControlCenterColumnContainer';
+import InputGridCenterColumnContainer from '../inputgrid/InputGridCenterColumnContainer';
+import InputGridLeftMenuContainer from '../inputgrid/InputGridLeftMenuContainer';
 
 const ControlPage = () => {    
   return (  
     <div id="controlPage">
       <div className="leftcolumn">
-        Left
+        <InputGridLeftMenuContainer/>
       </div>
       <div className="rightcolumn">
         Right
       </div>
       <div className="centercolumn">
-        <ControlCenterColumnContainer/>
+        <InputGridCenterColumnContainer/>
       </div>
     </div>
   ) 

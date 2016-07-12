@@ -1,36 +1,48 @@
 import {Map} from 'immutable';
 import {inputgridActionTypes} from '../../shared/state/actions/inputgrid';
 
+const newGroup = (id) => {
+  return {
+    id,
+    elements: Map()
+  }
+}
+
+const getWrappedElement = (id, offsetXem, offsetYem, elementId) => {
+  return Map({
+    id,
+    elementId,
+    offset: Map({
+      x: offsetXem,
+      y: offsetYem
+    })
+  })
+}
+
 const inputgrid = (
   state = Map({
-    selectedElement: '',
     offset: Map({
       x: 0, 
       y: 0
     }),
-    dragStart: Map({
-      x: '',
-      y: '',
-      originX: '',
-      originY: ''
-    })
+    groups: Map({})
   }), 
   action) => {
 
   switch(action.type){
-    case inputgridActionTypes.SELECT_ELEMENT:
-      return state.set('selectedElement', action.id)
-        .setIn(['dragStart', 'x'], action.mouseX)
-        .setIn(['dragStart', 'y'], action.mouseY)
-        .setIn(['dragStart', 'originX'], action.offsetXem)
-        .setIn(['dragStart', 'originY'], action.offsetYem);
     case inputgridActionTypes.MOVE_ELEMENT:
       return state        
         .setIn(['offset', 'x'], action.offsetXem)
         .setIn(['offset', 'y'], action.offsetYem);
-
-    case inputgridActionTypes.DESELECT_ELEMENT:
-      return state.set('selectedElement', '');
+    case inputgridActionTypes.NEW_GROUP:
+      return state.setIn(['groups', action.groupId], newGroup(action.groupId))
+    case inputgridActionTypes.LOAD_GROUP:
+      return state;
+    case inputgridActionTypes.ADD_ELEMENT:
+      let wrappedElement = getWrappedElement(action.id, action.offsetXem, action.offsetYem, action.elementId, action.elementType);
+      return state.setIn(['groups', action.groupId, 'elements', action.id], wrappedElement);
+    case inputgridActionTypes.DELETE_ELEMENT:
+      return state.deleteIn(['groups', action.groupId, 'elements', action.id]);
   } 
   return state;
 }
