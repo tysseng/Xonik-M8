@@ -3,9 +3,15 @@ import {Map} from 'immutable';
 const inputs = (
   state = Map({
     selectedElement: '',
+    offset: Map({
+      x: 0, 
+      y: 0
+    }),    
     dragStart: Map({
       x: '',
-      y: ''
+      y: '',
+      originX: '',
+      originY: ''
     })
   }), 
   action) => {

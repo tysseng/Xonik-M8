@@ -1,30 +1,5 @@
 import $ from 'jquery';
 
-function getPosition(el) {
-  var xPosition = 0;
-  var yPosition = 0;
- 
-  while (el) {
-    if (el.tagName == "BODY") {
-      // deal with browser quirks with body/window/document and page scroll
-      var xScrollPos = el.scrollLeft || document.documentElement.scrollLeft;
-      var yScrollPos = el.scrollTop || document.documentElement.scrollTop;
- 
-      xPosition += (el.offsetLeft - xScrollPos + el.clientLeft);
-      yPosition += (el.offsetTop - yScrollPos + el.clientTop);
-    } else {
-      xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-      yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
-    }
- 
-    el = el.offsetParent;
-  }
-  return {
-    x: xPosition,
-    y: yPosition
-  };
-}
-
 const findDraggableElement = (el) => {
   while(el){
     if(el.hasAttribute('class') && el.getAttribute('class').indexOf('draggable') > -1){
@@ -35,39 +10,68 @@ const findDraggableElement = (el) => {
   return undefined;
 }
 
-
+// calculate em size as grid is em based but position is in pixels
 let emSize;
-
 const calculateEmSize = () => { 
   let grid = document.getElementById('inputgrid');
   emSize = Number(getComputedStyle(grid, "").fontSize.match(/(\d*(\.\d*)?)px/)[1]);
 }
 
-const onMouseDown = (e, selectElement) => {
-  let clickedElement = findDraggableElement(e.target);
-  if(!clickedElement) return;
-
-  calculateEmSize();
-  selectElement(clickedElement.getAttribute('data-element-id'),  e.pageX, e.pageY);
-}
-
-const handleRelease = e => {
-  console.log("Up ", e.pageX, e.pageY, getPosition(e.target).x,e.target.parentElement);
-}
-
-const handleDrag = (e, dragStart, selectedElement) => {
-  if(selectedElement !== ''){
-    let draggedEmsX = Math.floor((e.pageX - dragStart.x) / emSize);
-    let draggedEmsY = Math.floor((e.pageY - dragStart.y) / emSize);
-
-    console.log("Dragged. Start ", draggedEmsX, draggedEmsY);
+const getOffset = (element) => {
+  return {
+    x: Number(getComputedStyle(element, "").left.match(/(\d*(\.\d*)?)px/)[1]) / emSize,
+    y: Number(getComputedStyle(element, "").top.match(/(\d*(\.\d*)?)px/)[1]) / emSize    
   }
 }
 
-const InputGrid = ({selectedElement, dragStart, selectElement, moveElement, deselectElement}) => {
+const onMouseDown = (e, selectElementCallback) => {
+  let clickedElement = findDraggableElement(e.target);
+  if(!clickedElement) return;
+
+  // recalculate em size, font may have changed (?)
+  calculateEmSize();
+
+  // where is the element we want to drag now, in relation to the surrounding div.
+  let elementOffset = getOffset(clickedElement);
+  
+  selectElementCallback(clickedElement.id,  e.pageX, e.pageY, elementOffset.x, elementOffset.y);
+}
+
+const onDrag = (e, dragStart, selectedElementId, moveElementCallback) => {
+  if(selectedElementId !== ''){
+
+    let selectedElement = document.getElementById(selectedElementId);
+
+    // how long is the current drag in ems?
+    let draggedEmsX = Math.floor((e.pageX - dragStart.x) / emSize);
+    let draggedEmsY = Math.floor((e.pageY - dragStart.y) / emSize);
+
+    // where is the element to drag right now
+    let elementOffset = getOffset(selectedElement);
+
+    // where should it be
+    let newX = dragStart.originX + draggedEmsX;
+    let newY = dragStart.originY + draggedEmsY;
+
+    // if wanted and current positions are not the same, move element.
+    if(newX !== elementOffset.x || newY !== elementOffset.y){
+      moveElementCallback(selectedElementId, newX, newY);
+    }
+
+  }
+}
+
+const InputGrid = ({selectedElement, offset, dragStart, selectElement, moveElement, deselectElement}) => {
+
+  // position element according to offset. TODO: Should be element position instead
+  let style={
+    top: offset.y + 'em',
+    left: offset.x + 'em'
+  }
+
   return (
-    <div id="inputgrid" className="grid" onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseUp={deselectElement} onMouseMove={(e) => handleDrag(e, dragStart, selectedElement)}>
-      <div className="draggable selected" data-element-id='45'></div>
+    <div id="inputgrid" className="grid" onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseUp={deselectElement} onMouseMove={(e) => onDrag(e, dragStart, selectedElement, moveElement)}>
+      <div className="draggable selected" id='draggable-45' style={style}></div>
     </div>
   )
 }

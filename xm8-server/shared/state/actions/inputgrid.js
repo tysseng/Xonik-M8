@@ -6,21 +6,23 @@ export const inputgridActionTypes = {
 
 let types = inputgridActionTypes;
 
-export const selectElement = (id, x, y) => {
+export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem) => {
   return {
     type: types.SELECT_ELEMENT,
-    x,
-    y,
+    mouseX, 
+    mouseY, 
+    offsetXem, 
+    offsetYem,    
     id,
     target: 'SERVER'
   };  
 }
 
-export const moveElement = (id, x, y) => {
+export const moveElement = (id, offsetXem, offsetYem) => {
   return {
     type: types.MOVE_ELEMENT,
-    x,
-    y,
+    offsetXem, 
+    offsetYem,
     id,
     target: 'SERVER'
   }
