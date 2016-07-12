@@ -97,6 +97,11 @@ button,
     background: linear-gradient(#18191b 3%, #242529 51%, #20191b 100%);
     box-shadow: 1px 1px 1px rgba(255,255,255,0.1);
   }
+
+  &:disabled {
+    color: #666;
+    text-shadow: none;
+  }
 }
 
 input {
