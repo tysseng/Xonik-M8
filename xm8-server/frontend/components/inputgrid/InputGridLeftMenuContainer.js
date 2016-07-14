@@ -1,7 +1,10 @@
 import $ from 'jquery';
 import InputGridLeftMenu from './InputGridLeftMenu';
 import { connect } from 'react-redux';
-import { openNewElementDialog } from '../../../shared/state/actions/inputgrid';
+import { openNewElementDialog, newGroup } from '../../../shared/state/actions/inputgrid';
+
+// TODO: MOVE THIS!
+let nextGroupId = 0;
 
 const mapStateToProps = (state, ownProps) => {
   let inputgrid = state.inputgrid;
@@ -13,7 +16,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onOpenNewElementDialog: () => dispatch(openNewElementDialog())
+    onOpenNewElementDialog: () => dispatch(openNewElementDialog()),
+    newGroup: () => dispatch(newGroup('' + nextGroupId++))
+
   }
 }
 

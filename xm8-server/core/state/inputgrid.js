@@ -2,10 +2,10 @@ import {Map} from 'immutable';
 import {inputgridActionTypes} from '../../shared/state/actions/inputgrid';
 
 const newGroup = (id) => {
-  return {
+  return Map({
     id,
     elements: Map()
-  }
+  });
 }
 
 const getWrappedElement = (id, offsetXem, offsetYem, elementId) => {
@@ -36,6 +36,8 @@ const inputgrid = (
         .setIn(['offset', 'y'], action.offsetYem);
     case inputgridActionTypes.NEW_GROUP:
       return state.setIn(['groups', action.groupId], newGroup(action.groupId))
+        //TODO: TEMPORARY, REMOVE
+        .set('selectedGroup', action.groupId);
     case inputgridActionTypes.LOAD_GROUP:
       return state;
     case inputgridActionTypes.ADD_ELEMENT:

@@ -4,7 +4,7 @@ import {inputgridActionTypes} from '../../shared/state/actions/inputgrid';
 const inputs = (
   state = Map({
     selectedElement: '',
-    selectedGroup: '0',
+    selectedGroup: '',
     offset: Map({
       x: 0, 
       y: 0
@@ -15,12 +15,7 @@ const inputs = (
       originX: '',
       originY: ''
     }),
-    groups: Map({
-      '0': {
-        id: '0',
-        elements: Map()
-      }
-    }),
+    groups: Map(),
     newElementDialog: Map({
       show: false,
       type: '',

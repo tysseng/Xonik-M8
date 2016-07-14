@@ -6,8 +6,14 @@ import InputGrid from './InputGrid';
 
 const mapStateToProps = (state, ownProps) => {
 
+  let selectedGroupId = state.inputgrid.get('selectedGroup');
+  let selectedGroup = selectedGroupId !== '' ? state.inputgrid.getIn(['groups', selectedGroupId]).toJS() : undefined;
+  let inputs = state.inputs.get('byId').toJS();
+
   return {
     selectedElement: state.inputgrid.get('selectedElement'),
+    selectedGroup,
+    inputs,
     dragStart: state.inputgrid.get('dragStart').toJS(),
     offset: state.inputgrid.get('offset').toJS()
   }

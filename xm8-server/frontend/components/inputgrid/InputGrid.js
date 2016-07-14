@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import Controller from '../control/Controller';
 
 const findDraggableElement = (el) => {
   while(el){
@@ -61,17 +61,31 @@ const onDrag = (e, dragStart, selectedElementId, moveElementCallback) => {
   }
 }
 
-const InputGrid = ({selectedElement, offset, dragStart, selectElement, moveElement, deselectElement}) => {
+const InputGrid = ({selectedElement, selectedGroup, inputs, offset, dragStart, selectElement, moveElement, deselectElement}) => {
 
   // position element according to offset. TODO: Should be element position instead
   let style={
     top: offset.y + 'em',
-    left: offset.x + 'em'
+    left: offset.x + 'em',
+    height: '17em',
+    width: '4em'
   }
 
   return (
     <div id="inputgrid" className="grid" onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseUp={deselectElement} onMouseMove={(e) => onDrag(e, dragStart, selectedElement, moveElement)}>
-      <div className="draggable selected" id='draggable-45' style={style}></div>
+    { selectedGroup && Object.values(selectedGroup.elements).map(element => {
+
+        // todo swith on element type here
+        let input = inputs[element.elementId];
+        console.log("input", input)
+
+        return (
+          <div className="draggable selected" id='draggable-45' style={style}>
+            <Controller input={input} value={0}/>
+          </div>
+        )
+      })
+    }
     </div>
   )
 }
