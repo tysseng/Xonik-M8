@@ -20,8 +20,15 @@ const getSelectedElement = (state) => {
 
 const mapStateToProps = (state, ownProps) => {
 
+  let element = getSelectedElement(state);
+  let inputs = state.inputs.get('byId').toJS();
+  let input;
+  if(element){
+    input = inputs[element.elementId];
+  }
   return {
-    element: getSelectedElement(state)
+    element,
+    input
   }
 }
 

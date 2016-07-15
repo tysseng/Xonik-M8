@@ -3,7 +3,7 @@ import React from 'react';
 import MiniIcon from '../framework/MiniIcon';
 import InputTypesDropdown from '../inputs/InputTypesDropdown';
 
-const ElementForm = ({ element, changeElementType, onCloseDialog }) => {
+const ElementForm = ({ element, input, changeElementType, onCloseDialog }) => {
 
   if(!element){
     return null;
@@ -12,7 +12,7 @@ const ElementForm = ({ element, changeElementType, onCloseDialog }) => {
   return (
 
     <form className="elementForm configPane">
-      <div className="heading">Display options<MiniIcon label="Close" icon="cancel.svg" onClick={onCloseDialog}/></div>
+      <div className="heading">{input.name.full}<MiniIcon label="Close" icon="cancel.svg" onClick={onCloseDialog}/></div>
 
       <div className='contents'>
         <label>Show as</label> 
