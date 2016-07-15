@@ -15,7 +15,7 @@ import InputRange from './InputRange';
 import InputStepsGeneration from './InputStepsGeneration';
 
 import UnitDropdown from '../matrix/ParameterUnitDropdown';
-import InputDropdown from '../matrix/InputLinkDropdown';
+import InputDropdown from './InputDropdown';
 
 const InputForm = ({ input, inputs, inputValue, 
   selectInput, onCloseDialog, rename, renameShort, 
@@ -38,7 +38,7 @@ const InputForm = ({ input, inputs, inputValue,
 
           <div className='contents'>
             <div>
-              <InputDropdown inputs={inputs} value={selectedId} onInputLinkChange={selectInput}/>
+              <InputDropdown inputs={inputs} value={selectedId} onChange={selectInput}/>
             </div>
           </div>
         </div>

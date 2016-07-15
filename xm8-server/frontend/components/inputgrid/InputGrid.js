@@ -63,7 +63,10 @@ const onDrag = (e, dragStart, selectedElementId, moveElementCallback) => {
 
 const InputGrid = ({selectedElement, selectedGroup, inputs, offset, dragStart, selectElement, moveElement, deselectElement}) => {
 
-  // position element according to offset. TODO: Should be element position instead
+  // position element according to offset.
+  //TODO: get element size from input type
+  //TODO: set and get position on element in group
+  //TODO: Change div id
   let style={
     top: offset.y + 'em',
     left: offset.x + 'em',
@@ -77,7 +80,6 @@ const InputGrid = ({selectedElement, selectedGroup, inputs, offset, dragStart, s
 
         // todo swith on element type here
         let input = inputs[element.elementId];
-        console.log("input", input)
 
         return (
           <div className="draggable selected" id='draggable-45' style={style}>
