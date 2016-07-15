@@ -1,5 +1,6 @@
 import InputGridCenterColumnContainer from '../inputgrid/InputGridCenterColumnContainer';
 import InputGridLeftMenuContainer from '../inputgrid/InputGridLeftMenuContainer';
+import ElementFormContainer from '../inputgrid/ElementFormContainer';
 
 const ControlPage = () => {    
   return (  
@@ -8,7 +9,7 @@ const ControlPage = () => {
         <InputGridLeftMenuContainer/>
       </div>
       <div className="rightcolumn">
-        Right
+        <ElementFormContainer/>
       </div>
       <div className="centercolumn">
         <InputGridCenterColumnContainer/>

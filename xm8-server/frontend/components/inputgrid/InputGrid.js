@@ -25,7 +25,8 @@ const getOffset = (element) => {
   }
 }
 
-const onMouseDown = (e, selectElementCallback) => {
+const onMouseDown = (e, selectElement) => {
+
   let clickedElement = findDraggableElement(e.target);
   if(!clickedElement) return;
 
@@ -35,13 +36,13 @@ const onMouseDown = (e, selectElementCallback) => {
   // where is the element we want to drag now, in relation to the surrounding div.
   let elementOffset = getOffset(clickedElement);
   
-  selectElementCallback(clickedElement.id,  e.pageX, e.pageY, elementOffset.x, elementOffset.y);
+  selectElement(clickedElement.id,  e.pageX, e.pageY, elementOffset.x, elementOffset.y);
 }
 
-const onDrag = (e, dragStart, selectedGroupId, selectedElementId, moveElementCallback) => {
-  if(selectedElementId !== ''){
+const onDrag = (e, dragStart, selectedGroupId, dragElementId, moveElementCallback) => {
+  if(dragElementId !== ''){
 
-    let selectedElement = document.getElementById(selectedElementId);
+    let selectedElement = document.getElementById(dragElementId);
 
     // how long is the current drag in ems?
     let draggedEmsX = Math.floor((e.pageX - dragStart.x) / emSize);
@@ -56,29 +57,29 @@ const onDrag = (e, dragStart, selectedGroupId, selectedElementId, moveElementCal
 
     // if wanted and current positions are not the same, move element.
     if(newX !== elementOffset.x || newY !== elementOffset.y){
-      moveElementCallback(selectedGroupId, selectedElementId, newX, newY);
+      moveElementCallback(selectedGroupId, dragElementId, newX, newY);
     }
 
   }
 }
 
-const InputGrid = ({selectedElementId, selectedGroup, inputs, offset, dragStart, selectElement, moveElement, deselectElement}) => {
-
-  // position element according to offset.
-  //TODO: get element size from input type
-  //TODO: set and get position on element in group
-  //TODO: Change div id
-
+const InputGrid = ({dragElementId, selectedGroup, inputs, offset, dragStart, selectElement, moveElement, deselectDragElement}) => {
 
   return (
-    <div id="inputgrid" className="grid" onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseUp={deselectElement} onMouseMove={(e) => onDrag(e, dragStart, selectedGroup.id, selectedElementId, moveElement)}>
+    <div id="inputgrid" className="grid" onMouseUp={deselectDragElement} onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseMove={(e) => onDrag(e, dragStart, selectedGroup.id, dragElementId, moveElement)}>
     { selectedGroup && Object.values(selectedGroup.elements).map(element => {
 
-        // todo swith on element type here
+        // todo swith on element type here (input or group)
+        // TODO: or maybe groups in group are not necessary?
         let input = inputs[element.elementId];
-        let type = inputTypesById[input.type];
-        console.log(type)
 
+        // override default input type to render input differently for this group
+        if(element.type && element.type !== ''){
+          input.type = element.type;
+        }
+
+        let type = inputTypesById[input.type];
+        
         let style={
           top: element.offset.y + 'em',
           left: element.offset.x + 'em',
@@ -86,7 +87,7 @@ const InputGrid = ({selectedElementId, selectedGroup, inputs, offset, dragStart,
           width: type.size.x + 'em'
         }
 
-        let classnames = 'draggable' + (element.id === selectedElementId ? ' selected' : '');
+        let classnames = 'draggable' + (element.id === dragElementId ? ' selected' : '');
 
         return (
           <div className={classnames} id={element.id} style={style}>

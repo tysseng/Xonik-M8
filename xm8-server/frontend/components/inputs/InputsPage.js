@@ -1,4 +1,3 @@
-import InputsCenterColumnContainer from '../inputs/InputsCenterColumnContainer';
 import InputFormContainer from '../inputs/InputFormContainer';
 
 const InputsPage = () => {    

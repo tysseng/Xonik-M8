@@ -2,16 +2,28 @@ export const inputgridActionTypes = {
   SELECT_ELEMENT: 'SELECT_ELEMENT',
   MOVE_ELEMENT: 'MOVE_ELEMENT',
   DESELECT_ELEMENT: 'DESELECT_ELEMENT',
+  DESELECT_DRAG_ELEMENT: 'DESELECT_DRAG_ELEMENT',
   NEW_GROUP: 'NEW_GROUP',
   LOAD_GROUP: 'LOAD_GROUP',
   ADD_ELEMENT: 'ADD_ELEMENT',
   DELETE_ELEMENT: 'DELETE_ELEMENT',
   OPEN_NEW_ELEMENT_DIALOG: 'OPEN_NEW_ELEMENT_DIALOG',
   CLOSE_NEW_ELEMENT_DIALOG: 'CLOSE_NEW_ELEMENT_DIALOG',
-  SELECT_ID_IN_NEW_ELEMENT_DIALOG: 'SELECT_ID_IN_NEW_ELEMENT_DIALOG'
+  SELECT_ID_IN_NEW_ELEMENT_DIALOG: 'SELECT_ID_IN_NEW_ELEMENT_DIALOG',
+  CHANGE_ELEMENT_TYPE: 'CHANGE_ELEMENT_TYPE'
 }
 
 let types = inputgridActionTypes;
+
+export const changeElementType = (groupId, id, inputType) => {
+  return {
+    type: types.CHANGE_ELEMENT_TYPE,
+    groupId,
+    id,
+    inputType,
+    target: 'SERVER'
+  };  
+}
 
 export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem) => {
   return {
@@ -39,6 +51,13 @@ export const moveElement = (groupId, id, offsetXem, offsetYem) => {
 export const deselectElement = () => {
   return {
     type: types.DESELECT_ELEMENT,
+    target: 'GUI'
+  }
+}
+
+export const deselectDragElement = () => {
+  return {
+    type: types.DESELECT_DRAG_ELEMENT,
     target: 'GUI'
   }
 }

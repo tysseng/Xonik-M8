@@ -8,9 +8,10 @@ const newGroup = (id) => {
   });
 }
 
-const getWrappedElement = (id, offsetXem, offsetYem, elementId) => {
+const getWrappedElement = (id, groupId, offsetXem, offsetYem, elementId) => {
   return Map({
     id,
+    groupId,
     elementId,
     offset: Map({
       x: offsetXem,
@@ -21,7 +22,7 @@ const getWrappedElement = (id, offsetXem, offsetYem, elementId) => {
 
 const inputgrid = (
   state = Map({
-    groups: Map({})
+    groups: Map()
   }), 
   action) => {
 
@@ -37,10 +38,12 @@ const inputgrid = (
     case inputgridActionTypes.LOAD_GROUP:
       return state;
     case inputgridActionTypes.ADD_ELEMENT:
-      let wrappedElement = getWrappedElement(action.id, action.offsetXem, action.offsetYem, action.elementId, action.elementType);
+      let wrappedElement = getWrappedElement(action.id, action.groupId, action.offsetXem, action.offsetYem, action.elementId, action.elementType);
       return state.setIn(['groups', action.groupId, 'elements', action.id], wrappedElement);
     case inputgridActionTypes.DELETE_ELEMENT:
       return state.deleteIn(['groups', action.groupId, 'elements', action.id]);
+    case inputgridActionTypes.CHANGE_ELEMENT_TYPE:
+      return state.setIn(['groups', action.groupId, 'elements', action.id, 'type'], action.inputType);
   } 
   return state;
 }
