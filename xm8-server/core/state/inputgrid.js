@@ -32,8 +32,8 @@ const inputgrid = (
   switch(action.type){
     case inputgridActionTypes.MOVE_ELEMENT:
       return state        
-        .setIn(['offset', 'x'], action.offsetXem)
-        .setIn(['offset', 'y'], action.offsetYem);
+        .setIn(['groups', action.groupId, 'elements', action.id, 'offset', 'x'], action.offsetXem)
+        .setIn(['groups', action.groupId, 'elements', action.id, 'offset', 'y'], action.offsetYem);
     case inputgridActionTypes.NEW_GROUP:
       return state.setIn(['groups', action.groupId], newGroup(action.groupId))
         //TODO: TEMPORARY, REMOVE

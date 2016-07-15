@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
   let inputs = state.inputs.get('byId').toJS();
 
   return {
-    selectedElement: state.inputgrid.get('selectedElement'),
+    selectedElementId: state.inputgrid.get('selectedElementId'),
     selectedGroup,
     inputs,
     dragStart: state.inputgrid.get('dragStart').toJS(),
@@ -22,7 +22,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {  
     selectElement: (id, mouseX, mouseY, offsetXem, offsetYem) => dispatch(selectElement(id, mouseX, mouseY, offsetXem, offsetYem)),
-    moveElement: (id, x, y) => dispatch(moveElement(id, x,y)),
+    moveElement: (groupId, id, x, y) => dispatch(moveElement(groupId, id, x, y)),
     deselectElement: () => dispatch(deselectElement())
   }
 }

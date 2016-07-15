@@ -3,7 +3,7 @@ import {inputgridActionTypes} from '../../shared/state/actions/inputgrid';
 
 const inputs = (
   state = Map({
-    selectedElement: '',
+    selectedElementId: '',
     selectedGroup: '',
     offset: Map({
       x: 0, 
@@ -31,13 +31,13 @@ const inputs = (
       }        
       break;  
     case inputgridActionTypes.SELECT_ELEMENT:
-      return state.set('selectedElement', action.id)
+      return state.set('selectedElementId', action.id)
         .setIn(['dragStart', 'x'], action.mouseX)
         .setIn(['dragStart', 'y'], action.mouseY)
         .setIn(['dragStart', 'originX'], action.offsetXem)
         .setIn(['dragStart', 'originY'], action.offsetYem);
     case inputgridActionTypes.DESELECT_ELEMENT:
-      return state.set('selectedElement', '');      
+      return state.set('selectedElementId', '');      
     case inputgridActionTypes.OPEN_NEW_ELEMENT_DIALOG:
       return state.setIn(['newElementDialog', 'show'], true);
     case inputgridActionTypes.ADD_ELEMENT:

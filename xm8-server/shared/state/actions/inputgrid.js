@@ -25,12 +25,13 @@ export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem) => {
   };  
 }
 
-export const moveElement = (id, offsetXem, offsetYem) => {
+export const moveElement = (groupId, id, offsetXem, offsetYem) => {
   return {
     type: types.MOVE_ELEMENT,
+    id,
+    groupId,    
     offsetXem, 
     offsetYem,
-    id,
     target: 'SERVER'
   }
 }

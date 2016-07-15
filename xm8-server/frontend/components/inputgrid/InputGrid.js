@@ -37,7 +37,7 @@ const onMouseDown = (e, selectElementCallback) => {
   selectElementCallback(clickedElement.id,  e.pageX, e.pageY, elementOffset.x, elementOffset.y);
 }
 
-const onDrag = (e, dragStart, selectedElementId, moveElementCallback) => {
+const onDrag = (e, dragStart, selectedGroupId, selectedElementId, moveElementCallback) => {
   if(selectedElementId !== ''){
 
     let selectedElement = document.getElementById(selectedElementId);
@@ -55,34 +55,36 @@ const onDrag = (e, dragStart, selectedElementId, moveElementCallback) => {
 
     // if wanted and current positions are not the same, move element.
     if(newX !== elementOffset.x || newY !== elementOffset.y){
-      moveElementCallback(selectedElementId, newX, newY);
+      moveElementCallback(selectedGroupId, selectedElementId, newX, newY);
     }
 
   }
 }
 
-const InputGrid = ({selectedElement, selectedGroup, inputs, offset, dragStart, selectElement, moveElement, deselectElement}) => {
+const InputGrid = ({selectedElementId, selectedGroup, inputs, offset, dragStart, selectElement, moveElement, deselectElement}) => {
 
   // position element according to offset.
   //TODO: get element size from input type
   //TODO: set and get position on element in group
   //TODO: Change div id
-  let style={
-    top: offset.y + 'em',
-    left: offset.x + 'em',
-    height: '17em',
-    width: '4em'
-  }
+
 
   return (
-    <div id="inputgrid" className="grid" onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseUp={deselectElement} onMouseMove={(e) => onDrag(e, dragStart, selectedElement, moveElement)}>
+    <div id="inputgrid" className="grid" onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseUp={deselectElement} onMouseMove={(e) => onDrag(e, dragStart, selectedGroup.id, selectedElementId, moveElement)}>
     { selectedGroup && Object.values(selectedGroup.elements).map(element => {
 
         // todo swith on element type here
         let input = inputs[element.elementId];
 
+        let style={
+          top: element.offset.y + 'em',
+          left: element.offset.x + 'em',
+          height: '17em',
+          width: '4em'
+        }
+
         return (
-          <div className="draggable selected" id='draggable-45' style={style}>
+          <div className="draggable selected" id={element.id} style={style}>
             <Controller input={input} value={0}/>
           </div>
         )
