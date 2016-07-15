@@ -1,7 +1,7 @@
 import ModalBox from '../framework/ModalBox'; 
-import InputLinkDropdown from '../matrix/InputLinkDropdown';    
+import InputDropdown from '../inputs/InputDropdown';    
 
-const ElementSelectorDialog = ({newElementDialog, inputs, selectedGroupId, onCancel, onAdd, selectElement}) => {
+const ElementSelectorDialog = ({newElementDialog, selectedGroupId, onCancel, onAdd, selectElement}) => {
   let inputvalue = '';
   let groupvalue = '';
 
@@ -17,10 +17,10 @@ const ElementSelectorDialog = ({newElementDialog, inputs, selectedGroupId, onCan
         <div className="intro">What element do you want to add to the group?</div>
         <div>
           <div>Input</div>
-          <InputLinkDropdown inputs={inputs} value={inputvalue} onInputLinkChange={(value) => selectElement('input', value)}/>
+          <InputDropdown value={inputvalue} onChange={(value) => selectElement('input', value)}/>
           <div>or</div>
           <div>Group</div>
-          <InputLinkDropdown inputs={inputs} value={groupvalue} onInputLinkChange={(value) => selectElement('group', value)}/>
+          <InputDropdown value={groupvalue} onChange={(value) => selectElement('group', value)}/>
           <div>GROUP DROPDOWN HERE</div>
         </div>
       </div>

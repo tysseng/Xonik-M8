@@ -17,7 +17,7 @@ import InputStepsGeneration from './InputStepsGeneration';
 import UnitDropdown from '../matrix/ParameterUnitDropdown';
 import InputDropdown from './InputDropdown';
 
-const InputForm = ({ input, inputs, inputValue, 
+const InputForm = ({ input, inputValue, 
   selectInput, onCloseDialog, rename, renameShort, 
   onStatusChange, onData1Change, onResolutionChange,
   onSendChange, onReceiveChange,
@@ -38,7 +38,7 @@ const InputForm = ({ input, inputs, inputValue,
 
           <div className='contents'>
             <div>
-              <InputDropdown inputs={inputs} value={selectedId} onChange={selectInput}/>
+              <InputDropdown value={selectedId} onChange={selectInput}/>
             </div>
           </div>
         </div>

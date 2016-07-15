@@ -7,10 +7,8 @@ import InputGridCenterColumn from './InputGridCenterColumn';
 const mapStateToProps = (state, ownProps) => {
 
   let inputgrid = state.inputgrid;
-  let inputs = state.inputs.get('byId').toJS();
 
   return {
-    inputs,
     selectedGroupId: inputgrid.get('selectedGroup'),
     showFileDialog: false, 
     newElementDialog: inputgrid.get('newElementDialog').toJS(), 

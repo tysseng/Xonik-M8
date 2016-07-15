@@ -6,17 +6,14 @@ import InputForm from './InputForm'
 
 const mapStateToProps = (state, ownProps) => {
 
-  let inputs = state.inputs.get('byId').toJS();
-  let orderedInputs = _.sortBy(inputs);
-
   let selectedInputId = state.inputs.get('selectedInput');
+  let inputs = state.inputs.get('byId').toJS();
   let input = inputs[selectedInputId];
 
   let controllers = state.controllers.toJS()
   let inputValue = controllers[selectedInputId];
 
   return {
-    inputs: orderedInputs,
     input,
     inputValue
   }

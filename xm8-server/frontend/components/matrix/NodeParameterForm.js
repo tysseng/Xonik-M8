@@ -3,7 +3,7 @@ import parameterTypes from '../../../shared/matrix/ParameterTypes.js';
 
 import NodeParameterTypeDropdown from './NodeParameterTypeDropdown.js';
 import NodeLinkDropdown from './NodeLinkDropdown.js';
-import InputLinkDropdown from './InputLinkDropdown.js';
+import InputDropdown from '../inputs/InputDropdown.js';
 import OutputLinkDropdown from './OutputLinkDropdown.js';
 import ParameterUnitDropdown from './ParameterUnitDropdown.js';
 
@@ -12,7 +12,6 @@ const NodeParameterForm = ({
   parameter,
   currentnode,
   nodes,
-  inputs,
   onValueChange, 
   onTypeChange,
   onUnitChange
@@ -29,7 +28,7 @@ const NodeParameterForm = ({
       body = "";
       break;
     case "input":
-      body = <InputLinkDropdown onInputLinkChange={(value) => onValueChange(value)} value={value} inputs={inputs}/>;
+      body = <InputDropdown onChange={(value) => onValueChange(value)} value={value}/>;
       break;
     case "output":
       body = <OutputLinkDropdown onOutputLinkChange={(value) => onValueChange(value)} value={value}/>;

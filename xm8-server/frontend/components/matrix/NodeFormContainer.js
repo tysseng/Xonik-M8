@@ -12,12 +12,10 @@ const mapStateToProps = (state, ownProps) => {
   let nodes = state.nodes.toJS();
   let selectedNodeId = state.matrix.get('selectedNode');
   let node = nodes[selectedNodeId];
-  let inputs = state.inputs.get('byId').toJS();
 
   return {
     node, 
-    nodes,
-    inputs
+    nodes
   }
 }
 
