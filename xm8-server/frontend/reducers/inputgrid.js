@@ -5,10 +5,6 @@ const inputs = (
   state = Map({
     selectedElementId: '',
     selectedGroup: '',
-    offset: Map({
-      x: 0, 
-      y: 0
-    }),    
     dragStart: Map({
       x: '',
       y: '',

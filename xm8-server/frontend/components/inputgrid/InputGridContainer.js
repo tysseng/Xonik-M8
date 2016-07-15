@@ -14,8 +14,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedElementId: state.inputgrid.get('selectedElementId'),
     selectedGroup,
     inputs,
-    dragStart: state.inputgrid.get('dragStart').toJS(),
-    offset: state.inputgrid.get('offset').toJS()
+    dragStart: state.inputgrid.get('dragStart').toJS()
   }
 }
 

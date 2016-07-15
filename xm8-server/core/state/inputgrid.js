@@ -21,10 +21,6 @@ const getWrappedElement = (id, offsetXem, offsetYem, elementId) => {
 
 const inputgrid = (
   state = Map({
-    offset: Map({
-      x: 0, 
-      y: 0
-    }),
     groups: Map({})
   }), 
   action) => {
