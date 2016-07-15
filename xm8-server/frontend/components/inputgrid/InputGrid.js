@@ -1,4 +1,5 @@
 import Controller from '../control/Controller';
+import { inputTypesById } from '../../../shared/inputs/InputTypes';
 
 const findDraggableElement = (el) => {
   while(el){
@@ -75,12 +76,14 @@ const InputGrid = ({selectedElementId, selectedGroup, inputs, offset, dragStart,
 
         // todo swith on element type here
         let input = inputs[element.elementId];
+        let type = inputTypesById[input.type];
+        console.log(type)
 
         let style={
           top: element.offset.y + 'em',
           left: element.offset.x + 'em',
-          height: '17em',
-          width: '4em'
+          height: type.size.y + 'em',
+          width: type.size.x + 'em'
         }
 
         return (

@@ -1,11 +1,19 @@
 let inputTypes = [
   {
     id: 'VERTICAL_RANGE',
-    name: 'Range (vertical)'
+    name: 'Range (vertical)',
+    size: {
+      x: 4,
+      y: 17
+    }
   },
   {
     id: 'HORIZONTAL_RANGE',
-    name: 'Range (horizontal)'
+    name: 'Range (horizontal)',
+    size: {
+      x: 15,
+      y: 5
+    }
   }  
 ]
 
