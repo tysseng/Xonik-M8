@@ -86,8 +86,10 @@ const InputGrid = ({selectedElementId, selectedGroup, inputs, offset, dragStart,
           width: type.size.x + 'em'
         }
 
+        let classnames = 'draggable' + (element.id === selectedElementId ? ' selected' : '');
+
         return (
-          <div className="draggable selected" id={element.id} style={style}>
+          <div className={classnames} id={element.id} style={style}>
             <Controller input={input} value={0}/>
           </div>
         )
