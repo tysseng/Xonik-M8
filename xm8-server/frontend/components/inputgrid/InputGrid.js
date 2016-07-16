@@ -67,6 +67,10 @@ const onDrag = (e, dragStart, selectedGroupId, dragElementId, moveElementCallbac
 
 const InputGrid = ({dragElementId, selectedGroup, inputs, offset, dragStart, selectElement, moveElement, deselectDragElement}) => {
 
+  if(!selectedGroup){
+    return null;
+  }
+
   return (
     <div id="inputgrid" className="grid" onMouseUp={deselectDragElement} onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseMove={(e) => onDrag(e, dragStart, selectedGroup.id, dragElementId, moveElement)}>
     { selectedGroup && Object.values(selectedGroup.elements).map(element => {
