@@ -1,6 +1,8 @@
+import { groups as undoGroups } from './undo';
+const undoGroup = undoGroups.MATRIX;
+
 // If on, all changes to the matrix are sent to the synth core immediately
 export const toggleAutoUpdate = (shouldAutoUpdate) => {
-  console.log(shouldAutoUpdate)
   return {
     type: 'TOGGLE_AUTO_UPDATE',
     target: 'SERVER',
@@ -17,7 +19,6 @@ export const setLoadedPatchFileDetails = (fileId, version) => {
   };
 }
 
-
 export const loadNodesFromFile = (fileId, version, nodes) => {
   return {
     type: 'LOAD_NODES_FROM_FILE',
@@ -27,7 +28,6 @@ export const loadNodesFromFile = (fileId, version, nodes) => {
     nodes
   }
 }
-
 
 export const setState = (state) => {  
   return {
@@ -57,7 +57,7 @@ export const createNewNode = () => {
   return {
     type: 'NEW_NODE',
     target: 'SERVER',
-    isUndoable: true,
+    undoGroup,
     undoDescription: 'Create new node'
   }
 }
@@ -67,7 +67,7 @@ export const deleteNode = (nodeId) => {
     type: 'DELETE_NODE',
     nodeId: nodeId,
     target: 'BOTH',
-    isUndoable: true,
+    undoGroup,
     undoDescription: 'Delete node'
   }
 }
@@ -87,7 +87,7 @@ export const changeNodeType = (nodeId, typeId) => {
     nodeId: nodeId,
     typeId: typeId,
     target: 'SERVER',    
-    isUndoable: true,
+    undoGroup,
     undoDescription: 'Change node type'
   }
 }
@@ -99,7 +99,7 @@ export const changeNodeParamType = (nodeId, paramId, paramType) => {
     paramId: paramId,
     paramType: paramType,
     target: 'SERVER',    
-    isUndoable: true,
+    undoGroup,
     undoDescription: 'Change parameter type'
   }
 }
@@ -112,7 +112,7 @@ export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue) =>
     paramType: paramType,
     paramValue: paramValue,
     target: 'SERVER',    
-    isUndoable: true,
+    undoGroup,
     undoDescription: 'Change parameter value'
   }
 }
@@ -124,7 +124,7 @@ export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
     paramId: paramId,
     paramUnit: paramUnit,
     target: 'SERVER',    
-    isUndoable: true,
+    undoGroup,
     undoDescription: 'Change unit'
   }
 }
@@ -137,7 +137,7 @@ export const createNewLink = (fromNodeId, toNodeId, toParamId) => {
     nodeId: toNodeId,
     paramId: toParamId,
     target: 'BOTH',    
-    isUndoable: true,
+    undoGroup,
     undoDescription: 'Link nodes'
   }
 }
@@ -159,11 +159,10 @@ export const toggleLinkNameInGraph = (toNodeId, toParamId, visible) => {
     toParamId,
     visible,
     target: 'SERVER',    
-    isUndoable: true,
+    undoGroup,
     undoDescription: 'Toggle link name visibility'
   }
 }
-
 
 export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
   return {
@@ -173,29 +172,13 @@ export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
     toNodeId, 
     toParamId,
     target: 'BOTH',    
-    isUndoable: true,
+    undoGroup,
     undoDescription: 'Delete link'
-  }
-}
-
-export const matrixUndo = () => {
-  return {
-    type: 'MATRIX_UNDO'
-  }
-}
-
-export const matrixRedo = () => {
-  return {
-    type: 'MATRIX_REDO'
   }
 }
 
 // this action is not explicitly treated by the reducer, but it adds an entry in the
 // undo history.
 export const matrixUndoPointPositionChanged = () => {
-  return {
-    type: 'MATRIX_SET_UNDO_POINT',
-    isUndoable: true,
-    undoDescription: 'Move node'
-  }
-}
+  return setUndoPoint(undoGroup, 'Move node');  
+}  

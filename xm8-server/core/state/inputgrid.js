@@ -1,5 +1,7 @@
 import {Map} from 'immutable';
-import {inputgridActionTypes} from '../../shared/state/actions/inputgrid';
+import { inputgridActionTypes } from '../../shared/state/actions/inputgrid';
+import { getUndoWrapper } from './undo';
+import { groups as undoGroups } from '../../shared/state/actions/undo';
 
 const newGroup = (id) => {
   return Map({
@@ -21,9 +23,7 @@ const getWrappedElement = (id, groupId, offsetXem, offsetYem, elementId) => {
 }
 
 const inputgrid = (
-  state = Map({
-    groups: Map()
-  }), 
+  state = getInitialState(), 
   action) => {
 
   switch(action.type){
@@ -43,9 +43,17 @@ const inputgrid = (
     case inputgridActionTypes.DELETE_ELEMENT:
       return state.deleteIn(['groups', action.groupId, 'elements', action.id]);
     case inputgridActionTypes.CHANGE_ELEMENT_TYPE:
-      return state.setIn(['groups', action.groupId, 'elements', action.id, 'type'], action.inputType);
+      return state.setIn(['groups', action.groupId, 'elements', action.id, 'type'], action.inputType); 
   } 
   return state;
 }
 
-export default inputgrid;
+const getInitialState = () => {
+  return Map({
+    groups: Map()
+  });
+}
+ 
+const undoWrapper = getUndoWrapper(undoGroups.INPUTGRID, inputgrid, getInitialState);
+
+export default undoWrapper;

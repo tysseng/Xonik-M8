@@ -2,7 +2,8 @@ import $ from 'jquery';
 import MatrixLeftMenu from './MatrixLeftMenu';
 import { connect } from 'react-redux';
 import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
-import { createNewNode, deleteNode, deleteLink, matrixUndo, matrixRedo } from '../../../shared/state/actions';
+import { createNewNode, deleteNode, deleteLink} from '../../../shared/state/actions';
+import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { toggleMode } from '../../../shared/state/actions/matrixgui';
 
 const forceUpdate = () => {
@@ -48,8 +49,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onCreate: () => dispatch(createNewNode()),
     onModeChange: (mode) => dispatch(toggleMode(mode)),
-    onUndo: () => dispatch(matrixUndo()),
-    onRedo: () => dispatch(matrixRedo())
+    onUndo: () => dispatch(undo(undoGroups.MATRIX)),
+    onRedo: () => dispatch(redo(undoGroups.MATRIX))
   }
 }
 

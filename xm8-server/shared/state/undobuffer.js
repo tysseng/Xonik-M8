@@ -55,7 +55,6 @@ export const redo = (groupId, state, redoToPosition) => {
 
   if(redoToPosition < group.contents.length ){
     group.position = redoToPosition;
-    console.log(" redoing to position " + group.position, group.contents[group.position]);
     return group.contents[group.position].state;
   } 
   

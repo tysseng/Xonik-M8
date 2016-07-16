@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import InputGridLeftMenu from './InputGridLeftMenu';
 import { connect } from 'react-redux';
+import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { openNewElementDialog, newGroup } from '../../../shared/state/actions/inputgrid';
 
 // TODO: MOVE THIS!
@@ -17,8 +18,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onOpenNewElementDialog: () => dispatch(openNewElementDialog()),
-    newGroup: () => dispatch(newGroup('' + nextGroupId++))
-
+    newGroup: () => dispatch(newGroup('' + nextGroupId++)),
+    onUndo: () => dispatch(undo(undoGroups.INPUTGRID)),
+    onRedo: () => dispatch(redo(undoGroups.INPUTGRID))    
   }
 }
 

@@ -1,3 +1,5 @@
+// TODO: Should separate drag ended and element clicked. A short click without a drag will now add an entry in the undo buffer.
+
 import Controller from '../control/Controller';
 import { inputTypesById } from '../../../shared/inputs/InputTypes';
 

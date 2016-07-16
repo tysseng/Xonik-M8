@@ -1,3 +1,6 @@
+import { groups as undoGroups, setUndoPoint } from './undo';
+const undoGroup = undoGroups.INPUTGRID;
+
 export const inputgridActionTypes = {
   SELECT_ELEMENT: 'SELECT_ELEMENT',
   MOVE_ELEMENT: 'MOVE_ELEMENT',
@@ -21,7 +24,9 @@ export const changeElementType = (groupId, id, inputType) => {
     groupId,
     id,
     inputType,
-    target: 'SERVER'
+    target: 'SERVER',    
+    undoGroup,
+    undoDescription: 'Change element type'
   };  
 }
 
@@ -66,7 +71,9 @@ export const newGroup = (groupId) => {
   return {
     type: inputgridActionTypes.NEW_GROUP,
     groupId,
-    target: 'SERVER'
+    target: 'SERVER',    
+    undoGroup,
+    undoDescription: 'New group'
   }
 }
 
@@ -74,7 +81,9 @@ export const loadGroup = (groupId) => {
   return {
     type: inputgridActionTypes.LOAD_GROUP,
     groupId,
-    target: 'SERVER'
+    target: 'SERVER',    
+    undoGroup,
+    undoDescription: 'Load group'
   }
 }
 
@@ -87,7 +96,9 @@ export const addElement = (id, groupId, elementId, elementType, offsetXem, offse
     elementType, 
     offsetXem, 
     offsetYem,
-    target: 'BOTH'
+    target: 'BOTH',    
+    undoGroup,
+    undoDescription: 'Add element'
   }
 }
 
@@ -96,7 +107,9 @@ export const deleteElement = (id, groupId) => {
     type: inputgridActionTypes.DELETE_ELEMENT,
     id, 
     groupId,
-    target: 'SERVER'
+    target: 'SERVER',    
+    undoGroup,
+    undoDescription: 'Delete element'
   }
 }
 
@@ -121,4 +134,8 @@ export const selectInputInNewElementDialog = (elementType, elementId) => {
     elementType,
     target: 'GUI'
   }   
+}
+
+export const inputgridUndoPointPositionChanged = () => {
+  return setUndoPoint(undoGroup, 'Move element');  
 }
