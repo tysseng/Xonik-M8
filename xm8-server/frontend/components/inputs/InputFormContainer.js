@@ -15,7 +15,8 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     input,
-    inputValue
+    inputValue,
+    showFileDialog: state.filedialog.get('show')
   }
 }
 
