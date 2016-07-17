@@ -73,35 +73,35 @@ const InputGrid = ({dragElementId, selectedGroup, inputs, offset, dragStart, sel
 
   return (
     <div id="inputgrid" className="grid" onMouseUp={deselectDragElement} onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseMove={(e) => onDrag(e, dragStart, selectedGroup.id, dragElementId, moveElement)}>
-    { selectedGroup && Object.values(selectedGroup.elements).map(element => {
+      { selectedGroup && Object.values(selectedGroup.elements).map(element => {
 
-        // todo swith on element type here (input or group)
-        // TODO: or maybe groups in group are not necessary?
-        let input = inputs[element.elementId];
+          // todo swith on element type here (input or group)
+          // TODO: or maybe groups in group are not necessary?
+          let input = inputs[element.elementId];
 
-        // override default input type to render input differently for this group
-        if(element.type && element.type !== ''){
-          input.type = element.type;
-        }
+          // override default input type to render input differently for this group
+          if(element.type && element.type !== ''){
+            input.type = element.type;
+          }
 
-        let type = inputTypesById[input.type];
-        
-        let style={
-          top: element.offset.y + 'em',
-          left: element.offset.x + 'em',
-          height: type.size.y + 'em',
-          width: type.size.x + 'em'
-        }
+          let type = inputTypesById[input.type];
+          
+          let style={
+            top: element.offset.y + 'em',
+            left: element.offset.x + 'em',
+            height: type.size.y + 'em',
+            width: type.size.x + 'em'
+          }
 
-        let classnames = 'draggable' + (element.id === dragElementId ? ' selected' : '');
+          let classnames = 'draggable' + (element.id === dragElementId ? ' selected' : '');
 
-        return (
-          <div className={classnames} id={element.id} style={style}>
-            <Controller input={input} value={0}/>
-          </div>
-        )
-      })
-    }
+          return (
+            <div className={classnames} id={element.id} style={style}>
+              <Controller input={input} value={0}/>
+            </div>
+          )
+        })
+      }
     </div>
   )
 }

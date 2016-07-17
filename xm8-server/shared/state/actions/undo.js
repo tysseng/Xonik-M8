@@ -1,6 +1,7 @@
 export const groups = {
   MATRIX: 'MATRIX',
-  INPUTGRID: 'INPUTGRID' 
+  INPUTGRID: 'INPUTGRID',
+  INPUTS: 'INPUTS'
 }
 
 export const types = {

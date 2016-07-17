@@ -20,6 +20,12 @@ const MainMenu = () => {
       <Link to="/settings" activeClassName="selected">
         <MenuItem label="Settings" icon="settings-1.svg" onClick={() => console.log("Settings")}/>
       </Link>
+      <Link to="/inputs" activeClassName="selected">
+        <MenuItem label="Inputs" icon="settings-1.svg" onClick={() => console.log("Inputs")}/>
+      </Link>
+      <Link to="/inputgroups" activeClassName="selected">
+        <MenuItem label="Groups" icon="settings-1.svg" onClick={() => console.log("Groups")}/>
+      </Link>
       <Link to="/network" activeClassName="selected">
         <MenuItem label="Network" icon="wifi-2.svg" onClick={() => console.log("Network")}/>
       </Link>

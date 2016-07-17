@@ -13,7 +13,6 @@ const MatrixCenterColumn = ({
   return ( 
     <div>
 
-      
       {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/api/matrix/save' loadUrl = '/api/matrix/load'/> } 
       {linkDialog.show && <LinkDialog nodes={nodes} linkDialog={linkDialog} onCancel={cancelLinkCreation} onCreate={createLink} onNodeTypeChange={onNodeTypeChange}/> }    
 

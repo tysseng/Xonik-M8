@@ -10,7 +10,7 @@ let panelControllers = [
       short: 'virtual'
     },
     type: 'VIRTUAL',
-    midi: {status: ''}
+    midi: {status: '', data1: ''}
 
   },  
   {
@@ -20,7 +20,7 @@ let panelControllers = [
       short: 'pitch'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
 
   },
   {
@@ -30,7 +30,7 @@ let panelControllers = [
       short: 'square'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },
   {
     id: 'OSC_1_SAW',
@@ -39,7 +39,7 @@ let panelControllers = [
       short: 'saw'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },
   {
     id: 'OSC_1_TRIANGLE',
@@ -48,7 +48,7 @@ let panelControllers = [
       short: 'triangle'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },    
   {
     id: 'OSC_2_PITCH',
@@ -57,7 +57,7 @@ let panelControllers = [
       short: 'pitch'
     },
     type: 'POT',
-    midi: {status: 0xB0}  
+    midi: {status: 0xB0, data1: ''}  
   },  
   {
     id: 'OSC_3_PITCH', 
@@ -66,7 +66,7 @@ let panelControllers = [
       short: 'pitch'
     },
     type: 'POT',
-    midi: {status: 0xB0}  
+    midi: {status: 0xB0, data1: ''}  
   },  
   {
     id: 'FILTER_1_CUTOFF', 
@@ -75,7 +75,7 @@ let panelControllers = [
       short: 'cut-off'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },
   {
     id: 'FILTER_1_RESONANCE', 
@@ -84,7 +84,7 @@ let panelControllers = [
       short: 'resonance'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },
   {
     id: 'FILTER_1_SLOPE', 
@@ -93,7 +93,7 @@ let panelControllers = [
       short: 'slope'
     },    
     type: 'SWITCH',
-    midi: {status: 0xB0},
+    midi: {status: 0xB0, data1: ''},
     options: [
       {id: '0', label: '12 dB'},
       {id: '1', label: '24 dB'}
@@ -106,7 +106,7 @@ let panelControllers = [
       short: 'mode'
     },       
     type: 'SWITCH',
-    midi: {status: 0xB0},
+    midi: {status: 0xB0, data1: ''},
     options: [
       {id: '0', label: 'HP'},
       {id: '1', label: 'BP'},
@@ -120,7 +120,7 @@ let panelControllers = [
       short: 'attack'
     },
     type: 'POT',
-    midi: {status: 0xB0}   
+    midi: {status: 0xB0, data1: ''}   
   },
   {
     id: 'AMP_ENV_DECAY', 
@@ -129,7 +129,7 @@ let panelControllers = [
       short: 'decay'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },
   {
     id: 'AMP_ENV_SUSTAIN', 
@@ -138,7 +138,7 @@ let panelControllers = [
       short: 'sustain'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },
   {
     id: 'AMP_ENV_RELEASE', 
@@ -147,7 +147,7 @@ let panelControllers = [
       short: 'release'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },
   {
     id: 'FILTER_1_ENV_ATTACK', 
@@ -156,7 +156,7 @@ let panelControllers = [
       short: 'attack'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },
   {
     id: 'FILTER_1_ENV_DECAY', 
@@ -165,7 +165,7 @@ let panelControllers = [
       short: 'decay'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },
   {
     id: 'FILTER_1_ENV_SUSTAIN', 
@@ -174,7 +174,7 @@ let panelControllers = [
       short: 'sustain'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   },
   {
     id: 'FILTER_1_ENV_RELEASE', 
@@ -183,7 +183,7 @@ let panelControllers = [
       short: 'release'
     },
     type: 'POT',
-    midi: {status: 0xB0}
+    midi: {status: 0xB0, data1: ''}
   }  
 ];
 

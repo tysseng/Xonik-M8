@@ -1,7 +1,10 @@
 import {OrderedMap, Map, Iterable, fromJS} from 'immutable';
 import _ from 'lodash';
-import {inputsById, inputGroupsById, getEmptyOption, getStepPositions} from '../../shared/matrix/inputs';
+import { inputsById, inputGroupsById, getEmptyOption, getStepPositions } from '../../shared/matrix/inputs';
 import inputActionTypes from '../../shared/state/actions/inputsActionTypes';
+import { getUndoWrapper } from './undo';
+import { groups as undoGroups } from '../../shared/state/actions/undo';
+
 
 const groups = (state,action) => {
 
@@ -12,7 +15,7 @@ const groups = (state,action) => {
 
 const updateOptionsValues = (state, action, field) => {
   let numberOfSteps = state.get('options').size;
-  let {centered, endToEnd, includeNegative, min, max} = action;
+  let {centered, endToEnd, min, max} = action;
 
   // Make sure defaults are used if values are not set or cannot be parsed, 
   if(min === '' || isNaN(min)){
@@ -80,10 +83,7 @@ const byId = (state, action) => {
 }
 
 const root = (
-  state = Map({
-    byId: fromJS(inputsById),
-    groups: fromJS(inputGroupsById)
-  }),
+  state = getInitialState(),
   action) => {
   switch(action.type){
     case inputActionTypes.INPUTCONFIG_UPDATE_FIELD:
@@ -98,4 +98,13 @@ const root = (
   return state;
 }
 
-export default root;
+const getInitialState = () => {
+  return Map({
+    byId: fromJS(inputsById),
+    groups: fromJS(inputGroupsById)
+  });
+}
+
+const undoWrapper = getUndoWrapper(undoGroups.INPUTS, root, getInitialState);
+
+export default undoWrapper;

@@ -158,7 +158,21 @@ const getInitialFat = () => {
         files: {},
         folders: {},
         undeletable: true
-      }
+      },
+      inputgroups: {
+        name: 'inputgroups',
+        id: 'inputgroups',
+        files: {},
+        folders: {},
+        undeletable: true
+      },
+      inputs: {
+        name: 'inputs',
+        id: 'inputs',
+        files: {},
+        folders: {},
+        undeletable: true
+      }            
     },
     trash: {},
     nextFolderId: 0

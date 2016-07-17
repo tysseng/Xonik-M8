@@ -34,7 +34,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onNumberOfStepsChange:  (id, value) => dispatch(updateField(id, ['numberOfSteps'], value)),
     onControllerChange: (id, value) => dispatch(updateField(id, ['panelController'], value)),
     onStatusChange: (id, value) => dispatch(updateField(id, ['midi', 'status'], parseInt(value))),
-    onData1Change: (id, value) => dispatch(updateField(id, ['midi', 'data1'], parseInt(value))),
+    onData1Change: (id, value) => {
+      value !== '' ? value = parseInt(value) : value;
+      dispatch(updateField(id, ['midi', 'data1'], value));
+    },
     onResolutionChange: (id, value) => dispatch(updateField(id, ['midi', 'hires'], value)),
     onSendChange: (id, value) => dispatch(updateField(id, ['midi', 'send'], value)),
     onReceiveChange: (id, value) => dispatch(updateField(id, ['midi', 'receive'], value)),

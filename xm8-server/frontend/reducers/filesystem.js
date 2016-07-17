@@ -10,6 +10,14 @@ const filesystem = (
       patches: Map({
         name: 'patches',
         files: Map()
+      }),
+      inputgroups: Map({
+        name: 'Input groups',
+        files: Map()
+      }),
+      inputs: Map({
+        name: 'Inputs',
+        files: Map()
       })
     })
   }), 

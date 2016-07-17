@@ -1,10 +1,11 @@
-import InputFormContainer from '../inputs/InputFormContainer';
+import InputFormContainer from './InputFormContainer';
+import InputsLeftMenuContainer from './InputsLeftMenuContainer';
 
 const InputsPage = () => {    
   return (  
     <div>
       <div className="leftcolumn">
-        Left
+        <InputsLeftMenuContainer/>
       </div>
       <div className="centercolumn">
         <InputFormContainer/>

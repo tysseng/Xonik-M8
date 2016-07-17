@@ -1,6 +1,6 @@
 import MenuItem from '../framework/MenuItem';
 
-const InputGridLeftMenu = ({onOpenNewElementDialog, newGroup, onUndo, onRedo}) => {    
+const InputGridLeftMenu = ({ onOpenNewElementDialog, newGroup, onUndo, onRedo, onInputGridSave, onInputGridLoad }) => {    
   
   return ( 
     <div>
@@ -12,6 +12,10 @@ const InputGridLeftMenu = ({onOpenNewElementDialog, newGroup, onUndo, onRedo}) =
       <div className="leftMenu">
         <MenuItem label="Undo" icon="circular-arrow-1.svg" onClick={onUndo}/>
         <MenuItem label="Redo" icon="circular-arrow.svg" onClick={onRedo}/>
+      </div>      
+      <div className="leftMenu">
+        <MenuItem label="Save" icon="download.svg" onClick={() => onInputGridSave()}/>
+        <MenuItem label="Load" icon="upload 2.svg" onClick={onInputGridLoad}/>
       </div>      
     </div>
   )

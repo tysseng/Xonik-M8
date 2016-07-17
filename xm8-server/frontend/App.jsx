@@ -37,7 +37,7 @@ var NodeList = require('./components/matrix/NodeList.jsx');
 
 ReactDOM.render(
   <div>
-    <<Knob controllerId="volume"/>
+    <Knob controllerId="volume"/>
     <Knob controllerId="frequency"/>
   </div>
   ,

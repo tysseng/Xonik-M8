@@ -10,7 +10,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     selectedGroupId: inputgrid.get('selectedGroup'),
-    showFileDialog: false, 
+    showFileDialog: state.filedialog.get('show'),
     newElementDialog: inputgrid.get('newElementDialog').toJS(), 
   }
 }
