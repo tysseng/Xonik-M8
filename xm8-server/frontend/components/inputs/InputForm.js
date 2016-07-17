@@ -1,19 +1,10 @@
-//TODO: Add 'not selected' to midi dropdowns
-//TODO: Add 'transmit midi', 'receive midi' checkboxes
-
-import _ from 'lodash';
-
 import MiniIcon from '../framework/MiniIcon';
-
-import inputTypes from '../../../shared/inputs/InputTypes';
 import MidiFormContainer from './MidiFormContainer';
 import DisplayOptionsFormContainer from './DisplayOptionsFormContainer';
 import InputOptionsContainer from './InputOptionsContainer';
 import InputPreview from './InputPreview';
 import PanelControllerDropdown from './PanelControllerDropdown';
 import FileDialogContainer from '../filesystem/FileDialogContainer';
-
-
 import InputDropdown from './InputDropdown';
 
 const InputForm = ({ input, inputValue, showFileDialog,
@@ -26,6 +17,7 @@ const InputForm = ({ input, inputValue, showFileDialog,
   return (
     <div>
       {showFileDialog && <FileDialogContainer path='/inputs' headingPostfix='inputs' saveUrl='/api/inputs/save' loadUrl = '/api/inputs/load'/> } 
+
       <div className='inputForm'>
         <div className="tricol-left">      
           <div className='configPane'>
@@ -65,12 +57,14 @@ const InputForm = ({ input, inputValue, showFileDialog,
             <DisplayOptionsFormContainer input={input}/> 
           }
 
-          { input && input.stepGenerationMode === 'OPTIONS' && (
+          { input && input.stepGenerationMode === 'OPTIONS' && 
             <InputOptionsContainer input={input}/>
-          )}
+          }
         </div>
         <div className="tricol-left">
-          {input && <InputPreview input={input} value={inputValue}/>}      
+          { input && 
+            <InputPreview input={input} value={inputValue}/>
+          }      
         </div>      
       </div>
     </div>
