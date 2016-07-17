@@ -6,7 +6,7 @@ import _ from 'lodash';
 import MiniIcon from '../framework/MiniIcon';
 
 import inputTypes from '../../../shared/inputs/InputTypes';
-import MidiForm from './MidiForm';
+import MidiFormContainer from './MidiFormContainer';
 import InputOptionsContainer from './InputOptionsContainer';
 import InputPreview from './InputPreview';
 import PanelControllerDropdown from './PanelControllerDropdown';
@@ -21,8 +21,6 @@ import InputDropdown from './InputDropdown';
 const InputForm = ({ input, inputValue, showFileDialog,
   selectInput, onCloseDialog, 
   rename, renameShort, 
-  onStatusChange, onData1Change, onResolutionChange,
-  onSendChange, onReceiveChange,
   onScaleChange, onTypeChange, onControllerChange,
   onStepGenerationModeChange, onStepIntervalChange, onNumberOfStepsChange,
   onMinChange, onMaxChange }) => {
@@ -61,19 +59,8 @@ const InputForm = ({ input, inputValue, showFileDialog,
                   </div>
                 </div>
               </div>
-              <MidiForm 
-                id='midi'
-                midiStatus={input.midi.status} 
-                midiData1={input.midi.data1} 
-                highRes={input.midi.hires}
-                name='Midi' 
-                send={input.midi.send}
-                receive={input.midi.receive}
-                onStatusChange={(value) => onStatusChange(input.id, value)}  
-                onData1Change={(value) => onData1Change(input.id, value)}
-                onResolutionChange={(value) => onResolutionChange(input.id, value)}
-                onSendChange={(value) => onSendChange(input.id, value)}
-                onReceiveChange={(value) => onReceiveChange(input.id, value)}/> 
+
+              <MidiFormContainer id={input.id} midi={input.midi}/> 
             </div>
           }
         </div>
