@@ -5,7 +5,7 @@ const isLink = (type) => {
   return type === paramTypes.map.LINK.id;
 }
 
-const getLinks = (nodes) => {
+export const getLinks = (nodes) => {
 
   let links = [];
   _.each(nodes, node => {
@@ -23,5 +23,3 @@ const getLinks = (nodes) => {
   });
   return links;
 }
-
-export {getLinks};

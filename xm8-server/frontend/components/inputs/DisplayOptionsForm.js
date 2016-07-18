@@ -1,6 +1,6 @@
 import React from 'react'
 import InputTypesDropdown from './InputTypesDropdown';
-import UnitDropdown from '../graph/ParameterUnitDropdown';
+import UnitDropdown from '../graph/nodeform/ParameterUnitDropdown';
 import InputRange from './InputRange';
 import InputStepsGeneration from './InputStepsGeneration';
 

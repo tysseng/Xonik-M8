@@ -1,6 +1,6 @@
 import nodeTypes from '../../../shared/graph/NodeTypes.js';
 import ParameterDescription from './ParameterDescription';
-import NodeTypeDropdown from './NodeTypeDropdown';
+import NodeTypeDropdown from './nodeform/NodeTypeDropdown';
 import ModalBox from '../framework/ModalBox';     
 
 const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate, onNodeTypeChange}) => {

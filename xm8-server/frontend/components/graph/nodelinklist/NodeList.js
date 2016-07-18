@@ -1,6 +1,6 @@
-import MiniIcon from '../framework/MiniIcon';
+import MiniIcon from '../../framework/MiniIcon';
 import _ from 'lodash';
-let nodeTypes = require('../../../shared/graph/NodeTypes.js').idMap;
+import { idMap as nodeTypes } from '../../../../shared/graph/NodeTypes.js';
 
 const NodeList = ({nodes, onNodeClick, onDeleteClick}) => {
   return (

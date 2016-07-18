@@ -1,9 +1,6 @@
-import MiniIcon from '../framework/MiniIcon';
-import LinkDescription from './LinkDescription';
-import paramTypes from '../../../shared/graph/ParameterTypes.js';
-
-let nodeTypes = require('../../../shared/graph/NodeTypes.js').idMap;
-
+import MiniIcon from '../../framework/MiniIcon';
+import LinkDescription from '../linkform/LinkDescription';
+import paramTypes from '../../../../shared/graph/ParameterTypes';
 
 const NodeList = ({links, nodes, onLinkClick, onDeleteClick}) => {
   return (

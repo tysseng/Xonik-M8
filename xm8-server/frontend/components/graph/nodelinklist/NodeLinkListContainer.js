@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getLinks } from './LinkFunctions';
-
-
+import { getLinks } from '../LinkFunctions';
+import { selectNode, selectLink, deleteNode, deleteLink } from '../../../../shared/state/actions/nodes';
 import NodeLinkList from './NodeLinkList';
-import { selectNode, selectLink, deleteNode, deleteLink } from '../../../shared/state/actions/nodes';
 
 const mapStateToProps = (state, ownProps) => {
   let nodes = state.nodes.toJS();
