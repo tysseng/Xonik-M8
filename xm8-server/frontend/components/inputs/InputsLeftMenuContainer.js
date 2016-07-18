@@ -3,7 +3,7 @@ import InputsLeftMenu from './InputsLeftMenu';
 import { connect } from 'react-redux';
 import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
-import { openNewElementDialog, newGroup } from '../../../shared/state/actions/inputgrid';
+import { openNewElementDialog, newGroup } from '../../../shared/state/actions/inputgroups';
 
 // TODO: MOVE THIS!
 let nextInputId = 0;

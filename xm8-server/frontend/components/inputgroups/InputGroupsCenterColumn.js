@@ -4,7 +4,7 @@ import ElementSelectorDialog from './ElementSelectorDialog';
 import InputGridContainer from './InputGridContainer';
 import FileDialogContainer from '../filesystem/FileDialogContainer';
 
-const InputGridCenterColumn = ({showFileDialog, selectedGroupId, newElementDialog, closeNewElementDialog, addElement, selectElement}) => {
+const InputGroupsCenterColumn = ({showFileDialog, selectedGroupId, newElementDialog, closeNewElementDialog, addElement, selectElement}) => {
   return ( 
     <div>
       {showFileDialog && <FileDialogContainer path='/inputgroups' headingPostfix='input groups' saveUrl='/api/inputgroup/save' loadUrl = '/api/inputgroup/load'/> } 
@@ -24,4 +24,4 @@ const InputGridCenterColumn = ({showFileDialog, selectedGroupId, newElementDialo
 
 }
 
-export default InputGridCenterColumn;
+export default InputGroupsCenterColumn;

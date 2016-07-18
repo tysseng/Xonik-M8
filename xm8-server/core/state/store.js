@@ -4,7 +4,7 @@ import graph from './graph';
 import network from './network';
 import filesystem from './filesystem';
 import inputs from './inputs';
-import inputgrid from './inputgrid';
+import inputgroups from './inputgroups';
 import controllers from './controllers';
 import reduxSubscribeMiddleware from '../../shared/state/redux-subscribe';
 
@@ -14,7 +14,7 @@ const serverReducers = combineReducers({
   filesystem,
   network,
   inputs,
-  inputgrid,
+  inputgroups,
   controllers
 });
 

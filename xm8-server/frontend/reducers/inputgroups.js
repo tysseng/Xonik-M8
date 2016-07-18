@@ -1,5 +1,5 @@
 import {Map} from 'immutable';
-import {inputgridActionTypes} from '../../shared/state/actions/inputgrid';
+import {inputgroupsActionTypes} from '../../shared/state/actions/inputgroups';
 
 const inputs = (
   state = Map({
@@ -22,30 +22,30 @@ const inputs = (
   action) => {
   switch(action.type){
     case 'SET_STATE':
-      if(action.state.inputgrid){
-        return state.merge(action.state.inputgrid);
+      if(action.state.inputgroups){
+        return state.merge(action.state.inputgroups);
       }        
       break;  
-    case inputgridActionTypes.SELECT_ELEMENT:
+    case inputgroupsActionTypes.SELECT_ELEMENT:
       return state.set('selectedElementId', action.id)
         .set('dragElementId', action.id)
         .setIn(['dragStart', 'x'], action.mouseX)
         .setIn(['dragStart', 'y'], action.mouseY)
         .setIn(['dragStart', 'originX'], action.offsetXem)
         .setIn(['dragStart', 'originY'], action.offsetYem);
-    case inputgridActionTypes.DESELECT_ELEMENT:
+    case inputgroupsActionTypes.DESELECT_ELEMENT:
       return state.set('selectedElementId', '');      
-    case inputgridActionTypes.DESELECT_DRAG_ELEMENT:
+    case inputgroupsActionTypes.DESELECT_DRAG_ELEMENT:
       return state.set('dragElementId', '');      
-    case inputgridActionTypes.OPEN_NEW_ELEMENT_DIALOG:
+    case inputgroupsActionTypes.OPEN_NEW_ELEMENT_DIALOG:
       return state.setIn(['newElementDialog', 'show'], true);
-    case inputgridActionTypes.ADD_ELEMENT:
-    case inputgridActionTypes.CLOSE_NEW_ELEMENT_DIALOG:
+    case inputgroupsActionTypes.ADD_ELEMENT:
+    case inputgroupsActionTypes.CLOSE_NEW_ELEMENT_DIALOG:
       return state
         .setIn(['newElementDialog', 'show'], false)
         .setIn(['newElementDialog', 'type'], '')
         .setIn(['newElementDialog', 'id'], '');      
-    case inputgridActionTypes.SELECT_ID_IN_NEW_ELEMENT_DIALOG:
+    case inputgroupsActionTypes.SELECT_ID_IN_NEW_ELEMENT_DIALOG:
       return state
         .setIn(['newElementDialog', 'type'], action.elementType)
         .setIn(['newElementDialog', 'id'], action.elementId);    

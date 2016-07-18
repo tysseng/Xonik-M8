@@ -17,7 +17,7 @@ import ControlPage from './components/control/ControlPage';
 import FilesPage from './components/files/FilesPage';
 import SettingsPage from './components/settings/SettingsPage';
 import InputsPage from './components/inputs/InputsPage';
-import InputGroupsPage from './components/inputgrid/InputGroupsPage';
+import InputGroupsPage from './components/inputgroups/InputGroupsPage';
 import NetworkPage from './components/network/NetworkPage';
 import TrashPage from './components/trash/TrashPage';
 

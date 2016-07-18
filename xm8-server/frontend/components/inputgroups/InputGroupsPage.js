@@ -1,18 +1,18 @@
-import InputGridCenterColumnContainer from './InputGridCenterColumnContainer';
-import InputGridLeftMenuContainer from './InputGridLeftMenuContainer';
+import InputGroupsCenterColumnContainer from './InputGroupsCenterColumnContainer';
+import InputGroupsLeftMenuContainer from './InputGroupsLeftMenuContainer';
 import ElementFormContainer from './ElementFormContainer';
 
 const InputGroupsPage = () => {    
   return (  
     <div id="inputGroupsPage">
       <div className="leftcolumn">
-        <InputGridLeftMenuContainer/>
+        <InputGroupsLeftMenuContainer/>
       </div>
       <div className="rightcolumn">
         <ElementFormContainer/>
       </div>
       <div className="centercolumn">
-        <InputGridCenterColumnContainer/>
+        <InputGroupsCenterColumnContainer/>
       </div>
     </div>
   ) 

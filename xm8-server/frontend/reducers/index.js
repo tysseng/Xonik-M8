@@ -6,7 +6,7 @@ import network from './network';
 import filesystem from './filesystem';
 import filedialog from './filedialog';
 import inputs from './inputs';
-import inputgrid from './inputgrid';
+import inputgroups from './inputgroups';
 import controllers from './controllers';
 
 const guiReducers = combineReducers({
@@ -17,7 +17,7 @@ const guiReducers = combineReducers({
   filesystem,
   network,
   inputs,
-  inputgrid,
+  inputgroups,
   controllers
 });
 

@@ -1,6 +1,6 @@
 export const groups = {
   GRAPH: 'GRAPH',
-  INPUTGRID: 'INPUTGRID',
+  INPUTGROUPS: 'INPUTGROUPS',
   INPUTS: 'INPUTS'
 }
 

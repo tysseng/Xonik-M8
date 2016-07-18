@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { changeElementType, deselectElement } from '../../../shared/state/actions/inputgrid';
+import { changeElementType, deselectElement } from '../../../shared/state/actions/inputgroups';
 import ElementForm from './ElementForm'
 
 const getSelectedElement = (state) => {
-  let selectedGroupId = state.inputgrid.get('selectedGroup');
-  let selectedGroup = selectedGroupId !== '' ? state.inputgrid.getIn(['groups', selectedGroupId]) : undefined;  
+  let selectedGroupId = state.inputgroups.get('selectedGroup');
+  let selectedGroup = selectedGroupId !== '' ? state.inputgroups.getIn(['groups', selectedGroupId]) : undefined;  
 
   if(selectedGroup){
-    let selectedElementId = state.inputgrid.get('selectedElementId');
+    let selectedElementId = state.inputgroups.get('selectedElementId');
     let selectedElement = selectedGroup.getIn(['elements', selectedElementId]);
     if(selectedElement) {       
       return selectedElement.toJS();

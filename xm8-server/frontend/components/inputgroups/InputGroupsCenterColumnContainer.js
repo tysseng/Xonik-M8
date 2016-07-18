@@ -1,17 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
-import { closeNewElementDialog, addElement, selectInputInNewElementDialog } from '../../../shared/state/actions/inputgrid';
+import { closeNewElementDialog, addElement, selectInputInNewElementDialog } from '../../../shared/state/actions/inputgroups';
 
-import InputGridCenterColumn from './InputGridCenterColumn';
+import InputGroupsCenterColumn from './InputGroupsCenterColumn';
 
 const mapStateToProps = (state, ownProps) => {
 
-  let inputgrid = state.inputgrid;
+  let inputgroups = state.inputgroups;
 
   return {
-    selectedGroupId: inputgrid.get('selectedGroup'),
+    selectedGroupId: inputgroups.get('selectedGroup'),
     showFileDialog: state.filedialog.get('show'),
-    newElementDialog: inputgrid.get('newElementDialog').toJS(), 
+    newElementDialog: inputgroups.get('newElementDialog').toJS(), 
   }
 }
 
@@ -25,9 +25,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 
-const InputGridCenterColumnContainer = connect(
+const InputGroupsCenterColumnContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(InputGridCenterColumn);
+)(InputGroupsCenterColumn);
 
-export default InputGridCenterColumnContainer;
+export default InputGroupsCenterColumnContainer;

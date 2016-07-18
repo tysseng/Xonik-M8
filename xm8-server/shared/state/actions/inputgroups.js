@@ -1,4 +1,4 @@
-export const inputgridActionTypes = {
+export const inputgroupsActionTypes = {
   SELECT_ELEMENT: 'SELECT_ELEMENT',
   MOVE_ELEMENT: 'MOVE_ELEMENT',
   DESELECT_ELEMENT: 'DESELECT_ELEMENT',
@@ -14,7 +14,7 @@ export const inputgridActionTypes = {
   SET_UNDO_POINT: 'SET_UNDO_POINT'
 }
 
-let types = inputgridActionTypes;
+let types = inputgroupsActionTypes;
 
 export const changeElementType = (groupId, id, inputType) => {
   return {
@@ -66,7 +66,7 @@ export const deselectDragElement = () => {
 
 export const newGroup = (groupId) => {
   return {
-    type: inputgridActionTypes.NEW_GROUP,
+    type: inputgroupsActionTypes.NEW_GROUP,
     groupId,
     target: 'SERVER',
     undoDescription: 'New group'
@@ -75,7 +75,7 @@ export const newGroup = (groupId) => {
 
 export const loadGroup = (groupId) => {
   return {
-    type: inputgridActionTypes.LOAD_GROUP,
+    type: inputgroupsActionTypes.LOAD_GROUP,
     groupId,
     target: 'SERVER',
     undoDescription: 'Load group'
@@ -84,7 +84,7 @@ export const loadGroup = (groupId) => {
 
 export const addElement = (id, groupId, elementId, elementType, offsetXem, offsetYem) => {
   return {
-    type: inputgridActionTypes.ADD_ELEMENT,
+    type: inputgroupsActionTypes.ADD_ELEMENT,
     id, 
     groupId, 
     elementId, 
@@ -98,7 +98,7 @@ export const addElement = (id, groupId, elementId, elementType, offsetXem, offse
 
 export const deleteElement = (id, groupId) => {
   return {
-    type: inputgridActionTypes.DELETE_ELEMENT,
+    type: inputgroupsActionTypes.DELETE_ELEMENT,
     id, 
     groupId,
     target: 'SERVER',
@@ -108,30 +108,30 @@ export const deleteElement = (id, groupId) => {
 
 export const openNewElementDialog = () => {
   return {
-    type: inputgridActionTypes.OPEN_NEW_ELEMENT_DIALOG,
+    type: inputgroupsActionTypes.OPEN_NEW_ELEMENT_DIALOG,
     target: 'GUI'
   }
 }
 
 export const closeNewElementDialog = () => {
   return {
-    type: inputgridActionTypes.CLOSE_NEW_ELEMENT_DIALOG,
+    type: inputgroupsActionTypes.CLOSE_NEW_ELEMENT_DIALOG,
     target: 'GUI'
   } 
 }
 
 export const selectInputInNewElementDialog = (elementType, elementId) => {
   return {
-    type: inputgridActionTypes.SELECT_ID_IN_NEW_ELEMENT_DIALOG,
+    type: inputgroupsActionTypes.SELECT_ID_IN_NEW_ELEMENT_DIALOG,
     elementId,
     elementType,
     target: 'GUI'
   }   
 }
 
-export const inputgridUndoPointPositionChanged = () => {
+export const inputgroupsUndoPointPositionChanged = () => {
   return {
-    type: inputgridActionTypes.SET_UNDO_POINT,
+    type: inputgroupsActionTypes.SET_UNDO_POINT,
     undoDescription: 'Move element'
   }
 }
