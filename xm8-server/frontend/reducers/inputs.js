@@ -1,6 +1,6 @@
 import {OrderedMap, Map, List, fromJS} from 'immutable';
 import _ from 'lodash';
-import inputActionTypes from '../../shared/state/actions/inputsActionTypes';
+import { types as inputTypes } from '../../shared/state/actions/inputs';
 
 const byId = (state, action) => {
   switch(action.type){
@@ -25,7 +25,7 @@ const inputs = (
         return state.merge(action.state.inputs);
       }        
       break;   
-    case inputActionTypes.INPUTCONFIG_SELECT_INPUT: 
+    case inputTypes.INPUTCONFIG_SELECT_INPUT: 
       return state.set("selectedInput", action.selectedInput);   
   } 
   return state;
