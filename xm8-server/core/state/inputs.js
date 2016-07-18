@@ -1,6 +1,6 @@
 import {OrderedMap, Map, Iterable, fromJS} from 'immutable';
 import _ from 'lodash';
-import { inputsById, inputGroupsById, getEmptyOption, getStepPositions } from '../../shared/matrix/inputs';
+import { inputsById, inputGroupsById, getEmptyOption, getStepPositions } from '../../shared/graph/inputs';
 import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';

@@ -1,5 +1,5 @@
 export const groups = {
-  MATRIX: 'MATRIX',
+  GRAPH: 'GRAPH',
   INPUTGRID: 'INPUTGRID',
   INPUTS: 'INPUTS'
 }

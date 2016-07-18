@@ -1,4 +1,4 @@
-import {unitsById} from '../../../shared/matrix/ParameterUnits'
+import {unitsById} from '../../../shared/graph/ParameterUnits'
 
 const onChange = (value, converter, callback) => {
   let convertedValue = '';

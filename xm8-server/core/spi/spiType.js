@@ -5,6 +5,6 @@ module.exports = {
   CONSTANT: {id: 3, size: 6},
   NODE_COUNT: {id: 4, size: 4},
   CONSTANTS_COUNT: {id: 5, size: 4},
-  MATRIX_COMMAND: {id: 6, size: 3},
+  GRAPH_COMMAND: {id: 6, size: 3},
   UNKNOWN: {id: 255, size: 0}
 }

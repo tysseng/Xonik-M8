@@ -94,8 +94,8 @@ var VoiceGroupForm = React.createClass({
       controllerToInputMap: [], // what midi CCs are mapped to what input positions
       controllerHiRes: [] // what midi CCs are high res
     },
-    matrix: {
-      //TODO: Add matrix here
+    graph: {
+      //TODO: Add graph here
     },
     voices: [];      
   };*/

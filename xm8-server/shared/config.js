@@ -34,7 +34,7 @@ let config = {
     interruptPin: 22,
     minBufferSize: 16 
   },
-  matrix: {
+  graph: {
     numberOfInputs: 64
   },
   voices: {

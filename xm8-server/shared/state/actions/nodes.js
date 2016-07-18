@@ -184,7 +184,7 @@ export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
 
 // this action is not explicitly treated by the reducer, but it adds an entry in the
 // undo history.
-export const matrixUndoPointPositionChanged = () => {
+export const graphUndoPointPositionChanged = () => {
   return {
     type: types.SET_UNDO_POINT,
     undoDescription: 'Move element'

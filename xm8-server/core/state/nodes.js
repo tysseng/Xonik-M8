@@ -1,7 +1,7 @@
 // TODO - let emtpy values be undefined, not ""?  
 
-import nodeTypes from '../../shared/matrix/NodeTypes';
-import paramTypes from '../../shared/matrix/ParameterTypes';
+import nodeTypes from '../../shared/graph/NodeTypes';
+import paramTypes from '../../shared/graph/ParameterTypes';
 import { types } from '../../shared/state/actions/nodes';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
@@ -291,6 +291,6 @@ const undoableActions = [
     types.SET_UNDO_POINT
 ];
 
-const undoWrapper = getUndoWrapper(undoGroups.MATRIX, undoableActions, nodes, getInitialState);
+const undoWrapper = getUndoWrapper(undoGroups.GRAPH, undoableActions, nodes, getInitialState);
 
 export default undoWrapper;

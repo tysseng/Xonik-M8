@@ -31,8 +31,8 @@ require('./eventDebug.js');
 
 var Knob = require('./components/Knob.jsx');
 var VoiceGroupForm = require('./components/voice/VoiceGroupForm.jsx');
-var NodeForm = require('./components/matrix/NodeForm.jsx');
-var NodeList = require('./components/matrix/NodeList.jsx');
+var NodeForm = require('./components/graph/NodeForm.jsx');
+var NodeList = require('./components/graph/NodeList.jsx');
 
 
 ReactDOM.render(

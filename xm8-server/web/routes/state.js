@@ -1,6 +1,6 @@
 import store from '../../core/state/store.js';
 import tools from './routeTools';
-import matrixRepository from '../../core/matrix/matrixRepository';
+import graphRepository from '../../core/graph/graphRepository';
 import {subscribe} from '../../shared/state/redux-subscribe.js';
 
 // receive actions and send state
@@ -32,7 +32,7 @@ export default (app, ws) => {
   });
 
   store.dispatch(subscribe('nodes', 'frontend', sendPartialState));
-  store.dispatch(subscribe('matrix', 'frontend', sendPartialState));
+  store.dispatch(subscribe('graph', 'frontend', sendPartialState));
   store.dispatch(subscribe('filesystem', 'frontend', sendPartialState));
   store.dispatch(subscribe('inputs', 'frontend', sendPartialState));
   store.dispatch(subscribe('inputgrid', 'frontend', sendPartialState));

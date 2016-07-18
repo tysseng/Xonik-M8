@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import nodes from './nodes';
 import links from './links';
-import matrix from './matrix';
+import graph from './graph';
 import network from './network';
 import filesystem from './filesystem';
 import filedialog from './filedialog';
@@ -12,7 +12,7 @@ import controllers from './controllers';
 const guiReducers = combineReducers({
   nodes,
   links,
-  matrix,
+  graph,
   filedialog,
   filesystem,
   network,

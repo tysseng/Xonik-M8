@@ -12,7 +12,7 @@ import guiReducers from './reducers';
 import MainMenu from './components/framework/MainMenu';
 
 import HomePage from './components/home/HomePage';
-import MatrixPage from './components/matrix/MatrixPageContainer';
+import GraphPage from './components/graph/GraphPageContainer';
 import ControlPage from './components/control/ControlPage';
 import FilesPage from './components/files/FilesPage';
 import SettingsPage from './components/settings/SettingsPage';
@@ -56,9 +56,9 @@ render(
   <Provider store={store}>
     <Router history={browserHistory}>      
       <Route path="/" component={AppWrapper}>
-        <IndexRoute component={MatrixPage}/>
+        <IndexRoute component={GraphPage}/>
         <Route path="home" component={HomePage}/>
-        <Route path="patches" component={MatrixPage}/>
+        <Route path="patches" component={GraphPage}/>
         <Route path="control" component={ControlPage}/>
         <Route path="files" component={FilesPage}/>
         <Route path="settings" component={SettingsPage}/>

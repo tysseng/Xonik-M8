@@ -10,7 +10,7 @@ import FileDialogDispatchers from './dispatchers/FileDialogDispatchers';
 import FolderList from './FolderList';
 
 const mapStateToProps = (state, ownProps) => {
-  let fileId = state.matrix.getIn(['patch','fileId']);
+  let fileId = state.graph.getIn(['patch','fileId']);
   let filesystem = state.filesystem.toJS();
 
   return {
@@ -38,7 +38,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onFileSaveClick: (name, id, fileId) => {
       $.ajax({
-        url: '/matrix/save',
+        url: '/graph/save',
         type: 'PUT',
         contentType:'application/json',
         data: JSON.stringify({name: name, folderId: id, fileId: fileId}),

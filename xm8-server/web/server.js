@@ -15,7 +15,7 @@ import path from 'path';
 
 
 //import wifiRoutes from './routes/wifi';
-import matrixRoutes from './routes/matrix';
+import graphRoutes from './routes/graph';
 import voiceRoutes from './routes/voice';
 import stateRoute from './routes/state';
 //import controllerRoute from './routes/controller';
@@ -47,7 +47,7 @@ stateRoute(app, ws);
 //controllerRoute(app, ws);
 
 //app.use('/app/wifi', wifiRoutes);
-app.use('/api/matrix', matrixRoutes);
+app.use('/api/graph', graphRoutes);
 app.use('/api/voice', voiceRoutes);
 
 // handle every other route with index.html, this lets react do the routing

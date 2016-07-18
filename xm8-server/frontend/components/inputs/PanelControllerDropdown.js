@@ -1,4 +1,4 @@
-import {panelControllers} from '../../../shared/matrix/PanelControllers.js';
+import {panelControllers} from '../../../shared/graph/PanelControllers.js';
 
 const PanelControllerDropdown = ({value, onControllerChange}) => (
 

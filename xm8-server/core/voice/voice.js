@@ -33,8 +33,8 @@ function createGroup(id){
       controllerToInputMap: [], // what midi CCs are mapped to what input positions
       controllerHiRes: [] // what midi CCs are high res
     },
-    matrix: {
-      //TODO: Add matrix here
+    graph: {
+      //TODO: Add graph here
     },
     voices: [];      
   };
@@ -94,9 +94,9 @@ function initGroups(){
   }
 }
 
-function setGroupMatrix(groupId, matrix){
-  groups[groupId].matrix.matrix = matrix;
-  //TODO: Send matrix thru SPI
+function setGroupGraph(groupId, graph){
+  groups[groupId].graph.graph = graph;
+  //TODO: Send graph thru SPI
 }
 
 function removeFromArray(array, element){
