@@ -23,13 +23,3 @@ export const redo = (undoGroup) => {
     undoGroup
   }
 }
-
-// this action is not explicitly treated by the reducer, but it adds an entry in the
-// undo history because it has an undoGroup.
-export const setUndoPoint = (undoGroup, description) => {
-  return {
-    type: types.SET_UNDO_POINT,
-    undoGroup,
-    undoDescription: 'Move element'
-  }
-}

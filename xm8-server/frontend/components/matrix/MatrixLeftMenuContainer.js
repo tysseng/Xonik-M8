@@ -2,7 +2,7 @@ import $ from 'jquery';
 import MatrixLeftMenu from './MatrixLeftMenu';
 import { connect } from 'react-redux';
 import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
-import { createNewNode, deleteNode, deleteLink} from '../../../shared/state/actions';
+import { createNewNode, deleteNode, deleteLink} from '../../../shared/state/actions/nodes';
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { toggleMode } from '../../../shared/state/actions/matrixgui';
 

@@ -2,6 +2,7 @@
 
 import nodeTypes from '../../shared/matrix/NodeTypes';
 import paramTypes from '../../shared/matrix/ParameterTypes';
+import { types } from '../../shared/state/actions/nodes';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 import {List, Map, OrderedMap} from 'immutable';
@@ -142,24 +143,24 @@ const removeFromConsumers = (state, nodeId, paramId) => {
 const param = (state, action) => {
 
   switch(action.type){
-    case 'DELETE_LINK':
+    case types.DELETE_LINK:
       return state.set('value', "");
-    case 'CHANGE_LINK_NAME':  
+    case types.CHANGE_LINK_NAME:  
       return state.setIn(['value', 'name'], action.name);
-    case 'TOGGLE_LINK_NAME_IN_GRAPH':  
+    case types.TOGGLE_LINK_NAME_IN_GRAPH:  
       return state.setIn(['value', 'showNameInGraph'], action.visible);
-    case 'CHANGE_NODE_PARAM_TYPE':
+    case types.CHANGE_NODE_PARAM_TYPE:
       return state.merge(getEmptyParam(action.paramId, action.paramType));
-    case 'CHANGE_NODE_PARAM_VALUE':
+    case types.CHANGE_NODE_PARAM_VALUE:
       let value = action.paramValue;
       if(isLink(action.paramType) && value && value != "") value = createLink(action);
       return state.set('value', value);
-    case 'CHANGE_NODE_PARAM_UNIT':    
+    case types.CHANGE_NODE_PARAM_UNIT:    
       return state.set('unit', action.paramUnit);
-    case 'NEW_LINK':
+    case types.NEW_LINK:
       let newLinkParamValue = createLink(action);
       return state.merge(getParam(action.paramId, paramTypes.map.LINK.id, newLinkParamValue, ''));
-    case 'DELETE_NODE': 
+    case types.DELETE_NODE: 
       // check if deleted node is the value of this parameter
       if(isLink(state.get('type')) && getFromNodeId(state) === action.nodeId){
         return state.set('value', "");        
@@ -172,35 +173,35 @@ const param = (state, action) => {
 
 const node = (state, action) => {
   switch (action.type){
-    case 'DELETE_LINK':
+    case types.DELETE_LINK:
       if(state.get('id') === action.fromNodeId){
         return state.deleteIn(['consumers', getLinkIdFromIds(action.toNodeId, action.toParamId)]);
       } else if(state.get('id') === action.toNodeId){
         return validateNode(state.updateIn(['params', action.toParamId], aParam => param(aParam, action)));
       }
       return state;
-    case 'CHANGE_LINK_NAME':
-    case 'TOGGLE_LINK_NAME_IN_GRAPH':      
+    case types.CHANGE_LINK_NAME:
+    case types.TOGGLE_LINK_NAME_IN_GRAPH:
       return state.updateIn(['params', action.toParamId], aParam => param(aParam, action));
-    case 'NEW_NODE':
+    case types.NEW_NODE:
       return validateNode(getEmptyNode('' + nextAvailableNodeId++));
     case 'INTERNAL_ADD_TO_CONSUMERS':
       let linkId = getLinkId(action);
       let consumerLink = createConsumerLink(action);
       return state.setIn(['consumers', linkId], consumerLink);      
-    case 'CHANGE_NODE_TYPE':
+    case types.CHANGE_NODE_TYPE:
       return validateNode(state.merge({
         type: action.typeId,
         params: getEmptyParams(action.typeId)
       }));
-    case 'NEW_LINK':
-    case 'CHANGE_NODE_PARAM_TYPE':
-    case 'CHANGE_NODE_PARAM_VALUE':
-    case 'CHANGE_NODE_PARAM_UNIT':
+    case types.NEW_LINK:
+    case types.CHANGE_NODE_PARAM_TYPE:
+    case types.CHANGE_NODE_PARAM_VALUE:
+    case types.CHANGE_NODE_PARAM_UNIT:
       return validateNode(state.updateIn(['params', action.paramId], (aParam) => param(aParam, action)));
-    case 'CHANGE_NODE_NAME':
+    case types.CHANGE_NODE_NAME:
       return state.set('name', action.name);
-    case 'DELETE_NODE': 
+    case types.DELETE_NODE: 
       // check if deleted node is the value of any parameter of this node
       let params = state.get('params');
       if(params){     
@@ -209,7 +210,7 @@ const node = (state, action) => {
         });
       }    
       return validateNode(state);  
-    case 'NODE_MOVE':    
+    case types.NODE_MOVE:
       return state.setIn(['vis','x'], action.x).setIn(['vis','y'], action.y);  
     default: 
       return state;
@@ -219,28 +220,27 @@ const node = (state, action) => {
 const nodes = (
   state = getInitialState(), 
   action) => {
-
   switch (action.type){
-    case 'LOAD_NODES_FROM_FILE':
+    case types.LOAD_NODES_FROM_FILE:
       return action.nodes;
-    case 'DELETE_LINK':
+    case types.DELETE_LINK:
       state = state.updateIn([action.fromNodeId], aNode => node(aNode, action));
       return state.updateIn([action.toNodeId], aNode => node(aNode, action));
-    case 'CHANGE_LINK_NAME':
-    case 'TOGGLE_LINK_NAME_IN_GRAPH':      
+    case types.CHANGE_LINK_NAME:
+    case types.TOGGLE_LINK_NAME_IN_GRAPH:      
       return state.updateIn([action.toNodeId], aNode => node(aNode, action));    
-    case 'NEW_NODE': 
+    case types.NEW_NODE: 
       let nodeId = '' + nextAvailableNodeId;
       return state.set(nodeId, node(undefined, action));
-    case 'DELETE_NODE':
+    case types.DELETE_NODE:
       // check if deleted node is the value of any parameter of any node
       _.each(state.toIndexedSeq().toArray(), (currentNode) => {
         state = state.updateIn([currentNode.get('id')], aNode => node(aNode, action));
       });
 
       return state.delete(action.nodeId);   
-    case 'NEW_LINK':   
-    case 'CHANGE_NODE_PARAM_VALUE':
+    case types.NEW_LINK:   
+    case types.CHANGE_NODE_PARAM_VALUE:
       // add or remove consumer link
       if(isLink(action.paramType)){
         if(action.paramValue && action.paramValue !== ""){       
@@ -250,11 +250,11 @@ const nodes = (
         }
       }
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
-    case 'CHANGE_NODE_PARAM_TYPE':
+    case types.CHANGE_NODE_PARAM_TYPE:
       // Remove any from-node consumers
       state = removeFromConsumers(state, action.nodeId, action.paramId);   
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
-    case 'CHANGE_NODE_TYPE':
+    case types.CHANGE_NODE_TYPE:
       // Remove any from-node consumers
       let params = state.getIn([action.nodeId, 'params']);
       if(params){
@@ -263,11 +263,11 @@ const nodes = (
         });        
       }
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));  
-    case 'CHANGE_NODE_NAME':
+    case types.CHANGE_NODE_NAME:
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
-    case 'CHANGE_NODE_PARAM_UNIT':
+    case types.CHANGE_NODE_PARAM_UNIT:
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
-    case 'NODE_MOVE':
+    case types.NODE_MOVE:
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     default: 
       return state;
@@ -278,6 +278,19 @@ const getInitialState = () => {
   return OrderedMap();
 }
 
-const undoWrapper = getUndoWrapper(undoGroups.MATRIX, nodes, getInitialState);
+const undoableActions = [
+    types.NEW_NODE,
+    types.DELETE_NODE,
+    types.CHANGE_NODE_TYPE,
+    types.CHANGE_NODE_PARAM_TYPE,      
+    types.CHANGE_NODE_PARAM_VALUE,      
+    types.CHANGE_NODE_PARAM_UNIT,      
+    types.NEW_LINK,  
+    types.TOGGLE_LINK_NAME_IN_GRAPH,
+    types.DELETE_LINK,
+    types.SET_UNDO_POINT
+];
+
+const undoWrapper = getUndoWrapper(undoGroups.MATRIX, undoableActions, nodes, getInitialState);
 
 export default undoWrapper;

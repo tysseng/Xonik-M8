@@ -1,15 +1,11 @@
-import { groups as undoGroups, setUndoPoint } from './undo';
-const undoGroup = undoGroups.INPUTS;
 import types from './inputsActionTypes';
-
 
 export const changeValue = (id, value) => {
   return {
     type: types.CONTROLLER_CHANGE,
     id,
     value,
-    target: 'BOTH',    
-    undoGroup,
+    target: 'BOTH',
     undoDescription: 'Change value'    
   };  
 }
@@ -46,8 +42,7 @@ export const updateField = (inputId, fieldPath, value) => {
     inputId,
     fieldPath,
     value,
-    target: 'SERVER',    
-    undoGroup,
+    target: 'SERVER',
     undoDescription: 'Update field'
   }
 }
@@ -57,8 +52,7 @@ export const deleteOption = (inputId, index) => {
     type: types.INPUTCONFIG_DELETE_OPTION,
     inputId,
     index,
-    target: 'SERVER',    
-    undoGroup,
+    target: 'SERVER',
     undoDescription: 'Delete option'
   }
 }
@@ -67,8 +61,7 @@ export const newOption = (inputId) => {
   return {
     type: types.INPUTCONFIG_NEW_OPTION,
     inputId,
-    target: 'SERVER',    
-    undoGroup,
+    target: 'SERVER',
     undoDescription: 'New option'
   }
 }
@@ -81,8 +74,7 @@ export const spreadOptionValues = (inputId, centered, endToEnd, min, max) => {
     endToEnd,
     min, 
     max,
-    target: 'SERVER',    
-    undoGroup,
+    target: 'SERVER',
     undoDescription: 'Spread option values'
   }
 }
@@ -94,8 +86,7 @@ export const spreadOptionValuesMidi = (inputId, centered, endToEnd) => {
     centered, 
     endToEnd,
     includeNegative,
-    target: 'SERVER',    
-    undoGroup,
+    target: 'SERVER',
     undoDescription: 'Spread midi values'
   }
 }

@@ -4,7 +4,7 @@ import { getLinks } from './LinkFunctions';
 
 
 import NodeLinkList from './NodeLinkList';
-import { selectNode, selectLink, deleteNode, deleteLink } from '../../../shared/state/actions';
+import { selectNode, selectLink, deleteNode, deleteLink } from '../../../shared/state/actions/nodes';
 
 const mapStateToProps = (state, ownProps) => {
   let nodes = state.nodes.toJS();

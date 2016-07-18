@@ -53,7 +53,16 @@ const getInitialState = () => {
     groups: Map()
   });
 }
+
+const undoableActions = [
+  inputgridActionTypes.CHANGE_ELEMENT_TYPE,
+  inputgridActionTypes.NEW_GROUP,
+  inputgridActionTypes.LOAD_GROUP,
+  inputgridActionTypes.ADD_ELEMENT,
+  inputgridActionTypes.DELETE_ELEMENT,
+  inputgridActionTypes.SET_UNDO_POINT
+];
  
-const undoWrapper = getUndoWrapper(undoGroups.INPUTGRID, inputgrid, getInitialState);
+const undoWrapper = getUndoWrapper(undoGroups.INPUTGRID, undoableActions, inputgrid, getInitialState);
 
 export default undoWrapper;

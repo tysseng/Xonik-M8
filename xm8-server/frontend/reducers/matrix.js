@@ -1,4 +1,7 @@
-import {Map} from 'immutable';
+import { Map } from 'immutable';
+import { types } from '../../shared/state/actions/nodes';
+import { types as vizTypes } from '../../shared/state/actions/matrixvisualization';
+import { types as guiTypes } from '../../shared/state/actions/matrixgui';
 
 const merge = (state, changes) => Object.assign({}, state, changes);  
 
@@ -22,38 +25,38 @@ const matrix = (
   action) => {
   
   switch (action.type){
-    case 'TOGGLE_PATCH_FILE_DIALOG':
+    case types.TOGGLE_PATCH_FILE_DIALOG:
       return state.setIn(['patchFileDialog', 'show'], action.show).setIn(['patchFileDialog', 'mode'], action.mode);
-    case 'DELETE_NODE':
+    case types.DELETE_NODE:
       if(state.get('selectedNode') === action.nodeId){
         return state.set('selectedNode', '');
       }
       return state; 
-    case 'DELETE_LINK':
+    case types.DELETE_LINK:
       if(state.get('selectedLink') === action.linkId){
         return state.set('selectedLink', '');
       }
       return state; 
-    case 'SELECT_NODE': 
+    case types.SELECT_NODE: 
       return state.set("selectedLink", "").set("selectedNode", action.nodeId);
-    case 'SELECT_LINK': 
+    case types.SELECT_LINK: 
       return state.set("selectedNode", "").set("selectedLink", action.linkId);      
-    case 'MATRIX_START_NODE_MOVE':
+    case vizTypes.MATRIX_START_NODE_MOVE:
       return state.set('offsetX', action.offsetX).set('offsetY', action.offsetY);
-    case 'MATRIX_TOGGLE_MODE':
+    case guiTypes.MATRIX_TOGGLE_MODE:
       if(action.mode != 'create_link'){
         state = closeLinkDialog(state);        
       }
       return state.set('mode', action.mode);
-    case 'MATRIX_SET_LINK_FROM':
+    case vizTypes.MATRIX_SET_LINK_FROM:
       return state.setIn(['linkDialog', 'fromNodeId'], action.nodeId);
-    case 'MATRIX_SET_LINK_TO':
+    case vizTypes.MATRIX_SET_LINK_TO:
       return state.setIn(['linkDialog', 'toNodeId'], action.nodeId).setIn(['linkDialog', 'show'], true);
-    case 'MATRIX_CANCEL_LINK_CREATION':
+    case vizTypes.MATRIX_CANCEL_LINK_CREATION:
       return closeLinkDialog(state);
-    case 'NEW_LINK':
+    case types.NEW_LINK:
       return closeLinkDialog(state);
-    case 'SET_STATE':
+    case types.SET_STATE:
       if(action.state.matrix){
         return state.merge(action.state.matrix);
       }

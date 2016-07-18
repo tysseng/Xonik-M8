@@ -1,6 +1,3 @@
-import { groups as undoGroups, setUndoPoint } from './undo';
-const undoGroup = undoGroups.INPUTGRID;
-
 export const inputgridActionTypes = {
   SELECT_ELEMENT: 'SELECT_ELEMENT',
   MOVE_ELEMENT: 'MOVE_ELEMENT',
@@ -13,7 +10,8 @@ export const inputgridActionTypes = {
   OPEN_NEW_ELEMENT_DIALOG: 'OPEN_NEW_ELEMENT_DIALOG',
   CLOSE_NEW_ELEMENT_DIALOG: 'CLOSE_NEW_ELEMENT_DIALOG',
   SELECT_ID_IN_NEW_ELEMENT_DIALOG: 'SELECT_ID_IN_NEW_ELEMENT_DIALOG',
-  CHANGE_ELEMENT_TYPE: 'CHANGE_ELEMENT_TYPE'
+  CHANGE_ELEMENT_TYPE: 'CHANGE_ELEMENT_TYPE',
+  SET_UNDO_POINT: 'SET_UNDO_POINT'
 }
 
 let types = inputgridActionTypes;
@@ -24,8 +22,7 @@ export const changeElementType = (groupId, id, inputType) => {
     groupId,
     id,
     inputType,
-    target: 'SERVER',    
-    undoGroup,
+    target: 'SERVER',
     undoDescription: 'Change element type'
   };  
 }
@@ -71,8 +68,7 @@ export const newGroup = (groupId) => {
   return {
     type: inputgridActionTypes.NEW_GROUP,
     groupId,
-    target: 'SERVER',    
-    undoGroup,
+    target: 'SERVER',
     undoDescription: 'New group'
   }
 }
@@ -81,8 +77,7 @@ export const loadGroup = (groupId) => {
   return {
     type: inputgridActionTypes.LOAD_GROUP,
     groupId,
-    target: 'SERVER',    
-    undoGroup,
+    target: 'SERVER',
     undoDescription: 'Load group'
   }
 }
@@ -96,8 +91,7 @@ export const addElement = (id, groupId, elementId, elementType, offsetXem, offse
     elementType, 
     offsetXem, 
     offsetYem,
-    target: 'BOTH',    
-    undoGroup,
+    target: 'BOTH',
     undoDescription: 'Add element'
   }
 }
@@ -107,8 +101,7 @@ export const deleteElement = (id, groupId) => {
     type: inputgridActionTypes.DELETE_ELEMENT,
     id, 
     groupId,
-    target: 'SERVER',    
-    undoGroup,
+    target: 'SERVER',
     undoDescription: 'Delete element'
   }
 }
@@ -137,5 +130,8 @@ export const selectInputInNewElementDialog = (elementType, elementId) => {
 }
 
 export const inputgridUndoPointPositionChanged = () => {
-  return setUndoPoint(undoGroup, 'Move element');  
+  return {
+    type: inputgridActionTypes.SET_UNDO_POINT,
+    undoDescription: 'Move element'
+  }
 }

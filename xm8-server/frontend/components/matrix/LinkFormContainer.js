@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectLink, changeLinkName, toggleLinkNameInGraph } from '../../../shared/state/actions';
+import { selectLink, changeLinkName, toggleLinkNameInGraph } from '../../../shared/state/actions/nodes';
 import paramTypes from '../../../shared/matrix/ParameterTypes.js';
 import LinkForm from './LinkForm'
 

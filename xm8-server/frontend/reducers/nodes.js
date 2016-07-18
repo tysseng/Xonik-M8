@@ -1,4 +1,4 @@
-import {OrderedMap} from 'immutable';
+import { OrderedMap } from 'immutable';
 
 const nodes = (state = OrderedMap(), action) => {
   switch (action.type){

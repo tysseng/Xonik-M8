@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 
 import { newFolder, selectFolder, deleteFolder } from '../../../shared/state/actions/filesystem';
-import { togglePatchSaveDialog, togglePatchLoadDialog } from '../../../shared/state/actions';
+import { togglePatchSaveDialog, togglePatchLoadDialog } from '../../../shared/state/actions/nodes';
 import _ from 'lodash';
 
 import FileDialogDispatchers from './dispatchers/FileDialogDispatchers';

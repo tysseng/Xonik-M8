@@ -5,14 +5,6 @@ import inputActionTypes from '../../shared/state/actions/inputsActionTypes';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 
-
-const groups = (state,action) => {
-
-  switch(action.type){
-  } 
-  return state;
-}
-
 const updateOptionsValues = (state, action, field) => {
   let numberOfSteps = state.get('options').size;
   let {centered, endToEnd, min, max} = action;
@@ -105,6 +97,15 @@ const getInitialState = () => {
   });
 }
 
-const undoWrapper = getUndoWrapper(undoGroups.INPUTS, root, getInitialState);
+const undoableActions = [
+  inputActionTypes.CONTROLLER_CHANGE,
+  inputActionTypes.INPUTCONFIG_UPDATE_FIELD,
+  inputActionTypes.INPUTCONFIG_DELETE_OPTION,
+  inputActionTypes.INPUTCONFIG_NEW_OPTION,
+  inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES,
+  inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI,
+];
+
+const undoWrapper = getUndoWrapper(undoGroups.INPUTS, undoableActions, root, getInitialState);
 
 export default undoWrapper;

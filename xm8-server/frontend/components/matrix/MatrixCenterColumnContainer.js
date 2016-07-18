@@ -4,8 +4,9 @@ import { getLinks } from './LinkFunctions';
 
 
 import MatrixCenterColumn from './MatrixCenterColumn';
-import { selectNode, selectLink, createNewNode, createNewLink, deleteNode, deleteLink, toggleAutoUpdate, changeNodeType, matrixUndoPointPositionChanged } from '../../../shared/state/actions';
-import { startNodeMove, moveNode, setLinkFromNodeId, setLinkToNodeId, cancelLinkCreation } from '../../../shared/state/actions/matrixvisualization';
+import { selectNode, selectLink, createNewNode, createNewLink, deleteNode, deleteLink, toggleAutoUpdate, changeNodeType, matrixUndoPointPositionChanged } from '../../../shared/state/actions/nodes';
+import { startNodeMove, setLinkFromNodeId, setLinkToNodeId, cancelLinkCreation } from '../../../shared/state/actions/matrixvisualization';
+import { moveNode } from '../../../shared/state/actions/nodes';
 import { toggleMode } from '../../../shared/state/actions/matrixgui';
 
 // TODO: Don't update if net does not validate (or send error message)
