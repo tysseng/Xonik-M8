@@ -1,7 +1,7 @@
 .matrixbutton{
   height: 30px;
   width: 30px;
-  margin: 5px;
+  margin: 2px;
   border-radius: 5px;
   background-image: -webkit-radial-gradient(#e0e3e6, #9da6af);
   box-shadow: inset -1px -1px 2px #333, 1px 1px 3px rgba(0,0,0,0.3);
@@ -10,4 +10,18 @@
     background-image: -webkit-radial-gradient(#00ff00, #00cc00);
     box-shadow: inset -1px -1px 2px #373, 0px 0px 5px #0a0, 1px 1px 3px rgba(0,0,0,1);
   }
+}
+
+#buttonmatrix{
+  tr {
+    height: 34px;    
+  }
+
+  td {
+    width: 34px;
+  }
+
+  table{
+    border-spacing: 0px;
+  }  
 }

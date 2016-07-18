@@ -13,6 +13,7 @@ import MainMenu from './components/framework/MainMenu';
 
 import HomePage from './components/home/HomePage';
 import GraphPage from './components/graph/GraphPageContainer';
+import MatrixPage from './components/matrix/MatrixPage';
 import ControlPage from './components/control/ControlPage';
 import FilesPage from './components/files/FilesPage';
 import SettingsPage from './components/settings/SettingsPage';
@@ -59,6 +60,7 @@ render(
         <IndexRoute component={GraphPage}/>
         <Route path="home" component={HomePage}/>
         <Route path="patches" component={GraphPage}/>
+        <Route path="matrix" component={MatrixPage}/>        
         <Route path="control" component={ControlPage}/>
         <Route path="files" component={FilesPage}/>
         <Route path="settings" component={SettingsPage}/>

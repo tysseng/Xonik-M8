@@ -7,7 +7,8 @@ export const types = {
   INPUTCONFIG_DELETE_OPTION: 'INPUTCONFIG_DELETE_OPTION',
   INPUTCONFIG_NEW_OPTION: 'INPUTCONFIG_NEW_OPTION',
   INPUTCONFIG_SPREAD_OPTIONS_VALUES: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES',
-  INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI'
+  INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI',
+  INPUT_DIRECT_OUTPUT_TOGGLE: 'INPUT_DIRECT_OUTPUT_TOGGLE'
 }
 
 export const changeValue = (id, value) => {
@@ -98,6 +99,15 @@ export const spreadOptionValuesMidi = (inputId, centered, endToEnd) => {
     includeNegative,
     target: 'SERVER',
     undoDescription: 'Spread midi values'
+  }
+}
+
+export const toggleDirectOutput = (inputId, outputId) => {
+  return {
+    type: types.INPUT_DIRECT_OUTPUT_TOGGLE,
+    inputId,
+    outputId,
+    target: 'SERVER'
   }
 }
 
