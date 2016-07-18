@@ -1,5 +1,5 @@
 import React from 'react'
-import outputs from '../../../shared/graph/Outputs.js'
+import outputs from '../../../../shared/graph/Outputs.js'
 
 const OutputLinkDropdown = ({value, onOutputLinkChange}) => (
   <select value={value} onChange={(e) => (onOutputLinkChange(e.target.value))}>

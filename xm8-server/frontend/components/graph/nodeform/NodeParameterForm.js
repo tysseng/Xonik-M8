@@ -1,9 +1,9 @@
 import React from 'react'
-import parameterTypes from '../../../shared/graph/ParameterTypes.js';
+import parameterTypes from '../../../../shared/graph/ParameterTypes.js';
 
 import NodeParameterTypeDropdown from './NodeParameterTypeDropdown.js';
 import NodeLinkDropdown from './NodeLinkDropdown.js';
-import InputDropdown from '../inputs/InputDropdown.js';
+import InputDropdown from '../../inputs/InputDropdown.js';
 import OutputLinkDropdown from './OutputLinkDropdown.js';
 import ParameterUnitDropdown from './ParameterUnitDropdown.js';
 

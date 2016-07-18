@@ -1,6 +1,6 @@
 import React from 'react'
 
-import NodeFormContainer from './NodeFormContainer';
+import NodeFormContainer from './nodeform/NodeFormContainer';
 import LinkFormContainer from './LinkFormContainer';
 import NodeLinkListContainer from './NodeLinkListContainer';
 

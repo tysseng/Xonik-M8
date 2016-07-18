@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import nodeTypes from '../../../shared/graph/NodeTypes.js';
+import nodeTypes from '../../../../shared/graph/NodeTypes.js';
 
 let nodeTypeMap = nodeTypes.map;
 

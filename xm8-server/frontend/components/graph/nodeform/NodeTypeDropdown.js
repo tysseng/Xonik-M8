@@ -1,6 +1,6 @@
 import React from 'react';
-import nodeTypes from '../../../shared/graph/NodeTypes';
-import MiniIcon from '../framework/MiniIcon';
+import nodeTypes from '../../../../shared/graph/NodeTypes';
+import MiniIcon from '../../framework/MiniIcon';
 
 const NodeTypeDropdown = ({id, value, onNodeTypeChange}) => (
   <div className="nodeType">

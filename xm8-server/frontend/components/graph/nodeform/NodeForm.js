@@ -5,9 +5,9 @@ import _ from 'lodash';
 
 import NodeTypeDropdown from './NodeTypeDropdown';
 import NodeParameterForm from './NodeParameterForm';
-import MiniIcon from '../framework/MiniIcon';
+import MiniIcon from '../../framework/MiniIcon';
 
-import nodeTypes from '../../../shared/graph/NodeTypes.js';
+import nodeTypes from '../../../../shared/graph/NodeTypes.js';
 
 const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange, onCloseDialog }) => {
 

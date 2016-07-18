@@ -1,5 +1,5 @@
 import React from 'react'
-import parameterUnits from '../../../shared/graph/ParameterUnits.js';
+import parameterUnits from '../../../../shared/graph/ParameterUnits.js';
 
 const ParameterUnitDropdown = ({value, onUnitChange}) => (
   <select value={value} onChange={(e) => (onUnitChange(e.target.value))}>
