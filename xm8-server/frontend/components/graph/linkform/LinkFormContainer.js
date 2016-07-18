@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectLink, changeLinkName, toggleLinkNameInGraph } from '../../../shared/state/actions/nodes';
-import paramTypes from '../../../shared/graph/ParameterTypes.js';
+import { selectLink, changeLinkName, toggleLinkNameInGraph } from '../../../../shared/state/actions/nodes';
+import paramTypes from '../../../../shared/graph/ParameterTypes.js';
 import LinkForm from './LinkForm'
 
 const isLink = (type) => {

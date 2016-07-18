@@ -1,4 +1,4 @@
-import MiniIcon from '../framework/MiniIcon';
+import MiniIcon from '../../framework/MiniIcon';
 import LinkDescription from './LinkDescription';
 const LinkFormComponent = ({link, nodes, onLinkNameChange, onCloseDialog, toggleLinkNameInGraph}) => {
 
