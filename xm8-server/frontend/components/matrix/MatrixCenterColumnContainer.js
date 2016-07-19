@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
-import { toggleDirectOutput} from '../../../shared/state/actions/matrix';
+import { toggleDirectOutput, toggleHover} from '../../../shared/state/actions/matrix';
 
 import MatrixCenterColumn from './MatrixCenterColumn';
 
@@ -16,7 +16,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {  
-    toggleButton: (inputId, outputId) => dispatch(toggleDirectOutput(inputId, outputId))
+    toggleButton: (inputId, outputId) => dispatch(toggleDirectOutput(inputId, outputId)),
+    hover: (inputId, outputId) => dispatch(toggleHover(inputId, outputId))
   }
 }
 

@@ -10,7 +10,8 @@ const ButtonMatrixRowLabels = ({inputs, directoutputs}) => {
       <table>
         <tbody>
           {Object.values(inputs).map(input => {
-            return <tr key={'labelrow' + input.id}><td>{input.name.full}</td></tr>
+            let className = directoutputs.hover.inputId === input.id ? 'hover' : '';
+            return <tr key={'labelrow' + input.id}><td><span className={className}>{input.name.full}</span></td></tr>
           })}
         </tbody>
       </table>           

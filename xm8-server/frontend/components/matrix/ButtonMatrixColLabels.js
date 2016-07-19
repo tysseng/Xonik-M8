@@ -1,7 +1,7 @@
 import React from 'react';
 import outputs from '../../../shared/graph/Outputs.js'
 
-const ButtonMatrixColLabels = () => {
+const ButtonMatrixColLabels = ({directoutputs}) => {
 
   return ( 
     <div id='buttonmatrixcols'>
@@ -9,7 +9,9 @@ const ButtonMatrixColLabels = () => {
         <tbody>
           <tr>
             {Object.values(outputs).map(output => {
-              return <td key={'col' + output.id}><div>{output.name}</div></td>;
+              let className = directoutputs.hover.outputId === output.id ? 'hover' : '';
+
+              return <td key={'col' + output.id}><div className={className}>{output.name}</div></td>;
             })}
           </tr>
         </tbody>

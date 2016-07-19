@@ -13,27 +13,21 @@
 }
 
 $col-label-height: 120px;
-
-
-#buttonmatrix,
-#buttonmatrixrows{
-  tr {
-    height: 34px;    
-  }  
-}
+$button-cell: 34px;
+$hover-color: #fff;
 
 #buttonmatrixcols {
   td {
     /* Something you can count on */
     height: $col-label-height;
     white-space: nowrap;
+    .hover{
+      color: $hover-color;
+    }
   }
 
   td > div {
-    transform: 
-      /* Magic Numbers */
-      translate(15px, 40px)      
-      rotate(-45deg);
+    transform: translate(15px, 40px) rotate(-45deg);
     width: 30px;
   }
 }
@@ -44,6 +38,14 @@ $col-label-height: 120px;
   table {
     margin-right: 5px;
   }
+  tr {
+    height: $button-cell;    
+  }   
+  td {
+    .hover{
+      color: $hover-color;
+    }    
+  } 
 
   .corner{
     height: $col-label-height;
@@ -52,8 +54,11 @@ $col-label-height: 120px;
 
 #buttonmatrix{
   float: none;
+  tr {
+    height: $button-cell;    
+  }    
   td {
-    width: 34px;
+    width: $button-cell;
   }
 
   table{

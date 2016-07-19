@@ -3,7 +3,7 @@ import React from 'react';
 import outputs from '../../../shared/graph/Outputs'
 import ButtonMatrixRow from './ButtonMatrixRow';
 
-const ButtonMatrix = ({inputs, directoutputs, toggleButton}) => {
+const ButtonMatrix = ({inputs, directoutputs, toggleButton, hover}) => {
 
   inputs = _.sortBy(inputs, ['sortKey']);
 
@@ -12,7 +12,7 @@ const ButtonMatrix = ({inputs, directoutputs, toggleButton}) => {
       <table>
         <tbody>
           {Object.values(inputs).map(input => {
-            return <ButtonMatrixRow key={'row' + input.id} input={input} directoutputs={directoutputs} toggleButton={toggleButton}/>
+            return <ButtonMatrixRow key={'row' + input.id} input={input} directoutputs={directoutputs} toggleButton={toggleButton} hover={hover}/>
           })}
         </tbody>
       </table>           
