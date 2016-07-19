@@ -8,9 +8,13 @@ const directoutputs = (state, action) => {
     case types.DIRECT_OUTPUT_TOGGLE: 
       let currentInputId = state.get(action.outputId);
       if(currentInputId === action.inputId){
-        return state.delete(action.outputId);
+        return state
+          .delete(action.outputId)
+          .set('latestToggle', Map({inputId: action.inputId, outputId: action.outputId}));
       } else {
-        return state.set(action.outputId, action.inputId);
+        return state
+          .set(action.outputId, action.inputId)
+          .set('latestToggle', Map({inputId: action.inputId, outputId: action.outputId}));
       }      
   } 
   return state;
@@ -28,7 +32,9 @@ const root = (
 
 const getInitialState = () => {
   return Map({
-    directoutputs: Map()
+    directoutputs: Map({
+      latestToggle: Map({inputId: '', outputId: ''})
+    })
   });
 }
 

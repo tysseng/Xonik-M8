@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import outputs from '../../../shared/graph/Outputs.js'
 
-const MatrixButtonRow = ({input, directoutputs, toggleButton}) => {
+const ButtonMatrixRow = ({input, directoutputs, toggleButton}) => {
 
   return ( 
     <tr>
@@ -20,4 +20,4 @@ const MatrixButtonRow = ({input, directoutputs, toggleButton}) => {
 
 }
 
-export default MatrixButtonRow;
+export default ButtonMatrixRow;

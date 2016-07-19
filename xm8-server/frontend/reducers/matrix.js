@@ -11,7 +11,9 @@ const byId = (state, action) => {
 
 const inputs = (
   state = Map({
-    directoutputs: Map()
+    directoutputs: Map({
+      latestToggle: Map({inputId: '', outputId: ''})
+    })
   }),
   action) => {
 

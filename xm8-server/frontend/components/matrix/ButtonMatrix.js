@@ -7,7 +7,7 @@ const ButtonMatrix = ({inputs, directoutputs, toggleButton}) => {
 
   inputs = _.sortBy(inputs, ['sortKey']);
 
-  return ( 
+  return (
     <div id='buttonmatrix'>
       <table>
         <tbody>

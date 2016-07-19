@@ -12,11 +12,46 @@
   }
 }
 
-#buttonmatrix{
+$col-label-height: 120px;
+
+
+#buttonmatrix,
+#buttonmatrixrows{
   tr {
     height: 34px;    
+  }  
+}
+
+#buttonmatrixcols {
+  td {
+    /* Something you can count on */
+    height: $col-label-height;
+    white-space: nowrap;
   }
 
+  td > div {
+    transform: 
+      /* Magic Numbers */
+      translate(15px, 40px)      
+      rotate(-45deg);
+    width: 30px;
+  }
+}
+
+#buttonmatrixrows{
+  float: left;
+
+  table {
+    margin-right: 5px;
+  }
+
+  .corner{
+    height: $col-label-height;
+  }
+}
+
+#buttonmatrix{
+  float: none;
   td {
     width: 34px;
   }
