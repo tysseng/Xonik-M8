@@ -3,14 +3,14 @@ import _ from 'lodash';
 
 import outputs from '../../../shared/graph/Outputs.js'
 
-const MatrixButtonRow = ({input, toggleButton}) => {
+const MatrixButtonRow = ({input, directoutputs, toggleButton}) => {
 
   return ( 
     <tr>
       {Object.values(outputs).map(output => {
         let className = 'matrixbutton';
 
-        if(_.includes(input.directoutputs, output.id)){
+        if(directoutputs[output.id] === input.id){
           className += ' on';
         }
         return <td key={'col' + input.id+'_'+output.id} ><div className={className} onClick={() => toggleButton(input.id, output.id)}></div></td>

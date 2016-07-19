@@ -1,7 +1,8 @@
 export const groups = {
   GRAPH: 'GRAPH',
   INPUTGROUPS: 'INPUTGROUPS',
-  INPUTS: 'INPUTS'
+  INPUTS: 'INPUTS',
+  MATRIX: 'MATRIX'
 }
 
 export const types = {

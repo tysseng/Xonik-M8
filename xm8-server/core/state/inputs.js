@@ -55,14 +55,7 @@ const input = (state, action) => {
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:
       return updateOptionsValues(state, action, 'value');
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
-      return updateOptionsValues(state, action, 'valuemidi');
-    case inputActionTypes.INPUT_DIRECT_OUTPUT_TOGGLE:
-      let isOn = state.getIn(['directoutputs', action.outputId]);
-      if(isOn){
-        return state.deleteIn(['directoutputs', action.outputId]);
-      } else {
-        return state.setIn(['directoutputs', action.outputId], action.outputId);
-      }      
+      return updateOptionsValues(state, action, 'valuemidi');     
   }
   return state;
 }
@@ -76,7 +69,6 @@ const byId = (state, action) => {
     case inputActionTypes.INPUTCONFIG_NEW_OPTION:   
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES: 
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
-    case inputActionTypes.INPUT_DIRECT_OUTPUT_TOGGLE: //TODO: It doesn't feel right to have this in this reducer!
       return state.updateIn([action.inputId], inputElem => input(inputElem, action));         
   } 
   return state;
@@ -93,7 +85,6 @@ const root = (
     case inputActionTypes.INPUTCONFIG_NEW_OPTION:
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:  
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
-    case inputActionTypes.INPUT_DIRECT_OUTPUT_TOGGLE: //TODO: It doesn't feel right to have this in this reducer!
       return state.updateIn(['byId'], (inputByIdMap) => byId(inputByIdMap, action));
   } 
   return state;

@@ -1,14 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
-import { toggleDirectOutput} from '../../../shared/state/actions/inputs';
+import { toggleDirectOutput} from '../../../shared/state/actions/matrix';
 
 import MatrixCenterColumn from './MatrixCenterColumn';
 
 const mapStateToProps = (state, ownProps) => {
   let inputs = state.inputs.get('byId').toJS();
+  let directoutputs = state.matrix.get('directoutputs').toJS();
 
   return {
-    inputs
+    inputs,
+    directoutputs
   }
 }
 
