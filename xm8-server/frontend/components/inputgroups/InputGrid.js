@@ -2,6 +2,7 @@
 
 import Controller from '../control/Controller';
 import { inputTypesById } from '../../../shared/inputs/InputTypes';
+import { getOffset } from '../positionTools.js';
 
 const findDraggableElement = (el) => {
   while(el){
@@ -20,13 +21,6 @@ const calculateEmSize = () => {
   emSize = Number(getComputedStyle(grid, "").fontSize.match(/(\d*(\.\d*)?)px/)[1]);
 }
 
-const getOffset = (element) => {
-  return {
-    x: Number(getComputedStyle(element, "").left.match(/(\d*(\.\d*)?)px/)[1]) / emSize,
-    y: Number(getComputedStyle(element, "").top.match(/(\d*(\.\d*)?)px/)[1]) / emSize    
-  }
-}
-
 const onMouseDown = (e, selectElement) => {
 
   let clickedElement = findDraggableElement(e.target);
@@ -38,7 +32,7 @@ const onMouseDown = (e, selectElement) => {
   // where is the element we want to drag now, in relation to the surrounding div.
   let elementOffset = getOffset(clickedElement);
   
-  selectElement(clickedElement.id,  e.pageX, e.pageY, elementOffset.x, elementOffset.y);
+  selectElement(clickedElement.id,  e.pageX, e.pageY, elementOffset.x / emSize, elementOffset.y / emSize);
 }
 
 const onDrag = (e, dragStart, selectedGroupId, dragElementId, moveElementCallback) => {
