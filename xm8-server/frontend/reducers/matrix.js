@@ -3,11 +3,6 @@ import _ from 'lodash';
 import { types } from '../../shared/state/actions/matrix';
 
 const directoutputs = (state, action) => {
-  switch(action.type){
-    case types.DIRECT_OUTPUT_TOGGLE:
-    case types.DIRECT_OUTPUT_HOVER:
-      return state.set('hover', Map({inputId: action.inputId, outputId: action.outputId}));
-  } 
   return state;
 }
 
@@ -21,8 +16,7 @@ const root = (
       }        
       break;     
     case types.DIRECT_OUTPUT_HOVER:
-    case types.DIRECT_OUTPUT_TOGGLE:
-      return state.updateIn(['directoutputs'], substate => directoutputs(substate, action));
+        return state.set('hover', Map({inputId: action.inputId, outputId: action.outputId}));
   } 
   return state;
 }
@@ -30,8 +24,9 @@ const root = (
 const getInitialState = () => {
   return Map({
     directoutputs: Map({
-      hover: Map({inputId: '', outputId: ''})
-    })
+      
+    }),
+    hover: Map({inputId: '', outputId: ''})
   });
 }
 

@@ -7,17 +7,19 @@ import MatrixCenterColumn from './MatrixCenterColumn';
 const mapStateToProps = (state, ownProps) => {
   let inputs = state.inputs.get('byId').toJS();
   let directoutputs = state.matrix.get('directoutputs').toJS();
+  let hover = state.matrix.get('hover').toJS();
 
   return {
     inputs,
-    directoutputs
+    directoutputs,
+    hover
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {  
     toggleButton: (inputId, outputId) => dispatch(toggleDirectOutput(inputId, outputId)),
-    hover: (inputId, outputId) => dispatch(toggleHover(inputId, outputId))
+    onHover: (inputId, outputId) => dispatch(toggleHover(inputId, outputId))
   }
 }
 

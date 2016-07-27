@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ButtonMatrixRowLabels = ({inputs, directoutputs}) => {
+const ButtonMatrixRowLabels = ({inputs, hover}) => {
 
   inputs = _.sortBy(inputs, ['sortKey']);
 
@@ -10,7 +10,7 @@ const ButtonMatrixRowLabels = ({inputs, directoutputs}) => {
       <table>
         <tbody>
           {Object.values(inputs).map(input => {
-            let className = directoutputs.hover.inputId === input.id ? 'hover' : '';
+            let className = hover.inputId === input.id ? 'hover' : '';
             return <tr key={'labelrow' + input.id}><td><span className={className}>{input.name.full}</span></td></tr>
           })}
         </tbody>

@@ -28,28 +28,32 @@
   }
 }
 
+
 $col-label-height: 120px;
 $button-cell: 34px;
 $hover-color: #fff;
 
+.buttonmatrixcols,
+.buttonmatrixrows {
+  &.hover{
+    color: $hover-color;
+  }  
+}
+
 .buttonmatrixcols {
-  /* Something you can count on */
+  /* height makes room for rotated label text */
   height: $col-label-height;
   white-space: nowrap;
 
-  .hover{
-    color: $hover-color;
-  }
-
-  > div {
-    transform: translate(2px, 90px) rotate(-90deg);
+  .rotated {
+    transform: translate(2px, 35px) rotate(-90deg);
     width: 30px;
   }    
 }
 
 #buttonmatrixcols {
   td {
-    /* Something you can count on */
+    /* height makes room for rotated label text */
     height: $col-label-height;
     white-space: nowrap;
     .hover{

@@ -4,47 +4,58 @@ import { Table, Column, Cell } from 'fixed-data-table';
 
 import outputs from '../../../shared/graph/Outputs.js'
 
-const RowLabelCell = ({rowIndex, data, col, ...props}) => {
-
+const RowLabelCell = ({inputs, hover, rowIndex, col, ...props}) => {
+  let input = inputs[rowIndex];
+  let className = 'buttonmatrixrows ' + (hover.inputId === input.id ? 'hover' : '');
+  
   return (
-    <Cell {...props}>
-      {data[rowIndex].name.full}
+    <Cell {...props} className={className}>
+      {input.name.full}
     </Cell>
   )
 };
 
-const ColLabelCell = ({data, ...props}) => {
+const ColLabelCell = ({output, hover, ...props}) => {
+  let className = 'buttonmatrixcols ' + (hover.outputId === output.id ? 'hover' : '');
 
   return (
-    <Cell {...props}>
-      <div className='buttonmatrixcols'><div>{data.name}</div></div>
+    <Cell {...props} className={className}>
+      <div className='rotated'>{output.name}</div>
     </Cell>
   )
 };
 
-const ButtonCell = ({rowIndex, data, col, ...props}) => {
+const ButtonCell = React.createClass({
+  shouldComponentUpdate: function(nextProps, nextState) {
+    let inputId = this.props.inputs[this.props.rowIndex].id;
 
-  let { inputs, directoutputs, toggleButton, hover } = data;
+    let currentlyOn = this.props.directoutput === inputId;
+    let nextOn = nextProps.directoutput === inputId;
+    return currentlyOn !== nextOn;
+  },
 
-  let inputId = inputs[rowIndex].id;
-  let outputId = col;
+  render: function() {
+    let { inputs, outputId, directoutput, toggleButton, onHover, rowIndex } = this.props;
 
-  let className = 'matrixbutton';  
-  if(directoutputs[outputId] === inputId){
-    className += ' on';
+    let inputId = inputs[rowIndex].id;
+
+    let className = 'matrixbutton';  
+
+    if(directoutput === inputId){
+      className += ' on';
+    }
+
+    return (
+      <Cell>
+        <div className={className} 
+          onClick={() => toggleButton(inputId, outputId)} 
+          onMouseOver={() => onHover(inputId, outputId)} 
+          onMouseOut={() => onHover('','')}>
+        </div>
+      </Cell>
+    )
   }
-
-  return (
-    <Cell {...props}>
-      <div className={className} 
-        onClick={() => toggleButton(inputId, outputId)} 
-        onMouseOver={() => hover(inputId, outputId)} 
-        onMouseOut={() => hover('','')}        
-        >
-      </div>
-    </Cell>
-  )
-};
+});
 
 class TableTest extends React.Component {
   constructor(props) {
@@ -54,13 +65,7 @@ class TableTest extends React.Component {
 
   render() {    
     let inputs = Object.values(this.props.inputs);
-
-    let dataList = {
-      inputs: inputs,
-      directoutputs: this.props.directoutputs,
-      toggleButton: this.props.toggleButton,
-      hover: this.props.hover
-    }
+    let { directoutputs, toggleButton, onHover } = this.props;
 
     return (
       <Table
@@ -73,15 +78,20 @@ class TableTest extends React.Component {
 
         <Column
           header={<Cell></Cell>}
-          cell={<RowLabelCell data={inputs} col='0' />}
+          cell={<RowLabelCell inputs={inputs} hover={this.props.hover} col='0' />}
           fixed={true}
           width={170}/>
 
         {Object.values(outputs).map(output => {
           return <Column
-            header={<ColLabelCell data={output}/>}
+            header={<ColLabelCell output={output} hover={this.props.hover}/>}
             key={'outputcol-' + output.id}
-            cell={<ButtonCell data={dataList} col={output.id}/>}
+            cell={<ButtonCell 
+              inputs={inputs} 
+              directoutput={directoutputs[output.id]} 
+              toggleButton={toggleButton} 
+              onHover={onHover} 
+              outputId={output.id}/>}
             width={36}/>
         })}
       </Table>

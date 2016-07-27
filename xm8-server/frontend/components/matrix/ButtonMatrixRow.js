@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import outputs from '../../../shared/graph/Outputs.js'
 
-const ButtonMatrixRow = ({input, directoutputs, toggleButton, hover}) => {
+const ButtonMatrixRow = ({input, directoutputs, toggleButton, onHover}) => {
 
   return ( 
     <tr>
@@ -13,7 +13,12 @@ const ButtonMatrixRow = ({input, directoutputs, toggleButton, hover}) => {
         if(directoutputs[output.id] === input.id){
           className += ' on';
         }
-        return <td key={'col' + input.id+'_'+output.id} ><div className={className} onClick={() => toggleButton(input.id, output.id)} onMouseOver={() => hover(input.id, output.id)} onMouseOut={() => hover('','')}></div></td>
+        return <td key={'col' + input.id+'_'+output.id} >
+          <div className={className} 
+            onClick={() => toggleButton(input.id, output.id)} 
+            onMouseOver={() => onHover(input.id, output.id)} 
+            onMouseOut={() => onHover('','')}></div>
+          </td>
       })}        
     </tr>
   )
