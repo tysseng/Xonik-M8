@@ -60,7 +60,6 @@ const ButtonCell = React.createClass({
 class TableTest extends React.Component {
   constructor(props) {
     super(props);
-
   }
 
   render() {    
