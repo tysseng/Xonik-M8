@@ -9,10 +9,10 @@ const MainMenu = () => {
         <MenuItem label="Home" icon="house.svg" onClick={() => console.log("Home")}/>
       </Link> 
       <Link to="/patches" activeClassName="selected">
-        <MenuItem label="Patches" icon="network.svg" onClick={() => console.log("Patches")} selected={true}/>
+        <MenuItem label="Patches" icon="network.svg" onClick={() => console.log("Patches")}/>
       </Link>
       <Link to="/matrix" activeClassName="selected">
-        <MenuItem label="Matrix" icon="network.svg" onClick={() => console.log("Matrix")} selected={true}/>
+        <MenuItem label="Matrix" icon="network.svg" onClick={() => console.log("Matrix")}/>
       </Link>
       <Link to="/control" activeClassName="selected">
         <MenuItem label="Control" icon="settings.svg" onClick={() => console.log("Control")}/>

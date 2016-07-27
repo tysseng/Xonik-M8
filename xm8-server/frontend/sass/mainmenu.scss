@@ -60,7 +60,8 @@ http://www.flaticon.com/packs/multimedia-set
 
 // when enclosing link is selected
 .selected {
-  .image{
+  .image,
+  &.image{
     fill: #0f0;
     filter: url(#glow);
   } 
