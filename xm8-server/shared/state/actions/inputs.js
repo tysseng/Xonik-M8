@@ -96,7 +96,6 @@ export const spreadOptionValuesMidi = (inputId, centered, endToEnd) => {
     inputId,
     centered, 
     endToEnd,
-    includeNegative,
     target: 'SERVER',
     undoDescription: 'Spread midi values'
   }

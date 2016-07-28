@@ -32,8 +32,8 @@ const InputOptions = ({ input, onLabelChange, onValueMidiChange, onValueChange, 
               })}
               <tr>
                 <td></td>
-                <td><button type='button' onClick={onSpreadValues}>Spread</button></td>
-                <td><button type='button' onClick={onSpreadValuesMidi}>Spread</button></td>
+                <td><button type='button' onClick={() => onSpreadValues(input)}>Spread</button></td>
+                <td><button type='button' onClick={() => onSpreadValuesMidi(input)}>Spread</button></td>
               </tr>
             </tbody>
           </table>
