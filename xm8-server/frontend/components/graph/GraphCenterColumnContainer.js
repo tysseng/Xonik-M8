@@ -12,7 +12,7 @@ import { toggleMode } from '../../../shared/state/actions/graphgui';
 // TODO: Don't update if net does not validate (or send error message)
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.nodes.toJS();
+  let nodes = state.nodes.get('nodes').toJS();
   let shouldAutoUpdate = state.graph.get('shouldAutoUpdate');
 
   return {

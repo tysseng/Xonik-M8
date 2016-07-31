@@ -10,7 +10,7 @@ const isLink = (type) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.nodes.toJS();
+  let nodes = state.nodes.get('nodes').toJS();
   let links = {};
   _.each(nodes, node => {
     _.each(node.params, param => {

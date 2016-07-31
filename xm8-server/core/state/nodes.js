@@ -2,7 +2,7 @@
 
 import nodeTypes from '../../shared/graph/NodeTypes';
 import paramTypes from '../../shared/graph/ParameterTypes';
-import { types } from '../../shared/state/actions/nodes';
+import { types, changeNodeParamValue } from '../../shared/state/actions/nodes';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 import {List, Map, OrderedMap} from 'immutable';
@@ -12,6 +12,10 @@ let nextAvailableNodeId = 1;
 
 const isLink = (type) => {
   return type === paramTypes.map.LINK.id;
+}
+
+const isOutput = (type) => {
+  return type === paramTypes.map.OUTPUT.id;
 }
 
 const getEmptyParam = (id, type) => {
@@ -140,6 +144,35 @@ const removeFromConsumers = (state, nodeId, paramId) => {
     return state;  
 }
 
+const updateOutputMaps = (state, action) => {
+  let currentOutputMapping = state.getIn(['reverseMap', action.nodeId]);
+  if(currentOutputMapping){
+    state = state
+      .deleteIn(['map', currentOutputMapping])
+      .deleteIn(['reverseMap', action.nodeId])
+  }
+  if(action.type === types.CHANGE_NODE_PARAM_VALUE && isOutput(action.paramType) && action.paramValue !== ''){
+    state = state
+      .setIn(['map', action.paramValue], Map({nodeId: action.nodeId, paramId: action.paramId}))
+      .setIn(['reverseMap', action.nodeId], action.paramValue);
+  }
+  return state;
+}
+
+const removeExistingOutputMapping = (state, action) => {
+  if(isOutput(action.paramType)){
+    // clear the value from any other parameter that has this output as its value
+    if(action.paramValue && action.paramValue !== ""){
+      let existingMapping = state.getIn(['outputs', 'map', action.paramValue]);
+      if(existingMapping){
+        let changeValueAction = changeNodeParamValue(existingMapping.get('nodeId'), existingMapping.get('paramId'), action.paramType, '');
+        state = state.updateIn(['nodes'], (nodesState) => nodes(nodesState, changeValueAction)); 
+      }
+    }  
+  }
+  return state;
+}
+
 const param = (state, action) => {
 
   switch(action.type){
@@ -216,10 +249,8 @@ const node = (state, action) => {
       return state;
   }
 }
-  
-const nodes = (
-  state = getInitialState(), 
-  action) => {
+
+const nodes = (state, action) => {
   switch (action.type){
     case types.LOAD_NODES_FROM_FILE:
       return action.nodes;
@@ -240,9 +271,9 @@ const nodes = (
 
       return state.delete(action.nodeId);   
     case types.NEW_LINK:   
-    case types.CHANGE_NODE_PARAM_VALUE:
-      // add or remove consumer link
+    case types.CHANGE_NODE_PARAM_VALUE:      
       if(isLink(action.paramType)){
+        // add or remove consumer link
         if(action.paramValue && action.paramValue !== ""){       
           state = state.updateIn([action.paramValue], (aNode) => node(aNode, getAddToConsumersAction(action)));
         } else {
@@ -274,8 +305,51 @@ const nodes = (
   }
 }
 
+const outputs = (state, action) => {
+  switch (action.type){
+    case types.DELETE_NODE:
+    case types.CHANGE_NODE_TYPE:
+    case types.CHANGE_NODE_PARAM_TYPE:
+    case types.CHANGE_NODE_PARAM_VALUE:
+    case types.NEW_LINK:
+      return updateOutputMaps(state, action);
+    default: 
+      return state;
+  }
+}
+
+const graph = (state = getInitialState(), action) => {
+  // any existing usage of the currenly selected output must be removed before we add
+  // it to a node AND before we update the outputs mapping.
+  // This requires knowledge of both outputs and nodes and has to be at this level.
+  if(action.type === types.CHANGE_NODE_PARAM_VALUE) {
+    state = removeExistingOutputMapping(state, action);
+  }
+
+  return state
+    .updateIn(['outputs'], substate => outputs(substate, action))
+    .updateIn(['nodes'], substate => nodes(substate, action));
+}
+
+
+/**
+ Convenience function that calculates some knowhow about the graph every time it changes and exposes it as state.
+ Triggers on selectable actions
+ May be abuse of the model but perhaps most efficient place to keep this?
+
+ - validity of graph
+ - reachable nodes 
+
+const calculatedState
+*/
 const getInitialState = () => {
-  return OrderedMap();
+  return Map({
+    nodes: OrderedMap(),
+    outputs: Map({
+      map: Map(),
+      reverseMap: Map()
+    })
+  });
 }
 
 const undoableActions = [
@@ -291,6 +365,6 @@ const undoableActions = [
     types.SET_UNDO_POINT
 ];
 
-const undoWrapper = getUndoWrapper(undoGroups.GRAPH, undoableActions, nodes, getInitialState);
+const undoWrapper = getUndoWrapper(undoGroups.GRAPH, undoableActions, graph, getInitialState);
 
 export default undoWrapper;

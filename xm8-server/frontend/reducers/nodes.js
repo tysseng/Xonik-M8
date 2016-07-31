@@ -1,6 +1,6 @@
-import { OrderedMap } from 'immutable';
+import { OrderedMap, Map } from 'immutable';
 
-const nodes = (state = OrderedMap(), action) => {
+const nodes = (state = getInitialState(), action) => {
   switch (action.type){
     case 'SET_STATE':
       if(action.state.nodes){
@@ -10,6 +10,16 @@ const nodes = (state = OrderedMap(), action) => {
     default: 
       return state;
   }
+}
+
+const getInitialState = () => {
+  return Map({
+    nodes: OrderedMap(),
+    outputs: Map({
+      map: Map(),
+      reverseMap: Map()
+    })
+  });
 }
 
 export default nodes

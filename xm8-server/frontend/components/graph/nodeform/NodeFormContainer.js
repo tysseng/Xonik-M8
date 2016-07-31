@@ -9,7 +9,7 @@ import NodeForm from './NodeForm'
 
 const mapStateToProps = (state, ownProps) => {
 
-  let nodes = state.nodes.toJS();
+  let nodes = state.nodes.get('nodes').toJS();
   let selectedNodeId = state.graph.get('selectedNode');
   let node = nodes[selectedNodeId];
 

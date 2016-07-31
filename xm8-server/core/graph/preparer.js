@@ -140,7 +140,7 @@ function addNode(node, sortedNodes, offset){
 
 function isNetValid(){
   let state = store.getState();
-  let nodes = state.nodes.toIndexedSeq().toJS();
+  let nodes = state.nodes.get('nodes').toIndexedSeq().toJS();
 
   let isValid = true;
 
@@ -155,7 +155,7 @@ function isNetValid(){
 
 function prepareNetForSerialization(){
   let state = store.getState();
-  let nodesMap = state.nodes.toJS();
+  let nodesMap = state.nodes.get('nodes').toJS();
 
   // convert map to list for further processing.
   let nodes = [];

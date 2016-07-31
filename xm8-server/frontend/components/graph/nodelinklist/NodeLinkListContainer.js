@@ -5,7 +5,7 @@ import { selectNode, selectLink, deleteNode, deleteLink } from '../../../../shar
 import NodeLinkList from './NodeLinkList';
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.nodes.toJS();
+  let nodes = state.nodes.get('nodes').toJS();
 
   return {
     links: getLinks(nodes),
