@@ -6,6 +6,10 @@ import { groups as undoGroups } from '../../shared/state/actions/undo';
 import outputs from './graph/outputs';
 import nodes from './graph/nodes';
 
+const isOutput = (type) => {
+  return type === paramTypes.map.OUTPUT.id;
+}
+
 // remove output from parameter value of the node currently outputting to this output.
 const removeOutputFromCurrentParameter = (state, action) => {
   if(isOutput(action.paramType) && action.paramValue !== ''){

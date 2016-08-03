@@ -31,18 +31,29 @@ const ButtonCell = React.createClass({
 
     let currentlyOn = this.props.directoutput === inputId;
     let nextOn = nextProps.directoutput === inputId;
-    return currentlyOn !== nextOn;
+
+    let currentlyColliding = this.props.graphOutputs[this.props.outputId] ? true : false;
+    let nextColliding = nextProps.graphOutputs[nextProps.outputId] ? true : false;
+
+    return currentlyOn !== nextOn || currentlyColliding !== nextColliding;
   },
 
   render: function() {
-    let { inputs, outputId, directoutput, toggleButton, onHover, rowIndex } = this.props;
+    let { inputs, outputId, directoutput, graphOutputs, toggleButton, onHover, rowIndex } = this.props;
 
     let inputId = inputs[rowIndex].id;
 
     let className = 'matrixbutton';  
 
+    // switch is turned on
     if(directoutput === inputId){
       className += ' on';
+    }
+
+    // output is in use in graph. We do not want it to magically disappear here (or maybe we do), so instead
+    // we highlight conflicts
+    if(graphOutputs[outputId]){
+      className += ' collision';
     }
 
     return (
@@ -64,7 +75,7 @@ class TableTest extends React.Component {
 
   render() {    
     let inputs = Object.values(this.props.inputs);
-    let { directoutputs, toggleButton, onHover } = this.props;
+    let { directoutputs, graphOutputs, toggleButton, onHover } = this.props;
 
     return (
       <Table
@@ -88,6 +99,7 @@ class TableTest extends React.Component {
             cell={<ButtonCell 
               inputs={inputs} 
               directoutput={directoutputs[output.id]} 
+              graphOutputs={graphOutputs}
               toggleButton={toggleButton} 
               onHover={onHover} 
               outputId={output.id}/>}
