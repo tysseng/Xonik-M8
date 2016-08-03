@@ -7,7 +7,6 @@ const isOutput = (type) => {
   return type === paramTypes.map.OUTPUT.id;
 }
 
-
 const getOutputsForNode = (outputs, nodeId) => {
   let outputsInUse = [];
   _.forEach(outputs, (mapping, output) => {    
@@ -57,7 +56,6 @@ const addNewOutputMapping = (state, action) => {
   }  
   return state;
 }
-
 
 // outputs-reducer
 const outputs = (state, action) => {  
