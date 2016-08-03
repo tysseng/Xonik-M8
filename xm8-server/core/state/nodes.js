@@ -1,5 +1,7 @@
 // TODO - let emtpy values be undefined, not ""?  
 
+// BUG: Output uniqueness is not constrained if parameter is alreadu an output.
+
 import nodeTypes from '../../shared/graph/NodeTypes';
 import paramTypes from '../../shared/graph/ParameterTypes';
 import { types, changeNodeParamValue } from '../../shared/state/actions/nodes';
@@ -144,35 +146,6 @@ const removeFromConsumers = (state, nodeId, paramId) => {
     return state;  
 }
 
-const updateOutputMaps = (state, action) => {
-  let currentOutputMapping = state.getIn(['reverseMap', action.nodeId]);
-  if(currentOutputMapping){
-    state = state
-      .deleteIn(['map', currentOutputMapping])
-      .deleteIn(['reverseMap', action.nodeId])
-  }
-  if(action.type === types.CHANGE_NODE_PARAM_VALUE && isOutput(action.paramType) && action.paramValue !== ''){
-    state = state
-      .setIn(['map', action.paramValue], Map({nodeId: action.nodeId, paramId: action.paramId}))
-      .setIn(['reverseMap', action.nodeId], action.paramValue);
-  }
-  return state;
-}
-
-const removeExistingOutputMapping = (state, action) => {
-  if(isOutput(action.paramType)){
-    // clear the value from any other parameter that has this output as its value
-    if(action.paramValue && action.paramValue !== ""){
-      let existingMapping = state.getIn(['outputs', 'map', action.paramValue]);
-      if(existingMapping){
-        let changeValueAction = changeNodeParamValue(existingMapping.get('nodeId'), existingMapping.get('paramId'), action.paramType, '');
-        state = state.updateIn(['nodes'], (nodesState) => nodes(nodesState, changeValueAction)); 
-      }
-    }  
-  }
-  return state;
-}
-
 const param = (state, action) => {
 
   switch(action.type){
@@ -305,17 +278,75 @@ const nodes = (state, action) => {
   }
 }
 
-const outputs = (state, action) => {
+const getOutputsForNode = (outputs, nodeId) => {
+  let outputsInUse = [];
+  _.forEach(outputs, (mapping, output) => {    
+    if(mapping.nodeId === nodeId) {
+      outputsInUse.push(output);
+    }
+  });
+  return outputsInUse;
+}
+
+const getOutputsForParam = (outputs, nodeId, paramId) => {
+  let outputsInUse = [];
+  _.forEach(outputs, (mapping, output) => {    
+    if(mapping.nodeId === nodeId && mapping.paramId === paramId) {
+      outputsInUse.push(output);
+    }
+  });
+  return outputsInUse;  
+}
+
+const removeExistingOutputMappings = (state, action) => {
+  let allOutputs = state.toJS();
+  let outputsInUse;
   switch (action.type){
     case types.DELETE_NODE:
     case types.CHANGE_NODE_TYPE:
+      outputsInUse = getOutputsForNode(allOutputs, action.nodeId);
+      break;      
     case types.CHANGE_NODE_PARAM_TYPE:
     case types.CHANGE_NODE_PARAM_VALUE:
     case types.NEW_LINK:
-      return updateOutputMaps(state, action);
-    default: 
-      return state;
+      outputsInUse = getOutputsForParam(allOutputs, action.nodeId, action.paramId);
+      break;
   }
+
+  if(outputsInUse) {
+    _.forEach(outputsInUse, output => {
+      state = state.delete(output);
+    })
+  }
+  return state;  
+}
+
+const addNewOutputMapping = (state, action) => {
+  if(isOutput(action.paramType) && action.paramValue !== ''){
+    state = state.set(action.paramValue, Map({nodeId: action.nodeId, paramId: action.paramId}));
+  }  
+  return state;
+}
+
+// remove output from parameter value of the node currently outputting to this output.
+const removeOutputFromCurrentParameter = (state, action) => {
+  if(isOutput(action.paramType) && action.paramValue !== ''){
+    // if the requested output is currently connected to another node:
+    let outputs = state.get('outputs');
+    let mapping = outputs.get('' + action.paramValue);
+    if(mapping){
+      let changeValueAction = changeNodeParamValue(mapping.get('nodeId'), mapping.get('paramId'), action.paramType, '');
+      state = state.updateIn(['nodes'], (nodesState) => nodes(nodesState, changeValueAction)); 
+    }
+  }
+  return state;
+}
+
+// outputs-reducer
+const outputs = (state, action) => {  
+  state = removeExistingOutputMappings(state, action);
+  state = addNewOutputMapping(state, action);
+  return state;
 }
 
 const graph = (state = getInitialState(), action) => {
@@ -323,7 +354,7 @@ const graph = (state = getInitialState(), action) => {
   // it to a node AND before we update the outputs mapping.
   // This requires knowledge of both outputs and nodes and has to be at this level.
   if(action.type === types.CHANGE_NODE_PARAM_VALUE) {
-    state = removeExistingOutputMapping(state, action);
+    state = removeOutputFromCurrentParameter(state, action);
   }
 
   return state
@@ -345,10 +376,7 @@ const calculatedState
 const getInitialState = () => {
   return Map({
     nodes: OrderedMap(),
-    outputs: Map({
-      map: Map(),
-      reverseMap: Map()
-    })
+    outputs: Map()
   });
 }
 

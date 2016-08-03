@@ -15,10 +15,7 @@ const nodes = (state = getInitialState(), action) => {
 const getInitialState = () => {
   return Map({
     nodes: OrderedMap(),
-    outputs: Map({
-      map: Map(),
-      reverseMap: Map()
-    })
+    outputs: Map()
   });
 }
 
