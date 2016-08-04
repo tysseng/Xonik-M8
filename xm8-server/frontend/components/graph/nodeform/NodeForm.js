@@ -42,7 +42,7 @@ const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, on
 
             return <NodeParameterForm 
               key={paramId} 
-              name={parameterDefinition.name}
+              parameterDefinition={parameterDefinition}
               parameter={parameter}
               currentnode={node}
               nodes={nodes}

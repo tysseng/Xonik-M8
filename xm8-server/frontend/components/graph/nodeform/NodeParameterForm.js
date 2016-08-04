@@ -8,7 +8,7 @@ import OutputLinkDropdown from './OutputLinkDropdown.js';
 import ParameterUnitDropdown from './ParameterUnitDropdown.js';
 
 const NodeParameterForm = ({
-  name,
+  parameterDefinition,
   parameter,
   currentnode,
   nodes,
@@ -48,9 +48,9 @@ const NodeParameterForm = ({
 
   return (
     <span>
-      <label>{name}{!valid && <span className='invalid'> (incomplete)</span>}</label>
+      <label>{parameterDefinition.name}{!valid && <span className='invalid'> (incomplete)</span>}</label>
       <div>
-        <NodeParameterTypeDropdown value={type} onParameterTypeChange={onTypeChange}/> {body}
+        <NodeParameterTypeDropdown value={type} onParameterTypeChange={onTypeChange} parameterDefinition={parameterDefinition}/> {body}
       </div>
     </span>
   )

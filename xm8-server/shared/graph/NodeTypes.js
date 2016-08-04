@@ -1,8 +1,14 @@
-var _ = require('lodash');
-
+import _ from 'lodash';
+import { map as paramTypes } from './ParameterTypes';
 // TODO: add hw ids
 // TODO: Add property key as key instead, and loop over list to make map?
-var nodeTypes = {
+
+// global type blacklist is only used if no white or blacklist exists for a parameter
+const globalTypeBlacklist = [
+  paramTypes.OUTPUT.id
+];
+
+const nodeTypes = {
   NOT_SELECTED: {
     id: "-1", name: "Type not selected", params: []
   },
@@ -553,7 +559,8 @@ var nodeTypes = {
       id: "1",
       name: "Output target",
       validator: function(value){},
-      optional: false
+      optional: false,
+      typeWhitelist: [paramTypes.UNUSED.id, paramTypes.OUTPUT.id]
     }]    
   }, 
   OUTPUT_TUNED: {
@@ -571,7 +578,8 @@ var nodeTypes = {
       id: "1",
       name: "Output to VCO",
       validator: function(value){},
-      optional: false
+      optional: false,
+      typeWhitelist: [paramTypes.OUTPUT.id]
     }]
   },
   GLIDE: {
@@ -624,7 +632,7 @@ var nodeTypes = {
   }
 };
 
-var nodeTypesList = [
+const nodeTypesList = [
   nodeTypes.NOT_SELECTED,
   nodeTypes.SUM,
   nodeTypes.INVERT,
@@ -653,7 +661,7 @@ var nodeTypesList = [
 ];
 
 // make it easy to lookup a node type based on its id
-var nodeTypesIdMap = {};
+let nodeTypesIdMap = {};
 _.each(nodeTypesList, function(nodeType){
   nodeTypesIdMap[nodeType.id] = nodeType;
 });
@@ -661,3 +669,4 @@ _.each(nodeTypesList, function(nodeType){
 module.exports.map = nodeTypes;
 module.exports.list = nodeTypesList;
 module.exports.idMap = nodeTypesIdMap;
+module.exports.globalTypeBlacklist = globalTypeBlacklist;
