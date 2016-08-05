@@ -560,7 +560,7 @@ const nodeTypes = {
       name: "Output target",
       validator: function(value){},
       optional: false,
-      typeWhitelist: [paramTypes.UNUSED.id, paramTypes.OUTPUT.id]
+      typeWhitelist: [paramTypes.OUTPUT.id]
     }]    
   }, 
   OUTPUT_TUNED: {

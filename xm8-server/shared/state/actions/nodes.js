@@ -106,9 +106,9 @@ export const changeNodeType = (nodeId, typeId) => {
 export const changeNodeParamType = (nodeId, paramId, paramType) => {
   return {
     type: types.CHANGE_NODE_PARAM_TYPE,      
-    nodeId: nodeId,
-    paramId: paramId,
-    paramType: paramType,
+    nodeId,
+    paramId,
+    paramType,
     target: 'SERVER',    
     undoDescription: 'Change parameter type'
   }
@@ -117,10 +117,10 @@ export const changeNodeParamType = (nodeId, paramId, paramType) => {
 export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue) => { 
   return {
     type: types.CHANGE_NODE_PARAM_VALUE,      
-    nodeId: nodeId,
-    paramId: paramId,
-    paramType: paramType,
-    paramValue: paramValue,
+    nodeId,
+    paramId,
+    paramType,
+    paramValue,
     target: 'SERVER',    
     undoDescription: 'Change parameter value'
   }
@@ -129,9 +129,9 @@ export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue) =>
 export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
   return {
     type: types.CHANGE_NODE_PARAM_UNIT,      
-    nodeId: nodeId,
-    paramId: paramId,
-    paramUnit: paramUnit,
+    nodeId,
+    paramId,
+    paramUnit,
     target: 'SERVER',    
     undoDescription: 'Change unit'
   }

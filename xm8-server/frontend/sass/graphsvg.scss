@@ -23,6 +23,11 @@
       stroke-width: 1;
       filter: url(#drop-shadow);
 
+      &.output {
+        stroke: #1aa3ff;
+        fill: #1aa3ff;        
+      }
+
       &.invalid {
         stroke: #d00;
         fill: #d00;

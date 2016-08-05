@@ -3,6 +3,7 @@ import d3 from 'd3';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
 import {Component} from 'react';
+import {map as nodeTypes} from '../../../shared/graph/NodeTypes';
 import NodeIcon from './NodeIcon';
 
 class GraphSvgNode extends Component {
@@ -37,9 +38,12 @@ class GraphSvgNode extends Component {
     });
   }
 
-  getClassName(selected, valid){
+  getClassName(type, selected, valid){
 
     let className = 'nodebox';
+    if(type === nodeTypes.OUTPUT.id || type === nodeTypes.OUTPUT_TUNED){
+      className += ' output';
+    }
     if(selected){
       className += ' selected';
     }
@@ -51,7 +55,7 @@ class GraphSvgNode extends Component {
 
   render() {
     let node = this.props.node;    
-    let className = this.getClassName(this.props.selected, node.valid);
+    let className = this.getClassName(node.type, this.props.selected, node.valid);
 
     return (
       <g className='node' key={'nodegroup' + node.id} ref='svgNode'>

@@ -50,7 +50,11 @@ const NodeParameterForm = ({
     <span>
       <label>{parameterDefinition.name}{!valid && <span className='invalid'> (incomplete)</span>}</label>
       <div>
-        <NodeParameterTypeDropdown value={type} onParameterTypeChange={onTypeChange} parameterDefinition={parameterDefinition}/> {body}
+        <NodeParameterTypeDropdown
+          value={type} 
+          onParameterTypeChange={onTypeChange} 
+          parameterDefinition={parameterDefinition}/> 
+          {body}
       </div>
     </span>
   )

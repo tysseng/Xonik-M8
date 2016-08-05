@@ -1,5 +1,6 @@
 import nodeTypes from '../../../shared/graph/NodeTypes';
 import paramTypes from '../../../shared/graph/ParameterTypes';
+import {unitsById} from '../../../shared/graph/ParameterUnits';
 import { types } from '../../../shared/state/actions/nodes';
 import { List, Map } from 'immutable';
 import _ from 'lodash';
@@ -17,7 +18,7 @@ const isOutput = (type) => {
 const getEmptyParam = (id, type) => {
   let unit = '';
   if(type === paramTypes.map.CONSTANT.id){
-    unit = 0;
+    unit = unitsById.FRACTION.id;
   }
 
   return Map({
@@ -35,12 +36,21 @@ const getParam = (id, type, value, unit) => Map({
   unit: unit
 })
 
+const getPreselectedParamType = (paramDefinition) => {
+  let whitelist = paramDefinition.typeWhitelist;
+  if(whitelist && whitelist.length === 1){
+    return whitelist[0];
+  }
+  return "";
+}
+
 const getEmptyParams = (typeId) => {
   let definition = nodeTypes.idMap[typeId];
   let params = List();
 
   _.each(definition.params, (param) => {
-    params = params.push(getEmptyParam(param.id, ""));
+    let paramType = getPreselectedParamType(param);
+    params = params.push(getEmptyParam(param.id, paramType));
   });
 
   return params; 

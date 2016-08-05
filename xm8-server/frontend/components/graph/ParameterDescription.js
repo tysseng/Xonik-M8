@@ -16,18 +16,19 @@ const ParameterDescription = ({
   let valid=parameter.valid;
 
   let body;
-
   switch(type){
     case "unused":
       body = "";
       break;
     case "input":
       // TODO: Get inputs as id->map
-      let inputName = inputsById[parameter.value].defaultName;
-      body = "Input from " + inputName;
+      if(value){
+        let inputName = inputsById[value].defaultName;
+        body = "Input from " + inputName;
+      }
       break;
     case "output":
-      let outputName = outputsById[parameter.value].name;
+      let outputName = outputsById[value].name;
       body = "Output to " + outputName;
       break;
     case "result":
@@ -37,7 +38,9 @@ const ParameterDescription = ({
       }
       break;
     case "constant":
-      body = value + ' ' + unitsById[unit].name;
+      if(value) {
+        body = value + ' ' + unitsById[unit].name;
+      }
       break;
   }
 
