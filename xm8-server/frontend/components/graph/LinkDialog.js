@@ -1,7 +1,20 @@
 import nodeTypes from '../../../shared/graph/NodeTypes.js';
+import {map as paramTypes} from '../../../shared/graph/ParameterTypes.js';
 import ParameterDescription from './ParameterDescription';
 import NodeTypeDropdown from './nodeform/NodeTypeDropdown';
 import ModalBox from '../framework/ModalBox';     
+
+const isLinkable = (parameterDefinition) => {
+  let whitelist = parameterDefinition.typeWhitelist
+  let blacklist = parameterDefinition.typeBlacklist
+
+  if(whitelist){
+    return _.includes(whitelist, paramTypes.INPUT.id);
+  } else if(blacklist){
+    return !_.includes(blacklist, paramTypes.INPUT.id);
+  } 
+  return true;
+}
 
 const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate, onNodeTypeChange}) => {
 
@@ -33,7 +46,14 @@ const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate, onNodeTypeChange}) 
           <div className="intro">What parameter of {toNode.name} do you want to send the output of {fromNode.name} to?</div>          
           <div className="parameters">          
             {        
-              nodeType.params.map((parameterDefinition) => { 
+              nodeType.params.map((parameterDefinition) => {
+
+                // check that parameter type INPUT is possible for the parameter.
+                if(!isLinkable(parameterDefinition)){
+                  console.log("not linkable", parameterDefinition)
+                  return null;
+                }
+
                 let paramId = parameterDefinition.id;
                 let name = parameterDefinition.name;                
                 let parameter = toNode.params[paramId];                 
