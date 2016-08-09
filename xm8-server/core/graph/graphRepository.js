@@ -8,7 +8,7 @@ import printer from './printer.js';
 import commands from './commands.js';
 
 import {undo, redo} from '../../shared/state/undobuffer.js';
-import {loadNodesFromFile, setLoadedPatchFileDetails} from '../../shared/state/actions/nodes';
+import {loadPatchFromFile, setLoadedPatchFileDetails} from '../../shared/state/actions/nodes';
 import {filetypes} from '../../shared/FileTypes';
 import {saveFile, loadFile} from '../persistence/fileRepo';
 import {fromJS} from 'immutable';
@@ -48,7 +48,8 @@ export const save = (name, folderId) => {
   // TODO: Store input values as well  
   let file = {
     contents: {
-      nodes: store.getState().nodes.toJS()
+      nodes: store.getState().nodes.toJS(),
+      matrix: store.getState().matrix.toJS()
     }
   }
 
@@ -64,9 +65,11 @@ export const load =(fileId, version) => {
   let file = loadFile(fileId, version);
 
   if(file && file.contents && file.contents.nodes){
+
     // TODO: Figure out how to make sure this is an orderedMap
     let immutableNodes = fromJS(file.contents.nodes);
-    store.dispatch(loadNodesFromFile(fileId, version, immutableNodes));
+    let immutableMatrix = fromJS(file.contents.matrix);
+    store.dispatch(loadPatchFromFile(fileId, version, immutableNodes, immutableMatrix));
   }
 }
 

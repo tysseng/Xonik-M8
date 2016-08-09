@@ -64,10 +64,9 @@ export const deselectDragElement = () => {
   }
 }
 
-export const newGroup = (groupId) => {
+export const newGroup = () => {
   return {
     type: inputgroupsActionTypes.NEW_GROUP,
-    groupId,
     target: 'SERVER',
     undoDescription: 'New group'
   }

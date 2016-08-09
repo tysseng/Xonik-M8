@@ -5,9 +5,6 @@ import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { openNewElementDialog, newGroup } from '../../../shared/state/actions/inputgroups';
 
-// TODO: MOVE THIS!
-let nextGroupId = 0;
-
 const mapStateToProps = (state, ownProps) => {
   let inputgroups = state.inputgroups;
 
@@ -19,7 +16,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onOpenNewElementDialog: () => dispatch(openNewElementDialog()),
-    newGroup: () => dispatch(newGroup('' + nextGroupId++)),
+    newGroup: () => dispatch(newGroup()),
     onUndo: () => dispatch(undo(undoGroups.INPUTGROUPS)),
     onRedo: () => dispatch(redo(undoGroups.INPUTGROUPS)),
     onInputGroupsSave: (options) => dispatch(toggleFileDialog(true, 'save', options)),

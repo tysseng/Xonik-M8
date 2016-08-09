@@ -139,7 +139,8 @@ class GraphSvg extends Component {
           {Object.values(this.props.nodes).map(node => {            
             let isSelected = this.isNodeSelected(node, this.props);
             return (
-              <GraphSvgNode key={node.id} 
+              <GraphSvgNode 
+              key={node.id} 
                 mode={this.props.mode}
                 node={node}
                 selected={isSelected}

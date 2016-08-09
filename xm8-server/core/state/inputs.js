@@ -4,6 +4,7 @@ import { inputsById, inputGroupsById, getEmptyOption, getStepPositions } from '.
 import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
+import { getNextInputId } from '../persistence/fileRepo';
 
 const updateOptionsValues = (state, action, field) => {
   let numberOfSteps = state.get('options').size;

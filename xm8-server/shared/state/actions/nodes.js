@@ -3,7 +3,7 @@
 export const types = {
   TOGGLE_AUTO_UPDATE: 'TOGGLE_AUTO_UPDATE',
   SET_LOADED_PATCH_FILE_DETAILS: 'SET_LOADED_PATCH_FILE_DETAILS',
-  LOAD_NODES_FROM_FILE: 'LOAD_NODES_FROM_FILE',
+  LOAD_PATCH_FROM_FILE: 'LOAD_NODES_FROM_FILE',
   SELECT_NODE: 'SELECT_NODE',
   SELECT_LINK: 'SELECT_LINK',
   NEW_NODE: 'NEW_NODE',
@@ -41,13 +41,14 @@ export const setLoadedPatchFileDetails = (fileId, version) => {
   };
 }
 
-export const loadNodesFromFile = (fileId, version, nodes) => {
+export const loadPatchFromFile = (fileId, version, nodes, matrix) => {
   return {
-    type: types.LOAD_NODES_FROM_FILE,
+    type: types.LOAD_PATCH_FROM_FILE,
     target: 'SERVER',
     fileId,
     version,
-    nodes
+    nodes,
+    matrix
   }
 }
 

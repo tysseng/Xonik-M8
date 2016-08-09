@@ -184,6 +184,7 @@ const param = (state, action) => {
 const node = (state, action) => {
   switch (action.type){
     case types.DELETE_LINK:
+      console.log(action)
       if(state.get('id') === action.fromNodeId){
         return state.deleteIn(['consumers', getLinkIdFromIds(action.toNodeId, action.toParamId)]);
       } else if(state.get('id') === action.toNodeId){
@@ -229,8 +230,8 @@ const node = (state, action) => {
 
 const nodes = (state, action) => {
   switch (action.type){
-    case types.LOAD_NODES_FROM_FILE:
-      return action.nodes;
+    case types.LOAD_PATCH_FROM_FILE:
+      return action.nodes.get('nodes');
     case types.DELETE_LINK:
       state = state.updateIn([action.fromNodeId], aNode => node(aNode, action));
       return state.updateIn([action.toNodeId], aNode => node(aNode, action));

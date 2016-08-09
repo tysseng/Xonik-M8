@@ -44,7 +44,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       if(nodeId){
         dispatch(deleteNode(nodeId));
       } else if(linkId){
-        dispatch(deleteLink(nodeId));
+        // TODO: create action that can delete a link without knowing more than the id 
+        dispatch(deleteLink(linkId));
       }
     },
     onCreate: () => dispatch(createNewNode()),

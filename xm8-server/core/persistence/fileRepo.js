@@ -8,6 +8,27 @@ import {newFile, updateFile} from '../../shared/state/actions/filesystem';
 
 import store from '../state/store.js';
 
+export const getNextInputId = () => {
+  let id;
+  try{
+    id = JSON.parse(fs.readFileSync(config.persistence.filesystemPaths.nextInputId));
+  } catch (e){
+    id = 0;
+  }  
+  fs.writeFileSync(config.persistence.filesystemPaths.nextInputId, JSON.stringify(id + 1));  
+  return id;
+}
+
+export const getNextInputGroupId = () => {
+  let id;
+  try{
+    id = JSON.parse(fs.readFileSync(config.persistence.filesystemPaths.nextInputGroupId));
+  } catch (e){
+    id = 0;
+  }  
+  fs.writeFileSync(config.persistence.filesystemPaths.nextInputGroupId, JSON.stringify(id + 1));  
+  return id;  
+}
 
 const readNextIdFromFile = () => {
   try{

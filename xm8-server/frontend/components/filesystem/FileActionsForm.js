@@ -25,13 +25,13 @@ const FileActionsForm = ({mode, filename, onFileSaveClick, onFileLoadClick, sele
       <form onSubmit={e =>  submitForm(e, onFileActionClick, selectedFolder, selectedFileId, selectedFileVersion)}>
         {mode === 'save' &&
           <div>
-            <label forHtml="filename">Name</label>
+            <label>Name</label>
             <input disabled={mode === 'load'} onChange={(e) => onFilenameInputChange(e.target.value)} id="filename" type="text" value={filename}/>
           </div>  
         }
         {mode === 'load' &&
           <div>
-            <label forHtml="filename">Name</label>
+            <label>Name</label>
             <input id="filename" type="hidden" value={filename}/> {filename}
           </div>  
         }              

@@ -8,7 +8,7 @@ const graph = (state = Map({shouldAutoUpdate: false, patch: Map()}), action) => 
       return state
         .setIn(['patch', 'fileId'], action.fileId)
         .setIn(['patch', 'version'], action.version);
-    case 'LOAD_NODES_FROM_FILE':
+    case 'LOAD_PATCH_FROM_FILE':
       return state
         .setIn(['patch', 'fileId'], action.fileId)
         .setIn(['patch', 'version'], action.version);

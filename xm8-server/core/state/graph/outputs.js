@@ -59,6 +59,9 @@ const addNewOutputMapping = (state, action) => {
 
 // outputs-reducer
 const outputs = (state, action) => {  
+  if(action.type === types.LOAD_PATCH_FROM_FILE){
+    return action.nodes.get('outputs');  
+  }    
   state = removeExistingOutputMappings(state, action);
   state = addNewOutputMapping(state, action);
   return state;
