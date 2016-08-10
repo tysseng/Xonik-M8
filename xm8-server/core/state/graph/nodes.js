@@ -5,8 +5,6 @@ import { types } from '../../../shared/state/actions/nodes';
 import { List, Map } from 'immutable';
 import _ from 'lodash';
 
-let nextAvailableNodeId = 1;
-
 const isLink = (type) => {
   return type === paramTypes.map.LINK.id;
 }
@@ -195,7 +193,7 @@ const node = (state, action) => {
     case types.TOGGLE_LINK_NAME_IN_GRAPH:
       return state.updateIn(['params', action.toParamId], aParam => param(aParam, action));
     case types.NEW_NODE:
-      return validateNode(getEmptyNode('' + nextAvailableNodeId++));
+      return validateNode(getEmptyNode(action.nodeId));
     case 'INTERNAL_ADD_TO_CONSUMERS':
       let linkId = getLinkId(action);
       let consumerLink = createConsumerLink(action);
@@ -239,8 +237,7 @@ const nodes = (state, action) => {
     case types.TOGGLE_LINK_NAME_IN_GRAPH:      
       return state.updateIn([action.toNodeId], aNode => node(aNode, action));    
     case types.NEW_NODE: 
-      let nodeId = '' + nextAvailableNodeId;
-      return state.set(nodeId, node(undefined, action));
+      return state.set(action.nodeId, node(undefined, action));
     case types.DELETE_NODE:
       // check if deleted node is the value of any parameter of any node
       _.each(state.toIndexedSeq().toArray(), (currentNode) => {

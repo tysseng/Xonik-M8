@@ -26,8 +26,10 @@ const removeOutputFromCurrentParameter = (state, action) => {
 
 const getInitialState = () => {
   return Map({
-    nodes: OrderedMap(),
-    outputs: Map()
+    nodes: OrderedMap({      
+    }),
+    outputs: Map(),
+    nextAvailableNodeId: 0
   });
 }
 
@@ -38,6 +40,12 @@ const graph = (state = getInitialState(), action) => {
   // This requires knowledge of both outputs and nodes and has to be at this level.
   if(action.type === types.CHANGE_NODE_PARAM_VALUE) {
     state = removeOutputFromCurrentParameter(state, action);
+  } else if(action.type === types.NEW_NODE) {
+    // Available node ids are kept in state to save the series with the patch. 
+    // This adds the first available id to the action and increments the id counter.
+    let nodeId = state.get('nextAvailableNodeId');
+    state = state.set('nextAvailableNodeId', nodeId +1);
+    action.nodeId = '' + nodeId;    
   }
 
   return state
