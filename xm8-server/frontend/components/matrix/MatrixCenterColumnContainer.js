@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
   let inputs = state.inputs.get('byId').toJS();
   let directoutputs = state.matrix.get('directoutputs').toJS();
   let hover = state.matrix.get('hover').toJS();
-  let graphOutputs = state.nodes.get('outputs').toJS();
+  let graphOutputs = state.graph.get('outputs').toJS();
   inputs = _.sortBy(inputs, ['sortKey']);
   
   return {

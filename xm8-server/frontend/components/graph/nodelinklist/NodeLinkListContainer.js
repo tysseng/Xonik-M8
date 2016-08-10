@@ -5,13 +5,13 @@ import { selectNode, selectLink, deleteNode, deleteLink } from '../../../../shar
 import NodeLinkList from './NodeLinkList';
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.nodes.get('nodes').toJS();
+  let nodes = state.graph.get('nodes').toJS();
 
   return {
     links: getLinks(nodes),
     nodes,
-    selectedNodeId: state.graph.get('selectedNode'),
-    selectedLinkId: state.graph.get('selectedLink')
+    selectedNodeId: state.patchview.get('selectedNode'),
+    selectedLinkId: state.patchview.get('selectedLink')
   }
 }
 

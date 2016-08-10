@@ -9,8 +9,8 @@ import NodeForm from './NodeForm'
 
 const mapStateToProps = (state, ownProps) => {
 
-  let nodes = state.nodes.get('nodes').toJS();
-  let selectedNodeId = state.graph.get('selectedNode');
+  let nodes = state.graph.get('nodes').toJS();
+  let selectedNodeId = state.patchview.get('selectedNode');
   let node = nodes[selectedNodeId];
 
   return {

@@ -12,19 +12,19 @@ import { toggleMode } from '../../../shared/state/actions/graphgui';
 // TODO: Don't update if net does not validate (or send error message)
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.nodes.get('nodes').toJS();
-  let shouldAutoUpdate = state.graph.get('shouldAutoUpdate');
+  let nodes = state.graph.get('nodes').toJS();
+  let shouldAutoUpdate = state.patchview.get('shouldAutoUpdate');
 
   return {
     links: getLinks(nodes),
     nodes,
     shouldAutoUpdate,
-    mode: state.graph.get('mode'),
-    offsetX: state.graph.get('offsetX'),
-    offsetY: state.graph.get('offsetY'),
-    linkDialog: state.graph.get('linkDialog').toJS(),
-    selectedNodeId: state.graph.get('selectedNode'),
-    selectedLinkId: state.graph.get('selectedLink'),
+    mode: state.patchview.get('mode'),
+    offsetX: state.patchview.get('offsetX'),
+    offsetY: state.patchview.get('offsetY'),
+    linkDialog: state.patchview.get('linkDialog').toJS(),
+    selectedNodeId: state.patchview.get('selectedNode'),
+    selectedLinkId: state.patchview.get('selectedLink'),
     showFileDialog: state.filedialog.get('show')
   }
 }

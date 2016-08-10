@@ -10,7 +10,7 @@ import FileDialogDispatchers from './dispatchers/FileDialogDispatchers';
 import FolderList from './FolderList';
 
 const mapStateToProps = (state, ownProps) => {
-  let fileId = state.graph.getIn(['patch','fileId']);
+  let fileId = state.patchview.getIn(['patch','fileId']);
   let filesystem = state.filesystem.toJS();
 
   return {

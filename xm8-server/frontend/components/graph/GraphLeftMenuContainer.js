@@ -21,16 +21,16 @@ const forceUpdate = () => {
 
 const mapStateToProps = (state, ownProps) => {
   let selectedFileDetails = {
-    selectedFileId: state.graph.getIn(['patch','fileId']),
-    selectedFileVersion: state.graph.getIn(['patch', 'version']),
+    selectedFileId: state.patchview.getIn(['patch','fileId']),
+    selectedFileVersion: state.patchview.getIn(['patch', 'version']),
   }
 
   return {
     selectedFileDetails,
-    mode: state.graph.get('mode'),
-    selectedNodeId: state.graph.get('selectedNode'),
-    selectedLinkId: state.graph.get('selectedLink'),
-    shouldAutoUpdate: state.graph.get('shouldAutoUpdate')
+    mode: state.patchview.get('mode'),
+    selectedNodeId: state.patchview.get('selectedNode'),
+    selectedLinkId: state.patchview.get('selectedLink'),
+    shouldAutoUpdate: state.patchview.get('shouldAutoUpdate')
   }
 }
 

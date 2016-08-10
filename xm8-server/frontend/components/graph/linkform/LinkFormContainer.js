@@ -10,7 +10,7 @@ const isLink = (type) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.nodes.get('nodes').toJS();
+  let nodes = state.graph.get('nodes').toJS();
   let links = {};
   _.each(nodes, node => {
     _.each(node.params, param => {
@@ -20,7 +20,7 @@ const mapStateToProps = (state, ownProps) => {
     });
   });
 
-  let selecedLinkId = state.graph.get('selectedLink');
+  let selecedLinkId = state.patchview.get('selectedLink');
   let link = links[selecedLinkId];
   
   return {
