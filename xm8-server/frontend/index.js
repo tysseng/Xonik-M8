@@ -17,7 +17,7 @@ import MatrixPage from './components/matrix/MatrixPage';
 import ControlPage from './components/control/ControlPage';
 import FilesPage from './components/files/FilesPage';
 import SettingsPage from './components/settings/SettingsPage';
-import InputsPage from './components/inputs/InputsPage';
+import PhysicalInputsPage from './components/inputs/physical/PhysicalInputsPage';
 import InputGroupsPage from './components/inputgroups/InputGroupsPage';
 import NetworkPage from './components/network/NetworkPage';
 import TrashPage from './components/trash/TrashPage';
@@ -86,7 +86,7 @@ render(
         <Route path="control" component={ControlPage}/>
         <Route path="files" component={FilesPage}/>
         <Route path="settings" component={SettingsPage}/>
-        <Route path="inputs" component={InputsPage}/>
+        <Route path="physicalinputs" component={PhysicalInputsPage}/>
         <Route path="inputgroups" component={InputGroupsPage}/>
         <Route path="network" component={NetworkPage}/>
         <Route path="trash" component={TrashPage}/>

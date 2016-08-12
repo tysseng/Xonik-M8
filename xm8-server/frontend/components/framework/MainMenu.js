@@ -23,8 +23,8 @@ const MainMenu = () => {
       <Link to="/settings" activeClassName="selected">
         <MenuItem label="Settings" icon="settings-1.svg" onClick={() => console.log("Settings")}/>
       </Link>
-      <Link to="/inputs" activeClassName="selected">
-        <MenuItem label="Inputs" icon="settings-1.svg" onClick={() => console.log("Inputs")}/>
+      <Link to="/physicalinputs" activeClassName="selected">
+        <MenuItem label="Physical" icon="settings-1.svg" onClick={() => console.log("Physical")}/>
       </Link>
       <Link to="/inputgroups" activeClassName="selected">
         <MenuItem label="Groups" icon="settings-1.svg" onClick={() => console.log("Groups")}/>

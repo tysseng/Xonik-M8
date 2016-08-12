@@ -5,7 +5,7 @@ import { toggleDirectOutput, toggleHover} from '../../../shared/state/actions/ma
 import MatrixCenterColumn from './MatrixCenterColumn';
 
 const mapStateToProps = (state, ownProps) => {
-  let inputs = state.inputs.get('byId').toJS();
+  let inputs = state.inputs.get('physical').get('byId').toJS();
   let directoutputs = state.matrix.get('directoutputs').toJS();
   let hover = state.matrix.get('hover').toJS();
   let graphOutputs = state.graph.get('outputs').toJS();

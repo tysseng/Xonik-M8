@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectInput, rename, renameShort, updateField } from '../../../shared/state/actions/inputs';
-import InputForm from './InputForm'
+import { selectInput, rename, renameShort, updateField } from '../../../../shared/state/actions/inputs';
+import PhysicalInputForm from './PhysicalInputForm'
 
 const mapStateToProps = (state, ownProps) => {
 
   let selectedInputId = state.inputs.get('selectedInput');
-  let inputs = state.inputs.get('byId').toJS();
+  let inputs = state.inputs.get('physical').get('byId').toJS();
   let input = inputs[selectedInputId];
 
   let controllers = state.controllers.toJS()
@@ -37,9 +37,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const InputFormContainer = connect(
+const PhysicalInputFormContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(InputForm);
+)(PhysicalInputForm);
 
-export default InputFormContainer;
+export default PhysicalInputFormContainer;

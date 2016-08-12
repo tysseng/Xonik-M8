@@ -10,18 +10,15 @@ const byId = (state, action) => {
 }
 
 const inputs = (
-  state = Map({
-    byId: Map(),
-    groups: Map(),
-    selectedInput: ''
-  }),
+  state = getInitialState(),
   action) => {
 
   switch(action.type){
     case 'SET_STATE':
       if(action.state.inputs){
         // retain frontend state by only clearing backend props. Should perhaps separate these better
-        state = state.set('byId', Map()).set('groups', Map());
+        state = state.setIn(['physical', 'byId'], Map()).set('groups', Map());
+        state = state.setIn(['virtual', 'byId'], Map()).set('groups', Map());
         return state.merge(action.state.inputs);
       }        
       break;   
@@ -29,6 +26,21 @@ const inputs = (
       return state.set("selectedInput", action.selectedInput);   
   } 
   return state;
+}
+
+const getInitialState = () => {
+  return Map({
+    // physical inputs are global and not affected by patches
+    physical: Map({
+      byId: Map()
+    }),
+    // virtual inputs are per patch and loaded/saved along with a patch
+    virtual: Map({
+      byId: Map()
+    }),
+    // for the time being groups are per patch, but we need default groups
+    groups: Map()
+  });
 }
 
 export default inputs;

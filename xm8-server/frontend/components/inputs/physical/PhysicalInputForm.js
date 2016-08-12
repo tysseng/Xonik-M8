@@ -1,13 +1,12 @@
-import MiniIcon from '../framework/MiniIcon';
-import MidiFormContainer from './MidiFormContainer';
-import DisplayOptionsFormContainer from './DisplayOptionsFormContainer';
-import InputOptionsContainer from './InputOptionsContainer';
-import InputPreview from './InputPreview';
-import PanelControllerDropdown from './PanelControllerDropdown';
-import FileDialogContainer from '../filesystem/FileDialogContainer';
-import InputDropdown from './InputDropdown';
+import MiniIcon from '../../framework/MiniIcon';
+import MidiFormContainer from '../MidiFormContainer';
+import DisplayOptionsFormContainer from '../DisplayOptionsFormContainer';
+import InputOptionsContainer from '../InputOptionsContainer';
+import InputPreview from '../InputPreview';
+import PanelControllerDropdown from '../PanelControllerDropdown';
+import InputDropdown from '../InputDropdown';
 
-const InputForm = ({ input, inputValue, showFileDialog,
+const PhysicalInputForm = ({ input, inputValue, showFileDialog,
   selectInput, onCloseDialog, 
   rename, renameShort, 
   onControllerChange }) => {
@@ -16,7 +15,6 @@ const InputForm = ({ input, inputValue, showFileDialog,
 
   return (
     <div>
-      {showFileDialog && <FileDialogContainer path='/inputs' headingPostfix='inputs' saveUrl='/api/inputs/save' loadUrl = '/api/inputs/load'/> } 
 
       <div className='inputForm'>
         <div className="tricol-left">      
@@ -41,9 +39,6 @@ const InputForm = ({ input, inputValue, showFileDialog,
 
                     <label htmlFor="shortname">Short name</label>           
                     <input id="shortname" type="text" value={input.name.short} onChange={(e) => renameShort(input.id, e.target.value)}/>
-
-                    <label>Panel controller</label> 
-                    <PanelControllerDropdown value={input.panelController} onControllerChange={(value) => onControllerChange(input.id, value)}/>
                   </div>
                 </div>
               </div>
@@ -71,4 +66,4 @@ const InputForm = ({ input, inputValue, showFileDialog,
   )
 }
 
-export default InputForm;
+export default PhysicalInputForm;

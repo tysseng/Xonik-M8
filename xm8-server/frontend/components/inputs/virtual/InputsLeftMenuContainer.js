@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) => {
   let inputs = state.inputs;
 
   return {
-    selectedInputId: inputs.get('selectedInput')
+    selectedInputId: inputs.get('physical').get('selectedInput')
   }
 }
 

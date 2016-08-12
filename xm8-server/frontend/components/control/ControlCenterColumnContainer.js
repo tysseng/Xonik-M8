@@ -5,7 +5,7 @@ import ControlCenterColumn from './ControlCenterColumn';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    inputs: state.inputs.get('byId').toJS(),
+    inputs: state.inputs.get('physical').get('byId').toJS(),
     inputValues: state.controllers.toJS(),    
     groups: state.inputs.get('groups').toJS()
   }

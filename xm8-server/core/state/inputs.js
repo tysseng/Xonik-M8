@@ -86,14 +86,22 @@ const root = (
     case inputActionTypes.INPUTCONFIG_NEW_OPTION:
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:  
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
-      return state.updateIn(['byId'], (inputByIdMap) => byId(inputByIdMap, action));
+      return state.updateIn(['physical', 'byId'], (inputByIdMap) => byId(inputByIdMap, action));
   } 
   return state;
 }
 
 const getInitialState = () => {
   return Map({
-    byId: fromJS(inputsById),
+    // physical inputs are global and not affected by patches
+    physical: Map({
+      byId: fromJS(inputsById)
+    }),
+    // virtual inputs are per patch and loaded/saved along with a patch
+    virtual: Map({
+      byId: fromJS(inputsById)
+    }),
+    // for the time being groups are per patch, but we need default groups
     groups: fromJS(inputGroupsById)
   });
 }
