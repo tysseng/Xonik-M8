@@ -86,7 +86,8 @@ const root = (
     case inputActionTypes.INPUTCONFIG_NEW_OPTION:
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:  
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
-      return state.updateIn(['physical', 'byId'], (inputByIdMap) => byId(inputByIdMap, action));
+      // TODO: switch on virtual/physical from input id!
+      return state.updateIn(['virtual', 'byId'], (inputByIdMap) => byId(inputByIdMap, action));
   } 
   return state;
 }

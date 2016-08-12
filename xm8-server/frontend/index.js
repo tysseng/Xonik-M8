@@ -18,6 +18,7 @@ import ControlPage from './components/control/ControlPage';
 import FilesPage from './components/files/FilesPage';
 import SettingsPage from './components/settings/SettingsPage';
 import PhysicalInputsPage from './components/inputs/physical/PhysicalInputsPage';
+import VirtualInputsPage from './components/inputs/virtual/VirtualInputsPage';
 import InputGroupsPage from './components/inputgroups/InputGroupsPage';
 import NetworkPage from './components/network/NetworkPage';
 import TrashPage from './components/trash/TrashPage';
@@ -87,6 +88,7 @@ render(
         <Route path="files" component={FilesPage}/>
         <Route path="settings" component={SettingsPage}/>
         <Route path="physicalinputs" component={PhysicalInputsPage}/>
+        <Route path="virtualinputs" component={VirtualInputsPage}/>
         <Route path="inputgroups" component={InputGroupsPage}/>
         <Route path="network" component={NetworkPage}/>
         <Route path="trash" component={TrashPage}/>

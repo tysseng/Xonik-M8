@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import PhysicalInputsLeftMenu from './PhysicalInputsLeftMenu';
+import VirtualInputsLeftMenu from './VirtualInputsLeftMenu';
 import { connect } from 'react-redux';
 import { undo, redo, groups as undoGroups } from '../../../../shared/state/actions/undo';
 
@@ -14,9 +14,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const PhysicalInputsLeftMenuContainer = connect(
+const VirtualInputsLeftMenuContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(PhysicalInputsLeftMenu);
+)(VirtualInputsLeftMenu);
 
-export default PhysicalInputsLeftMenuContainer;
+export default VirtualInputsLeftMenuContainer;

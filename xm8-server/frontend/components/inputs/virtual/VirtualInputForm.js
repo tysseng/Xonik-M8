@@ -3,11 +3,13 @@ import MidiFormContainer from '../MidiFormContainer';
 import DisplayOptionsFormContainer from '../DisplayOptionsFormContainer';
 import InputOptionsContainer from '../InputOptionsContainer';
 import InputPreview from '../InputPreview';
+import PanelControllerDropdown from '../PanelControllerDropdown';
 import InputDropdown from '../InputDropdown';
 
-const PhysicalInputForm = ({ input, inputValue, showFileDialog,
+const VirtualInputForm = ({ input, inputValue, showFileDialog,
   selectInput, onCloseDialog, 
-  rename, renameShort}) => {
+  rename, renameShort, 
+  onControllerChange }) => {
 
   let selectedId = input ? input.id : '';
 
@@ -37,6 +39,9 @@ const PhysicalInputForm = ({ input, inputValue, showFileDialog,
 
                     <label htmlFor="shortname">Short name</label>           
                     <input id="shortname" type="text" value={input.name.short} onChange={(e) => renameShort(input.id, e.target.value)}/>
+
+                    <label>Panel controller</label> 
+                    <PanelControllerDropdown value={input.panelController} onControllerChange={(value) => onControllerChange(input.id, value)}/>                    
                   </div>
                 </div>
               </div>
@@ -64,4 +69,4 @@ const PhysicalInputForm = ({ input, inputValue, showFileDialog,
   )
 }
 
-export default PhysicalInputForm;
+export default VirtualInputForm;
