@@ -272,6 +272,6 @@ _.each(inputGroups, group => {
   inputGroupsById[group.id] = group;
 });
 
-export {inputs, inputsById, inputGroups, inputGroupsById}; 
+export {getInput, inputs, inputsById, inputGroups, inputGroupsById}; 
 
 export default inputs;

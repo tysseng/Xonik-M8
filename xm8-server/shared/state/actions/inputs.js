@@ -1,5 +1,7 @@
 export const types = {
   CONTROLLER_CHANGE: 'CONTROLLER_CHANGE',
+  INPUTCONFIG_NEW_INPUT: 'INPUTCONFIG_NEW_INPUT',
+  INPUTCONFIG_DELETE_INPUT: 'INPUTCONFIG_DELETE_INPUT',
   INPUTCONFIG_SELECT_INPUT: 'INPUTCONFIG_SELECT_INPUT',
   INPUTCONFIG_RENAME: 'INPUTCONFIG_RENAME',
   INPUTCONFIG_RENAME_SHORT: 'INPUTCONFIG_RENAME_SHORT',
@@ -9,6 +11,24 @@ export const types = {
   INPUTCONFIG_SPREAD_OPTIONS_VALUES: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES',
   INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI',
   INPUT_DIRECT_OUTPUT_TOGGLE: 'INPUT_DIRECT_OUTPUT_TOGGLE'
+}
+
+export const newInput = (panelControllerId) => {
+  return {
+    type: types.INPUTCONFIG_NEW_INPUT,
+    panelControllerId,
+    target: 'SERVER',
+    undoDescription: 'New input'
+  }
+}
+
+export const deleteInput = (inputId) => {
+  return {
+    type: types.INPUTCONFIG_DELETE_INPUT,
+    inputId,
+    target: 'SERVER',
+    undoDescription: 'Delete input'
+  }
 }
 
 export const changeValue = (id, value) => {
@@ -21,9 +41,10 @@ export const changeValue = (id, value) => {
   };  
 }
 
-export const selectInput = (id) => {
+export const selectInput = (inputType, id) => {
   return {
     type: types.INPUTCONFIG_SELECT_INPUT,
+    inputType,
     selectedInput: id,
     target: 'FRONTEND'
   }

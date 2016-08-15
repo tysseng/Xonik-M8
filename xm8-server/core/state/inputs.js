@@ -5,6 +5,8 @@ import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 import { getNextInputId } from '../persistence/fileRepo';
+import { panelControllersById } from "../../shared/graph/PanelControllers";
+import { getInput } from "../../shared/graph/Inputs";
 
 const updateOptionsValues = (state, action, field) => {
   let numberOfSteps = state.get('options').size;
@@ -63,6 +65,12 @@ const input = (state, action) => {
 
 const byId = (state, action) => {
   switch(action.type){
+    case inputActionTypes.INPUTCONFIG_NEW_INPUT:
+      let inputId = getNextInputId();
+      let newInput = getInput(inputId, 'VERTICAL_RANGE', panelControllersById[action.panelControllerId]);
+      return state.set(inputId, fromJS(newInput));
+    case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
+      return state.delete(action.inputId);
     case inputActionTypes.INPUTCONFIG_UPDATE_FIELD:
     case inputActionTypes.INPUTCONFIG_RENAME:        
     case inputActionTypes.INPUTCONFIG_RENAME_SHORT:
@@ -79,6 +87,8 @@ const root = (
   state = getInitialState(),
   action) => {
   switch(action.type){
+    case inputActionTypes.INPUTCONFIG_NEW_INPUT:
+    case inputActionTypes.INPUTCONFIG_DELETE_INPUT:    
     case inputActionTypes.INPUTCONFIG_UPDATE_FIELD:
     case inputActionTypes.INPUTCONFIG_RENAME:        
     case inputActionTypes.INPUTCONFIG_RENAME_SHORT:   
@@ -86,6 +96,7 @@ const root = (
     case inputActionTypes.INPUTCONFIG_NEW_OPTION:
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:  
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
+      console.log(action)
       // TODO: switch on virtual/physical from input id!
       return state.updateIn(['virtual', 'byId'], (inputByIdMap) => byId(inputByIdMap, action));
   } 
@@ -100,7 +111,7 @@ const getInitialState = () => {
     }),
     // virtual inputs are per patch and loaded/saved along with a patch
     virtual: Map({
-      byId: fromJS(inputsById)
+      byId: Map()
     }),
     // for the time being groups are per patch, but we need default groups
     groups: fromJS(inputGroupsById)
@@ -109,6 +120,8 @@ const getInitialState = () => {
 
 const undoableActions = [
   inputActionTypes.CONTROLLER_CHANGE,
+  inputActionTypes.INPUTCONFIG_NEW_INPUT,
+  inputActionTypes.INPUTCONFIG_DELETE_INPUT,
   inputActionTypes.INPUTCONFIG_UPDATE_FIELD,
   inputActionTypes.INPUTCONFIG_DELETE_OPTION,
   inputActionTypes.INPUTCONFIG_NEW_OPTION,

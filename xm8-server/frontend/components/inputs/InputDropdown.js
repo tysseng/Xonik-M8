@@ -4,7 +4,7 @@ import Dropdown from '../framework/Dropdown';
 
 const mapStateToProps = (state, ownProps) => {
 
-  let inputs = state.inputs.get('physical').get('byId').toJS();
+  let inputs = state.inputs.get(ownProps.type).get('byId').toJS();
 
   return {
     values: inputs, 

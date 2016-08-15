@@ -23,7 +23,7 @@ const inputs = (
       }        
       break;   
     case inputTypes.INPUTCONFIG_SELECT_INPUT: 
-      return state.set("selectedInput", action.selectedInput);   
+      return state.setIn([action.inputType, "selectedInput"], action.selectedInput);   
   } 
   return state;
 }

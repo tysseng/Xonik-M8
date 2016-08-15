@@ -6,7 +6,8 @@ import VirtualInputForm from './VirtualInputForm'
 
 const mapStateToProps = (state, ownProps) => {
 
-  let selectedInputId = state.inputs.get('selectedInput');
+  let selectedInputId = state.inputs.getIn(['virtual', 'selectedInput']);
+
   let inputs = state.inputs.get('virtual').get('byId').toJS();
   let input = inputs[selectedInputId];
 
@@ -23,7 +24,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onCloseDialog: () => dispatch(selectInput('')),
-    selectInput: (id) => dispatch(selectInput(id)),
+    selectInput: (id) => {
+      dispatch(selectInput('virtual', id))
+    },
     rename: (id, name) => dispatch(rename(id, name)),
     renameShort: (id, name) => dispatch(renameShort(id, name)),
     onScaleChange: (id, value) => dispatch(updateField(id, ['scale'], value)),

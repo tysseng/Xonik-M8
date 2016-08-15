@@ -27,7 +27,7 @@ const MainMenu = () => {
         <MenuItem label="Physical" icon="settings-1.svg" onClick={() => console.log("Physical")}/>
       </Link>
       <Link to="/virtualinputs" activeClassName="selected">
-        <MenuItem label="Physical" icon="settings-1.svg" onClick={() => console.log("Physical")}/>
+        <MenuItem label="Virtual" icon="settings-1.svg" onClick={() => console.log("Virtual")}/>
       </Link>
       <Link to="/inputgroups" activeClassName="selected">
         <MenuItem label="Groups" icon="settings-1.svg" onClick={() => console.log("Groups")}/>

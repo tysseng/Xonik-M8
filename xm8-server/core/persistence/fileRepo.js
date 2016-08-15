@@ -16,7 +16,7 @@ export const getNextInputId = () => {
     id = 0;
   }  
   fs.writeFileSync(config.persistence.filesystemPaths.nextInputId, JSON.stringify(id + 1));  
-  return id;
+  return '' + id;
 }
 
 export const getNextInputGroupId = () => {
@@ -27,7 +27,7 @@ export const getNextInputGroupId = () => {
     id = 0;
   }  
   fs.writeFileSync(config.persistence.filesystemPaths.nextInputGroupId, JSON.stringify(id + 1));  
-  return id;  
+  return '' + id;  
 }
 
 const readNextIdFromFile = () => {

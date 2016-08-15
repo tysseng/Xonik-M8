@@ -2,15 +2,22 @@ import $ from 'jquery';
 import VirtualInputsLeftMenu from './VirtualInputsLeftMenu';
 import { connect } from 'react-redux';
 import { undo, redo, groups as undoGroups } from '../../../../shared/state/actions/undo';
+import { newInput, deleteInput } from '../../../../shared/state/actions/inputs';
+import { panelControllersById } from "../../../../shared/graph/PanelControllers";
 
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  console.log("Current", state.inputs.getIn(['virtual', 'selectedInput']))
+  return {
+    selectedInput: state.inputs.getIn(['virtual', 'selectedInput'])
+  }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onUndo: () => dispatch(undo(undoGroups.PHYSICAL_INPUTS)),
-    onRedo: () => dispatch(redo(undoGroups.PHYSICAL_INPUTS)),
+    onCreate: () => dispatch(newInput(panelControllersById.VIRTUAL.id)),
+    onDelete: (inputId) => dispatch(deleteInput(inputId)),
+    onUndo: () => dispatch(undo(undoGroups.VIRTUAL_INPUTS)),
+    onRedo: () => dispatch(redo(undoGroups.VIRTUAL_INPUTS)),
   }
 }
 
