@@ -28,7 +28,10 @@ const NodeParameterForm = ({
       body = "";
       break;
     case "input":
-      body = <InputDropdown onChange={(value) => onValueChange(value)} value={value}/>;
+      body = <InputDropdown type='physical' onChange={(value) => onValueChange(value)} value={value}/>;
+      break;
+    case "virtualinput":
+      body = <InputDropdown type='virtual' onChange={(value) => onValueChange(value)} value={value}/>;
       break;
     case "output":
       body = <OutputLinkDropdown onOutputLinkChange={(value) => onValueChange(value)} value={value}/>;

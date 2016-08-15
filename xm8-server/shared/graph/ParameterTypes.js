@@ -16,6 +16,11 @@ var parameterTypes = {
     name: "Input from",
     validator: function(input){}
   },
+  VIRTUALINPUT: {
+    id: "virtualinput", 
+    name: "Virtual input",
+    validator: function(input){}
+  },
   OUTPUT: {
     id: "output", 
     name: "Output to",
@@ -33,6 +38,7 @@ var parameterTypesList = [
   parameterTypes.UNUSED,
   parameterTypes.CONSTANT,
   parameterTypes.INPUT,
+  parameterTypes.VIRTUALINPUT,
   parameterTypes.OUTPUT,
   parameterTypes.LINK,
 ]

@@ -6,9 +6,8 @@ import { newInput, deleteInput } from '../../../../shared/state/actions/inputs';
 import { panelControllersById } from "../../../../shared/graph/PanelControllers";
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("Current", state.inputs.getIn(['virtual', 'selectedInput']))
   return {
-    selectedInput: state.inputs.getIn(['virtual', 'selectedInput'])
+    selectedInput: state.inputs.getIn(['frontend', 'virtual', 'selectedInput'])
   }
 }
 

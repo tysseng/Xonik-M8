@@ -27,6 +27,13 @@ const ParameterDescription = ({
         body = "Input from " + inputName;
       }
       break;
+    case "virtual input":
+      // TODO: Get inputs as id->map
+      if(value){
+        let inputName = inputsById[value].defaultName;
+        body = "Virtual input " + inputName;
+      }
+      break;      
     case "output":
       let outputName = outputsById[value].name;
       body = "Output to " + outputName;

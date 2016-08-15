@@ -6,7 +6,7 @@ import VirtualInputForm from './VirtualInputForm'
 
 const mapStateToProps = (state, ownProps) => {
 
-  let selectedInputId = state.inputs.getIn(['virtual', 'selectedInput']);
+  let selectedInputId = state.inputs.getIn(['frontend', 'virtual', 'selectedInput']);
 
   let inputs = state.inputs.get('virtual').get('byId').toJS();
   let input = inputs[selectedInputId];

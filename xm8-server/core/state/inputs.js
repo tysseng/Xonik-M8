@@ -66,7 +66,7 @@ const input = (state, action) => {
 const byId = (state, action) => {
   switch(action.type){
     case inputActionTypes.INPUTCONFIG_NEW_INPUT:
-      let inputId = getNextInputId();
+      let inputId = 'virt|' + getNextInputId();
       let newInput = getInput(inputId, 'VERTICAL_RANGE', panelControllersById[action.panelControllerId]);
       return state.set(inputId, fromJS(newInput));
     case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
@@ -86,8 +86,10 @@ const byId = (state, action) => {
 const root = (
   state = getInitialState(),
   action) => {
+
   switch(action.type){
     case inputActionTypes.INPUTCONFIG_NEW_INPUT:
+      return state.updateIn(['virtual', 'byId'], (inputByIdMap) => byId(inputByIdMap, action));
     case inputActionTypes.INPUTCONFIG_DELETE_INPUT:    
     case inputActionTypes.INPUTCONFIG_UPDATE_FIELD:
     case inputActionTypes.INPUTCONFIG_RENAME:        
@@ -96,9 +98,8 @@ const root = (
     case inputActionTypes.INPUTCONFIG_NEW_OPTION:
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:  
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
-      console.log(action)
-      // TODO: switch on virtual/physical from input id!
-      return state.updateIn(['virtual', 'byId'], (inputByIdMap) => byId(inputByIdMap, action));
+      let reducer = action.inputId.startsWith('virt') ? 'virtual' : 'physical'; 
+      return state.updateIn([reducer, 'byId'], (inputByIdMap) => byId(inputByIdMap, action));
   } 
   return state;
 }

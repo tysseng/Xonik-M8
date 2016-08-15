@@ -12,18 +12,14 @@ const byId = (state, action) => {
 const inputs = (
   state = getInitialState(),
   action) => {
-
   switch(action.type){
     case 'SET_STATE':
       if(action.state.inputs){
-        // retain frontend state by only clearing backend props. Should perhaps separate these better
-        state = state.setIn(['physical', 'byId'], Map()).set('groups', Map());
-        state = state.setIn(['virtual', 'byId'], Map()).set('groups', Map());
         return state.merge(action.state.inputs);
       }        
       break;   
     case inputTypes.INPUTCONFIG_SELECT_INPUT: 
-      return state.setIn([action.inputType, "selectedInput"], action.selectedInput);   
+      return state.setIn(['frontend', action.inputType, 'selectedInput'], action.selectedInput);   
   } 
   return state;
 }
@@ -39,7 +35,11 @@ const getInitialState = () => {
       byId: Map()
     }),
     // for the time being groups are per patch, but we need default groups
-    groups: Map()
+    groups: Map(),
+    frontend: Map({
+      physical: Map(),
+      virtual: Map(),
+    })
   });
 }
 
