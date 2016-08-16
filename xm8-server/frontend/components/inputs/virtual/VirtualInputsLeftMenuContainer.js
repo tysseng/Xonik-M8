@@ -7,7 +7,7 @@ import { panelControllersById } from "../../../../shared/graph/PanelControllers"
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    selectedInput: state.inputs.getIn(['frontend', 'virtual', 'selectedInput'])
+    selectedInput: state.virtualInputs.getIn(['frontend', 'selectedInput'])
   }
 }
 

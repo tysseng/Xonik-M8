@@ -21,7 +21,7 @@ const PhysicalInputForm = ({ input, inputValue, showFileDialog,
 
             <div className='contents'>
               <div>
-                <InputDropdown type='physical' value={selectedId} onChange={selectInput}/>
+                <InputDropdown type='physicalInputs' value={selectedId} onChange={selectInput}/>
               </div>
             </div>
           </div>

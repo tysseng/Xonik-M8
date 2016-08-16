@@ -34,7 +34,8 @@ export default (app, ws) => {
   store.dispatch(subscribe('patchview', 'frontend', sendPartialState));
   store.dispatch(subscribe('graph', 'frontend', sendPartialState));
   store.dispatch(subscribe('filesystem', 'frontend', sendPartialState));
-  store.dispatch(subscribe('inputs', 'frontend', sendPartialState));
+  store.dispatch(subscribe('virtualInputs', 'frontend', sendPartialState));
+  store.dispatch(subscribe('physicalInputs', 'frontend', sendPartialState));
   store.dispatch(subscribe('matrix', 'frontend', sendPartialState));
   store.dispatch(subscribe('inputgroups', 'frontend', sendPartialState));
   store.dispatch(subscribe('controllers', 'frontend', sendPartialState));

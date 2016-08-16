@@ -23,7 +23,7 @@ const VirtualInputForm = ({ input, inputValue, showFileDialog,
 
             <div className='contents'>
               <div>
-                <InputDropdown type='virtual' value={selectedId} onChange={selectInput}/>
+                <InputDropdown type='virtualInputs' value={selectedId} onChange={selectInput}/>
               </div>
             </div>
           </div>

@@ -1,46 +1,50 @@
 import {OrderedMap, Map, List, fromJS} from 'immutable';
-import _ from 'lodash';
 import { types as inputTypes } from '../../shared/state/actions/inputs';
 
-const byId = (state, action) => {
-  switch(action.type){
-    
-  } 
-  return state;  
-}
-
-const inputs = (
+export const virtualInputs = (
   state = getInitialState(),
   action) => {
+  console.log('virt', action)
   switch(action.type){
     case 'SET_STATE':
-      if(action.state.inputs){
-        return state.merge(action.state.inputs);
+      if(action.state.virtualInputs){
+        return state.merge(action.state.virtualInputs);
       }        
       break;   
     case inputTypes.INPUTCONFIG_SELECT_INPUT: 
-      return state.setIn(['frontend', action.inputType, 'selectedInput'], action.selectedInput);   
+      if(action.inputType === 'virtual'){
+        return state.setIn(['frontend', 'selectedInput'], action.selectedInput);   
+      } else {
+        return state;
+      }
+  } 
+  return state;
+}
+
+export const physicalInputs = (
+  state = getInitialState(),
+  action) => {
+  console.log('phys', action)
+  switch(action.type){
+    case 'SET_STATE':
+      if(action.state.physicalInputs){
+        return state.merge(action.state.physicalInputs);
+      }        
+      break;   
+    case inputTypes.INPUTCONFIG_SELECT_INPUT: 
+      if(action.inputType === 'physical'){
+        return state.setIn(['frontend', 'selectedInput'], action.selectedInput);   
+      } else {
+        return state;
+      }
   } 
   return state;
 }
 
 const getInitialState = () => {
   return Map({
-    // physical inputs are global and not affected by patches
-    physical: Map({
-      byId: Map()
-    }),
-    // virtual inputs are per patch and loaded/saved along with a patch
-    virtual: Map({
-      byId: Map()
-    }),
-    // for the time being groups are per patch, but we need default groups
+    byId: Map(),
     groups: Map(),
-    frontend: Map({
-      physical: Map(),
-      virtual: Map(),
-    })
+    frontend: Map()
   });
 }
-
-export default inputs;

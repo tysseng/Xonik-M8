@@ -17,7 +17,7 @@ const ElementSelectorDialog = ({newElementDialog, selectedGroupId, onCancel, onA
         <div className="intro">What element do you want to add to the group?</div>
         <div>
           <div>Input</div>
-          <InputDropdown type='virtual' value={inputvalue} onChange={(value) => selectElement('input', value)}/>
+          <InputDropdown type='virtualInputs' value={inputvalue} onChange={(value) => selectElement('input', value)}/>
           <div>or</div>
           <div>Group</div>
           <InputDropdown value={groupvalue} onChange={(value) => selectElement('group', value)}/>

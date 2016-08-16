@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     selectedGroup,
-    inputs: state.inputs.get('byId').toJS(),
+    inputs: state.physicalInputs.get('byId').toJS(),
     dragElementId: state.inputgroups.get('dragElementId'),    
     dragStart: state.inputgroups.get('dragStart').toJS()
   }

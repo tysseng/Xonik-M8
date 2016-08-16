@@ -6,8 +6,10 @@ import PhysicalInputForm from './PhysicalInputForm'
 
 const mapStateToProps = (state, ownProps) => {
 
-  let selectedInputId = state.inputs.getIn(['frontend', 'physical', 'selectedInput']);
-  let inputs = state.inputs.get('physical').get('byId').toJS();
+  console.log(state)
+
+  let selectedInputId = state.physicalInputs.getIn(['frontend', 'selectedInput']);
+  let inputs = state.physicalInputs.get('byId').toJS();
   let input = inputs[selectedInputId];
 
   let controllers = state.controllers.toJS()

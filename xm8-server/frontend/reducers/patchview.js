@@ -22,8 +22,7 @@ const patchview = (
       mode: 'none'
     })
   }), 
-  action) => {
-  
+  action) => {  
   switch (action.type){
     case types.TOGGLE_PATCH_FILE_DIALOG:
       return state.setIn(['patchFileDialog', 'show'], action.show).setIn(['patchFileDialog', 'mode'], action.mode);

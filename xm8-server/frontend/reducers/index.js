@@ -5,7 +5,7 @@ import patchview from './patchview';
 import network from './network';
 import filesystem from './filesystem';
 import filedialog from './filedialog';
-import inputs from './inputs';
+import {virtualInputs, physicalInputs} from './inputs';
 import matrix from './matrix';
 import inputgroups from './inputgroups';
 import controllers from './controllers';
@@ -18,7 +18,8 @@ const guiReducers = combineReducers({
   filedialog,
   filesystem,
   network,
-  inputs,
+  virtualInputs, 
+  physicalInputs,
   matrix,
   inputgroups  
 });

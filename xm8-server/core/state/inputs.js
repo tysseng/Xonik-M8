@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { inputsById, inputGroupsById, getEmptyOption, getStepPositions } from '../../shared/graph/inputs';
 import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { getUndoWrapper } from './undo';
-import { groups as undoGroups } from '../../shared/state/actions/undo';
+import { groups as undoGroups, types as undoTypes } from '../../shared/state/actions/undo';
 import { getNextInputId } from '../persistence/fileRepo';
 import { panelControllersById } from "../../shared/graph/PanelControllers";
 import { getInput } from "../../shared/graph/Inputs";
@@ -83,13 +83,9 @@ const byId = (state, action) => {
   return state;
 }
 
-const root = (
-  state = getInitialState(),
-  action) => {
-
+const inputs = (state, action) => {
   switch(action.type){
     case inputActionTypes.INPUTCONFIG_NEW_INPUT:
-      return state.updateIn(['virtual', 'byId'], (inputByIdMap) => byId(inputByIdMap, action));
     case inputActionTypes.INPUTCONFIG_DELETE_INPUT:    
     case inputActionTypes.INPUTCONFIG_UPDATE_FIELD:
     case inputActionTypes.INPUTCONFIG_RENAME:        
@@ -97,26 +93,52 @@ const root = (
     case inputActionTypes.INPUTCONFIG_DELETE_OPTION:
     case inputActionTypes.INPUTCONFIG_NEW_OPTION:
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:  
-    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
-      let reducer = action.inputId.startsWith('virt') ? 'virtual' : 'physical'; 
-      return state.updateIn([reducer, 'byId'], (inputByIdMap) => byId(inputByIdMap, action));
-  } 
+    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:  
+      return state.update('byId', inputByIdMap => byId(inputByIdMap, action));
+    default:
+      return state; 
+  }   
+}
+
+const getInputType = action => {
+  let reducer = 'virtual'
+  if(action.inputId){
+    reducer = action.inputId.startsWith('virt') ? 'virtual' : 'physical'; 
+  }
+  return reducer;
+}
+
+const getInitialPhysicalState = () => {
+  return Map({
+    byId: fromJS(inputsById),
+    groups: fromJS(inputGroupsById)
+  })  
+}
+
+const getInitialVirtualState = () => {
+  return Map({
+    byId: Map()
+  })  
+}
+
+// physical inputs reducer
+const physicalRoot = (
+  state = getInitialPhysicalState(),
+  action) => {
+  if(getInputType(action) === 'physical'){
+    return inputs(state, action);
+  }
   return state;
 }
 
-const getInitialState = () => {
-  return Map({
-    // physical inputs are global and not affected by patches
-    physical: Map({
-      byId: fromJS(inputsById)
-    }),
-    // virtual inputs are per patch and loaded/saved along with a patch
-    virtual: Map({
-      byId: Map()
-    }),
-    // for the time being groups are per patch, but we need default groups
-    groups: fromJS(inputGroupsById)
-  });
+// virtual inputs reducer
+const virtualRoot = (
+  state = getInitialVirtualState(),
+  action) => {
+  if(getInputType(action) === 'virtual'){
+    return inputs(state, action);
+  }
+  return state;
 }
 
 const undoableActions = [
@@ -130,6 +152,5 @@ const undoableActions = [
   inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI,
 ];
 
-const undoWrapper = getUndoWrapper(undoGroups.INPUTS, undoableActions, root, getInitialState);
-
-export default undoWrapper;
+export const virtualInputs = getUndoWrapper(undoGroups.VIRTUAL_INPUTS, undoableActions, virtualRoot, getInitialVirtualState);
+export const physicalInputs = getUndoWrapper(undoGroups.PHYSICAL_INPUTS, undoableActions, physicalRoot, getInitialPhysicalState);
