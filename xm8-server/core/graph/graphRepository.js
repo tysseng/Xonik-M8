@@ -48,8 +48,9 @@ export const save = (name, folderId) => {
   // TODO: Store input values as well  
   let file = {
     contents: {
-      nodes: store.getState().nodes.toJS(),
-      matrix: store.getState().matrix.toJS()
+      graph: store.getState().graph.toJS(),
+      matrix: store.getState().matrix.toJS(),    
+      virtualInputs: store.getState().virtualInputs.toJS()
     }
   }
 
@@ -64,12 +65,13 @@ export const save = (name, folderId) => {
 export const load =(fileId, version) => {
   let file = loadFile(fileId, version);
 
-  if(file && file.contents && file.contents.nodes){
+  if(file && file.contents && file.contents.graph){
 
     // TODO: Figure out how to make sure this is an orderedMap
-    let immutableNodes = fromJS(file.contents.nodes);
+    let immutableGraph = fromJS(file.contents.graph);
     let immutableMatrix = fromJS(file.contents.matrix);
-    store.dispatch(loadPatchFromFile(fileId, version, immutableNodes, immutableMatrix));
+    let immutableVirtualInputs = fromJS(file.contents.virtualInputs);
+    store.dispatch(loadPatchFromFile(fileId, version, immutableGraph, immutableMatrix, immutableVirtualInputs));
   }
 }
 

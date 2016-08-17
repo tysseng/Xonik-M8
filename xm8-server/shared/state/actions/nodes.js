@@ -41,14 +41,15 @@ export const setLoadedPatchFileDetails = (fileId, version) => {
   };
 }
 
-export const loadPatchFromFile = (fileId, version, nodes, matrix) => {
+export const loadPatchFromFile = (fileId, version, graph, matrix, virtualInputs) => {
   return {
     type: types.LOAD_PATCH_FROM_FILE,
     target: 'SERVER',
     fileId,
     version,
-    nodes,
-    matrix
+    graph,
+    matrix,
+    virtualInputs
   }
 }
 

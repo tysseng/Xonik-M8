@@ -38,7 +38,9 @@ const graph = (state = getInitialState(), action) => {
   // any existing usage of the currenly selected output must be removed before we add
   // it to a node AND before we update the outputs mapping.
   // This requires knowledge of both outputs and nodes and has to be at this level.
-  if(action.type === types.CHANGE_NODE_PARAM_VALUE) {
+  if(action.type === types.LOAD_PATCH_FROM_FILE) {
+      return action.graph;
+  } else if(action.type === types.CHANGE_NODE_PARAM_VALUE) {
     state = removeOutputFromCurrentParameter(state, action);
   } else if(action.type === types.NEW_NODE) {
     // Available node ids are kept in state to save the series with the patch. 

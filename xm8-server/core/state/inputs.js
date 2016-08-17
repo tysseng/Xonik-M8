@@ -2,9 +2,9 @@ import {OrderedMap, Map, Iterable, fromJS} from 'immutable';
 import _ from 'lodash';
 import { inputsById, inputGroupsById, getEmptyOption, getStepPositions } from '../../shared/graph/inputs';
 import { types as inputActionTypes } from '../../shared/state/actions/inputs';
+import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups, types as undoTypes } from '../../shared/state/actions/undo';
-import { getNextInputId } from '../persistence/fileRepo';
 import { panelControllersById } from "../../shared/graph/PanelControllers";
 import { getInput } from "../../shared/graph/Inputs";
 
@@ -135,7 +135,11 @@ const virtualRoot = (
   state = getInitialVirtualState(),
   action) => {
   if(getInputType(action) === 'virtual'){
-    return inputs(state, action);
+    if(action.type === nodeActionTypes.LOAD_PATCH_FROM_FILE){
+      return action.virtualInputs;
+    } else {
+      return inputs(state, action);
+    }
   }
   return state;
 }
