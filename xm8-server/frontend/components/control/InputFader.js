@@ -2,6 +2,7 @@ import React from 'react';
 import Fader from './Fader';
 import { connect } from 'react-redux'; 
 import { changeValue } from '../../../shared/state/actions/inputs';
+import { inputTypesById as inputTypes } from "../../../shared/inputs/InputTypes";
 
 const mapStateToProps = (state, ownProps) => {
 
@@ -18,7 +19,7 @@ const mapStateToProps = (state, ownProps) => {
     min,
     max, 
     step,
-    orientation: type === 'VERTICAL_RANGE' ? 'vertical' : 'horizontal'
+    orientation: type === inputTypes.VERTICAL_RANGE.id ? 'vertical' : 'horizontal'
   }
 }
 

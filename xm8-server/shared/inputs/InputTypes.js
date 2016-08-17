@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 let inputTypes = [
   {
     id: 'VERTICAL_RANGE',

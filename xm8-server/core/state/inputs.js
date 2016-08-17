@@ -7,6 +7,7 @@ import { getUndoWrapper } from './undo';
 import { groups as undoGroups, types as undoTypes } from '../../shared/state/actions/undo';
 import { panelControllersById } from "../../shared/graph/PanelControllers";
 import { getInput } from "../../shared/graph/Inputs";
+import { inputTypesById as inputTypes } from "../../shared/inputs/InputTypes";
 
 const updateOptionsValues = (state, action, field) => {
   let numberOfSteps = state.get('options').size;
@@ -66,7 +67,7 @@ const input = (state, action) => {
 const byId = (state, action) => {
   switch(action.type){
     case inputActionTypes.INPUTCONFIG_NEW_INPUT:
-      let newInput = getInput(action.inputId, 'VERTICAL_RANGE', panelControllersById[action.panelControllerId]);
+      let newInput = getInput(action.inputId, inputTypes.VERTICAL_RANGE.id, panelControllersById[action.panelControllerId]);
       return state.set(action.inputId, fromJS(newInput));
     case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
       return state.delete(action.inputId);
