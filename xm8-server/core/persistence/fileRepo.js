@@ -8,6 +8,20 @@ import {newFile, updateFile} from '../../shared/state/actions/filesystem';
 
 import store from '../state/store.js';
 
+let nextIdPath = config.persistence.filesystemPaths.nextId;
+
+// return the next available unique id that can be used for any object in state
+export const getNextUniqueId = () => {
+  let id;
+  try{
+    id = JSON.parse(fs.readFileSync(nextIdPath));
+  } catch (e){
+    id = 0;
+  }  
+  fs.writeFileSync(nextIdPath, JSON.stringify(id + 1));  
+  return '' + id;
+}
+
 export const getNextInputId = () => {
   let id;
   try{

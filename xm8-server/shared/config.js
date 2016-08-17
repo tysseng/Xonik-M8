@@ -80,6 +80,7 @@ let config = {
     filesystemPaths: {
       [filetypes.PATCH.id]: projectRoot + '/persistentStorage/patches/',
       nextFileId: projectRoot + '/persistentStorage/nextFileId.json',
+      nextId: projectRoot + '/persistentStorage/nextId.json',
       nextInputId: projectRoot + '/persistentStorage/nextInputId.json',
       nextInputGroupId: projectRoot + '/persistentStorage/nextInputGroupId.json',
       fat: projectRoot + '/persistentStorage/fat.json',

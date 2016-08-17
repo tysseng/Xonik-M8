@@ -66,9 +66,8 @@ const input = (state, action) => {
 const byId = (state, action) => {
   switch(action.type){
     case inputActionTypes.INPUTCONFIG_NEW_INPUT:
-      let inputId = 'virt|' + getNextInputId();
-      let newInput = getInput(inputId, 'VERTICAL_RANGE', panelControllersById[action.panelControllerId]);
-      return state.set(inputId, fromJS(newInput));
+      let newInput = getInput(action.inputId, 'VERTICAL_RANGE', panelControllersById[action.panelControllerId]);
+      return state.set(action.inputId, fromJS(newInput));
     case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
       return state.delete(action.inputId);
     case inputActionTypes.INPUTCONFIG_UPDATE_FIELD:

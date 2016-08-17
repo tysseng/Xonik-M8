@@ -13,9 +13,12 @@ export const types = {
   INPUT_DIRECT_OUTPUT_TOGGLE: 'INPUT_DIRECT_OUTPUT_TOGGLE'
 }
 
-export const newInput = (panelControllerId) => {
+// It is only possible to create new inputs, so virt is hard coded as part of the id 
+export const newInput = (inputId, panelControllerId) => {
+
   return {
     type: types.INPUTCONFIG_NEW_INPUT,
+    inputId,
     panelControllerId,
     target: 'SERVER',
     undoDescription: 'New input'

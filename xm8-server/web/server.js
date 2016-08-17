@@ -18,6 +18,7 @@ import path from 'path';
 import graphRoutes from './routes/graph';
 import voiceRoutes from './routes/voice';
 import stateRoute from './routes/state';
+import idRoute from './routes/id';
 //import controllerRoute from './routes/controller';
 
 // Setup server
@@ -49,6 +50,7 @@ stateRoute(app, ws);
 //app.use('/app/wifi', wifiRoutes);
 app.use('/api/graph', graphRoutes);
 app.use('/api/voice', voiceRoutes);
+app.use('/api/id', idRoute);
 
 // handle every other route with index.html, this lets react do the routing
 app.get('*', function (request, response){
