@@ -2,16 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getLinks } from '../LinkFunctions';
 import { selectNode, selectLink, deleteNode, deleteLink } from '../../../../shared/state/actions/nodes';
+import { getNodes, getPatchView } from '../../../state/selectors';
 import NodeLinkList from './NodeLinkList';
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.graph.get('nodes').toJS();
+  let nodes = getNodes(state).toJS();
 
   return {
     links: getLinks(nodes),
     nodes,
-    selectedNodeId: state.patchview.get('selectedNode'),
-    selectedLinkId: state.patchview.get('selectedLink')
+    selectedNodeId: getPatchView(state).get('selectedNode'),
+    selectedLinkId: getPatchView(state).get('selectedLink')
   }
 }
 

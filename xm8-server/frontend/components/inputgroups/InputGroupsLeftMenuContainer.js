@@ -5,9 +5,10 @@ import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { openNewElementDialog, newGroup, selectGroup } from '../../../shared/state/actions/inputgroups';
 import { getNextId } from '../../repositories/idRepository';
+import { getInputGroups } from '../../state/selectors'
 
 const mapStateToProps = (state, ownProps) => {
-  let inputgroups = state.inputgroups;
+  let inputgroups = getInputGroups(state);;
 
   return {
     newElementDialog: inputgroups.get('newElementDialog').toJS()

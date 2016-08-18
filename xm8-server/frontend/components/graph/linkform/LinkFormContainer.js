@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import { selectLink, changeLinkName, toggleLinkNameInGraph } from '../../../../shared/state/actions/nodes';
 import paramTypes from '../../../../shared/graph/ParameterTypes.js';
 import LinkForm from './LinkForm'
+import { getNodes, getPatchView } from '../../../state/selectors';
 
 const isLink = (type) => {
   return type === paramTypes.map.LINK.id;
 }
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.graph.get('nodes').toJS();
+  let nodes = getNodes(state).toJS();
   let links = {};
   _.each(nodes, node => {
     _.each(node.params, param => {
@@ -20,7 +21,7 @@ const mapStateToProps = (state, ownProps) => {
     });
   });
 
-  let selecedLinkId = state.patchview.get('selectedLink');
+  let selecedLinkId = getPatchView(state).get('selectedLink');
   let link = links[selecedLinkId];
   
   return {

@@ -8,24 +8,26 @@ import { selectNode, selectLink, createNewNode, createNewLink, deleteNode, delet
 import { startNodeMove, setLinkFromNodeId, setLinkToNodeId, cancelLinkCreation } from '../../../shared/state/actions/graphvisualization';
 import { moveNode } from '../../../shared/state/actions/nodes';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
+import { getNodes, getPatchView, getFileDialog } from '../../state/selectors';
 
 // TODO: Don't update if net does not validate (or send error message)
 
 const mapStateToProps = (state, ownProps) => {
-  let nodes = state.graph.get('nodes').toJS();
-  let shouldAutoUpdate = state.patchview.get('shouldAutoUpdate');
+  let nodes = getNodes(state).toJS();
+  let patchview = getPatchView(state);
+  let shouldAutoUpdate = patchview.get('shouldAutoUpdate');
 
   return {
     links: getLinks(nodes),
     nodes,
     shouldAutoUpdate,
-    mode: state.patchview.get('mode'),
-    offsetX: state.patchview.get('offsetX'),
-    offsetY: state.patchview.get('offsetY'),
-    linkDialog: state.patchview.get('linkDialog').toJS(),
-    selectedNodeId: state.patchview.get('selectedNode'),
-    selectedLinkId: state.patchview.get('selectedLink'),
-    showFileDialog: state.filedialog.get('show')
+    mode: patchview.get('mode'),
+    offsetX: patchview.get('offsetX'),
+    offsetY: patchview.get('offsetY'),
+    linkDialog: patchview.get('linkDialog').toJS(),
+    selectedNodeId: patchview.get('selectedNode'),
+    selectedLinkId: patchview.get('selectedLink'),
+    showFileDialog: getFileDialog(state).get('show')
   }
 }
 
