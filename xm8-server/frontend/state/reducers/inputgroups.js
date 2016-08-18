@@ -1,5 +1,5 @@
 import {Map} from 'immutable';
-import {inputgroupsActionTypes} from '../../shared/state/actions/inputgroups';
+import {inputgroupsActionTypes} from '../../../shared/state/actions/inputgroups';
 
 const inputs = (
   state = Map({

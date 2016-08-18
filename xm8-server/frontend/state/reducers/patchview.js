@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
-import { types } from '../../shared/state/actions/nodes';
-import { types as vizTypes } from '../../shared/state/actions/graphvisualization';
-import { types as guiTypes } from '../../shared/state/actions/graphgui';
+import { types } from '../../../shared/state/actions/nodes';
+import { types as vizTypes } from '../../../shared/state/actions/graphvisualization';
+import { types as guiTypes } from '../../../shared/state/actions/graphgui';
 
 const merge = (state, changes) => Object.assign({}, state, changes);  
 

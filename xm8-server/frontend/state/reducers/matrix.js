@@ -1,6 +1,6 @@
 import {OrderedMap, Map, List, fromJS} from 'immutable';
 import _ from 'lodash';
-import { types } from '../../shared/state/actions/matrix';
+import { types } from '../../../shared/state/actions/matrix';
 
 const directoutputs = (state, action) => {
   return state;

@@ -7,7 +7,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { setState } from '../shared/state/actions';
 import remoteActionMiddleware from './remoteActionMiddleware';
 import initWsclientForState from './wsclient-state.js';
-import guiReducers from './reducers';
+import guiReducers from './state/reducers';
 
 import MainMenu from './components/framework/MainMenu';
 

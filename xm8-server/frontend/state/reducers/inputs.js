@@ -1,5 +1,5 @@
 import {OrderedMap, Map, List, fromJS} from 'immutable';
-import { types as inputTypes } from '../../shared/state/actions/inputs';
+import { types as inputTypes } from '../../../shared/state/actions/inputs';
 
 export const virtualInputs = (
   state = getInitialState(),
