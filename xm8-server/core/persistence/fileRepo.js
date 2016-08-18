@@ -22,17 +22,6 @@ export const getNextUniqueId = () => {
   return '' + id;
 }
 
-export const getNextInputGroupId = () => {
-  let id;
-  try{
-    id = JSON.parse(fs.readFileSync(config.persistence.filesystemPaths.nextInputGroupId));
-  } catch (e){
-    id = 0;
-  }  
-  fs.writeFileSync(config.persistence.filesystemPaths.nextInputGroupId, JSON.stringify(id + 1));  
-  return '' + id;  
-}
-
 const readNextIdFromFile = () => {
   try{
     let id = JSON.parse(fs.readFileSync(config.persistence.filesystemPaths.nextFileId));

@@ -26,6 +26,8 @@ const inputs = (
         return state.merge(action.state.inputgroups);
       }        
       break;  
+    case inputgroupsActionTypes.SELECT_GROUP:
+      return state.set('selectedGroup', action.selectedGroupId);
     case inputgroupsActionTypes.SELECT_ELEMENT:
       return state.set('selectedElementId', action.id)
         .set('dragElementId', action.id)

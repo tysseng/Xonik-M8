@@ -1,4 +1,5 @@
 export const inputgroupsActionTypes = {
+  SELECT_GROUP: 'SELECT_GROUP',
   SELECT_ELEMENT: 'SELECT_ELEMENT',
   MOVE_ELEMENT: 'MOVE_ELEMENT',
   DESELECT_ELEMENT: 'DESELECT_ELEMENT',
@@ -15,6 +16,15 @@ export const inputgroupsActionTypes = {
 }
 
 let types = inputgroupsActionTypes;
+
+
+export const selectGroup = (selectedGroupId) => {
+  return {
+    type: inputgroupsActionTypes.SELECT_GROUP,
+    selectedGroupId,
+    target: 'GUI'
+  }
+}
 
 export const changeElementType = (groupId, id, inputType) => {
   return {
@@ -64,10 +74,11 @@ export const deselectDragElement = () => {
   }
 }
 
-export const newGroup = () => {
+export const newGroup = (groupId) => {
   return {
     type: inputgroupsActionTypes.NEW_GROUP,
     target: 'SERVER',
+    groupId,
     undoDescription: 'New group'
   }
 }

@@ -4,7 +4,6 @@ import { types as inputTypes } from '../../shared/state/actions/inputs';
 export const virtualInputs = (
   state = getInitialState(),
   action) => {
-  console.log('virt', action)
   switch(action.type){
     case 'SET_STATE':
       if(action.state.virtualInputs){
@@ -24,7 +23,6 @@ export const virtualInputs = (
 export const physicalInputs = (
   state = getInitialState(),
   action) => {
-  console.log('phys', action)
   switch(action.type){
     case 'SET_STATE':
       if(action.state.physicalInputs){

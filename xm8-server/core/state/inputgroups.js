@@ -2,11 +2,10 @@ import {Map} from 'immutable';
 import { inputgroupsActionTypes } from '../../shared/state/actions/inputgroups';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
-import { getNextInputGroupId } from '../persistence/fileRepo';
 
-const createNewGroup = () => {
+const createNewGroup = (id) => {
   return Map({
-    id: '' + getNextInputGroupId(),
+    id,
     elements: Map()
   });
 }
@@ -33,11 +32,8 @@ const inputgroups = (
         .setIn(['groups', action.groupId, 'elements', action.id, 'offset', 'x'], action.offsetXem)
         .setIn(['groups', action.groupId, 'elements', action.id, 'offset', 'y'], action.offsetYem);
     case inputgroupsActionTypes.NEW_GROUP:
-      let newGroup = createNewGroup();
-      let groupId = newGroup.get('id');
-      return state.setIn(['groups', groupId], newGroup)
-        //TODO: TEMPORARY, REMOVE
-        .set('selectedGroup', groupId);
+      let newGroup = createNewGroup(action.groupId);
+      return state.setIn(['groups', action.groupId], newGroup);
     case inputgroupsActionTypes.LOAD_GROUP:
       return state;
     case inputgroupsActionTypes.ADD_ELEMENT:

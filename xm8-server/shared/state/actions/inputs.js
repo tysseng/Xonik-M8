@@ -49,7 +49,7 @@ export const selectInput = (inputType, id) => {
     type: types.INPUTCONFIG_SELECT_INPUT,
     inputType,
     selectedInput: id,
-    target: 'FRONTEND'
+    target: 'GUI'
   }
 }
 
