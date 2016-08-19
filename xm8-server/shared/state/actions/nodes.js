@@ -1,7 +1,6 @@
 // TODO: SWITCH TO https://www.npmjs.com/package/es6-enum
 
 export const types = {
-  TOGGLE_AUTO_UPDATE: 'TOGGLE_AUTO_UPDATE',
   SET_LOADED_PATCH_FILE_DETAILS: 'SET_LOADED_PATCH_FILE_DETAILS',
   LOAD_PATCH_FROM_FILE: 'LOAD_NODES_FROM_FILE',
   SELECT_NODE: 'SELECT_NODE',
@@ -20,7 +19,7 @@ export const types = {
   TOGGLE_AUTO_UPDATE: 'TOGGLE_AUTO_UPDATE',
   SET_UNDO_POINT: 'SET_UNDO_POINT',
   NODE_MOVE: 'NODE_MOVE'
-}
+};
 
 export const moveNode = (nodeId, x, y) => {
   return {
@@ -30,7 +29,7 @@ export const moveNode = (nodeId, x, y) => {
     x,
     y
   };
-}
+};
 
 export const setLoadedPatchFileDetails = (fileId, version) => {
   return {
@@ -39,9 +38,9 @@ export const setLoadedPatchFileDetails = (fileId, version) => {
     fileId,
     version
   };
-}
+};
 
-export const loadPatchFromFile = (fileId, version, graph, matrix, virtualInputs) => {
+export const loadPatchFromFile = (fileId, version, graph, matrix, virtualInputs, virtualInputGroups) => {
   return {
     type: types.LOAD_PATCH_FROM_FILE,
     target: 'SERVER',
@@ -49,9 +48,10 @@ export const loadPatchFromFile = (fileId, version, graph, matrix, virtualInputs)
     version,
     graph,
     matrix,
-    virtualInputs
+    virtualInputs,
+    virtualInputGroups
   }
-}
+};
 
 export const selectNode = (nodeId) => {
   return {
@@ -59,7 +59,7 @@ export const selectNode = (nodeId) => {
     target: 'GUI',    
     nodeId: nodeId
   }  
-}
+};
 
 export const selectLink = (linkId) => {
   return {
@@ -67,7 +67,7 @@ export const selectLink = (linkId) => {
     target: 'GUI',    
     linkId
   }  
-}
+};
 
 export const createNewNode = () => {
   return {
@@ -75,7 +75,7 @@ export const createNewNode = () => {
     target: 'SERVER',
     undoDescription: 'Create new node'
   }
-}
+};
 
 export const deleteNode = (nodeId) => {
   return {
@@ -84,7 +84,7 @@ export const deleteNode = (nodeId) => {
     target: 'BOTH',
     undoDescription: 'Delete node'
   }
-}
+};
 
 export const changeNodeName = (nodeId, name) => {
   return {
@@ -93,7 +93,7 @@ export const changeNodeName = (nodeId, name) => {
     name,
     target: 'SERVER'
   }
-}
+};
 
 export const changeNodeType = (nodeId, typeId) => {
   return {
@@ -103,7 +103,7 @@ export const changeNodeType = (nodeId, typeId) => {
     target: 'SERVER',    
     undoDescription: 'Change node type'
   }
-}
+};
 
 export const changeNodeParamType = (nodeId, paramId, paramType) => {
   return {
@@ -114,7 +114,7 @@ export const changeNodeParamType = (nodeId, paramId, paramType) => {
     target: 'SERVER',    
     undoDescription: 'Change parameter type'
   }
-}
+};
 
 export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue) => { 
   return {
@@ -126,7 +126,7 @@ export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue) =>
     target: 'SERVER',    
     undoDescription: 'Change parameter value'
   }
-}
+};
 
 export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
   return {
@@ -137,7 +137,7 @@ export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
     target: 'SERVER',    
     undoDescription: 'Change unit'
   }
-}
+};
 
 export const createNewLink = (fromNodeId, toNodeId, toParamId) => {
 
@@ -149,7 +149,7 @@ export const createNewLink = (fromNodeId, toNodeId, toParamId) => {
     target: 'BOTH',    
     undoDescription: 'Link nodes'
   }
-}
+};
 
 export const changeLinkName = (toNodeId, toParamId, name) => {
   return {
@@ -159,7 +159,7 @@ export const changeLinkName = (toNodeId, toParamId, name) => {
     name,
     target: 'SERVER'
   }
-}
+};
 
 export const toggleLinkNameInGraph = (toNodeId, toParamId, visible) => {
   return {
@@ -170,7 +170,7 @@ export const toggleLinkNameInGraph = (toNodeId, toParamId, visible) => {
     target: 'SERVER',    
     undoDescription: 'Toggle link name visibility'
   }
-}
+};
 
 export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
   return {
@@ -182,7 +182,7 @@ export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
     target: 'BOTH',    
     undoDescription: 'Delete link'
   }
-}
+};
 
 // this action is not explicitly treated by the reducer, but it adds an entry in the
 // undo history.
@@ -191,4 +191,4 @@ export const graphUndoPointPositionChanged = () => {
     type: types.SET_UNDO_POINT,
     undoDescription: 'Move element'
   }
-}
+};

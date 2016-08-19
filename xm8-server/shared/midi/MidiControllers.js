@@ -96,7 +96,7 @@ const controllers = [
   {id: 119, name: "", hiRes: false}
 ];
 
-let controllersById = {}
+let controllersById = {};
 _.each(controllers, controller => {
   controllersById[controller.id] = controller;
 });

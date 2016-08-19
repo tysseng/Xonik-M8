@@ -36,7 +36,7 @@ function createGroup(id){
     graph: {
       //TODO: Add graph here
     },
-    voices: [];      
+    voices: []
   };
 }
 

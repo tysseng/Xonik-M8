@@ -16,7 +16,10 @@ const ElementForm = ({ element, input, changeElementType, onCloseDialog }) => {
 
       <div className='contents'>
         <label>Show as</label> 
-        <InputTypesDropdown value={element.type} onTypeChange={(value) => changeElementType(element.groupId, element.id, value)} showDefault={true}/>          
+        <InputTypesDropdown
+          value={element.type}
+          onTypeChange={(value) => changeElementType(element.groupId, element.id, value)}
+          showDefault={true}/>
       </div>    
     </form>
   )

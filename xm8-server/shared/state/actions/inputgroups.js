@@ -5,7 +5,7 @@ export const inputgroupsActionTypes = {
   DESELECT_ELEMENT: 'DESELECT_ELEMENT',
   DESELECT_DRAG_ELEMENT: 'DESELECT_DRAG_ELEMENT',
   NEW_GROUP: 'NEW_GROUP',
-  LOAD_GROUP: 'LOAD_GROUP',
+  DELETE_GROUP: 'DELETE_GROUP',
   ADD_ELEMENT: 'ADD_ELEMENT',
   DELETE_ELEMENT: 'DELETE_ELEMENT',
   OPEN_NEW_ELEMENT_DIALOG: 'OPEN_NEW_ELEMENT_DIALOG',
@@ -83,12 +83,12 @@ export const newGroup = (groupId) => {
   }
 }
 
-export const loadGroup = (groupId) => {
+export const deleteGroup = (groupId) => {
   return {
-    type: inputgroupsActionTypes.LOAD_GROUP,
-    groupId,
+    type: inputgroupsActionTypes.DELETE_GROUP,
     target: 'SERVER',
-    undoDescription: 'Load group'
+    groupId,
+    undoDescription: 'Delete group'
   }
 }
 

@@ -15,9 +15,7 @@ const ControllerGroup = ({group, inputs, inputValues}) => {
           let input = inputs[inputId]; 
           let value = inputValues[inputId]; 
 
-          let style = {
-       
-          }
+          let style = {};
 
           i++;
 

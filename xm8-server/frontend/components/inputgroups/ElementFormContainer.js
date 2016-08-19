@@ -21,7 +21,7 @@ const getSelectedElement = (state) => {
 const mapStateToProps = (state, ownProps) => {
 
   let element = getSelectedElement(state);
-  let inputs = state.physicalInputs.get('byId').toJS();
+  let inputs = state.virtualInputs.get('byId').toJS();
   let input;
   if(element){
     input = inputs[element.elementId];

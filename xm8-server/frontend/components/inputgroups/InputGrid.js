@@ -59,18 +59,20 @@ const onDrag = (e, dragStart, selectedGroupId, dragElementId, moveElementCallbac
   }
 }
 
-const InputGrid = ({dragElementId, selectedGroup, inputs, offset, dragStart, selectElement, moveElement, deselectDragElement}) => {
+const InputGrid = ({dragElementId, selectedGroup, inputs, dragStart, selectElement, moveElement, deselectDragElement}) => {
 
   if(!selectedGroup){
     return null;
   }
 
   return (
-    <div id="inputgrid" className="grid" onMouseUp={deselectDragElement} onMouseDown={(e) => onMouseDown(e, selectElement)} onMouseMove={(e) => onDrag(e, dragStart, selectedGroup.id, dragElementId, moveElement)}>
+    <div id="inputgrid"
+         className="grid"
+         onMouseUp={deselectDragElement}
+         onMouseDown={(e) => onMouseDown(e, selectElement)}
+         onMouseMove={(e) => onDrag(e, dragStart, selectedGroup.id, dragElementId, moveElement)}>
       { selectedGroup && Object.values(selectedGroup.elements).map(element => {
 
-          // todo swith on element type here (input or group)
-          // TODO: or maybe groups in group are not necessary?
           let input = inputs[element.elementId];
 
           // override default input type to render input differently for this group
@@ -85,7 +87,7 @@ const InputGrid = ({dragElementId, selectedGroup, inputs, offset, dragStart, sel
             left: element.offset.x + 'em',
             height: type.size.y + 'em',
             width: type.size.x + 'em'
-          }
+          };
 
           let classnames = 'draggable' + (element.id === dragElementId ? ' selected' : '');
 

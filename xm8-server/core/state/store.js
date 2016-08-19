@@ -22,9 +22,5 @@ const serverReducers = combineReducers({
 });
 
 const createStoreWithMiddleware = applyMiddleware(reduxSubscribeMiddleware)(createStore);
-
 const store = createStoreWithMiddleware(serverReducers);
-
-//let store = createStore(serverReducers);
-
 export default store;

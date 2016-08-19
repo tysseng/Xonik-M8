@@ -85,7 +85,7 @@ let config = {
     },
 
   }
-}
+};
 
 if(localOverrides) {
   //console.log("Overridden configuration for this host:");

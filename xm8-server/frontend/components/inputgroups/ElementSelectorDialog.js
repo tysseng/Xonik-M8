@@ -10,18 +10,13 @@ const ElementSelectorDialog = ({newElementDialog, selectedGroupId, onCancel, onA
   } else if(newElementDialog.type === 'group'){
     groupvalue = newElementDialog.id;
   }
-
-  return ( 
+  return (
     <ModalBox heading='Add element' boxClass='linkdialog'>
       <div>
         <div className="intro">What element do you want to add to the group?</div>
         <div>
           <div>Input</div>
           <InputDropdown type='virtualInputs' value={inputvalue} onChange={(value) => selectElement('input', value)}/>
-          <div>or</div>
-          <div>Group</div>
-          <InputDropdown value={groupvalue} onChange={(value) => selectElement('group', value)}/>
-          <div>GROUP DROPDOWN HERE</div>
         </div>
       </div>
 

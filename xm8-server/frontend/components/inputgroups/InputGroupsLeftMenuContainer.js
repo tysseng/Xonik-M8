@@ -1,17 +1,16 @@
-import $ from 'jquery';
 import InputGroupsLeftMenu from './InputGroupsLeftMenu';
 import { connect } from 'react-redux';
-import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
-import { openNewElementDialog, newGroup, selectGroup } from '../../../shared/state/actions/inputgroups';
+import { openNewElementDialog, newGroup, selectGroup, deleteGroup } from '../../../shared/state/actions/inputgroups';
 import { getNextId } from '../../repositories/idRepository';
 import { getInputGroups } from '../../state/selectors'
 
 const mapStateToProps = (state, ownProps) => {
-  let inputgroups = getInputGroups(state);;
+  let inputgroups = getInputGroups(state);
 
   return {
-    newElementDialog: inputgroups.get('newElementDialog').toJS()
+    newElementDialog: inputgroups.get('newElementDialog').toJS(),
+    selectedGroup: inputgroups.get('selectedGroup')
   }
 }
 
@@ -23,11 +22,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         let groupId = 'virtgroup|' + id;
         dispatch(newGroup(groupId));
         dispatch(selectGroup(groupId));
-      }), 
+      }),
+    deleteGroup: (groupId) => dispatch(deleteGroup(groupId)),
     onUndo: () => dispatch(undo(undoGroups.INPUTGROUPS)),
-    onRedo: () => dispatch(redo(undoGroups.INPUTGROUPS)),
-    onInputGroupsSave: (options) => dispatch(toggleFileDialog(true, 'save', options)),
-    onInputGroupsLoad: () => dispatch(toggleFileDialog(true, 'load'))
+    onRedo: () => dispatch(redo(undoGroups.INPUTGROUPS))
   }
 }
 

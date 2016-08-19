@@ -17,11 +17,11 @@ let inputTypes = [
       y: 5
     }
   }  
-]
+];
 
-let inputTypesById = {}
+let inputTypesById = {};
 _.each(inputTypes, type => {
   inputTypesById[type.id] = type;
-})
+});
 
 export {inputTypes, inputTypesById}

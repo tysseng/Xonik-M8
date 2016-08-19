@@ -6,8 +6,8 @@ import serializer from './serializer.js';
 import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
+import { getGraph, getMatrix, getVirtualInputs, getVirtualInputGroups} from '../state/selectors';
 
-import {undo, redo} from '../../shared/state/undobuffer.js';
 import {loadPatchFromFile, setLoadedPatchFileDetails} from '../../shared/state/actions/nodes';
 import {filetypes} from '../../shared/FileTypes';
 import {saveFile, loadFile} from '../persistence/fileRepo';
@@ -48,11 +48,12 @@ export const save = (name, folderId) => {
   // TODO: Store input values as well  
   let file = {
     contents: {
-      graph: store.getState().graph.toJS(),
-      matrix: store.getState().matrix.toJS(),    
-      virtualInputs: store.getState().virtualInputs.toJS()
+      graph: getGraph().toJS(),
+      matrix: getMatrix().toJS(),
+      virtualInputs: getVirtualInputs().toJS(),
+      virtualInputGroups: getVirtualInputGroups().toJS()
     }
-  }
+  };
 
   let result = saveFile(file, filetypes.PATCH, name, folderId);
 
@@ -60,7 +61,7 @@ export const save = (name, folderId) => {
     store.dispatch(setLoadedPatchFileDetails(result.fileId, result.version));
   } 
   return result;
-}
+};
 
 export const load =(fileId, version) => {
   let file = loadFile(fileId, version);
@@ -71,9 +72,10 @@ export const load =(fileId, version) => {
     let immutableGraph = fromJS(file.contents.graph);
     let immutableMatrix = fromJS(file.contents.matrix);
     let immutableVirtualInputs = fromJS(file.contents.virtualInputs);
-    store.dispatch(loadPatchFromFile(fileId, version, immutableGraph, immutableMatrix, immutableVirtualInputs));
+    let immutableVirtualInputGroups = fromJS(file.contents.virtualInputGroups);
+    store.dispatch(loadPatchFromFile(fileId, version, immutableGraph, immutableMatrix, immutableVirtualInputs, immutableVirtualInputGroups));
   }
-}
+};
 
 function serialize(){
   var net = preparer.prepareNetForSerialization();
