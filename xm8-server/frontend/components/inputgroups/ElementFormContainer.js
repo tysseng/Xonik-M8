@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import { changeElementType, deselectElement } from '../../../shared/state/actions/inputgroups';
 import ElementForm from './ElementForm'
@@ -22,10 +23,13 @@ const mapStateToProps = (state, ownProps) => {
 
   let element = getSelectedElement(state);
   let inputs = state.virtualInputs.get('byId').toJS();
+  _.merge(inputs, state.physicalInputs.get('byId').toJS());
+
   let input;
   if(element){
     input = inputs[element.elementId];
   }
+
   return {
     element,
     input
