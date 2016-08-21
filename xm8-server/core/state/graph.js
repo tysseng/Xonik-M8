@@ -1,6 +1,7 @@
 import {Map, OrderedMap} from 'immutable';
 import paramTypes from '../../shared/graph/ParameterTypes';
 import { types, changeNodeParamValue } from '../../shared/state/actions/nodes';
+import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 import outputs from './graph/outputs';
@@ -65,7 +66,8 @@ const undoableActions = [
     types.NEW_LINK,  
     types.TOGGLE_LINK_NAME_IN_GRAPH,
     types.DELETE_LINK,
-    types.SET_UNDO_POINT
+    types.SET_UNDO_POINT,
+    inputActionTypes.INPUTCONFIG_DELETE_INPUT
 ];
 
 /**

@@ -83,7 +83,8 @@ const undoableActions = [
   inputgroupsActionTypes.DELETE_GROUP,
   inputgroupsActionTypes.ADD_ELEMENT,
   inputgroupsActionTypes.DELETE_ELEMENT,
-  inputgroupsActionTypes.SET_UNDO_POINT
+  inputgroupsActionTypes.SET_UNDO_POINT,
+  inputActionTypes.INPUTCONFIG_DELETE_INPUT
 ];
  
 const undoWrapper = getUndoWrapper(undoGroups.INPUTGROUPS, undoableActions, inputgroups, getInitialState);

@@ -2,6 +2,7 @@ import nodeTypes from '../../../shared/graph/NodeTypes';
 import paramTypes from '../../../shared/graph/ParameterTypes';
 import {unitsById} from '../../../shared/graph/ParameterUnits';
 import { types } from '../../../shared/state/actions/nodes';
+import { types as inputActionTypes } from '../../../shared/state/actions/inputs';
 import { List, Map } from 'immutable';
 import _ from 'lodash';
 
@@ -11,6 +12,10 @@ const isLink = (type) => {
 
 const isOutput = (type) => {
   return type === paramTypes.map.OUTPUT.id;
+}
+
+const isVirtualInput = (type) => {
+  return type === paramTypes.map.VIRTUALINPUT.id;
 }
 
 const getEmptyParam = (id, type) => {
@@ -174,15 +179,23 @@ const param = (state, action) => {
         return state.set('value', "");        
       }
       return state;
+    case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
+      if(isVirtualInput(state.get('type')) && state.get('value') === action.inputId){
+        return state.set('value', '');
+      } else {
+        return state;
+      }
     default:
       return state;
   }
 }
 
 const node = (state, action) => {
+
+  let params;
+
   switch (action.type){
     case types.DELETE_LINK:
-      console.log(action)
       if(state.get('id') === action.fromNodeId){
         return state.deleteIn(['consumers', getLinkIdFromIds(action.toNodeId, action.toParamId)]);
       } else if(state.get('id') === action.toNodeId){
@@ -212,7 +225,7 @@ const node = (state, action) => {
       return state.set('name', action.name);
     case types.DELETE_NODE: 
       // check if deleted node is the value of any parameter of this node
-      let params = state.get('params');
+      params = state.get('params');
       if(params){     
         _.each(params.toArray(), currentParam => {            
           state = state.updateIn(['params', currentParam.get('id')], aParam => param(aParam, action));
@@ -220,7 +233,15 @@ const node = (state, action) => {
       }    
       return validateNode(state);  
     case types.NODE_MOVE:
-      return state.setIn(['vis','x'], action.x).setIn(['vis','y'], action.y);  
+      return state.setIn(['vis','x'], action.x).setIn(['vis','y'], action.y);
+    case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
+      params = state.get('params');
+      if(params){
+        _.each(params.toArray(), currentParam => {
+          state = state.updateIn(['params', currentParam.get('id')], aParam => param(aParam, action));
+        });
+      }
+      return validateNode(state);
     default: 
       return state;
   }
@@ -273,6 +294,12 @@ const nodes = (state, action) => {
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     case types.NODE_MOVE:
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
+    case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
+      let nodes = state.toArray();
+      _.each(nodes, nodeToSearch => {
+        state = state.updateIn([nodeToSearch.get('id')], (aNode) => node(aNode, action));
+      });
+      return state;
     default: 
       return state;
   }
