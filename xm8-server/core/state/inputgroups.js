@@ -1,5 +1,7 @@
 import {Map} from 'immutable';
+import _ from 'lodash';
 import { inputgroupsActionTypes } from '../../shared/state/actions/inputgroups';
+import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
@@ -23,6 +25,20 @@ const getWrappedElement = (id, groupId, offsetXem, offsetYem, elementId) => {
   })
 }
 
+const removeElementFromGroups = (state, elementId) => {
+
+  let groups = state.get('groups');
+
+  _.each(groups.toJS(), group => {
+    if(groups.getIn([group.id, 'elements', elementId])){
+      state = state.deleteIn(['groups', group.id, 'elements', elementId]);
+    }
+  });
+
+  return state;
+}
+
+// Element in a group id is equal to whatever the element contains - input id if it is an id etc.
 const inputgroups = (
   state = getInitialState(), 
   action) => {
@@ -36,7 +52,6 @@ const inputgroups = (
       let newGroup = createNewGroup(action.groupId);
       return state.setIn(['groups', action.groupId], newGroup);
     case inputgroupsActionTypes.DELETE_GROUP:
-      console.log(action)
       console.log("delete", state, state.deleteIn(['groups', action.groupId]));
       return state.deleteIn(['groups', action.groupId]);
     case inputgroupsActionTypes.ADD_ELEMENT:
@@ -48,6 +63,9 @@ const inputgroups = (
       return state.setIn(['groups', action.groupId, 'elements', action.id, 'type'], action.inputType);
     case nodeActionTypes.LOAD_PATCH_FROM_FILE:
       return action.virtualInputGroups;
+    case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
+      return removeElementFromGroups(state, action.inputId);
+
     default:
       return state;
   }

@@ -1,6 +1,8 @@
 import {Map} from 'immutable';
 import {inputgroupsActionTypes} from '../../../shared/state/actions/inputgroups';
 
+
+// Element in a group id is equal to whatever the element contains - input id if it is an id etc.
 const inputs = (
   state = Map({
     selectedElementId: '',
@@ -50,8 +52,8 @@ const inputs = (
     case inputgroupsActionTypes.SELECT_ID_IN_NEW_ELEMENT_DIALOG:
       return state
         .setIn(['newElementDialog', 'type'], action.elementType)
-        .setIn(['newElementDialog', 'id'], action.elementId);    
-  } 
+        .setIn(['newElementDialog', 'id'], action.elementId);
+  }
   return state;
 }
 
