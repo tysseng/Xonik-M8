@@ -12,11 +12,30 @@ export const inputgroupsActionTypes = {
   CLOSE_NEW_ELEMENT_DIALOG: 'CLOSE_NEW_ELEMENT_DIALOG',
   SELECT_ID_IN_NEW_ELEMENT_DIALOG: 'SELECT_ID_IN_NEW_ELEMENT_DIALOG',
   CHANGE_ELEMENT_TYPE: 'CHANGE_ELEMENT_TYPE',
-  SET_UNDO_POINT: 'SET_UNDO_POINT'
+  SET_UNDO_POINT: 'SET_UNDO_POINT',
+  TOGGLE_VISIBILITY: 'TOGGLE_VISIBILITY',
+  RENAME_GROUP: 'RENAME_GROUP'
 }
 
 let types = inputgroupsActionTypes;
 
+export const toggleVisibility = (groupId, isVisible) => {
+  return {
+    type: inputgroupsActionTypes.TOGGLE_VISIBILITY,
+    groupId,
+    isVisible,
+    target: 'SERVER'
+  }
+}
+
+export const renameGroup = (groupId, name) => {
+  return {
+    type: inputgroupsActionTypes.RENAME_GROUP,
+    groupId,
+    name,
+    target: 'SERVER'
+  }
+}
 
 export const selectGroup = (selectedGroupId) => {
   return {

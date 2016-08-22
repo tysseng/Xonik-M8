@@ -1,20 +1,13 @@
 import { connect } from 'react-redux';
 import Dropdown from '../framework/Dropdown';
-
+import { getInputGroups } from '../../state/selectors';
 
 const mapStateToProps = (state, ownProps) => {
-
-  let states = state[ownProps.type];
-  if(!states) console.log(ownProps, state);
-  let byId = states.get("byId");
-  let js = byId.toJS()
-  let inputs = state[ownProps.type].get('byId').toJS();
-
+  let groupsState = getInputGroups(state).toJS();
 
   return {
-    values: inputs,
-    value: ownProps.value,
-    nameFunc: name => name.full
+    values: groupsState.groups,
+    value: groupsState.selectedGroup
   }
 }
 

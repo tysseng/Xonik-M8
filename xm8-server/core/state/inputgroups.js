@@ -9,6 +9,8 @@ import { groups as undoGroups } from '../../shared/state/actions/undo';
 const createNewGroup = (id) => {
   return Map({
     id,
+    name: 'New group',
+    isVisible: true,
     elements: Map()
   });
 }
@@ -65,6 +67,10 @@ const inputgroups = (
       return action.virtualInputGroups;
     case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
       return removeElementFromGroups(state, action.inputId);
+    case inputgroupsActionTypes.TOGGLE_VISIBILITY:
+      return state.setIn(['groups', action.groupId, 'isVisible'], action.isVisible);
+    case inputgroupsActionTypes.RENAME_GROUP:
+      return state.setIn(['groups', action.groupId, 'name'], action.name);
 
     default:
       return state;
