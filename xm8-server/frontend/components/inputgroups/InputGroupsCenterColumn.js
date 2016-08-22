@@ -19,7 +19,7 @@ const InputGroupsCenterColumn = ({
           onAdd={addElement} 
           selectElement={selectElement}/> 
       }
-      <div className="properties">
+      <div className="actions">
         <div className="dropdown">
           <label>Group</label>
           <InputGroupDropdown onChange={selectGroup}/>

@@ -1,5 +1,5 @@
 .inputgroups{
-  .properties{
+  .actions{
     margin: 5px;
     margin-bottom: 14px;
     .dropdown{
@@ -14,4 +14,14 @@
 
 .groupPropsForm {
   margin-bottom: 10px;
+  label.small {
+    // create som air between checkbox and label. Done this way because input is inside label tag
+    position: relative;
+    left: 5px;
+
+    input {
+      position: relative;
+      left: -5px;
+    }
+  }
 }
