@@ -67,7 +67,7 @@ const InputGrid = ({dragElementId, selectedGroup, inputs, dragStart, selectEleme
 
   return (
     <div id="inputgrid"
-         className="grid"
+         className="controllerGroup grid"
          onMouseUp={deselectDragElement}
          onMouseDown={(e) => onMouseDown(e, selectElement)}
          onMouseMove={(e) => onDrag(e, dragStart, selectedGroup.id, dragElementId, moveElement)}>
@@ -89,7 +89,7 @@ const InputGrid = ({dragElementId, selectedGroup, inputs, dragStart, selectEleme
             width: type.size.x + 'em'
           };
 
-          let classnames = 'draggable' + (element.id === dragElementId ? ' selected' : '');
+          let classnames = 'controller draggable' + (element.id === dragElementId ? ' selected' : '');
 
           return (
             <div className={classnames} id={element.id} style={style}>

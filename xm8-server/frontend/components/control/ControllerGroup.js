@@ -1,4 +1,5 @@
 import Controller from './Controller';
+import { inputTypesById } from '../../../shared/inputs/InputTypes';
 
 const ControllerGroup = ({group, inputs, inputValues}) => {
 
@@ -6,20 +7,33 @@ const ControllerGroup = ({group, inputs, inputValues}) => {
     return null;
   }
 
-  let i = 0;
-
   return (
     <div className="controllerGroup">
       {
-        Object.values(group.children).map(inputId => {
-          let input = inputs[inputId]; 
-          let value = inputValues[inputId]; 
+        Object.values(group.elements).map(element => {
+          let inputId = element.elementId;
+          let input = inputs[inputId];
+          let value = inputValues[inputId];
 
-          let style = {};
+          // override default input type to render input differently for this group
+          if(element.type && element.type !== ''){
+            input.type = element.type;
+          }
 
-          i++;
+          let type = inputTypesById[input.type];
 
-          return <Controller input={input} value={value} style={style}/>
+          let style={
+            top: element.offset.y + 'em',
+            left: element.offset.x + 'em',
+            height: type.size.y + 'em',
+            width: type.size.x + 'em'
+          };
+
+          return (
+            <div className="controller draggable" style={style} id={inputId}>
+              <Controller input={input} value={value}/>
+            </div>
+          )
         })
       }
     </div>

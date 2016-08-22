@@ -1,17 +1,11 @@
-.grid{
-  height: 30.05em;
-  width: 100%;
-  background-image: repeating-linear-gradient(0deg,transparent,transparent 0.95em,#444 0.95em,#444 1em),
-    repeating-linear-gradient(-90deg,transparent,transparent 0.95em,#444 0.95em,#444 1em);
-  background-size: 1em 1em;
-  position: relative;
+.controllerGroup {
+  &.grid {
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 0.95em, #444 0.95em, #444 1em),
+    repeating-linear-gradient(-90deg, transparent, transparent 0.95em, #444 0.95em, #444 1em);
+    background-size: 1em 1em;
 
-  .draggable {
-    position: absolute;
+    .selected {
+      border: 1px solid #0e0;
+    }
   }
-
-  .selected{
-    border: 1px solid #0e0;
-  }
-
 }

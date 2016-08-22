@@ -6,13 +6,12 @@
   }
 }
 
-.controllerRow{
-  display: block;
-  margin-bottom: 10px;
-}
-
 .controllerGroup{
-  background-color: #ff0000;
-  display: inline;
-  margin-right: 30px;
+  height: 30.05em;
+  width: 100%;
+  position: relative;
+
+  .controller {
+    position: absolute;
+  }
 }
