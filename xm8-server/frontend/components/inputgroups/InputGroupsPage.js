@@ -1,6 +1,7 @@
 import InputGroupsCenterColumnContainer from './InputGroupsCenterColumnContainer';
 import InputGroupsLeftMenuContainer from './InputGroupsLeftMenuContainer';
 import ElementFormContainer from './ElementFormContainer';
+import GroupPropsFormContainer from './GroupPropsFormContainer';
 
 const InputGroupsPage = () => {    
   return (  
@@ -9,6 +10,7 @@ const InputGroupsPage = () => {
         <InputGroupsLeftMenuContainer/>
       </div>
       <div className="rightcolumn">
+        <GroupPropsFormContainer/>
         <ElementFormContainer/>
       </div>
       <div className="centercolumn">

@@ -11,7 +11,10 @@ const LinkFormComponent = ({link, nodes, onLinkNameChange, onCloseDialog, toggle
       <label htmlFor="linkName">Name</label>         
       <input id="linkName" type="text" onChange={(e) => onLinkNameChange(link.to, link.toParam,  e.target.value)} value={link.name}/>      
       <br/>
-      <input id="showInGraph" type="checkbox" onChange={(e) => toggleLinkNameInGraph(link.to, link.toParam,  !link.showNameInGraph)} checked={link.showNameInGraph}/><label className='small' htmlFor="showInGraph">Show name along link in graph</label>
+      <label className='small' htmlFor="showInGraph">
+        <input id="showInGraph" type="checkbox" onChange={(e) => toggleLinkNameInGraph(link.to, link.toParam,  !link.showNameInGraph)} checked={link.showNameInGraph}/>
+        Show name along link in graph
+      </label>
     </div>    
   </form>
 

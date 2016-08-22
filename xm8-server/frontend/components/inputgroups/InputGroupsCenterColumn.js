@@ -6,10 +6,10 @@ import InputGroupDropdown from './InputGroupDropdown';
 import FileDialogContainer from '../filesystem/FileDialogContainer';
 
 const InputGroupsCenterColumn = ({
-  showFileDialog, selectedGroupId, groupName, isVisible, newElementDialog,
-  closeNewElementDialog, addElement, selectElement, selectGroup, renameGroup, toggleVisibility}) => {
+  showFileDialog, selectedGroupId, newElementDialog,
+  closeNewElementDialog, addElement, selectElement, selectGroup}) => {
   return ( 
-    <div>
+    <div className="inputgroups">
       {showFileDialog && <FileDialogContainer path='/inputgroups' headingPostfix='input groups' saveUrl='/api/inputgroup/save' loadUrl = '/api/inputgroup/load'/> } 
       {newElementDialog.show && 
         <ElementSelectorDialog 
@@ -19,24 +19,15 @@ const InputGroupsCenterColumn = ({
           onAdd={addElement} 
           selectElement={selectElement}/> 
       }
-      <InputGroupDropdown onChange={selectGroup}/>
-      {selectedGroupId &&
-      <div>
-
-        <div>
-          <label>Name</label>
-          <input type="text" value={groupName} onChange={e => renameGroup(selectedGroupId, e.target.value)}/>
+      <div className="properties">
+        <div className="dropdown">
+          <label>Group</label>
+          <InputGroupDropdown onChange={selectGroup}/>
         </div>
-        <div>
-          <label>
-            Hide from controls
-            <input type="checkbox" checked={isVisible} onChange={e => toggleVisibility(selectedGroupId, e.target.checked)}/>
-          </label>
-        </div>
-        <InputGridContainer/>
       </div>
-      }
-        
+      <div>
+        {selectedGroupId && <InputGridContainer/>}
+      </div>
     </div>
   )
 
