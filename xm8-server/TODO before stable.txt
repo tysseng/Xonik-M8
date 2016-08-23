@@ -5,10 +5,11 @@ TODO før "stabilt"
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
 - Faner for inputgroups under controll
-    - Har laget visning av virtuelle grupper, må bare deles på sider
+    - Style
     - Lag visning av fysiske grupper
 - Scrollbars i matrix
-- Lage selector for alle inputs
+- Lage virtualgroup| og virtual| som 'prefix' eller liknende isf hardkodet
+- Mer luft under label i add input to input group modal
 
 - TODO-issues:
  - Sletting av inputs skaper problemer med undo-synch fordi undo av sletting av input ikke undo'er sletting fra groups og matrix etc.
@@ -20,7 +21,7 @@ Tanke:
 - Alle virtual input groups vises under controllers. Har edit-knapp
 - Edit skjer i kontekst av patch. Alternativt: Edit skjer inline under Control men saves sammen med patch. Kan være forvirrende å vite hvilken
   patch man editerer i?
-- Mulig å dra sidefaner dit man vil for raskere tilgang
+- Mulig å dra controllersidefaner dit man vil for raskere tilgang (må persisteres)
 - Ny input group -> Oppretter ny side under controllers. Mulig å klikke av for "hide from Control page"
 - Flytte save/load til topp av patchside siden disse påvirker alt. Undo må være per-subpage siden det IKKE påvirker alt
 

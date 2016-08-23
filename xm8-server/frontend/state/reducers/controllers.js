@@ -10,7 +10,7 @@ const controllers = (
   switch(action.type){
     case 'SET_STATE':
       if(action.state.controllers){
-        return state.clear().merge(action.state.controllers);
+        return state.merge(action.state.controllers);
       }
       break;
     case types.SELECT_CONTROL_GROUP:

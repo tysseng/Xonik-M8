@@ -8,7 +8,7 @@ const ControlCenterColumn = ({selectedGroupId, groups, inputs, inputValues, onCo
       <div>
         {
           Object.values(groups).map(group => {
-            return <div onClick={() => selectGroup(group.id)}>{group.name}</div>
+            return <div key={group.id} onClick={() => selectGroup(group.id)}>{group.name}</div>
           })
         }
       </div>

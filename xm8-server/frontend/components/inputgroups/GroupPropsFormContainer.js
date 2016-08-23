@@ -7,11 +7,11 @@ const mapStateToProps = (state, ownProps) => {
 
   let inputgroups = state.inputgroups;
   let selectedGroupId = inputgroups.get('selectedGroup');
+  let group = inputgroups.getIn(['groups', selectedGroupId]);
+  if(group) group = group.toJS();
 
   return {
-    selectedGroupId,
-    groupName: inputgroups.getIn(['groups', selectedGroupId, 'name']),
-    isVisible: inputgroups.getIn(['groups', selectedGroupId, 'isVisible'])
+    group
   }
 }
 

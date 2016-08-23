@@ -7,14 +7,18 @@ import ControlCenterColumn from './ControlCenterColumn';
 
 const mapStateToProps = (state, ownProps) => {
 
-  let groups = getInputGroups(state).get('groups').toJS();
+  let groups = getInputGroups(state).get('groups');
   let inputs = getVirtualInputs(state).get('byId').toJS();
   _.merge(inputs, getPhysicalInputs(state).get('byId').toJS());
   let selectedGroupId = getControllerGroups(state).get('selectedGroupId');
+  if(!selectedGroupId && selectedGroupId != 0 && groups.size > 0) {
+    selectedGroupId = groups.first().get('id');
+  }
+
   return {
     inputs,
     inputValues: state.controllers.toJS(),    
-    groups,
+    groups: groups.toJS(),
     selectedGroupId
   }
 }
