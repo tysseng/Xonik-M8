@@ -10,8 +10,8 @@ const MenuItem = ({label, icon, onClick, selected, target = "Capa_1"}) => {
   }
 
   return (
-    <span className="menuicon">
-      <svg className={svgClassName} onClick={onClick}>   
+    <span className="menuicon" onClick={onClick}>
+      <svg className={svgClassName}>
         <use xlinkHref={"img/icons/" + icon + "#" + target}></use>
       </svg>
       <div className={labelClassName}>{label}</div>
