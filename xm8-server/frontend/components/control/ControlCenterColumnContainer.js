@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
   let inputs = getVirtualInputs(state).get('byId').toJS();
   _.merge(inputs, getPhysicalInputs(state).get('byId').toJS());
   let selectedGroupId = getControllerGroups(state).get('selectedGroupId');
-  if(!selectedGroupId && selectedGroupId != 0 && groups.size > 0) {
+  if(!selectedGroupId && selectedGroupId !== 0 && groups.size > 0) {
     selectedGroupId = groups.first().get('id');
   }
 
