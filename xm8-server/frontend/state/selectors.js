@@ -6,3 +6,4 @@ export const getPhysicalInputs = state => state.physicalInputs;
 export const getNodes = state => state.graph.get('nodes');
 export const getPatchView = state => state.patchview;
 export const getFileDialog = state => state.filedialog;
+export const getControllerGroups = state => state.controllers;

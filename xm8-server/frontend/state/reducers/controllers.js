@@ -1,8 +1,10 @@
-import {OrderedMap, Map, List, fromJS} from 'immutable';
-import _ from 'lodash';
+import { Map } from 'immutable';
+import { types } from '../../../shared/state/actions/controllers';
 
-const inputs = (
-  state = Map(),
+const controllers = (
+  state = Map({
+    selectedGroupId: ''
+  }),
   action) => {
 
   switch(action.type){
@@ -10,9 +12,11 @@ const inputs = (
       if(action.state.controllers){
         return state.clear().merge(action.state.controllers);
       }
-      break;   
+      break;
+    case types.SELECT_CONTROL_GROUP:
+      return state.set('selectedGroupId', action.selectedGroupId);
   } 
   return state;
 }
 
-export default inputs;
+export default controllers;

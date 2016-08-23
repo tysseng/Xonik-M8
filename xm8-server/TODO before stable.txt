@@ -1,0 +1,37 @@
+TODO før "stabilt"
+
+- Autosave fysiske inputs
+- Delete link fungerer ikke - må ha action som kan delete link med bare id og bruke denne i venstremeny, nå må man ha med fra til osv.
+- Serialisering av matrix - lag noder i første omgang
+- Faner med matrix/graph/inputs/groups under patch
+- Faner for inputgroups under controll
+    - Har laget visning av virtuelle grupper, må bare deles på sider
+    - Lag visning av fysiske grupper
+- Scrollbars i matrix
+- Lage selector for alle inputs
+
+- TODO-issues:
+ - Sletting av inputs skaper problemer med undo-synch fordi undo av sletting av input ikke undo'er sletting fra groups og matrix etc.
+ - Det lages undo-states også når en action IKKE påvirker noe, så lenge det er en undoable action. Det er litt kjipt
+ - Løsning: Undo-buffer må gjelde hele patch
+
+Reorganisere sider
+Tanke:
+- Alle virtual input groups vises under controllers. Har edit-knapp
+- Edit skjer i kontekst av patch. Alternativt: Edit skjer inline under Control men saves sammen med patch. Kan være forvirrende å vite hvilken
+  patch man editerer i?
+- Mulig å dra sidefaner dit man vil for raskere tilgang
+- Ny input group -> Oppretter ny side under controllers. Mulig å klikke av for "hide from Control page"
+- Flytte save/load til topp av patchside siden disse påvirker alt. Undo må være per-subpage siden det IKKE påvirker alt
+
+
+For later:
+
+- Use Reselect - https://github.com/reactjs/reselect
+- Fjerne groups fra inputs (er de i bruk)?
+- move all things ajax to repositories?
+- ids should be unique across synths and memorycards, so we may have to use some sort of uuid scheme instead of a running number. 
+- Kanskje selectedInput også bør være en del av undo-løypa, nå er det forvirrende når man går til undo på forrige input.
+- bytte til getNextUniqueId for noder også, og automatisk velg nyeste node. Fjern navn og nextAvailableId
+- Flytte display options fra input til visning i input group?
+- Vise editerte kontrollflater under control (ikke et MÅ-krav i denne omgang)
