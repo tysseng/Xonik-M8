@@ -239,32 +239,67 @@ _.each(inputs, input => {
   inputsById[input.id] = input;
 });
 
-let inputGroups = [  
-  {
-    id: 'OSC_1',
-    name: 'Oscillator 1',
-    type: 'group',
-    children: [OSC_1_SQUARE.id, OSC_1_SAW.id, OSC_1_TRIANGLE.id]
-  },  
-  {
-    id: 'FILTER_1',
-    name: 'Filter 1',
-    type: 'group',
-    children: [FILTER_1_CUTOFF.id, FILTER_1_RESONANCE.id, FILTER_1_SLOPE.id, FILTER_1_RESONANCE.id]
-  },  
-  {
-    id: 'AMP_ENV',
-    name: 'Amplifier envelope',
-    type: 'group',
-    children: [AMP_ENV_ATTACK.id, AMP_ENV_DECAY.id, AMP_ENV_SUSTAIN.id, AMP_ENV_RELEASE.id]
-  },
-  {
-    id: 'FILTER_1_ENV',
-    name: 'Filter 1 envelope',
-    type: 'group',
-    children: [FILTER_1_ENV_ATTACK.id, FILTER_1_ENV_DECAY.id, FILTER_1_ENV_SUSTAIN.id, FILTER_1_ENV_RELEASE.id]
-  }    
-];
+/*
+  return Map({
+    id,
+    groupId,
+    elementId,
+    offset: Map({
+      x: offsetXem,
+      y: offsetYem
+    })
+  }
+*/
+
+const createGroup = (id, name) => {
+  return {
+    id,
+    name,
+    elements: {}
+  }
+}
+
+const addInput = (group, input, x, y) => {
+  group.elements[input.id] = {
+    id: input.id,
+    groupId: group.id,
+    elementId: input.id,
+    offset: {
+      x,
+      y
+    }
+  }
+}
+
+let osc1 = createGroup('OSC_1', 'Oscillator 1');
+addInput(osc1, OSC_1_SQUARE, 0, 0);
+addInput(osc1, OSC_1_SAW, 4, 0);
+addInput(osc1, OSC_1_TRIANGLE, 8, 0);
+
+let filter1 = createGroup('FILTER_1', 'Filter 1');
+addInput(filter1, FILTER_1_CUTOFF, 0, 0);
+addInput(filter1, FILTER_1_RESONANCE, 4, 0);
+addInput(filter1, FILTER_1_SLOPE, 8, 0);
+addInput(filter1, FILTER_1_RESONANCE, 12, 0);
+
+let ampEnv = createGroup('AMP_ENV', 'Amplifier envelope');
+addInput(ampEnv, AMP_ENV_ATTACK, 0, 0);
+addInput(ampEnv, AMP_ENV_DECAY, 4, 0);
+addInput(ampEnv, AMP_ENV_SUSTAIN, 8, 0);
+addInput(ampEnv, AMP_ENV_RELEASE, 12, 0);
+
+let filter1env = createGroup('FILTER_1_ENV', 'Filter 1 envelope');
+addInput(filter1env, FILTER_1_ENV_ATTACK, 0, 0);
+addInput(filter1env, FILTER_1_ENV_DECAY, 4, 0);
+addInput(filter1env, FILTER_1_ENV_SUSTAIN, 8, 0);
+addInput(filter1env, FILTER_1_ENV_RELEASE, 12, 0);
+
+let inputGroups = {
+  osc1,
+  filter1,
+  ampEnv,
+  filter1env
+};
 
 sortKey = 0;
 let inputGroupsById = {};

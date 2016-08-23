@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
 import { selectElement, deselectDragElement, moveElement, inputgroupsUndoPointPositionChanged } from '../../../shared/state/actions/inputgroups.js'
-import { getInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
+import { getVirtualInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
 
 import InputGrid from './InputGrid';
 
 const mapStateToProps = (state, ownProps) => {
 
   // TODO: Maybe selected group should be part of the undo buffer? This means mixing frontend and backend undo buffers though.
-  let inputGroups = getInputGroups(state);
+  let inputGroups = getVirtualInputGroups(state);
 
   let selectedGroupId = inputGroups.get('selectedGroup');
   let selectedGroup = inputGroups.getIn(['groups', selectedGroupId]);

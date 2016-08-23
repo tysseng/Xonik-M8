@@ -1,32 +1,30 @@
-import React from 'react';
+import ControlLeftMenu from './ControlLeftMenu';
 import { connect } from 'react-redux';
-
+import { selectControllerGroup } from '../../../shared/state/actions/controllers';
 import { getGroups, getSelectedGroupId } from './groupTools';
 import {getInputsAsJS} from "../../state/selectors";
-import ControlCenterColumn from './ControlCenterColumn';
+
 
 const mapStateToProps = (state, ownProps) => {
-
   let groups = getGroups(state);
   let inputs = getInputsAsJS(state);
   let selectedGroupId = getSelectedGroupId(state, inputs);
-  let selectedGroup = groups[selectedGroupId];
 
   return {
-    inputs,
-    inputValues: state.controllers.toJS(),
-    selectedGroup
+    groups,
+    selectedGroupId,
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return {}
+  return {
+    selectGroup: groupId => dispatch(selectControllerGroup(groupId))
+  }
 }
 
-
-const ControlCenterColumnContainer = connect(
+const ControlLeftMenuContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ControlCenterColumn);
+)(ControlLeftMenu);
 
-export default ControlCenterColumnContainer;
+export default ControlLeftMenuContainer;

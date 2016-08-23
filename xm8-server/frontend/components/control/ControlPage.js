@@ -1,10 +1,10 @@
 import ControlCenterColumnContainer from './ControlCenterColumnContainer';
-
+import ControlLeftMenuContainer from './ControlLeftMenuContainer';
 const ControlPage = () => {    
   return (  
     <div id="controlPage">
       <div className="leftcolumn">
-        Left
+        <ControlLeftMenuContainer/>
       </div>
       <div className="rightcolumn">
         Right

@@ -18,7 +18,7 @@ const GroupPropsForm = ({ group, renameGroup, toggleVisibility }) => {
         <input type="text" value={group.name} onChange={e => renameGroup(group.id, e.target.value)}/>
 
         <label className="small">
-          <input type="checkbox" checked={group.isVisible} onChange={e => toggleVisibility(group.id, e.target.checked)}/>
+          <input type="checkbox" checked={!group.isVisible} onChange={e => toggleVisibility(group.id, !e.target.checked)}/>
           Hide from controls
         </label>
       </div>

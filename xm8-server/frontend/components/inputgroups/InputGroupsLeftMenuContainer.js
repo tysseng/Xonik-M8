@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { openNewElementDialog, newGroup, selectGroup, deleteGroup } from '../../../shared/state/actions/inputgroups';
 import { getNextId } from '../../repositories/idRepository';
-import { getInputGroups } from '../../state/selectors'
+import { getVirtualInputGroups } from '../../state/selectors'
 
 const mapStateToProps = (state, ownProps) => {
-  let inputgroups = getInputGroups(state);
+  let inputgroups = getVirtualInputGroups(state);
 
   return {
     newElementDialog: inputgroups.get('newElementDialog').toJS(),

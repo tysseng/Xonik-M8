@@ -1,23 +1,17 @@
 import React from 'react';
 import ControllerGroup from './ControllerGroup';
 
-const ControlCenterColumn = ({selectedGroupId, groups, inputs, inputValues, onControllerChange, selectGroup}) => {
+const ControlCenterColumn = ({selectedGroup, inputs, inputValues, onControllerChange}) => {
+
+  if(!selectedGroup || selectedGroup.isVisible === false){
+    return null;
+  }
+  console.log("something", selectedGroup)
   return (
     <div>
-      <div>Controls</div>
+      <div>{selectedGroup.name}</div>
       <div>
-        {
-          Object.values(groups).map(group => {
-            return <div key={group.id} onClick={() => selectGroup(group.id)}>{group.name}</div>
-          })
-        }
-      </div>
-      <div>
-        {
-          selectedGroupId &&
-          groups[selectedGroupId] &&
-          <ControllerGroup group={groups[selectedGroupId]} inputs={inputs} inputValues={inputValues} onControllerChange={onControllerChange}/>
-        }
+        <ControllerGroup group={selectedGroup} inputs={inputs} inputValues={inputValues} onControllerChange={onControllerChange}/>
       </div>
     </div>
   )
