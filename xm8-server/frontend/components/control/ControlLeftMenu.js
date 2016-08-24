@@ -9,7 +9,7 @@ const ControlLeftMenu = ({ groups, selectedGroupId, selectGroup}) => {
           Object.values(groups).map(group => {
             return group.isVisible !== false && <MenuItem
                 label={group.name}
-                icon="add-2.svg"
+                icon="settings.svg"
                 onClick={() => selectGroup(group.id)}
                 selected={group.id === selectedGroupId}
               />
