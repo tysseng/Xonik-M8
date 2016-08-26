@@ -1,13 +1,24 @@
-import {OrderedMap, Map, Iterable, fromJS} from 'immutable';
+import { Map, fromJS } from 'immutable';
 import _ from 'lodash';
 import { inputsById, inputGroupsById, getEmptyOption, getStepPositions } from '../../shared/graph/inputs';
 import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { getUndoWrapper } from './undo';
-import { groups as undoGroups, types as undoTypes } from '../../shared/state/actions/undo';
+import { groups as undoGroups } from '../../shared/state/actions/undo';
 import { panelControllersById } from "../../shared/graph/PanelControllers";
 import { getInput } from "../../shared/graph/Inputs";
 import { inputTypesById as inputTypes } from "../../shared/inputs/InputTypes";
+
+let hasChangedVirtualInputs = false;
+let hasChangedPhysicalInputs = false;
+
+const onChangeVirtual = () => {
+  hasChangedVirtualInputs = true;
+}
+
+const onChangePhysical = () => {
+  hasChangedPhysicalInputs = true;
+}
 
 const updateOptionsValues = (state, action, field) => {
   let numberOfSteps = state.get('options').size;
@@ -83,7 +94,7 @@ const byId = (state, action) => {
   return state;
 }
 
-const inputs = (state, action) => {
+const inputs = (state, action, hasChanged) => {
   switch(action.type){
     case inputActionTypes.INPUTCONFIG_NEW_INPUT:
     case inputActionTypes.INPUTCONFIG_DELETE_INPUT:    
@@ -93,7 +104,8 @@ const inputs = (state, action) => {
     case inputActionTypes.INPUTCONFIG_DELETE_OPTION:
     case inputActionTypes.INPUTCONFIG_NEW_OPTION:
     case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:  
-    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:  
+    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
+      hasChanged();
       return state.update('byId', inputByIdMap => byId(inputByIdMap, action));
     default:
       return state; 
@@ -101,7 +113,7 @@ const inputs = (state, action) => {
 }
 
 const getInputType = action => {
-  let reducer = 'virtual'
+  let reducer = 'virtual';
   if(action.inputId){
     reducer = action.inputId.startsWith('virt') ? 'virtual' : 'physical'; 
   }
@@ -126,7 +138,7 @@ const physicalRoot = (
   state = getInitialPhysicalState(),
   action) => {
   if(getInputType(action) === 'physical'){
-    return inputs(state, action);
+    return inputs(state, action, onChangePhysical);
   }
   return state;
 }
@@ -139,7 +151,7 @@ const virtualRoot = (
     if(action.type === nodeActionTypes.LOAD_PATCH_FROM_FILE){
       return action.virtualInputs;
     } else {
-      return inputs(state, action);
+      return inputs(state, action, onChangeVirtual);
     }
   }
   return state;

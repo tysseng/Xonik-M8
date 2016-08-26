@@ -310,4 +310,7 @@ _.each(inputGroups, group => {
 
 export {getInput, inputs, inputsById, inputGroups, inputGroupsById}; 
 
+export const virtualInputGroupIdPrefix = 'virtgroup|';
+export const virtualInputIdPrefix = 'virt|';
+
 export default inputs;

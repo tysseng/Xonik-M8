@@ -21,13 +21,13 @@ const PatchTopMenu = ({showFileDialog, onPatchSave, onPatchLoad, selectedFileDet
           <MenuItem label="Graph" icon="network.svg" onClick={() => console.log("Patches")}/>
         </Link>
         <Link to="/matrix" activeClassName="selected">
-          <MenuItem label="Matrix" icon="network.svg" onClick={() => console.log("Matrix")}/>
+          <MenuItem label="Matrix" icon="squares.svg" onClick={() => console.log("Matrix")}/>
         </Link>
         <Link to="/virtualinputs" activeClassName="selected">
-          <MenuItem label="Custom ctrls" icon="settings.svg" onClick={() => console.log("Virtual")}/>
+          <MenuItem label="Custom ctrls" icon="volume-control.svg" onClick={() => console.log("Virtual")}/>
         </Link>
         <Link to="/inputgroups" activeClassName="selected">
-          <MenuItem label="Controller groups" icon="settings-1.svg" onClick={() => console.log("Groups")}/>
+          <MenuItem label="Controller groups" icon="settings.svg" onClick={() => console.log("Groups")}/>
         </Link>
       </div>
 

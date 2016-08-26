@@ -4,6 +4,12 @@ import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 
+let hasChanged = false;
+const updateHasChanged = (action) => {
+  // TODO: List actions that affects change
+  hasChanged = true;
+}
+
 const directoutputs = (state, action) => {
   switch(action.type){
     case types.DIRECT_OUTPUT_TOGGLE: 
@@ -20,6 +26,9 @@ const directoutputs = (state, action) => {
 const root = (
   state = getInitialState(),
   action) => {
+
+  updateHasChanged(action);
+
   switch(action.type){
     case nodeActionTypes.LOAD_PATCH_FROM_FILE:      
       return action.matrix;    

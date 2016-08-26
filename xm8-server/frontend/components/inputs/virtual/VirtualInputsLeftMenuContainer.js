@@ -1,9 +1,9 @@
-import $ from 'jquery';
 import VirtualInputsLeftMenu from './VirtualInputsLeftMenu';
 import { connect } from 'react-redux';
 import { newInput, deleteInput, selectInput } from '../../../../shared/state/actions/inputs';
 import { panelControllersById } from "../../../../shared/graph/PanelControllers";
 import { getNextId } from '../../../repositories/idRepository';
+import { virtualInputIdPrefix } from '../../../../shared/graph/Inputs';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -15,7 +15,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onCreate: () => getNextId(
       (id) => {
-        let inputId = 'virt|' + id;
+        let inputId = virtualInputIdPrefix + id;
         dispatch(newInput(inputId, panelControllersById.VIRTUAL.id));
         dispatch(selectInput('virtual', inputId));
       }),

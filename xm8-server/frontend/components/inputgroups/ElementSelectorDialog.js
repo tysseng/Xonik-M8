@@ -15,12 +15,12 @@ const ElementSelectorDialog = ({newElementDialog, selectedGroupId, onCancel, onA
       <div>
         <div className="intro">What element do you want to add to the group?</div>
         <div>
-          <div>Physical input</div>
+          <div className="dropdownLabel">Physical input</div>
           <InputDropdown type='physicalInputs' value={physicalInputValue} onChange={(value) => selectElement('physicalInput', value)}/>
         </div>
         <div><p>or</p></div>
         <div>
-          <div>Virtual input</div>
+          <div className="dropdownLabel">Virtual input</div>
           <InputDropdown type='virtualInputs' value={virtualInputValue} onChange={(value) => selectElement('virtualInput', value)}/>
         </div>
       </div>

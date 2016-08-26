@@ -6,6 +6,12 @@ import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 
+let hasChanged = false;
+const updateHasChanged = (action) => {
+  // TODO: List actions that affects change
+  hasChanged = true;
+}
+
 const createNewGroup = (id) => {
   return Map({
     id,
@@ -45,16 +51,17 @@ const inputgroups = (
   state = getInitialState(), 
   action) => {
 
+  updateHasChanged(action);
+
   switch(action.type){
     case inputgroupsActionTypes.MOVE_ELEMENT:
-      return state        
+      return state
         .setIn(['groups', action.groupId, 'elements', action.id, 'offset', 'x'], action.offsetXem)
         .setIn(['groups', action.groupId, 'elements', action.id, 'offset', 'y'], action.offsetYem);
     case inputgroupsActionTypes.NEW_GROUP:
       let newGroup = createNewGroup(action.groupId);
       return state.setIn(['groups', action.groupId], newGroup);
     case inputgroupsActionTypes.DELETE_GROUP:
-      console.log("delete", state, state.deleteIn(['groups', action.groupId]));
       return state.deleteIn(['groups', action.groupId]);
     case inputgroupsActionTypes.ADD_ELEMENT:
       let wrappedElement = getWrappedElement(action.id, action.groupId, action.offsetXem, action.offsetYem, action.elementId, action.elementType);
@@ -71,7 +78,6 @@ const inputgroups = (
       return state.setIn(['groups', action.groupId, 'isVisible'], action.isVisible);
     case inputgroupsActionTypes.RENAME_GROUP:
       return state.setIn(['groups', action.groupId, 'name'], action.name);
-
     default:
       return state;
   }

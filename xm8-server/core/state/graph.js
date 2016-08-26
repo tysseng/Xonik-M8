@@ -7,6 +7,12 @@ import { groups as undoGroups } from '../../shared/state/actions/undo';
 import outputs from './graph/outputs';
 import nodes from './graph/nodes';
 
+let hasChanged = false;
+const updateHasChanged = (action) => {
+  // TODO: List actions that affects change
+  hasChanged = true;
+}
+
 const isOutput = (type) => {
   return type === paramTypes.map.OUTPUT.id;
 }
@@ -36,6 +42,9 @@ const getInitialState = () => {
 
 // root reducer
 const graph = (state = getInitialState(), action) => {
+
+  updateHasChanged(action);
+
   // any existing usage of the currenly selected output must be removed before we add
   // it to a node AND before we update the outputs mapping.
   // This requires knowledge of both outputs and nodes and has to be at this level.
