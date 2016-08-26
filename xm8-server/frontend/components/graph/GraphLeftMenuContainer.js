@@ -36,9 +36,6 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onPatchSave: (options) => dispatch(toggleFileDialog(true, 'save', options)),
-    onPatchSaveAs: (options) => dispatch(toggleFileDialog(true, 'saveas', options)),
-    onPatchLoad: () => dispatch(toggleFileDialog(true, 'load')),
     onUpdateVoice: forceUpdate,
     onDelete: (nodeId, linkId) => {
       if(nodeId){
@@ -49,9 +46,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
     },
     onCreate: () => dispatch(createNewNode()),
-    onModeChange: (mode) => dispatch(toggleMode(mode)),
-    onUndo: () => dispatch(undo(undoGroups.GRAPH)),
-    onRedo: () => dispatch(redo(undoGroups.GRAPH))
+    onModeChange: (mode) => dispatch(toggleMode(mode))
   }
 }
 

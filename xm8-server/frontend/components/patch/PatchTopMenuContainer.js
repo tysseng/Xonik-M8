@@ -5,6 +5,7 @@ import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
 import { createNewNode, deleteNode, deleteLink} from '../../../shared/state/actions/nodes';
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
+import { getFileDialog } from '../../state/selectors';
 
 const forceUpdate = () => {
   $.ajax({
@@ -30,7 +31,8 @@ const mapStateToProps = (state, ownProps) => {
     mode: state.patchview.get('mode'),
     selectedNodeId: state.patchview.get('selectedNode'),
     selectedLinkId: state.patchview.get('selectedLink'),
-    shouldAutoUpdate: state.patchview.get('shouldAutoUpdate')
+    shouldAutoUpdate: state.patchview.get('shouldAutoUpdate'),
+    showFileDialog: getFileDialog(state).get('show')
   }
 }
 

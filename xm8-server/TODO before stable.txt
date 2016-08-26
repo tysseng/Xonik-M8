@@ -4,13 +4,12 @@ TODO før "stabilt"
 - Delete link fungerer ikke - må ha action som kan delete link med bare id og bruke denne i venstremeny, nå må man ha med fra til osv.
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
-- Faner for inputgroups under controll
-    - Style
-    - Lag visning av fysiske grupper
-    - Overholde isVisible (Hide from controls)
+    - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
+- Finne ikon for matrix
 - Scrollbars i matrix
 - Lage virtualgroup| og virtual| som 'prefix' eller liknende isf hardkodet
 - Mer luft under label i add input to input group modal
+- Luft etter hver gruppe i meny
 
 - TODO-issues:
  - Sletting av inputs skaper problemer med undo-synch fordi undo av sletting av input ikke undo'er sletting fra groups og matrix etc.
@@ -28,7 +27,7 @@ Tanke:
 
 
 For later:
-
+- Predefinerte ikoner for physical groups
 - Use Reselect - https://github.com/reactjs/reselect
 - Fjerne groups fra inputs (er de i bruk)?
 - move all things ajax to repositories?

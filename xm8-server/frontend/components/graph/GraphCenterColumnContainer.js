@@ -4,11 +4,11 @@ import { getLinks } from './LinkFunctions';
 
 
 import GraphCenterColumn from './GraphCenterColumn';
-import { selectNode, selectLink, createNewNode, createNewLink, deleteNode, deleteLink, toggleAutoUpdate, changeNodeType, graphUndoPointPositionChanged } from '../../../shared/state/actions/nodes';
+import { selectNode, selectLink, createNewLink, toggleAutoUpdate, changeNodeType, graphUndoPointPositionChanged } from '../../../shared/state/actions/nodes';
 import { startNodeMove, setLinkFromNodeId, setLinkToNodeId, cancelLinkCreation } from '../../../shared/state/actions/graphvisualization';
 import { moveNode } from '../../../shared/state/actions/nodes';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
-import { getNodes, getPatchView, getFileDialog } from '../../state/selectors';
+import { getNodes, getPatchView } from '../../state/selectors';
 
 // TODO: Don't update if net does not validate (or send error message)
 
@@ -26,14 +26,12 @@ const mapStateToProps = (state, ownProps) => {
     offsetY: patchview.get('offsetY'),
     linkDialog: patchview.get('linkDialog').toJS(),
     selectedNodeId: patchview.get('selectedNode'),
-    selectedLinkId: patchview.get('selectedLink'),
-    showFileDialog: getFileDialog(state).get('show')
+    selectedLinkId: patchview.get('selectedLink')
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onCreateNewNode: () => dispatch(createNewNode()),    
     onNodeClick: (id, offsetX, offsetY) => {
       dispatch(selectNode(id));
       dispatch(toggleMode('move_node'));
@@ -44,8 +42,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(graphUndoPointPositionChanged());
     },
     onLinkClick: (id) => dispatch(selectLink(id)),
-    onNodeDeleteClick: (id) => dispatch(deleteNode(id)),
-    onLinkDeleteClick: (id, from, to, param) => dispatch(deleteLink(id, from, to, param)),
     toggleAutoUpdate: (shouldAutoUpdate) => dispatch(toggleAutoUpdate(shouldAutoUpdate)),
     onNodeMove: (nodeId, x, y) => dispatch(moveNode(nodeId, x, y)),
     setLinkFromNode: (nodeId) => dispatch(setLinkFromNodeId(nodeId)),

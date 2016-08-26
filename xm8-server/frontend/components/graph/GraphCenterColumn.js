@@ -2,18 +2,16 @@ import React from 'react';
 
 import LinkDialog from './LinkDialog';
 import GraphSvg from './GraphSvg';
-import FileDialogContainer from '../filesystem/FileDialogContainer';
 
 
 const GraphCenterColumn = ({
   nodes, links, mode, selectedNodeId, selectedLinkId, shouldAutoUpdate, linkDialog, offsetX, offsetY,
-  showFileDialog, toggleAutoUpdate, onNodeMove, onNodeClick, onNodeMoveEnded, onNodeDeleteClick, onLinkClick, onLinkDeleteClick, onCreateNewNode,
+  toggleAutoUpdate, onNodeMove, onNodeClick, onNodeMoveEnded, onLinkClick,
   setLinkFromNode, setLinkToNode, cancelLinkCreation, createLink, onNodeTypeChange}) => {
 
   return ( 
     <div>
 
-      {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/api/graph/save' loadUrl = '/api/graph/load'/> } 
       {linkDialog.show && <LinkDialog nodes={nodes} linkDialog={linkDialog} onCancel={cancelLinkCreation} onCreate={createLink} onNodeTypeChange={onNodeTypeChange}/> }    
 
       <GraphSvg 

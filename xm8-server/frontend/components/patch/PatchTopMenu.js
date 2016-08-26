@@ -1,12 +1,10 @@
 import MenuItem from '../framework/MenuItem';
 import { Link } from 'react-router';
+import FileDialogContainer from '../filesystem/FileDialogContainer';
 
-const PatchTopMenu = ({mode, selectedNodeId, selectedLinkId, onPatchSave, onPatchLoad, selectedFileDetails, onDelete, onCreate, onModeChange, onUpdateVoice, onUndo, onRedo, shouldAutoUpdate}) => {
+const PatchTopMenu = ({showFileDialog, onPatchSave, onPatchLoad, selectedFileDetails, onUndo, onRedo}) => {
   
-  //<button onClick={() => onPatchSaveAs(selectedFileDetails)}>Save as</button>
-  let linkButtonMode = (mode === 'create_link' ? 'default' : 'create_link');
-
-  return ( 
+  return (
     <div>
       <div className="topSubMenu">
         <MenuItem label="Undo" icon="circular-arrow-1.svg" onClick={onUndo}/>
@@ -32,6 +30,8 @@ const PatchTopMenu = ({mode, selectedNodeId, selectedLinkId, onPatchSave, onPatc
           <MenuItem label="Controller groups" icon="settings-1.svg" onClick={() => console.log("Groups")}/>
         </Link>
       </div>
+
+      {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/api/graph/save' loadUrl = '/api/graph/load'/> }
     </div>
   )
 }
