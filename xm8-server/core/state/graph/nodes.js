@@ -205,7 +205,7 @@ const node = (state, action) => {
   switch (action.type){
     case types.DELETE_LINK:
       if(state.get('id') === action.fromNodeId){
-        return state.deleteIn(['consumers', getLinkIdFromIds(action.fromNodeId, action.toNodeId, action.toParamId)]);
+        return state.deleteIn(['consumers', action.linkId]);
       } else if(state.get('id') === action.toNodeId){
         return validateNode(state.updateIn(['params', action.toParamId], aParam => param(aParam, action)));
       }
