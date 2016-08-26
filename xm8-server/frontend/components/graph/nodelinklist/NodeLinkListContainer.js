@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onNodeClick: (id) => dispatch(selectNode(id)),
     onLinkClick: (id) => dispatch(selectLink(id)),
     onNodeDeleteClick: (id) => dispatch(deleteNode(id)),
-    onLinkDeleteClick: (id, from, to, param) => dispatch(deleteLink(id, from, to, param))
+    onLinkDeleteClick: (id) => dispatch(deleteLink(id))
   }
 }
 

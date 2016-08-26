@@ -10,10 +10,6 @@ const isLink = (type) => {
   return type === paramTypes.map.LINK.id;
 }
 
-const isOutput = (type) => {
-  return type === paramTypes.map.OUTPUT.id;
-}
-
 const isVirtualInput = (type) => {
   return type === paramTypes.map.VIRTUALINPUT.id;
 }
@@ -68,11 +64,23 @@ const getEmptyNode = (nodeId) => Map({
 })
 
 const getLinkId = (action) => {
-  return getLinkIdFromIds(action.nodeId, action.paramId);
+  return getLinkIdFromIds(action.paramValue, action.nodeId, action.paramId);
 }
 
-const getLinkIdFromIds = (nodeId, paramId) => {
-  return '' + nodeId + '-' + paramId;
+const getLinkIdFromIds = (fromNodeId, toNodeId, paramId) => {
+  return '' + fromNodeId + '-' + toNodeId + '-' + paramId;
+}
+
+const getFromNodeIdFromLinkId = (linkId) => {
+  return linkId.split('-')[0];
+}
+
+const getToNodeIdFromLinkId = (linkId) => {
+  return linkId.split('-')[1];
+}
+
+const getToParamIdFromLinkId = (linkId) => {
+  return linkId.split('-')[2];
 }
 
 const createLink = (action) => {
@@ -141,12 +149,12 @@ const getAddToConsumersAction = action => {
   }   
 }
 
-const removeFromConsumers = (state, nodeId, paramId) => {
-    let param = state.getIn([nodeId, 'params', paramId]);      
+const removeFromConsumers = (state, toNodeId, paramId) => {
+    let param = state.getIn([toNodeId, 'params', paramId]);
     if(isLink(param.get('type'))) {
       let currentFromNodeId = getFromNodeId(param);
       if(currentFromNodeId){
-        let linkId = getLinkIdFromIds(nodeId, paramId);
+        let linkId = getLinkIdFromIds(currentFromNodeId, toNodeId, paramId);
         state = state.deleteIn([currentFromNodeId, 'consumers', linkId]);    
       }
     }  
@@ -197,7 +205,7 @@ const node = (state, action) => {
   switch (action.type){
     case types.DELETE_LINK:
       if(state.get('id') === action.fromNodeId){
-        return state.deleteIn(['consumers', getLinkIdFromIds(action.toNodeId, action.toParamId)]);
+        return state.deleteIn(['consumers', getLinkIdFromIds(action.fromNodeId, action.toNodeId, action.toParamId)]);
       } else if(state.get('id') === action.toNodeId){
         return validateNode(state.updateIn(['params', action.toParamId], aParam => param(aParam, action)));
       }
@@ -247,9 +255,19 @@ const node = (state, action) => {
   }
 }
 
+// make it easier to use the linkId to find the correct parameter to update.
+const splitLinkId = (action) => {
+  action.fromNodeId = getFromNodeIdFromLinkId(action.linkId);
+  action.toNodeId = getToNodeIdFromLinkId(action.linkId);
+  action.toParamId = getToParamIdFromLinkId(action.linkId);
+
+  return action;
+}
+
 const nodes = (state, action) => {
   switch (action.type){
     case types.DELETE_LINK:
+      action = splitLinkId(action);
       state = state.updateIn([action.fromNodeId], aNode => node(aNode, action));
       return state.updateIn([action.toNodeId], aNode => node(aNode, action));
     case types.CHANGE_LINK_NAME:
@@ -268,9 +286,11 @@ const nodes = (state, action) => {
     case types.CHANGE_NODE_PARAM_VALUE:      
       if(isLink(action.paramType)){
         // add or remove consumer link
-        if(action.paramValue && action.paramValue !== ""){       
+        if(action.paramValue && action.paramValue !== ""){
+          // add
           state = state.updateIn([action.paramValue], (aNode) => node(aNode, getAddToConsumersAction(action)));
         } else {
+          // remove existing
           state = removeFromConsumers(state, action.nodeId, action.paramId);
         }
       }

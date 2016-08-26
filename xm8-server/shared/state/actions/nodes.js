@@ -172,14 +172,13 @@ export const toggleLinkNameInGraph = (toNodeId, toParamId, visible) => {
   }
 };
 
-export const deleteLink = (linkId, fromNodeId, toNodeId, toParamId) => {
+export const deleteLink = (linkId) => {
+  // by splitting id into its parts, some of the reducer code may be reused.
+  let linkIdParts = linkId.split('-');
   return {
     type: types.DELETE_LINK,
     linkId,
-    fromNodeId, 
-    toNodeId, 
-    toParamId,
-    target: 'BOTH',    
+    target: 'BOTH',
     undoDescription: 'Delete link'
   }
 };
