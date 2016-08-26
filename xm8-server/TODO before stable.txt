@@ -1,7 +1,7 @@
 TODO før "stabilt"
 
 - Autosave fysiske inputs
-- Delete link fungerer ikke - må ha action som kan delete link med bare id og bruke denne i venstremeny, nå må man ha med fra til osv.
+
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
@@ -16,17 +16,11 @@ TODO før "stabilt"
  - Det lages undo-states også når en action IKKE påvirker noe, så lenge det er en undoable action. Det er litt kjipt
  - Løsning: Undo-buffer må gjelde hele patch
 
-Reorganisere sider
-Tanke:
-- Alle virtual input groups vises under controllers. Har edit-knapp
-- Edit skjer i kontekst av patch. Alternativt: Edit skjer inline under Control men saves sammen med patch. Kan være forvirrende å vite hvilken
-  patch man editerer i?
-- Mulig å dra controllersidefaner dit man vil for raskere tilgang (må persisteres)
-- Ny input group -> Oppretter ny side under controllers. Mulig å klikke av for "hide from Control page"
-- Flytte save/load til topp av patchside siden disse påvirker alt. Undo må være per-subpage siden det IKKE påvirker alt
-
 
 For later:
+- Generalisere sletting fra consumers, det er et rakleverk nå.
+- Flatten node reducer, den er helt uoversiktlig.
+- Mulig å dra controllersidefaner dit man vil for raskere tilgang (må persisteres)
 - Predefinerte ikoner for physical groups
 - Use Reselect - https://github.com/reactjs/reselect
 - Fjerne groups fra inputs (er de i bruk)?
