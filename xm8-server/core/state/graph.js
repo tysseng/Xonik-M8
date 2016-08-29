@@ -7,10 +7,14 @@ import { groups as undoGroups } from '../../shared/state/actions/undo';
 import outputs from './graph/outputs';
 import nodes from './graph/nodes';
 
-let hasChanged = false;
+export let hasChanged = false;
 const updateHasChanged = (action) => {
-  // TODO: List actions that affects change
-  hasChanged = true;
+  if(undoableActions.indexOf(action.type) > -1 || action.type === types.LOAD_PATCH_FROM_FILE){
+    hasChanged = true;
+  }
+}
+export const clearHasChanged = () => {
+  hasChanged = false;
 }
 
 const isOutput = (type) => {
@@ -69,10 +73,10 @@ const undoableActions = [
     types.NEW_NODE,
     types.DELETE_NODE,
     types.CHANGE_NODE_TYPE,
-    types.CHANGE_NODE_PARAM_TYPE,      
-    types.CHANGE_NODE_PARAM_VALUE,      
-    types.CHANGE_NODE_PARAM_UNIT,      
-    types.NEW_LINK,  
+    types.CHANGE_NODE_PARAM_TYPE,
+    types.CHANGE_NODE_PARAM_VALUE,
+    types.CHANGE_NODE_PARAM_UNIT,
+    types.NEW_LINK,
     types.TOGGLE_LINK_NAME_IN_GRAPH,
     types.DELETE_LINK,
     types.SET_UNDO_POINT,

@@ -6,10 +6,14 @@ import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 
-let hasChanged = false;
+export let hasChanged = false;
 const updateHasChanged = (action) => {
-  // TODO: List actions that affects change
-  hasChanged = true;
+  if(undoableActions.indexOf(action.type) > -1 || action.type === nodeActionTypes.LOAD_PATCH_FROM_FILE){
+    hasChanged = true;
+  }
+}
+export const clearHasChanged = () => {
+  hasChanged = false;
 }
 
 const createNewGroup = (id) => {
@@ -96,6 +100,7 @@ const undoableActions = [
   inputgroupsActionTypes.ADD_ELEMENT,
   inputgroupsActionTypes.DELETE_ELEMENT,
   inputgroupsActionTypes.SET_UNDO_POINT,
+  inputgroupsActionTypes.TOGGLE_VISIBILITY,
   inputActionTypes.INPUTCONFIG_DELETE_INPUT
 ];
  

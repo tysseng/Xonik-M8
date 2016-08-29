@@ -9,8 +9,16 @@ import { panelControllersById } from "../../shared/graph/PanelControllers";
 import { getInput } from "../../shared/graph/Inputs";
 import { inputTypesById as inputTypes } from "../../shared/inputs/InputTypes";
 
-let hasChangedVirtualInputs = false;
-let hasChangedPhysicalInputs = false;
+export let hasChangedVirtualInputs = false;
+export let hasChangedPhysicalInputs = false;
+
+export const clearHasChangedVirtualInputs = () => {
+  hasChangedVirtualInputs = false;
+}
+
+export const clearHasChangedPhysicalInputs = () => {
+  hasChangedVirtualInputs = false;
+}
 
 const onChangeVirtual = () => {
   hasChangedVirtualInputs = true;

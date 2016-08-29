@@ -14,6 +14,7 @@ TODO før "stabilt"
 
 
 For later:
+- Do change detection in middleware
 - Retain frontend state on reload
 - Generalisere sletting fra consumers, det er et rakleverk nå.
 - Flatten node reducer, den er helt uoversiktlig.

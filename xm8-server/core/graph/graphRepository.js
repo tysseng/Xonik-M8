@@ -13,6 +13,13 @@ import {filetypes} from '../../shared/FileTypes';
 import {saveFile, loadFile} from '../persistence/fileRepo';
 import {fromJS} from 'immutable';
 
+import { hasChangedVirtualInputs, clearHasChangedVirtualInputs } from '../state/inputs';
+import { hasChanged as hasChangedGraph, clearHasChanged as clearHasChangedGraph } from '../state/graph';
+import { hasChanged as hasChangedMatrix, clearHasChanged as clearHasChangedMatrix } from '../state/matrix';
+import { hasChanged as hasChangedControls, clearHasChanged as clearHasChangedControls } from '../state/controllers';
+import { hasChanged as hasChangedVirtualInputGroups, clearHasChanged as clearHasChangedVirtualInputGroups } from '../state/inputgroups';
+
+
 // auto-update voices whenever state changes
 // TODO: listen to only graph changes!
 store.subscribe(
@@ -22,6 +29,26 @@ store.subscribe(
     }
   }
 );
+
+const autosave = () => {
+  if(hasChangedGraph ||
+    hasChangedMatrix ||
+    hasChangedVirtualInputGroups ||
+    hasChangedControls ||
+    hasChangedVirtualInputs){
+    console.log("Patch has changed, saving");
+    //save('autosavedPatch', 'autosaves');
+
+    clearHasChangedGraph();
+    clearHasChangedMatrix();
+    clearHasChangedVirtualInputGroups();
+    clearHasChangedControls();
+    clearHasChangedVirtualInputs();
+  }
+  setTimeout(autosave, 3000);
+}
+//run autosave in a loop;
+autosave();
 
 function sendGraph(){
   if(!preparer.isNetValid()){
@@ -45,7 +72,7 @@ export const save = (name, folderId) => {
     return {fileSaved: false, message: "Name or folder id missing"};
   }
 
-  // TODO: Store input values as well  
+  // TODO: Store input values as well
   let file = {
     contents: {
       graph: getGraph().toJS(),
