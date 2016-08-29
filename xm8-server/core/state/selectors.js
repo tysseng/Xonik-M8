@@ -9,3 +9,4 @@ export const getGraph = () => getState().graph;
 export const getMatrix = () => getState().matrix;
 export const getVirtualInputs = () => getState().virtualInputs;
 export const getVirtualInputGroups = () => getState().inputgroups;
+export const getControllers = () => getState().controllers;

@@ -6,7 +6,7 @@ import serializer from './serializer.js';
 import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
-import { getGraph, getMatrix, getVirtualInputs, getVirtualInputGroups} from '../state/selectors';
+import { getGraph, getMatrix, getVirtualInputs, getVirtualInputGroups, getControllers} from '../state/selectors';
 
 import {loadPatchFromFile, setLoadedPatchFileDetails} from '../../shared/state/actions/nodes';
 import {filetypes} from '../../shared/FileTypes';
@@ -51,7 +51,8 @@ export const save = (name, folderId) => {
       graph: getGraph().toJS(),
       matrix: getMatrix().toJS(),
       virtualInputs: getVirtualInputs().toJS(),
-      virtualInputGroups: getVirtualInputGroups().toJS()
+      virtualInputGroups: getVirtualInputGroups().toJS(),
+      controllers: getControllers().toJS()
     }
   };
 
@@ -73,7 +74,15 @@ export const load =(fileId, version) => {
     let immutableMatrix = fromJS(file.contents.matrix);
     let immutableVirtualInputs = fromJS(file.contents.virtualInputs);
     let immutableVirtualInputGroups = fromJS(file.contents.virtualInputGroups);
-    store.dispatch(loadPatchFromFile(fileId, version, immutableGraph, immutableMatrix, immutableVirtualInputs, immutableVirtualInputGroups));
+    let immutableControllers = fromJS(file.contents.controllers);
+    store.dispatch(
+      loadPatchFromFile(
+        fileId, version,
+        immutableGraph,
+        immutableMatrix,
+        immutableVirtualInputs,
+        immutableVirtualInputGroups,
+        immutableControllers));
   }
 };
 

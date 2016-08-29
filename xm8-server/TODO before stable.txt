@@ -1,7 +1,6 @@
 TODO før "stabilt"
 
 - Autosave fysiske inputs
-- Save input values with patch
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
@@ -15,7 +14,6 @@ TODO før "stabilt"
 
 
 For later:
-- Consider volume-control.svg for inputs
 - Retain frontend state on reload
 - Generalisere sletting fra consumers, det er et rakleverk nå.
 - Flatten node reducer, den er helt uoversiktlig.

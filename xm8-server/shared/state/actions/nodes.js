@@ -41,7 +41,10 @@ export const setLoadedPatchFileDetails = (fileId, version) => {
   };
 };
 
-export const loadPatchFromFile = (fileId, version, graph, matrix, virtualInputs, virtualInputGroups) => {
+export const loadPatchFromFile = (
+  fileId, version,
+  graph, matrix,
+  virtualInputs, virtualInputGroups, controllers) => {
   return {
     type: types.LOAD_PATCH_FROM_FILE,
     target: 'SERVER',
@@ -50,7 +53,8 @@ export const loadPatchFromFile = (fileId, version, graph, matrix, virtualInputs,
     graph,
     matrix,
     virtualInputs,
-    virtualInputGroups
+    virtualInputGroups,
+    controllers
   }
 };
 
