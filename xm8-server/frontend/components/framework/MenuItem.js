@@ -1,12 +1,21 @@
 import { Link } from 'react-router';
 
-const MenuItem = ({label, icon, onClick, selected, target = "Capa_1"}) => {
+const MenuItem = ({label, icon, onClick, selected, disabled = false, target = "Capa_1"}) => {
 
   let svgClassName = "image";
   let labelClassName = "name";
   if(selected){
     svgClassName += " selected";
     labelClassName += " selected";
+  }
+
+  if(disabled){
+    svgClassName += " disabled";
+    labelClassName += " disabled";
+  }
+
+  if(disabled) {
+    onClick = () => null;
   }
 
   return (
