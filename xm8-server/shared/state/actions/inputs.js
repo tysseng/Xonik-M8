@@ -11,7 +11,10 @@ export const types = {
   INPUTCONFIG_SPREAD_OPTIONS_VALUES: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES',
   INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI',
   INPUT_DIRECT_OUTPUT_TOGGLE: 'INPUT_DIRECT_OUTPUT_TOGGLE',
-  LOAD_PHYSICAL_INPUTS_FROM_FILE: 'LOAD_PHYSICAL_INPUTS_FROM_FILE'
+  LOAD_PHYSICAL_INPUTS_FROM_FILE: 'LOAD_PHYSICAL_INPUTS_FROM_FILE',
+  RESET_PHYSICAL_INPUTS: 'RESET_PHYSICAL_INPUTS',
+  RESET_PHYSICAL_INPUT: 'RESET_PHYSICAL_INPUT',
+  RESET_VIRTUAL_INPUT: 'RESET_VIRTUAL_INPUT'
 }
 
 // It is only possible to create new inputs, so virt is hard coded as part of the id 
@@ -145,6 +148,20 @@ export const loadPhysicalInputsFromFile = (fileId, version, physicalInputs) => {
   }
 };
 
+export const resetPhysicalInputs = () => {
+  return {
+    type: types.RESET_PHYSICAL_INPUTS,
+    target: 'SERVER'
+  }
+};
+
+export const resetPhysicalInput = (inputId) => {
+  return {
+    type: types.RESET_PHYSICAL_INPUT,
+    inputId,
+    target: 'SERVER'
+  }
+};
 
 
 

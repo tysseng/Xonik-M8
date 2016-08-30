@@ -2,7 +2,7 @@ import MenuItem from '../framework/MenuItem';
 import { Link } from 'react-router';
 import FileDialogContainer from '../filesystem/FileDialogContainer';
 
-const PatchTopMenu = ({showFileDialog, onPatchSave, onPatchLoad, selectedFileDetails, onUndo, onRedo}) => {
+const PatchTopMenu = ({showFileDialog, onPatchSave, onPatchLoad, resetPatch, selectedFileDetails, onUndo, onRedo}) => {
   
   return (
     <div>
@@ -14,6 +14,9 @@ const PatchTopMenu = ({showFileDialog, onPatchSave, onPatchLoad, selectedFileDet
         <MenuItem label="Save" icon="download.svg" onClick={() => onPatchSave(selectedFileDetails)}/>
         <MenuItem label="Load" icon="upload 2.svg" onClick={onPatchLoad}/>
         <MenuItem label="Snap-shot" icon="photo-camera-3.svg" onClick={() => console.log("Snapshot")}/>
+      </div>
+      <div className="topSubMenu">
+        <MenuItem label="Reset" icon="garbage.svg" onClick={resetPatch}/>
       </div>
 
       <div className="topSubMenu right">

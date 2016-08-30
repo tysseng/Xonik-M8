@@ -1,6 +1,7 @@
 export const types = {
   DIRECT_OUTPUT_TOGGLE: 'DIRECT_OUTPUT_TOGGLE',
-  DIRECT_OUTPUT_HOVER: 'DIRECT_OUTPUT_HOVER'
+  DIRECT_OUTPUT_HOVER: 'DIRECT_OUTPUT_HOVER',
+  RESET_MATRIX: 'RESET_MATRIX'
 }
 
 export const toggleDirectOutput = (inputId, outputId) => {
@@ -20,6 +21,13 @@ export const toggleHover = (inputId, outputId) => {
     target: 'GUI'
   }
 }
+
+export const resetMatrix = () => {
+  return {
+    type: types.RESET_MATRIX,
+    target: 'SERVER'
+  }
+};
 
 
 

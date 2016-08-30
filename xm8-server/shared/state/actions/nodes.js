@@ -19,7 +19,8 @@ export const types = {
   DELETE_LINK: 'DELETE_LINK',  
   TOGGLE_AUTO_UPDATE: 'TOGGLE_AUTO_UPDATE',
   SET_UNDO_POINT: 'SET_UNDO_POINT',
-  NODE_MOVE: 'NODE_MOVE'
+  NODE_MOVE: 'NODE_MOVE',
+  RESET_GRAPH: 'RESET_GRAPH'
 };
 
 export const moveNode = (nodeId, x, y) => {
@@ -195,5 +196,12 @@ export const graphUndoPointPositionChanged = () => {
   return {
     type: types.SET_UNDO_POINT,
     undoDescription: 'Move element'
+  }
+};
+
+export const resetGraph = () => {
+  return {
+    type: types.RESET_GRAPH,
+    target: 'SERVER'
   }
 };

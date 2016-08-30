@@ -1,6 +1,6 @@
 import InputGroupsLeftMenu from './InputGroupsLeftMenu';
 import { connect } from 'react-redux';
-import { openNewElementDialog, newGroup, selectGroup, deleteGroup } from '../../../shared/state/actions/inputgroups';
+import { openNewElementDialog, newGroup, selectGroup, deleteGroup, deleteElement } from '../../../shared/state/actions/inputgroups';
 import { getNextId } from '../../repositories/idRepository';
 import { getVirtualInputGroups } from '../../state/selectors';
 import { virtualInputGroupIdPrefix } from '../../../shared/graph/Inputs';
@@ -10,7 +10,8 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     newElementDialog: inputgroups.get('newElementDialog').toJS(),
-    selectedGroup: inputgroups.get('selectedGroup')
+    selectedGroupId: inputgroups.get('selectedGroup'),
+    selectedElementId: inputgroups.get('selectedElementId')
   }
 }
 
@@ -23,7 +24,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch(newGroup(groupId));
         dispatch(selectGroup(groupId));
       }),
-    deleteGroup: (groupId) => dispatch(deleteGroup(groupId))
+    deleteGroup: (groupId) => dispatch(deleteGroup(groupId)),
+    deleteElement: (elementId, groupId) => dispatch(deleteElement(elementId, groupId))
   }
 }
 

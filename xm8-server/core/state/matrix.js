@@ -1,6 +1,7 @@
 import { Map } from 'immutable';
 import { types } from '../../shared/state/actions/matrix';
 import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
+import { types as patchActionTypes } from '../../shared/state/actions/patch';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 
@@ -26,13 +27,19 @@ const root = (
   action) => {
 
   switch(action.type){
-    case nodeActionTypes.LOAD_PATCH_FROM_FILE:      
+    case nodeActionTypes.LOAD_PATCH_FROM_FILE:
+      setHasChanged();
       return action.matrix;    
     case types.DIRECT_OUTPUT_TOGGLE:
       setHasChanged();
       return state.updateIn(['directoutputs'], substate => directoutputs(substate, action));
-  } 
-  return state;
+    case patchActionTypes.RESET_PATCH:
+    case types.RESET_MATRIX:
+      setHasChanged();
+      return getInitialState();
+    default:
+      return state;
+  }
 }
 
 const getInitialState = () => {

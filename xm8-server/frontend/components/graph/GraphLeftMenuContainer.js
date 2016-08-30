@@ -1,9 +1,7 @@
 import $ from 'jquery';
 import GraphLeftMenu from './GraphLeftMenu';
 import { connect } from 'react-redux';
-import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
-import { createNewNode, deleteNode, deleteLink} from '../../../shared/state/actions/nodes';
-import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
+import { createNewNode, deleteNode, deleteLink, resetGraph} from '../../../shared/state/actions/nodes';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
 
 const forceUpdate = () => {
@@ -45,7 +43,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
     },
     onCreate: () => dispatch(createNewNode()),
-    onModeChange: (mode) => dispatch(toggleMode(mode))
+    onModeChange: (mode) => dispatch(toggleMode(mode)),
+    resetGraph: () => dispatch(resetGraph())
   }
 }
 

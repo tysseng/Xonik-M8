@@ -1,8 +1,11 @@
 TODO før "stabilt"
 
-- Autoload av physical inputs på startup
 - Ta vare på hvilken fil som er loadet slik at dette også autosaves. Krever antakelig endring i struktur
-- Lage reset-knapp for patch og physical inputs
+- Legg til undo på matrix
+- Undo virker ikke på flere reset physical input etter hverandre.
+- Bedre ikoner for reset og delete, bedre skille i meny
+- Highlight av selectedElement under group
+
 
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch

@@ -1,5 +1,6 @@
-import MatrixCenterColumnContainer from './MatrixCenterColumnContainer';
 import PatchTopMenuContainer from '../patch/PatchTopMenuContainer';
+import MatrixCenterColumnContainer from './MatrixCenterColumnContainer';
+import MatrixLeftMenuContainer from './MatrixLeftMenuContainer';
 
 const MatrixPage = () => {    
   return (  
@@ -12,7 +13,7 @@ const MatrixPage = () => {
       </div>
       <div className="row">
         <div className="leftcolumn">
-          Left
+          <MatrixLeftMenuContainer/>
         </div>
         <div className="rightcolumn">
           Right

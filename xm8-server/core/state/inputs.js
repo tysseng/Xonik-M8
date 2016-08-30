@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { inputsById, inputGroupsById, getEmptyOption, getStepPositions } from '../../shared/graph/inputs';
 import { types } from '../../shared/state/actions/inputs';
 import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
+import { types as patchActionTypes } from '../../shared/state/actions/patch';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 import { panelControllersById } from "../../shared/graph/PanelControllers";
@@ -90,6 +91,9 @@ const byId = (state, action) => {
       return state.set(action.inputId, fromJS(newInput));
     case types.INPUTCONFIG_DELETE_INPUT:
       return state.delete(action.inputId);
+    case types.RESET_PHYSICAL_INPUT:
+      let resetInput = getInitialPhysicalState().getIn(['byId', action.inputId]);
+      return state.set(action.inputId, resetInput);
     case types.INPUTCONFIG_UPDATE_FIELD:
     case types.INPUTCONFIG_RENAME:
     case types.INPUTCONFIG_RENAME_SHORT:
@@ -113,6 +117,7 @@ const inputs = (state, action, hasChanged) => {
     case types.INPUTCONFIG_NEW_OPTION:
     case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES:
     case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
+    case types.RESET_PHYSICAL_INPUT:
       hasChanged();
       return state.update('byId', inputByIdMap => byId(inputByIdMap, action));
     default:
@@ -148,8 +153,10 @@ const physicalRoot = (
   if(getInputType(action) === 'physical'){
     return inputs(state, action, onChangePhysical);
   } else if(action.type === types.LOAD_PHYSICAL_INPUTS_FROM_FILE) {
-    console.log("loaded physical inputs");
     return action.physicalInputs;
+  } else if(action.type === types.RESET_PHYSICAL_INPUTS) {
+    onChangePhysical();
+    return getInitialPhysicalState()
   }
   return state;
 }
@@ -161,6 +168,9 @@ const virtualRoot = (
   if(getInputType(action) === 'virtual'){
     if(action.type === nodeActionTypes.LOAD_PATCH_FROM_FILE){
       return action.virtualInputs;
+    } else if(action.type === patchActionTypes.RESET_PATCH) {
+      onChangeVirtual();
+      return getInitialVirtualState();
     } else {
       return inputs(state, action, onChangeVirtual);
     }
@@ -177,6 +187,9 @@ const undoableActions = [
   types.INPUTCONFIG_NEW_OPTION,
   types.INPUTCONFIG_SPREAD_OPTIONS_VALUES,
   types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI,
+  types.RESET_PHYSICAL_INPUTS,
+  types.RESET_PHYSICAL_INPUT,
+  patchActionTypes.RESET_PATCH
 ];
 
 export const virtualInputs = getUndoWrapper(undoGroups.VIRTUAL_INPUTS, undoableActions, virtualRoot, getInitialVirtualState);

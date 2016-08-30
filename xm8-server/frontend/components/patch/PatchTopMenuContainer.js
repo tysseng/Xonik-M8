@@ -5,6 +5,7 @@ import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
 import { createNewNode, deleteNode, deleteLink} from '../../../shared/state/actions/nodes';
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
+import { resetPatch } from '../../../shared/state/actions/patch';
 import { getFileDialog } from '../../state/selectors';
 
 const forceUpdate = () => {
@@ -41,6 +42,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onPatchSave: (options) => dispatch(toggleFileDialog(true, 'save', options)),
     onPatchSaveAs: (options) => dispatch(toggleFileDialog(true, 'saveas', options)),
     onPatchLoad: () => dispatch(toggleFileDialog(true, 'load')),
+    resetPatch: () => dispatch(resetPatch()),
     onUpdateVoice: forceUpdate,
     onDelete: (nodeId, linkId) => {
       if(nodeId){

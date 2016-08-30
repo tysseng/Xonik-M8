@@ -1,6 +1,6 @@
 import MenuItem from '../framework/MenuItem';
 
-const GraphLeftMenu = ({mode, selectedNodeId, selectedLinkId, onDelete, onCreate, onModeChange, onUpdateVoice, shouldAutoUpdate}) => {
+const GraphLeftMenu = ({mode, selectedNodeId, selectedLinkId, onDelete, onCreate, onModeChange, onUpdateVoice, shouldAutoUpdate, resetGraph}) => {
   
   //<button onClick={() => onPatchSaveAs(selectedFileDetails)}>Save as</button>
   let linkButtonMode = (mode === 'create_link' ? 'default' : 'create_link');
@@ -14,6 +14,9 @@ const GraphLeftMenu = ({mode, selectedNodeId, selectedLinkId, onDelete, onCreate
       </div>
       <div className="leftMenu">
         <MenuItem label="Update voice" icon="reload-1.svg" onClick={onUpdateVoice} disabled={shouldAutoUpdate}/>
+      </div>
+      <div className="leftMenu">
+        <MenuItem label="Reset" icon="garbage.svg" onClick={resetGraph}/>
       </div>
     </div>
   )

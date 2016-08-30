@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { inputgroupsActionTypes } from '../../shared/state/actions/inputgroups';
 import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
+import { types as patchActionTypes } from '../../shared/state/actions/patch';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 
@@ -71,6 +72,7 @@ const inputgroups = (
       let wrappedElement = getWrappedElement(action.id, action.groupId, action.offsetXem, action.offsetYem, action.elementId, action.elementType);
       return state.setIn(['groups', action.groupId, 'elements', action.id], wrappedElement);
     case inputgroupsActionTypes.DELETE_ELEMENT:
+      console.log("delete", action);
       return state.deleteIn(['groups', action.groupId, 'elements', action.id]);
     case inputgroupsActionTypes.CHANGE_ELEMENT_TYPE:
       return state.setIn(['groups', action.groupId, 'elements', action.id, 'type'], action.inputType);
@@ -82,6 +84,8 @@ const inputgroups = (
       return state.setIn(['groups', action.groupId, 'isVisible'], action.isVisible);
     case inputgroupsActionTypes.RENAME_GROUP:
       return state.setIn(['groups', action.groupId, 'name'], action.name);
+    case patchActionTypes.RESET_PATCH:
+      return getInitialState();
     default:
       return state;
   }
@@ -101,7 +105,8 @@ const undoableActions = [
   inputgroupsActionTypes.DELETE_ELEMENT,
   inputgroupsActionTypes.SET_UNDO_POINT,
   inputgroupsActionTypes.TOGGLE_VISIBILITY,
-  inputActionTypes.INPUTCONFIG_DELETE_INPUT
+  inputActionTypes.INPUTCONFIG_DELETE_INPUT,
+  patchActionTypes.RESET_PATCH
 ];
  
 const undoWrapper = getUndoWrapper(undoGroups.INPUTGROUPS, undoableActions, inputgroups, getInitialState);
