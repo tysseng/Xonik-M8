@@ -17,7 +17,7 @@ export const clearHasChangedVirtualInputs = () => {
 }
 
 export const clearHasChangedPhysicalInputs = () => {
-  hasChangedVirtualInputs = false;
+  hasChangedPhysicalInputs = false;
 }
 
 const onChangeVirtual = () => {

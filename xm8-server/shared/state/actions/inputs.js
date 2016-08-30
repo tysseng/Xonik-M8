@@ -10,7 +10,8 @@ export const types = {
   INPUTCONFIG_NEW_OPTION: 'INPUTCONFIG_NEW_OPTION',
   INPUTCONFIG_SPREAD_OPTIONS_VALUES: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES',
   INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI',
-  INPUT_DIRECT_OUTPUT_TOGGLE: 'INPUT_DIRECT_OUTPUT_TOGGLE'
+  INPUT_DIRECT_OUTPUT_TOGGLE: 'INPUT_DIRECT_OUTPUT_TOGGLE',
+  LOAD_PHYSICAL_INPUTS_FROM_FILE: 'LOAD_PHYSICAL_INPUTS_FROM_FILE'
 }
 
 // It is only possible to create new inputs, so virt is hard coded as part of the id 
@@ -134,6 +135,15 @@ export const toggleDirectOutput = (inputId, outputId) => {
   }
 }
 
+export const loadPhysicalInputsFromFile = (fileId, version, physicalInputs) => {
+  return {
+    type: types.LOAD_PHYSICAL_INPUTS_FROM_FILE,
+    target: 'SERVER',
+    fileId,
+    version,
+    physicalInputs
+  }
+};
 
 
 

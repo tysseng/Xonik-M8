@@ -46,19 +46,17 @@ const resetPatchChangedState = () => {
   clearHasChangedVirtualInputs();
 }
 
-const autosave = () => {
+export const autosave = () => {
   if(patchHasChanged()){
-    saveDirect(config.persistence.filesystemPaths.autosave, 'patch', getAsFile());
+    saveDirect(config.persistence.autosave.patch.file, getAsFile());
     resetPatchChangedState();
   }
-  setTimeout(autosave, 3000);
+  setTimeout(autosave, config.persistence.autosave.patch.intervalMs);
 }
-//run autosave in a loop;
-autosave();
 
 export const loadAutosaved = () => {
-  let file = loadDirect(config.persistence.filesystemPaths.autosave, 'patch');
-  dispatchLoadedFile(file);
+  let file = loadDirect(config.persistence.autosave.patch.file);
+  dispatchLoadedFile('', '', file);
 }
 
 function sendPatch(){
@@ -102,7 +100,7 @@ export const save = (name, folderId) => {
   return result;
 };
 
-const dispatchLoadedFile = (file) => {
+const dispatchLoadedFile = (fileId, version, file) => {
   if(file && file.contents && file.contents.graph){
 
     // TODO: Figure out how to make sure this is an orderedMap
@@ -124,7 +122,7 @@ const dispatchLoadedFile = (file) => {
 
 export const load =(fileId, version) => {
   let file = loadFile(fileId, version);
-  dispatchLoadedFile(file);
+  dispatchLoadedFile(fileId, version, file);
 };
 
 

@@ -79,19 +79,26 @@ let config = {
   persistence: {
     filesystemPaths: {
       [filetypes.PATCH.id]: projectRoot + '/persistentStorage/patches/',
-      autosave: projectRoot + '/persistentStorage/autosave/',
       nextFileId: projectRoot + '/persistentStorage/nextFileId.json',
       nextId: projectRoot + '/persistentStorage/nextId.json',
       fat: projectRoot + '/persistentStorage/fat.json',
       rootFolder: projectRoot + '/persistentStorage/'
     },
+    autosave: {
+      physicalInputs: {
+        intervalMs: 3000,
+        file: projectRoot + '/persistentStorage/autosave/physicalinputs'
+      },
+      patch: {
+        intervalMs: 3000,
+        file: projectRoot + '/persistentStorage/autosave/patch'
+      }
+    }
 
   }
 };
 
 if(localOverrides) {
-  //console.log("Overridden configuration for this host:");
-  //console.log(localOverrides);
   _.merge(config, localOverrides);
 }
 

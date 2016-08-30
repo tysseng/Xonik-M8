@@ -1,15 +1,15 @@
 TODO før "stabilt"
 
-- Autosave fysiske inputs
-- Autoload på startup
+- Autoload av physical inputs på startup
+- Ta vare på hvilken fil som er loadet slik at dette også autosaves. Krever antakelig endring i struktur
 - Lage reset-knapp for patch og physical inputs
-- Samle initiering av autosave og tilsvarende direct-run-metoder og kall de fra init
-- Sett autosave-interval i config
+
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
 - Scrollbars i matrix
 - Luft etter hver gruppe i meny
+- Flytte filloading ut av nodes actions, lage patch actions.
 
 - TODO-issues:
  - Sletting av inputs skaper problemer med undo-synch fordi undo av sletting av input ikke undo'er sletting fra groups og matrix etc.

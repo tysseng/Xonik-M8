@@ -112,12 +112,12 @@ const getLatestVersion = (fileId) => {
   }
 }
 
-export const saveDirect = (path, filename, contents) => {
-  fs.writeFileSync(path + filename, JSON.stringify(contents, null, '  '), 'utf8');
+export const saveDirect = (path, contents) => {
+  fs.writeFileSync(path, JSON.stringify(contents, null, '  '), 'utf8');
 }
 
-export const loadDirect = (filename, path) => {
-  return JSON.parse(fs.readFileSync(filename, 'utf8'));
+export const loadDirect = (path) => {
+  return JSON.parse(fs.readFileSync(path, 'utf8'));
 }
 
 

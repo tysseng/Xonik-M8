@@ -1,3 +1,4 @@
+import store from '../../core/state/store.js';
 import tools from './routeTools';
 import {subscribe} from '../../shared/state/redux-subscribe.js';
 
