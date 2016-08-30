@@ -1,18 +1,19 @@
 TODO før "stabilt"
 
-- Ta vare på hvilken fil som er loadet slik at dette også autosaves. Krever antakelig endring i struktur
-- Undo virker ikke på flere reset physical input etter hverandre.
-- Bedre ikoner for reset og delete, bedre skille i meny
-
-
+Større
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
 - Scrollbars i matrix
+- Ta vare på hvilken fil som er loadet slik at dette også autosaves. Krever antakelig endring i struktur
+- Bedre ikoner for reset og delete, bedre skille i meny
+
+Småting
 - Luft etter hver gruppe i meny
-- Flytte filloading ut av nodes actions, lage patch actions.
+- Flytte fil-loading ut av nodes actions, lage patch actions.
 
 - TODO-issues:
+ - Undo virker ikke på flere reset physical input etter hverandre.
  - Sletting av inputs skaper problemer med undo-synch fordi undo av sletting av input ikke undo'er sletting fra groups og matrix etc.
  - Det lages undo-states også når en action IKKE påvirker noe, så lenge det er en undoable action. Det er litt kjipt
  - Løsning: Undo-buffer må gjelde hele patch
