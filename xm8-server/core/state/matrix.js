@@ -50,7 +50,9 @@ const getInitialState = () => {
 }
 
 const undoableActions = [
-
+  types.DIRECT_OUTPUT_TOGGLE,
+  patchActionTypes.RESET_PATCH,
+  types.RESET_MATRIX
 ];
 
 const undoWrapper = getUndoWrapper(undoGroups.MATRIX, undoableActions, root, getInitialState);

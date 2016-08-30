@@ -1,10 +1,8 @@
 TODO før "stabilt"
 
 - Ta vare på hvilken fil som er loadet slik at dette også autosaves. Krever antakelig endring i struktur
-- Legg til undo på matrix
 - Undo virker ikke på flere reset physical input etter hverandre.
 - Bedre ikoner for reset og delete, bedre skille i meny
-- Highlight av selectedElement under group
 
 
 - Serialisering av matrix - lag noder i første omgang
@@ -21,7 +19,7 @@ TODO før "stabilt"
 
 
 For later:
-
+- Disable undo button when no previous/next
 - Do change detection in middleware
 - Retain frontend state on reload
 - Generalisere sletting fra consumers, det er et rakleverk nå.
