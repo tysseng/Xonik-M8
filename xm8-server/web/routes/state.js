@@ -1,6 +1,4 @@
-import store from '../../core/state/store.js';
 import tools from './routeTools';
-import graphRepository from '../../core/graph/graphRepository';
 import {subscribe} from '../../shared/state/redux-subscribe.js';
 
 // receive actions and send state
@@ -39,14 +37,5 @@ export default (app, ws) => {
   store.dispatch(subscribe('matrix', 'frontend', sendPartialState));
   store.dispatch(subscribe('inputgroups', 'frontend', sendPartialState));
   store.dispatch(subscribe('controllers', 'frontend', sendPartialState));
-
-  // Send state updates to all clients whenever state changes.
-  /*store.subscribe(
-    () => {
-      //console.log("Sending updated state to clients");
-      console.log(JSON.stringify(store.getState().nodes, null, 2));  
-      tools.sendToAllClients(ws.getWss(root), null, JSON.stringify(store.getState()));
-    }
-  );*/
 
 };

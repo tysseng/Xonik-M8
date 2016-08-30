@@ -25,7 +25,7 @@ import { hasChanged as hasChangedVirtualInputGroups, clearHasChanged as clearHas
 store.subscribe(
   () => {
     if(store.getState().graph.get('shouldAutoUpdate')){
-      sendGraph(); 
+      sendPatch();
     }
   }
 );
@@ -51,15 +51,19 @@ const autosave = () => {
     saveDirect(config.persistence.filesystemPaths.autosave, 'patch', getAsFile());
     resetPatchChangedState();
   }
-
   setTimeout(autosave, 3000);
 }
 //run autosave in a loop;
 autosave();
 
-function sendGraph(){
+export const loadAutosaved = () => {
+  let file = loadDirect(config.persistence.filesystemPaths.autosave, 'patch');
+  dispatchLoadedFile(file);
+}
+
+function sendPatch(){
   if(!preparer.isNetValid()){
-    console.log("Graph has validation errors, synth voices not updated");
+    console.log("Patch has validation errors, synth voices not updated");
     return {updated: false, message: "Graph has validation errors, synth voices not updated"};
   }
   
@@ -98,9 +102,7 @@ export const save = (name, folderId) => {
   return result;
 };
 
-export const load =(fileId, version) => {
-  let file = loadFile(fileId, version);
-
+const dispatchLoadedFile = (file) => {
   if(file && file.contents && file.contents.graph){
 
     // TODO: Figure out how to make sure this is an orderedMap
@@ -118,7 +120,14 @@ export const load =(fileId, version) => {
         immutableVirtualInputGroups,
         immutableControllers));
   }
+}
+
+export const load =(fileId, version) => {
+  let file = loadFile(fileId, version);
+  dispatchLoadedFile(file);
 };
+
+
 
 function serialize(){
   var net = preparer.prepareNetForSerialization();
@@ -143,4 +152,4 @@ function serialize(){
   return buffers;
 }
 
-module.exports.sendGraph = sendGraph;
+module.exports.sendPatch = sendPatch;

@@ -1,11 +1,11 @@
 var express = require('express');
-var graphRepository = require('../../core/graph/graphRepository.js');
+var patchRepository = require('../../core/graph/patchRepository.js');
 var router = express.Router();
 var paramType = require('../../shared/graph/ParameterTypes.js').map;
 
 // publish graph to voice cards
 router.put('/publish', function(req, res){
-  let result = graphRepository.sendGraph();
+  let result = patchRepository.sendPatch();
   if(result.updated){
     res.status(200).send(result.message);
   } else {
@@ -15,7 +15,7 @@ router.put('/publish', function(req, res){
 
 // save graph as a patch
 router.post('/save', function(req, res){  
-  let result = graphRepository.save(req.body.name, req.body.folderId, req.body.fileId);
+  let result = patchRepository.save(req.body.name, req.body.folderId, req.body.fileId);
 
   // TODO: need try/catch here
   if(result.fileSaved){
@@ -27,7 +27,7 @@ router.post('/save', function(req, res){
 
 // load graph from a patch
 router.post('/load', function(req, res){
-  graphRepository.load(req.body.fileId, req.body.version);
+  patchRepository.load(req.body.fileId, req.body.version);
   res.status(200).send('{}');
 });
 
