@@ -1,6 +1,10 @@
 TODO før "stabilt"
 
 - Autosave fysiske inputs
+- Autoload på startup
+- Lage reset-knapp for patch og physical inputs
+- Samle initiering av autosave og tilsvarende direct-run-metoder og kall de fra init
+- Sett autosave-interval i config
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
@@ -14,6 +18,7 @@ TODO før "stabilt"
 
 
 For later:
+
 - Do change detection in middleware
 - Retain frontend state on reload
 - Generalisere sletting fra consumers, det er et rakleverk nå.

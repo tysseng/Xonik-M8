@@ -1,10 +1,12 @@
 import _ from 'lodash';
 import fs from 'fs';
+import mkdirp from 'mkdirp';
 
 import config from '../../shared/config.js';
-import {typeFromFilename} from '../../shared/FileTypes.js';
+import {filetypes, typeFromFilename} from '../../shared/FileTypes.js';
 import {findPath} from '../../shared/filesystem/fileTools';
 import {newFile, updateFile} from '../../shared/state/actions/filesystem';
+
 
 import store from '../state/store.js';
 
@@ -71,7 +73,7 @@ const getFileIdByFilename = (filename, folderId) => {
 }
 
 const getHarddrivePathFromFileId = (fileId) => {
-  let fileTypeKey = fileId.match(/^[a-z]+/g)[0];
+  let fileTypeKey = fileId.match(/^[a-zA-Z]+/g)[0];
   let fileType = typeFromFilename[fileTypeKey];
   if(!fileType){
     throw new Error("Filetype not found for " + fileTypeKey);
@@ -110,6 +112,15 @@ const getLatestVersion = (fileId) => {
   }
 }
 
+export const saveDirect = (path, filename, contents) => {
+  fs.writeFileSync(path + filename, JSON.stringify(contents, null, '  '), 'utf8');
+}
+
+export const loadDirect = (filename, path) => {
+  return JSON.parse(fs.readFileSync(filename, 'utf8'));
+}
+
+
 export const loadFile = (fileId, version) => {
   if(!version){
     version = getLatestVersion(fileId);
@@ -123,7 +134,16 @@ export const loadFile = (fileId, version) => {
   return JSON.parse(fs.readFileSync(filename, 'utf8'));
 }
 
-export const saveFile = (file, type, filename, folderId) => {
+// To save file on top of existing file, versioned must be set to false.
+// It defaults to true to get a new copy of the file every time, but may
+// be overriden, for example for auto-save functionality
+//
+// NB: folderId is the virtual folder to save the file in, not the physical folder
+// on disk. Files on disk are saved in a flat structure but separated into
+// physical folders by their filename - file-to-folder mapping is done by first
+// looking up the filename-to-filetype mapping in FileTypes, then getting the
+// folder for that type from the global config.
+export const saveFile = (file, type, filename, folderId, versioned = true) => {
 
   // search for existing file by name, reuse id if name is found
   let fileId = getFileIdByFilename(filename, folderId);
@@ -131,7 +151,12 @@ export const saveFile = (file, type, filename, folderId) => {
   if(!fileId){
     fileId = getNextId(type);  
   }
-  let version = getLatestVersion(fileId) + 1;
+
+  let version = getLatestVersion(fileId);
+  if(versioned){
+    version = version + 1;
+  }
+
 
   let harddriveFilename = getFilename(fileId, version);
   fs.writeFileSync(harddriveFilename, JSON.stringify(file, null, '  '), 'utf8');
@@ -148,16 +173,37 @@ export const saveFile = (file, type, filename, folderId) => {
   return {fileSaved: true, fileId: fileId, version: version};
 }
 
+export const createPhysicalFolders = () => {
+
+  // Creating physical folders. NB: These are NOT the same as the root folders in the virtual file system.
+  // Instead, they are where files of a particular type are put on disk. See saveFile comment.
+  let foldersToCreate = [
+    config.persistence.filesystemPaths[filetypes.PATCH.id],
+    config.persistence.filesystemPaths.autosave
+  ];
+
+  _.each(foldersToCreate, folder => {
+    mkdirp(folder, err => {
+      if(err) console.log("Error while creating folder " + folder, err);
+      else console.log("Created folder " + folder);
+    });
+  });
+}
+
 export const saveFAT = fat => {
   fs.writeFileSync(config.persistence.filesystemPaths.fat, JSON.stringify(fat, null, '  '));
 }
 
-export const loadFAT = fat => {
+export const loadFAT = () => {
   let fatFilename = config.persistence.filesystemPaths.fat; 
   if(fileExists(fatFilename)){
     return JSON.parse(fs.readFileSync(fatFilename));
   } else {
-    return getInitialFat();
+    // first time, set up physical and virtual filesystem
+    createPhysicalFolders();
+    let fat = getInitialFat();
+    saveFAT(fat);
+    return fat;
   }
 }
 
@@ -171,21 +217,7 @@ const getInitialFat = () => {
         files: {},
         folders: {},
         undeletable: true
-      },
-      inputgroups: {
-        name: 'inputgroups',
-        id: 'inputgroups',
-        files: {},
-        folders: {},
-        undeletable: true
-      },
-      inputs: {
-        name: 'inputs',
-        id: 'inputs',
-        files: {},
-        folders: {},
-        undeletable: true
-      }            
+      }
     },
     trash: {},
     nextFolderId: 0

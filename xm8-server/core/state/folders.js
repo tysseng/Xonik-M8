@@ -1,5 +1,4 @@
 import {Map} from 'immutable';
-import _ from 'lodash';
 
 import { findPath } from '../../shared/filesystem/fileTools';
 

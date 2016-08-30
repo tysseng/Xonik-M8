@@ -10,7 +10,7 @@ import { getGraph, getMatrix, getVirtualInputs, getVirtualInputGroups, getContro
 
 import {loadPatchFromFile, setLoadedPatchFileDetails} from '../../shared/state/actions/nodes';
 import {filetypes} from '../../shared/FileTypes';
-import {saveFile, loadFile} from '../persistence/fileRepo';
+import {saveFile, loadFile, saveDirect, loadDirect} from '../persistence/fileRepo';
 import {fromJS} from 'immutable';
 
 import { hasChangedVirtualInputs, clearHasChangedVirtualInputs } from '../state/inputs';
@@ -30,21 +30,28 @@ store.subscribe(
   }
 );
 
-const autosave = () => {
-  if(hasChangedGraph ||
+const patchHasChanged = () => {
+  return hasChangedGraph ||
     hasChangedMatrix ||
     hasChangedVirtualInputGroups ||
     hasChangedControls ||
-    hasChangedVirtualInputs){
-    console.log("Patch has changed, saving");
-    //save('autosavedPatch', 'autosaves');
+    hasChangedVirtualInputs
+}
 
-    clearHasChangedGraph();
-    clearHasChangedMatrix();
-    clearHasChangedVirtualInputGroups();
-    clearHasChangedControls();
-    clearHasChangedVirtualInputs();
+const resetPatchChangedState = () => {
+  clearHasChangedGraph();
+  clearHasChangedMatrix();
+  clearHasChangedVirtualInputGroups();
+  clearHasChangedControls();
+  clearHasChangedVirtualInputs();
+}
+
+const autosave = () => {
+  if(patchHasChanged()){
+    saveDirect(config.persistence.filesystemPaths.autosave, 'patch', getAsFile());
+    resetPatchChangedState();
   }
+
   setTimeout(autosave, 3000);
 }
 //run autosave in a loop;
@@ -67,13 +74,8 @@ function sendGraph(){
   return {updated: true, message: "Synth voices updated"};  
 }
 
-export const save = (name, folderId) => {
-  if(!name || !folderId){
-    return {fileSaved: false, message: "Name or folder id missing"};
-  }
-
-  // TODO: Store input values as well
-  let file = {
+const getAsFile = () => {
+  return {
     contents: {
       graph: getGraph().toJS(),
       matrix: getMatrix().toJS(),
@@ -82,12 +84,17 @@ export const save = (name, folderId) => {
       controllers: getControllers().toJS()
     }
   };
+}
 
-  let result = saveFile(file, filetypes.PATCH, name, folderId);
+export const save = (name, folderId) => {
+  if (!name || !folderId) {
+    return {fileSaved: false, message: "Name or folder id missing"};
+  }
 
-  if(result.fileSaved){
+  let result = saveFile(getAsFile(), filetypes.PATCH, name, folderId, true);
+  if (result.fileSaved) {
     store.dispatch(setLoadedPatchFileDetails(result.fileId, result.version));
-  } 
+  }
   return result;
 };
 
