@@ -11,7 +11,6 @@ const filename = 'physicalinputs';
 
 export const autosave = () => {
   if(hasChangedPhysicalInputs){
-    console.log("autosaved phys")
     saveDirect(config.persistence.autosave.physicalInputs.file, getAsFile());
     clearHasChangedPhysicalInputs();
   }
@@ -37,7 +36,7 @@ const dispatchLoadedFile = (file) => {
     let immutablePhysicalInputs = fromJS(file.contents.physicalInputs);
 
     store.dispatch(
-      loadPhysicalInputsFromFile(immutablePhysicalInputs)
+      loadPhysicalInputsFromFile('', '', immutablePhysicalInputs)
     );
   }
 }

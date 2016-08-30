@@ -1,7 +1,7 @@
 import { Map, fromJS } from 'immutable';
 import _ from 'lodash';
 import { inputsById, inputGroupsById, getEmptyOption, getStepPositions } from '../../shared/graph/inputs';
-import { types as inputActionTypes } from '../../shared/state/actions/inputs';
+import { types } from '../../shared/state/actions/inputs';
 import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
@@ -64,20 +64,20 @@ const updateOptionsValues = (state, action, field) => {
 
 const input = (state, action) => {
   switch(action.type){
-    case inputActionTypes.INPUTCONFIG_UPDATE_FIELD:
+    case types.INPUTCONFIG_UPDATE_FIELD:
       return state.setIn(action.fieldPath, action.value);  
-    case inputActionTypes.INPUTCONFIG_RENAME:       
+    case types.INPUTCONFIG_RENAME:
       return state.setIn(['name', 'full'], action.name);  
-    case inputActionTypes.INPUTCONFIG_RENAME_SHORT:
+    case types.INPUTCONFIG_RENAME_SHORT:
       return state.setIn(['name', 'short'], action.name);
-    case inputActionTypes.INPUTCONFIG_DELETE_OPTION:      
+    case types.INPUTCONFIG_DELETE_OPTION:
       return state.deleteIn(['options', action.index]);
-    case inputActionTypes.INPUTCONFIG_NEW_OPTION:   
+    case types.INPUTCONFIG_NEW_OPTION:
       let option = getEmptyOption(state.toJS());      
       return state.setIn(['options', option.index], fromJS(option));
-    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:
+    case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES:
       return updateOptionsValues(state, action, 'value');
-    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
+    case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
       return updateOptionsValues(state, action, 'valuemidi');     
   }
   return state;
@@ -85,18 +85,18 @@ const input = (state, action) => {
 
 const byId = (state, action) => {
   switch(action.type){
-    case inputActionTypes.INPUTCONFIG_NEW_INPUT:
+    case types.INPUTCONFIG_NEW_INPUT:
       let newInput = getInput(action.inputId, inputTypes.VERTICAL_RANGE.id, panelControllersById[action.panelControllerId]);
       return state.set(action.inputId, fromJS(newInput));
-    case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
+    case types.INPUTCONFIG_DELETE_INPUT:
       return state.delete(action.inputId);
-    case inputActionTypes.INPUTCONFIG_UPDATE_FIELD:
-    case inputActionTypes.INPUTCONFIG_RENAME:        
-    case inputActionTypes.INPUTCONFIG_RENAME_SHORT:
-    case inputActionTypes.INPUTCONFIG_DELETE_OPTION:    
-    case inputActionTypes.INPUTCONFIG_NEW_OPTION:   
-    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES: 
-    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
+    case types.INPUTCONFIG_UPDATE_FIELD:
+    case types.INPUTCONFIG_RENAME:
+    case types.INPUTCONFIG_RENAME_SHORT:
+    case types.INPUTCONFIG_DELETE_OPTION:
+    case types.INPUTCONFIG_NEW_OPTION:
+    case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES:
+    case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
       return state.updateIn([action.inputId], inputElem => input(inputElem, action));         
   } 
   return state;
@@ -104,15 +104,15 @@ const byId = (state, action) => {
 
 const inputs = (state, action, hasChanged) => {
   switch(action.type){
-    case inputActionTypes.INPUTCONFIG_NEW_INPUT:
-    case inputActionTypes.INPUTCONFIG_DELETE_INPUT:    
-    case inputActionTypes.INPUTCONFIG_UPDATE_FIELD:
-    case inputActionTypes.INPUTCONFIG_RENAME:        
-    case inputActionTypes.INPUTCONFIG_RENAME_SHORT:   
-    case inputActionTypes.INPUTCONFIG_DELETE_OPTION:
-    case inputActionTypes.INPUTCONFIG_NEW_OPTION:
-    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES:  
-    case inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
+    case types.INPUTCONFIG_NEW_INPUT:
+    case types.INPUTCONFIG_DELETE_INPUT:
+    case types.INPUTCONFIG_UPDATE_FIELD:
+    case types.INPUTCONFIG_RENAME:
+    case types.INPUTCONFIG_RENAME_SHORT:
+    case types.INPUTCONFIG_DELETE_OPTION:
+    case types.INPUTCONFIG_NEW_OPTION:
+    case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES:
+    case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
       hasChanged();
       return state.update('byId', inputByIdMap => byId(inputByIdMap, action));
     default:
@@ -147,6 +147,9 @@ const physicalRoot = (
   action) => {
   if(getInputType(action) === 'physical'){
     return inputs(state, action, onChangePhysical);
+  } else if(action.type === types.LOAD_PHYSICAL_INPUTS_FROM_FILE) {
+    console.log("loaded physical inputs");
+    return action.physicalInputs;
   }
   return state;
 }
@@ -166,14 +169,14 @@ const virtualRoot = (
 }
 
 const undoableActions = [
-  inputActionTypes.CONTROLLER_CHANGE,
-  inputActionTypes.INPUTCONFIG_NEW_INPUT,
-  inputActionTypes.INPUTCONFIG_DELETE_INPUT,
-  inputActionTypes.INPUTCONFIG_UPDATE_FIELD,
-  inputActionTypes.INPUTCONFIG_DELETE_OPTION,
-  inputActionTypes.INPUTCONFIG_NEW_OPTION,
-  inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES,
-  inputActionTypes.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI,
+  types.CONTROLLER_CHANGE,
+  types.INPUTCONFIG_NEW_INPUT,
+  types.INPUTCONFIG_DELETE_INPUT,
+  types.INPUTCONFIG_UPDATE_FIELD,
+  types.INPUTCONFIG_DELETE_OPTION,
+  types.INPUTCONFIG_NEW_OPTION,
+  types.INPUTCONFIG_SPREAD_OPTIONS_VALUES,
+  types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI,
 ];
 
 export const virtualInputs = getUndoWrapper(undoGroups.VIRTUAL_INPUTS, undoableActions, virtualRoot, getInitialVirtualState);
