@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
-import { selectElement, deselectDragElement, moveElement, inputgroupsUndoPointPositionChanged } from '../../../shared/state/actions/inputgroups.js'
+import { selectElement, deselectElement, deselectDragElement, moveElement, inputgroupsUndoPointPositionChanged } from '../../../shared/state/actions/inputgroups.js'
 import { getVirtualInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
 
 import InputGrid from './InputGrid';
@@ -21,6 +21,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedGroup,
     inputs,
     dragElementId: inputGroups.get('dragElementId'),
+    selectedElementId: inputGroups.get('selectedElementId'),
     dragStart: inputGroups.get('dragStart').toJS()
   }
 }
@@ -32,6 +33,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     deselectDragElement: () => {
       dispatch(deselectDragElement());
       dispatch(inputgroupsUndoPointPositionChanged());
+    },
+    deselectElement: () => {
+      dispatch(deselectElement());
     }
   }
 }

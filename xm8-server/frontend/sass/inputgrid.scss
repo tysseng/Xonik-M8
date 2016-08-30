@@ -5,7 +5,23 @@
     background-size: 1em 1em;
 
     .selected {
+      border: 1px solid #090;
+      > div {
+        // makes sure element doesn't move when we add a border
+        position: relative;
+        top: -1px;
+        left: -1px;
+      }
+    }
+
+    .dragging {
       border: 1px solid #0e0;
+      > div {
+        // makes sure element doesn't move when we add a border
+        position: relative;
+        top: -1px;
+        left: -1px;
+      }
     }
   }
 }

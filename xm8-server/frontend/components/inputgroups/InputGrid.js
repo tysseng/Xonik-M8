@@ -21,10 +21,13 @@ const calculateEmSize = () => {
   emSize = Number(getComputedStyle(grid, "").fontSize.match(/(\d*(\.\d*)?)px/)[1]);
 }
 
-const onMouseDown = (e, selectElement) => {
+const onMouseDown = (e, selectElement, selectedElementId, deselectElement) => {
 
   let clickedElement = findDraggableElement(e.target);
-  if(!clickedElement) return;
+  if(!clickedElement && selectedElementId != '') {
+    deselectElement();
+  }
+
 
   // recalculate em size, font may have changed (?)
   calculateEmSize();
@@ -59,7 +62,7 @@ const onDrag = (e, dragStart, selectedGroupId, dragElementId, moveElementCallbac
   }
 }
 
-const InputGrid = ({dragElementId, selectedGroup, inputs, dragStart, selectElement, moveElement, deselectDragElement}) => {
+const InputGrid = ({dragElementId, selectedElementId, selectedGroup, inputs, dragStart, selectElement, moveElement, deselectDragElement, deselectElement}) => {
 
   if(!selectedGroup){
     return null;
@@ -69,7 +72,7 @@ const InputGrid = ({dragElementId, selectedGroup, inputs, dragStart, selectEleme
     <div id="inputgrid"
          className="controllerGroup grid"
          onMouseUp={deselectDragElement}
-         onMouseDown={(e) => onMouseDown(e, selectElement)}
+         onMouseDown={(e) => onMouseDown(e, selectElement, selectedElementId, deselectElement)}
          onMouseMove={(e) => onDrag(e, dragStart, selectedGroup.id, dragElementId, moveElement)}>
       { selectedGroup && Object.values(selectedGroup.elements).map(element => {
 
@@ -89,7 +92,10 @@ const InputGrid = ({dragElementId, selectedGroup, inputs, dragStart, selectEleme
             width: type.size.x + 'em'
           };
 
-          let classnames = 'controller draggable' + (element.id === dragElementId ? ' selected' : '');
+          let selectClass = (element.id === selectedElementId ? ' selected' : '');
+          let dragClass = (element.id === dragElementId ? ' dragging' : '');
+
+          let classnames = 'controller draggable' + selectClass + dragClass ;
 
           return (
             <div className={classnames} id={element.id} style={style}>

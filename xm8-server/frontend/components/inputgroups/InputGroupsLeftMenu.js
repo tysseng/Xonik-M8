@@ -5,11 +5,11 @@ const InputGroupsLeftMenu = ({ selectedGroupId, selectedElementId, onOpenNewElem
   return ( 
     <div>
       <div className="leftMenu">
-        <MenuItem label="Add group" icon="add-2.svg" onClick={newGroup}/>
+        <MenuItem label="Add group" icon="settings.svg" onClick={newGroup}/>
         <MenuItem label="Delete group" icon="garbage.svg" onClick={() => deleteGroup(selectedGroupId)}/>
       </div>
       <div className="leftMenu">
-        <MenuItem label="Add element" icon="add-2.svg" onClick={onOpenNewElementDialog}/>
+        <MenuItem label="Add element" icon="volume-control.svg" onClick={onOpenNewElementDialog}/>
         <MenuItem label="Delete element " icon="garbage.svg" onClick={() => deleteElement(selectedElementId, selectedGroupId)}/>
       </div>
     </div>
