@@ -10,7 +10,7 @@ const UNSUBSCRIBE = '@@redux-subscribe/unsubscribe';
 
 function indexOfPath(paths, pathObj){
   return _.findIndex(paths, existingPathObj => {
-    return existingPathObj.pathKey === pathObj.pathKey;
+    return existingPathObj.path === pathObj.path;
   });
 }
 
@@ -28,10 +28,10 @@ function subscribeMiddleware ({dispatch, getState}) {
   return next => action => {
     switch (action.type) {
       case SUBSCRIBE: {
-        const {pathObj, key, fn} = action.payload;
-        const pathKey = pathObj.pathKey;
-        subscriptions[pathKey] = subscriptions[pathKey] || {};
-        subscriptions[pathKey][key] = fn;
+        const {pathObj, subscriberKey, fn} = action.payload;
+        const path = pathObj.path;
+        subscriptions[path] = subscriptions[path] || {};
+        subscriptions[path][subscriberKey] = fn;
 
         if (hasNotBeenAdded(paths, pathObj)) {
           paths.push(pathObj)
@@ -39,14 +39,14 @@ function subscribeMiddleware ({dispatch, getState}) {
         break
       }
       case UNSUBSCRIBE: {
-        const {pathObj, key} = action.payload;
-        const pathKey = pathObj.pathKey;
-        const subs = subscriptions[pathKey];
+        const {pathObj, subscriberKey} = action.payload;
+        const path = pathObj.path;
+        const subs = subscriptions[path];
 
         if (subs) {
-          delete subs[key];
+          delete subs[subscriberKey];
           if (Object.keys(subs).length === 0) {
-            delete subscriptions[pathKey];
+            delete subscriptions[path];
             paths.splice(indexOfPath(paths, pathObj), 1);
           }
         }
@@ -59,23 +59,20 @@ function subscribeMiddleware ({dispatch, getState}) {
         const nextState = getState();
 
         _.each(paths, pathObj => {
-          let path = pathObj.path;
+          let pathElements = pathObj.pathElements;
 
-          let subPath;
-          if(path.length > 1){
-            subPath = path.slice(1);
-          }
+          let prev = prevState[pathElements[0]];
+          let next = nextState[pathElements[0]];
 
-          let prev = prevState[path[0]];
-          let next = nextState[path[0]];
 
-          if(subPath){
+          if(pathElements.length > 1){
+            let subPath = pathElements.slice(1);
             if(prev) prev = prev.getIn(subPath);
             if(next) next = next.getIn(subPath);
           }
 
           if (prev !== next) {
-            _.each(subscriptions[pathObj.pathKey], callback  => callback({pathObj, prev, next}));
+            _.each(subscriptions[pathObj.path], callback  => callback({pathObj, prev, next}));
           }
         });
 
@@ -89,29 +86,29 @@ function subscribeMiddleware ({dispatch, getState}) {
  * Action creators
  */
 
-function subscribe (pathKey, key, fn) {
+function subscribe (path, subscriberKey, fn) {
   return {
     type: SUBSCRIBE,
     payload: {
       pathObj: {
-        path: pathKey.split('/'),
-        pathKey
+        pathElements: path.split('/'),
+        path
       },
-      key,
+      subscriberKey,
       fn
     }
   }
 }
 
-function unsubscribe (pathKey, key) {
+function unsubscribe (path, subscriberKey) {
   return {
     type: UNSUBSCRIBE,
     payload: {
       pathObj: {
-        path: pathKey.split('/'),
-        pathKey
+        pathElements: path.split('/'),
+        path
       },
-      key
+      subscriberKey
     }
   }
 }
