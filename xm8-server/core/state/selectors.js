@@ -4,10 +4,11 @@ const getState = () => {
   return store.getState();
 }
 
-export const getNodes = () => getState().graph.get('nodes');
-export const getGraph = () => getState().graph;
-export const getMatrix = () => getState().matrix;
-export const getVirtualInputs = () => getState().virtualInputs;
+export const getNodes = () => getState().patches.getIn(['0', 'graph', 'nodes']);
+export const getGraph = () => getState().patches.getIn(['0', 'graph']);
+export const getMatrix = () => getState().patches.getIn(['0', 'matrix']);
+export const getVirtualInputs = () => getState().patches.getIn(['0', 'virtualInputs']);
 export const getPhysicalInputs = () => getState().physicalInputs;
-export const getVirtualInputGroups = () => getState().inputgroups;
+export const getVirtualInputGroups = () => getState().patches.getIn(['0', 'inputgroups']);
 export const getControllers = () => getState().controllers;
+export const getFilesystem = () => getState().filesystem;

@@ -42,7 +42,7 @@ const root = (
   }
 }
 
-const getInitialState = () => {
+export const getInitialState = () => {
   return Map({
     directoutputs: Map({      
     })

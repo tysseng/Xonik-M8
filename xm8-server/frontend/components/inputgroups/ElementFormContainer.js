@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { changeElementType, deselectElement } from '../../../shared/state/actions/inputgroups';
+import { getVirtualInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
 import ElementForm from './ElementForm'
 
 const getSelectedElement = (state) => {
-  let selectedGroupId = state.inputgroups.get('selectedGroup');
-  let selectedGroup = selectedGroupId !== '' ? state.inputgroups.getIn(['groups', selectedGroupId]) : undefined;  
+  let inputgroups = getVirtualInputGroups(state);
+  let selectedGroupId = inputgroups.get('selectedGroup');
+  let selectedGroup = selectedGroupId !== '' ? inputgroups.getIn(['groups', selectedGroupId]) : undefined;
 
   if(selectedGroup){
-    let selectedElementId = state.inputgroups.get('selectedElementId');
+    let selectedElementId = inputgroups.get('selectedElementId');
     let selectedElement = selectedGroup.getIn(['elements', selectedElementId]);
     if(selectedElement) {       
       return selectedElement.toJS();
@@ -22,8 +24,8 @@ const getSelectedElement = (state) => {
 const mapStateToProps = (state, ownProps) => {
 
   let element = getSelectedElement(state);
-  let inputs = state.virtualInputs.get('byId').toJS();
-  _.merge(inputs, state.physicalInputs.get('byId').toJS());
+  let inputs = getVirtualInputs(state).get('byId').toJS();
+  _.merge(inputs, getPhysicalInputs(state).get('byId').toJS());
 
   let input;
   if(element){

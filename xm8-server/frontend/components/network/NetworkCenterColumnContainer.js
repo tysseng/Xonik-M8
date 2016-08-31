@@ -1,11 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux'; 
+import { connect } from 'react-redux';
+import { getNetwork } from '../../state/selectors';
 
 import NetworkCenterColumn from './NetworkCenterColumn';
 
 const mapStateToProps = (state, ownProps) => {
 
-  let netState = state.network;
+  let netState = getNetwork(state);
   console.log(netState);
   return {
     currentNetwork: netState.get('current').toJS(), 

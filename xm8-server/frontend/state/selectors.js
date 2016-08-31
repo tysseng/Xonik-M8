@@ -1,12 +1,16 @@
 //TODO: Use reselect for selectors
 //https://github.com/reactjs/reselect
-export const getVirtualInputGroups = state => state.inputgroups;
-export const getVirtualInputs = state => state.virtualInputs;
+export const getVirtualInputGroups = state => state.patches.getIn(['0', 'inputgroups']);
+export const getVirtualInputs = state => state.patches.getIn(['0', 'virtualInputs']);
 export const getPhysicalInputs = state => state.physicalInputs;
-export const getNodes = state => state.graph.get('nodes');
+export const getMatrix = state => state.patches.getIn(['0', 'matrix']);
+export const getGraph = state => state.patches.getIn(['0', 'graph']);
+export const getNodes = state => state.patches.getIn(['0', 'graph', 'nodes']);
 export const getPatchView = state => state.patchview;
 export const getFileDialog = state => state.filedialog;
-export const getControllerGroups = state => state.controllers;
+export const getFilesystem = state => state.filesystem;
+export const getControllers = state => state.controllers;
+export const getNetwork = state => state.network;
 
 export const getInputsAsJS = state => {
   let inputs = getVirtualInputs(state).get('byId').toJS();

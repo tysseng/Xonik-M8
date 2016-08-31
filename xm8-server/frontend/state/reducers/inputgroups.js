@@ -1,10 +1,11 @@
-import {Map} from 'immutable';
-import {inputgroupsActionTypes} from '../../../shared/state/actions/inputgroups';
-
+import { Map } from 'immutable';
+import { inputgroupsActionTypes } from '../../../shared/state/actions/inputgroups';
+import { getUpdatedState } from './reducerTools';
 
 // Element in a group id is equal to whatever the element contains - input id if it is an id etc.
-const inputs = (
-  state = Map({
+
+export const getInitialState = () => {
+  return Map({
     selectedElementId: '',
     dragElementId: '',
     selectedGroup: '',
@@ -20,14 +21,19 @@ const inputs = (
       type: '',
       id: ''
     })
-  }), 
+  });
+}
+
+const inputs = (
+  state = getInitialState(),
   action) => {
   switch(action.type){
     case 'SET_STATE':
-      if(action.state.inputgroups){
-        return state.merge(action.state.inputgroups);
-      }        
-      break;  
+      let updatedState = getUpdatedState(['patches', '0', 'inputgroups'], action);
+      if(updatedState){
+        return state.merge(updatedState);
+      }
+      break;
     case inputgroupsActionTypes.SELECT_GROUP:
       return state.set('selectedGroup', action.selectedGroupId);
     case inputgroupsActionTypes.SELECT_ELEMENT:

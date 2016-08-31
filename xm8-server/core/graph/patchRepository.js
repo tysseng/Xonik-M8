@@ -8,10 +8,10 @@ import printer from './printer.js';
 import commands from './commands.js';
 import { getGraph, getMatrix, getVirtualInputs, getVirtualInputGroups, getControllers} from '../state/selectors';
 
-import {loadPatchFromFile, setLoadedPatchFileDetails} from '../../shared/state/actions/nodes';
-import {filetypes} from '../../shared/FileTypes';
-import {saveFile, loadFile, saveDirect, loadDirect} from '../persistence/fileRepo';
-import {fromJS} from 'immutable';
+import { loadPatchFromFile, setLoadedPatchFileDetails } from '../../shared/state/actions/nodes';
+import { filetypes } from '../../shared/FileTypes';
+import { saveFile, loadFile, saveDirect, loadDirect } from '../persistence/fileRepo';
+import { fromJS } from 'immutable';
 
 import { hasChangedVirtualInputs, clearHasChangedVirtualInputs } from '../state/inputs';
 import { hasChanged as hasChangedGraph, clearHasChanged as clearHasChangedGraph } from '../state/graph';
@@ -24,7 +24,7 @@ import { hasChanged as hasChangedVirtualInputGroups, clearHasChanged as clearHas
 // TODO: listen to only graph changes!
 store.subscribe(
   () => {
-    if(store.getState().graph.get('shouldAutoUpdate')){
+    if(getGraph().get('shouldAutoUpdate')){
       sendPatch();
     }
   }

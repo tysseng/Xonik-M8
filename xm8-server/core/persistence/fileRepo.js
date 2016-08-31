@@ -6,6 +6,7 @@ import config from '../../shared/config.js';
 import {filetypes, typeFromFilename} from '../../shared/FileTypes.js';
 import {findPath} from '../../shared/filesystem/fileTools';
 import {newFile, updateFile} from '../../shared/state/actions/filesystem';
+import { getFilesystem } from '../state/selectors';
 
 
 import store from '../state/store.js';
@@ -59,7 +60,7 @@ const fileExists = (filepath) => {
 
 const getFileIdByFilename = (filename, folderId) => {
   let fileId;
-  let filesystem = store.getState().filesystem;
+  let filesystem = getFilesystem();
   let folder = filesystem.getIn(findPath(folderId, filesystem));
   let filesInFolder = folder.get('files');
 

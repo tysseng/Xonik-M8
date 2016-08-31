@@ -1,15 +1,17 @@
-import {OrderedMap, Map, List, fromJS} from 'immutable';
+import { Map } from 'immutable';
 import { types as inputTypes } from '../../../shared/state/actions/inputs';
+import { getUpdatedState } from './reducerTools';
 
 export const virtualInputs = (
   state = getInitialState(),
   action) => {
   switch(action.type){
     case 'SET_STATE':
-      if(action.state.virtualInputs){
-        return state.merge(action.state.virtualInputs);
-      }        
-      break;   
+      let updatedState = getUpdatedState(['patches', '0', 'virtualInputs'], action);
+      if(updatedState){
+        return state.merge(updatedState);
+      }
+      break;
     case inputTypes.INPUTCONFIG_SELECT_INPUT: 
       if(action.inputType === 'virtual'){
         return state.setIn(['frontend', 'selectedInput'], action.selectedInput);   
@@ -39,7 +41,7 @@ export const physicalInputs = (
   return state;
 }
 
-const getInitialState = () => {
+export const getInitialState = () => {
   return Map({
     byId: Map(),
     groups: Map(),

@@ -6,7 +6,7 @@ import { createNewNode, deleteNode, deleteLink} from '../../../shared/state/acti
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
 import { resetPatch } from '../../../shared/state/actions/patch';
-import { getFileDialog } from '../../state/selectors';
+import { getFileDialog, getPatchView } from '../../state/selectors';
 
 const forceUpdate = () => {
   $.ajax({
@@ -22,17 +22,20 @@ const forceUpdate = () => {
 }
 
 const mapStateToProps = (state, ownProps) => {
+
+  let patchview = getPatchView(state);
+
   let selectedFileDetails = {
-    selectedFileId: state.patchview.getIn(['patch','fileId']),
-    selectedFileVersion: state.patchview.getIn(['patch', 'version']),
+    selectedFileId: patchview.getIn(['patch','fileId']),
+    selectedFileVersion: patchview.getIn(['patch', 'version']),
   }
 
   return {
     selectedFileDetails,
-    mode: state.patchview.get('mode'),
-    selectedNodeId: state.patchview.get('selectedNode'),
-    selectedLinkId: state.patchview.get('selectedLink'),
-    shouldAutoUpdate: state.patchview.get('shouldAutoUpdate'),
+    mode: patchview.get('mode'),
+    selectedNodeId: patchview.get('selectedNode'),
+    selectedLinkId: patchview.get('selectedLink'),
+    shouldAutoUpdate: patchview.get('shouldAutoUpdate'),
     showFileDialog: getFileDialog(state).get('show')
   }
 }

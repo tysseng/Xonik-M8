@@ -1,9 +1,9 @@
 import { inputGroupsById as physicalInputGroups } from '../../../shared/graph/Inputs';
-import { getVirtualInputGroups, getControllerGroups } from '../../state/selectors';
+import { getVirtualInputGroups, getControllers } from '../../state/selectors';
 
 export const getSelectedGroupId = (state, inputs) => {
   let groups = getGroups(state);
-  let selectedGroupId = getControllerGroups(state).get('selectedGroupId');
+  let selectedGroupId = getControllers(state).get('selectedGroupId');
   if (!selectedGroupId && selectedGroupId !== 0 && Object.values(inputs).length > 0) {
     let groupsAsArray = Object.values(groups);
     selectedGroupId = groupsAsArray[0].id;

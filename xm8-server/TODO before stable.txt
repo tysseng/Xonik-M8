@@ -1,10 +1,6 @@
 TODO før "stabilt"
 
-finne bruk av redux-subscribe
-endre nøkkel til å ikke slutte med pipe
-vurdere komma som separator
-teste subpaths.
-fikse unsubscribe, sjekke indexOf og splice.
+Fjerne ubrukt showFileDialog
 
 Større
 - Serialisering av matrix - lag noder i første omgang
@@ -27,6 +23,12 @@ Småting
 
 
 For later:
+- Split frontend state and backend-state-in-frontend to make state updating simpler (consider Sigurds suggestion
+  of reusing the backend reducer and only send actions.
+    - Requires any additional data from backend to be appended to actions when they arrive on the server instead
+      of performing calls in the reducers
+    - Must consider if this has any adverse effect on undo buffers since they are not in state and will not have all
+      data in a frontend instance.
 - Disable undo button when no previous/next
 - Do change detection in middleware
 - Retain frontend state on reload

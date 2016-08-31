@@ -140,7 +140,7 @@ const getInitialPhysicalState = () => {
   })  
 }
 
-const getInitialVirtualState = () => {
+export const getInitialVirtualState = () => {
   return Map({
     byId: Map()
   })  

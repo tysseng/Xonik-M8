@@ -1,14 +1,18 @@
 import { connect } from 'react-redux';
 import Dropdown from '../framework/Dropdown';
-
+import { getPhysicalInputs, getVirtualInputs } from '../../state/selectors';
 
 const mapStateToProps = (state, ownProps) => {
 
-  let states = state[ownProps.type];
-  if(!states) console.log(ownProps, state);
+  let states;
+  if(ownProps.type === 'physicalInputs'){
+    states = getPhysicalInputs(state);
+  } else if(ownProps.type === 'virtualInputs'){
+    states = getVirtualInputs(state);
+  }
+
   let byId = states.get("byId");
-  let js = byId.toJS()
-  let inputs = state[ownProps.type].get('byId').toJS();
+  let inputs = byId.toJS();
 
 
   return {

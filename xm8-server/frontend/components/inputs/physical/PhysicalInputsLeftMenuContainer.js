@@ -2,9 +2,10 @@ import PhysicalInputsLeftMenu from './PhysicalInputsLeftMenu';
 import { connect } from 'react-redux';
 import { undo, redo, groups as undoGroups } from '../../../../shared/state/actions/undo';
 import { resetPhysicalInput, resetPhysicalInputs } from '../../../../shared/state/actions/inputs';
+import { getPhysicalInputs } from '../../../state/selectors';
 
 const mapStateToProps = (state, ownProps) => {
-  let selectedInputId = state.physicalInputs.getIn(['frontend', 'selectedInput']);
+  let selectedInputId = getPhysicalInputs(state).getIn(['frontend', 'selectedInput']);
 
   return {
     selectedInputId

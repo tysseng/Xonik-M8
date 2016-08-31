@@ -91,7 +91,7 @@ const inputgroups = (
   }
 }
 
-const getInitialState = () => {
+export const getInitialState = () => {
   return Map({
     groups: Map()
   });

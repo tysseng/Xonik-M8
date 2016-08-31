@@ -4,14 +4,12 @@ import $ from 'jquery';
 
 import { newFolder, selectFolder, deleteFolder } from '../../../shared/state/actions/filesystem';
 import { togglePatchSaveDialog, togglePatchLoadDialog } from '../../../shared/state/actions/nodes';
-import _ from 'lodash';
-
-import FileDialogDispatchers from './dispatchers/FileDialogDispatchers';
+import { getPatchView, getFilesystem } from '../../state/selectors';
 import FolderList from './FolderList';
 
 const mapStateToProps = (state, ownProps) => {
-  let fileId = state.patchview.getIn(['patch','fileId']);
-  let filesystem = state.filesystem.toJS();
+  let fileId = getPatchView(state).getIn(['patch','fileId']);
+  let filesystem = getFilesystem(state).toJS();
 
   return {
     loadedPatchFileId: fileId,

@@ -2,23 +2,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { selectInput, rename, renameShort, updateField } from '../../../../shared/state/actions/inputs';
+import { getFileDialog, getPhysicalInputs, getControllers } from '../../../state/selectors';
+
 import PhysicalInputForm from './PhysicalInputForm'
 
 const mapStateToProps = (state, ownProps) => {
 
-  console.log(state)
-
-  let selectedInputId = state.physicalInputs.getIn(['frontend', 'selectedInput']);
-  let inputs = state.physicalInputs.get('byId').toJS();
+  let physicalInputs = getPhysicalInputs(state);
+  let selectedInputId = physicalInputs.getIn(['frontend', 'selectedInput']);
+  let inputs = physicalInputs.get('byId').toJS();
   let input = inputs[selectedInputId];
 
-  let controllers = state.controllers.toJS()
+  let controllers = getControllers(state).toJS();
   let inputValue = controllers[selectedInputId];
 
   return {
     input,
     inputValue,
-    showFileDialog: state.filedialog.get('show')
+    showFileDialog: getFileDialog(state).get('show')
   }
 }
 

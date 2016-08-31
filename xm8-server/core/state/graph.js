@@ -36,7 +36,7 @@ const removeOutputFromCurrentParameter = (state, action) => {
   return state;
 }
 
-const getInitialState = () => {
+export const getInitialState = () => {
   return Map({
     nodes: OrderedMap({      
     }),
@@ -47,7 +47,6 @@ const getInitialState = () => {
 
 // root reducer
 const graph = (state = getInitialState(), action) => {
-
   updateHasChanged(action);
 
   // any existing usage of the currenly selected output must be removed before we add

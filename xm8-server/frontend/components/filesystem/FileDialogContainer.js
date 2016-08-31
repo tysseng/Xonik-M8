@@ -9,26 +9,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
-import _ from 'lodash';
 
 import { toggleFileDialog, toggleNewFolderDialog, selectFolder, selectFile, setFilename } from '../../../shared/state/actions/filedialog';
 import { newFolder, deleteFolder } from '../../../shared/state/actions/filesystem';
 import { findFilenameForFileId, findFolderForFileId, findFolderById, getFolderByPathNames } from '../../../shared/filesystem/fileTools';
-
-import FileDialogDispatchers from './dispatchers/FileDialogDispatchers';
+import { getFileDialog, getFilesystem } from '../../state/selectors';
 import FileDialog from './FileDialog';
 
 
 const mapStateToProps = (state, ownProps) => {
+  let filedialog = getFileDialog(state);
+  let mode = filedialog.get('mode');
 
-  let mode = state.filedialog.get('mode');
   //TODO: Remember last directory on reopen - per file type
-  let root = getFolderByPathNames(state.filesystem, ownProps.path);
+  let root = getFolderByPathNames(getFilesystem(state), ownProps.path);
 
   let selectedFolder;
-  let selectedFileId = state.filedialog.get('selectedFileId');
-  let selectedFilename = state.filedialog.get('filename');  
-  let selectedFileVersion = state.filedialog.get('selectedFileVersion');
+  let selectedFileId = filedialog.get('selectedFileId');
+  let selectedFilename = filedialog.get('filename');
+  let selectedFileVersion = filedialog.get('selectedFileVersion');
   
   // If saving, find the currently open file if the user has not explicitly selected a different file or entered a new file name
   if(mode === 'save'){
@@ -47,7 +46,7 @@ const mapStateToProps = (state, ownProps) => {
   if(selectedFilename === null) selectedFilename = '';
 
   // Default folder to show is the one explicity selected by the user.
-  let selectedFolderId = state.filedialog.get('selectedFolderId');
+  let selectedFolderId = filedialog.get('selectedFolderId');
   if(selectedFolderId){
     selectedFolder = findFolderById(selectedFolderId, root);
   }  
@@ -81,7 +80,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedFileId,
     selectedFileVersion,  
     filename: selectedFilename,
-    showNewFolderDialog: state.filedialog.get('showNewFolderDialog')
+    showNewFolderDialog: filedialog.get('showNewFolderDialog')
   }
 }
 
