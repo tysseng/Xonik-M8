@@ -10,8 +10,7 @@ export default (app, ws) => {
   const sendPartialState = change => {
       //console.log(JSON.stringify(change.next, null, 2));  
 
-      let fullState = {[change.path]: change.next};
-
+      let fullState = {[change.pathObj.pathKey]: change.next};
       tools.sendToAllClients(ws.getWss(root), null, JSON.stringify(fullState));
     }
 

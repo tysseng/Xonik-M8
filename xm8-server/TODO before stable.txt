@@ -1,5 +1,11 @@
 TODO før "stabilt"
 
+finne bruk av redux-subscribe
+endre nøkkel til å ikke slutte med pipe
+vurdere komma som separator
+teste subpaths.
+fikse unsubscribe, sjekke indexOf og splice.
+
 Større
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
@@ -9,6 +15,7 @@ Større
 - Bedre ikoner for reset og delete, bedre skille i meny
 
 Småting
+- Fjerne selected fra frontend på reset (inputs, inputgroups etc)
 - Luft etter hver gruppe i meny
 - Flytte fil-loading ut av nodes actions, lage patch actions.
 
