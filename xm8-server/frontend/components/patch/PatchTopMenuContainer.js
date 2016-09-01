@@ -57,8 +57,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onCreate: () => dispatch(createNewNode()),
     onModeChange: (mode) => dispatch(toggleMode(mode)),
-    onUndo: () => dispatch(undo(undoGroups.GRAPH)),
-    onRedo: () => dispatch(redo(undoGroups.GRAPH))
+    onUndo: () => dispatch(undo(undoGroups.PATCH, '0')),
+    onRedo: () => dispatch(redo(undoGroups.PATCH, '0'))
   }
 }
 

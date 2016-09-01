@@ -4,10 +4,10 @@ import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 import config from '../../shared/config';
 
-import { getInitialState as getInitialGraphState } from './graph';
-import { getInitialState as getInitialMatrixState } from './matrix';
-import { getInitialVirtualState as getInitialVirtualInputState } from './inputs';
-import { getInitialState as getInitialInputGroupsState } from './inputgroups';
+import { getInitialState as getInitialGraphState, undoableActions as undoableGraphActions } from './graph';
+import { getInitialState as getInitialMatrixState, undoableActions as undoableMatrixActions } from './matrix';
+import { getInitialVirtualState as getInitialVirtualInputState, undoableActions as undoableInputActions } from './inputs';
+import { getInitialState as getInitialInputGroupsState, undoableActions as undoableInputGroupsActions } from './inputgroups';
 
 import graph from './graph';
 import matrix from './matrix';
@@ -46,6 +46,7 @@ const getInitialState = () => {
 const patches = (state = getInitialState(), action) => {
   // TODO: Change later.
   action.patchNumber = '0';
+  action.undoSubGroup = '0';
   if(action.patchNumber) {
     return state.updateIn([action.patchNumber], patchState => patch(patchState, action))
   } else {
@@ -53,8 +54,12 @@ const patches = (state = getInitialState(), action) => {
   }
 }
 
-//const undoWrapper = getUndoWrapper(undoGroups.PATCH, undoableActions, patches, getInitialState);
+const undoableActions = undoableGraphActions
+  .concat(undoableMatrixActions)
+  .concat(undoableInputActions)
+  .concat(undoableInputGroupsActions);
 
-//export default undoWrapper;
 
-export default patches;
+const undoWrapper = getUndoWrapper(undoGroups.PATCH, undoableActions, patches, getInitialState);
+
+export default undoWrapper;

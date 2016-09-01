@@ -1,6 +1,9 @@
 TODO før "stabilt"
 
 Fjerne ubrukt showFileDialog
+BUG: Første action kan ikke undo'es.
+Fjerne undo fra subreducers under patch.
+Fjerne undoknapper fra matrix left menu
 
 Større
 - Serialisering av matrix - lag noder i første omgang
@@ -17,9 +20,7 @@ Småting
 
 - TODO-issues:
  - Undo virker ikke på flere reset physical input etter hverandre.
- - Sletting av inputs skaper problemer med undo-synch fordi undo av sletting av input ikke undo'er sletting fra groups og matrix etc.
  - Det lages undo-states også når en action IKKE påvirker noe, så lenge det er en undoable action. Det er litt kjipt
- - Løsning: Undo-buffer må gjelde hele patch
 
 
 For later:

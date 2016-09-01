@@ -178,7 +178,7 @@ const virtualRoot = (
   return state;
 }
 
-const undoableActions = [
+export const undoableActions = [
   types.CONTROLLER_CHANGE,
   types.INPUTCONFIG_NEW_INPUT,
   types.INPUTCONFIG_DELETE_INPUT,

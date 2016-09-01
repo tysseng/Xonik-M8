@@ -3,7 +3,8 @@ export const groups = {
   INPUTGROUPS: 'INPUTGROUPS',
   PHYSICAL_INPUTS: 'PHYSICAL_INPUTS',
   VIRTUAL_INPUTS: 'VIRTUAL_INPUTS',
-  MATRIX: 'MATRIX'
+  MATRIX: 'MATRIX',
+  PATCH: 'PATCH'
 }
 
 export const types = {
@@ -12,16 +13,18 @@ export const types = {
   SET_UNDO_POINT: 'SET_UNDO_POINT'
 }
 
-export const undo = (undoGroup) => {
+export const undo = (undoGroup, undoSubGroup) => {
   return {
     type: types.UNDO,
-    undoGroup
+    undoGroup,
+    undoSubGroup
   }
 }
 
-export const redo = (undoGroup) => {
+export const redo = (undoGroup, undoSubGroup) => {
   return {
     type: types.REDO,
-    undoGroup
+    undoGroup,
+    undoSubGroup
   }
 }

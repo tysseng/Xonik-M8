@@ -49,7 +49,7 @@ export const getInitialState = () => {
   });
 }
 
-const undoableActions = [
+export const undoableActions = [
   types.DIRECT_OUTPUT_TOGGLE,
   patchActionTypes.RESET_PATCH,
   types.RESET_MATRIX

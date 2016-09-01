@@ -26,7 +26,6 @@ export const pushToUndobuffer = (groupId, description, state) => {
   };
 
   group.contents.push(undoElement);
-
 }
 
 export const undo = (groupId, state, undoToPosition) => {

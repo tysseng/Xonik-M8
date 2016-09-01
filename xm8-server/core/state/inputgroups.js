@@ -97,7 +97,7 @@ export const getInitialState = () => {
   });
 }
 
-const undoableActions = [
+export const undoableActions = [
   inputgroupsActionTypes.CHANGE_ELEMENT_TYPE,
   inputgroupsActionTypes.NEW_GROUP,
   inputgroupsActionTypes.DELETE_GROUP,

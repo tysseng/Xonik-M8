@@ -75,7 +75,7 @@ const graph = (state = getInitialState(), action) => {
     .updateIn(['nodes'], substate => nodes(substate, action));
 }
 
-const undoableActions = [
+export const undoableActions = [
   types.NEW_NODE,
   types.DELETE_NODE,
   types.CHANGE_NODE_TYPE,
