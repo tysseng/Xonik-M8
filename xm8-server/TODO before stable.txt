@@ -1,9 +1,12 @@
 TODO før "stabilt"
 
 Fjerne ubrukt showFileDialog
-BUG: Første action kan ikke undo'es.
-Fjerne undo fra subreducers under patch.
-Fjerne undoknapper fra matrix left menu
+Ikke lage undopositions for inputgroups før drag slippes opp
+
+TODO:
+- Gjøre load fra disk til undoable
+- la initialState være const og send denne med til undobufferinit og state init. Da garanterer vi at første state i undobuffer
+  har samme referanse som første state i state.
 
 Større
 - Serialisering av matrix - lag noder i første omgang
@@ -20,7 +23,6 @@ Småting
 
 - TODO-issues:
  - Undo virker ikke på flere reset physical input etter hverandre.
- - Det lages undo-states også når en action IKKE påvirker noe, så lenge det er en undoable action. Det er litt kjipt
 
 
 For later:

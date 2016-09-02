@@ -13,18 +13,16 @@ export const types = {
   SET_UNDO_POINT: 'SET_UNDO_POINT'
 }
 
-export const undo = (undoGroup, undoSubGroup) => {
+export const undo = (undoGroup) => {
   return {
     type: types.UNDO,
-    undoGroup,
-    undoSubGroup
+    undoGroup
   }
 }
 
-export const redo = (undoGroup, undoSubGroup) => {
+export const redo = (undoGroup) => {
   return {
     type: types.REDO,
-    undoGroup,
-    undoSubGroup
+    undoGroup
   }
 }

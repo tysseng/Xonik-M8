@@ -2,8 +2,12 @@ import { Map } from 'immutable';
 import { types } from '../../shared/state/actions/matrix';
 import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { types as patchActionTypes } from '../../shared/state/actions/patch';
-import { getUndoWrapper } from './undo';
-import { groups as undoGroups } from '../../shared/state/actions/undo';
+
+export const undoableActions = [
+  types.DIRECT_OUTPUT_TOGGLE,
+  patchActionTypes.RESET_PATCH,
+  types.RESET_MATRIX
+];
 
 export let hasChanged = false;
 const setHasChanged = () => hasChanged = true;
@@ -49,12 +53,4 @@ export const getInitialState = () => {
   });
 }
 
-export const undoableActions = [
-  types.DIRECT_OUTPUT_TOGGLE,
-  patchActionTypes.RESET_PATCH,
-  types.RESET_MATRIX
-];
-
-const undoWrapper = getUndoWrapper(undoGroups.MATRIX, undoableActions, root, getInitialState);
-
-export default undoWrapper;
+export default root;

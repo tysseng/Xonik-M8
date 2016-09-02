@@ -4,32 +4,32 @@ let undobuffer = {
   groups: {}
 }
 
+export const init = (groupId, description, initialState) => {
+  undobuffer.groups[groupId] = {
+    position: 0,
+    contents: [getUndoElement(description, initialState)]
+  };
+}
+
+const getUndoElement = (description, state) => ({
+  description,
+  state
+});
+
 export const pushToUndobuffer = (groupId, description, state) => {
-  if(!undobuffer.groups[groupId]){
-    undobuffer.groups[groupId] = {
-      position: -1,
-      contents: []
-    };
-  } 
 
   let group = undobuffer.groups[groupId];
 
-  group.position += 1;
-
-  // trunkate buffer, a new push should make
+  // Truncate buffer, a new push should make
   // redo impossible.
-  group.contents.length = group.position;
+  group.contents.length = group.position + 1;
 
-  let undoElement = {
-    description,
-    state
-  };
+  group.contents.push(getUndoElement(description, state));
 
-  group.contents.push(undoElement);
+  group.position++;
 }
 
 export const undo = (groupId, state, undoToPosition) => {
-
   let group = undobuffer.groups[groupId];
 
   if(!isInteger(undoToPosition)){      
@@ -45,7 +45,6 @@ export const undo = (groupId, state, undoToPosition) => {
 }
 
 export const redo = (groupId, state, redoToPosition) => {
-
   let group = undobuffer.groups[groupId];
 
   if(!isInteger(redoToPosition)){
@@ -55,9 +54,14 @@ export const redo = (groupId, state, redoToPosition) => {
   if(redoToPosition < group.contents.length ){
     group.position = redoToPosition;
     return group.contents[group.position].state;
-  } 
-  
+  }
+
   return state;
+}
+
+export const peek = (groupId) => {
+  let group = undobuffer.groups[groupId];
+  return group.contents[group.position].state;
 }
 
 export const buffer = (groupId) => {

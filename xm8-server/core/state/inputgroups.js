@@ -1,11 +1,22 @@
-import {Map} from 'immutable';
 import _ from 'lodash';
+import { Map } from 'immutable';
 import { inputgroupsActionTypes } from '../../shared/state/actions/inputgroups';
 import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { types as patchActionTypes } from '../../shared/state/actions/patch';
-import { getUndoWrapper } from './undo';
-import { groups as undoGroups } from '../../shared/state/actions/undo';
+
+
+export const undoableActions = [
+  inputgroupsActionTypes.CHANGE_ELEMENT_TYPE,
+  inputgroupsActionTypes.NEW_GROUP,
+  inputgroupsActionTypes.DELETE_GROUP,
+  inputgroupsActionTypes.ADD_ELEMENT,
+  inputgroupsActionTypes.DELETE_ELEMENT,
+  inputgroupsActionTypes.SET_UNDO_POINT,
+  inputgroupsActionTypes.TOGGLE_VISIBILITY,
+  inputActionTypes.INPUTCONFIG_DELETE_INPUT,
+  patchActionTypes.RESET_PATCH
+];
 
 export let hasChanged = false;
 const updateHasChanged = (action) => {
@@ -16,6 +27,7 @@ const updateHasChanged = (action) => {
 export const clearHasChanged = () => {
   hasChanged = false;
 }
+
 
 const createNewGroup = (id) => {
   return Map({
@@ -97,18 +109,5 @@ export const getInitialState = () => {
   });
 }
 
-export const undoableActions = [
-  inputgroupsActionTypes.CHANGE_ELEMENT_TYPE,
-  inputgroupsActionTypes.NEW_GROUP,
-  inputgroupsActionTypes.DELETE_GROUP,
-  inputgroupsActionTypes.ADD_ELEMENT,
-  inputgroupsActionTypes.DELETE_ELEMENT,
-  inputgroupsActionTypes.SET_UNDO_POINT,
-  inputgroupsActionTypes.TOGGLE_VISIBILITY,
-  inputActionTypes.INPUTCONFIG_DELETE_INPUT,
-  patchActionTypes.RESET_PATCH
-];
- 
-const undoWrapper = getUndoWrapper(undoGroups.INPUTGROUPS, undoableActions, inputgroups, getInitialState);
 
-export default undoWrapper;
+export default inputgroups;

@@ -14,9 +14,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onUndo: () => dispatch(undo(undoGroups.MATRIX)),
-    onRedo: () => dispatch(redo(undoGroups.MATRIX)),
-    resetMatrix: (inputId) => dispatch(resetMatrix()),
+    resetMatrix: (inputId) => dispatch(resetMatrix())
   }
 }
 

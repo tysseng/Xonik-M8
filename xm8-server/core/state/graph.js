@@ -1,12 +1,26 @@
-import {Map, OrderedMap} from 'immutable';
-import paramTypes from '../../shared/graph/ParameterTypes';
+import { Map, OrderedMap } from 'immutable';
 import { types, changeNodeParamValue } from '../../shared/state/actions/nodes';
 import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { types as patchActionTypes } from '../../shared/state/actions/patch';
-import { getUndoWrapper } from './undo';
-import { groups as undoGroups } from '../../shared/state/actions/undo';
+import paramTypes from '../../shared/graph/ParameterTypes';
 import outputs from './graph/outputs';
 import nodes from './graph/nodes';
+
+export const undoableActions = [
+  types.NEW_NODE,
+  types.DELETE_NODE,
+  types.CHANGE_NODE_TYPE,
+  types.CHANGE_NODE_PARAM_TYPE,
+  types.CHANGE_NODE_PARAM_VALUE,
+  types.CHANGE_NODE_PARAM_UNIT,
+  types.NEW_LINK,
+  types.TOGGLE_LINK_NAME_IN_GRAPH,
+  types.DELETE_LINK,
+  types.SET_UNDO_POINT,
+  inputActionTypes.INPUTCONFIG_DELETE_INPUT,
+  patchActionTypes.RESET_PATCH,
+  types.RESET_GRAPH
+];
 
 export let hasChanged = false;
 const updateHasChanged = (action) => {
@@ -75,22 +89,6 @@ const graph = (state = getInitialState(), action) => {
     .updateIn(['nodes'], substate => nodes(substate, action));
 }
 
-export const undoableActions = [
-  types.NEW_NODE,
-  types.DELETE_NODE,
-  types.CHANGE_NODE_TYPE,
-  types.CHANGE_NODE_PARAM_TYPE,
-  types.CHANGE_NODE_PARAM_VALUE,
-  types.CHANGE_NODE_PARAM_UNIT,
-  types.NEW_LINK,
-  types.TOGGLE_LINK_NAME_IN_GRAPH,
-  types.DELETE_LINK,
-  types.SET_UNDO_POINT,
-  inputActionTypes.INPUTCONFIG_DELETE_INPUT,
-  patchActionTypes.RESET_PATCH,
-  types.RESET_GRAPH
-];
-
 /**
 TODO:
  Convenience function that calculates some knowhow about the graph every time it changes and exposes it as state.
@@ -103,7 +101,4 @@ TODO:
 const calculatedState
 */
 
-
-const undoWrapper = getUndoWrapper(undoGroups.GRAPH, undoableActions, graph, getInitialState);
-
-export default undoWrapper;
+export default graph;
