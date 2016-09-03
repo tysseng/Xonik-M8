@@ -3,9 +3,9 @@ import _ from 'lodash';
 import { types as undoActionTypes } from '../../shared/state/actions/undo';
 import { init, undo, redo, peek, pushToUndobuffer } from '../../shared/state/undobuffer';
 
-export const getUndoWrapper = (undoGroup, undoableActions, reducer, getInitialState) => {
+export const getUndoWrapper = (undoGroup, undoableActions, reducer, initialState) => {
 
-  init(undoGroup, 'Start', getInitialState());
+  init(undoGroup, 'Start', initialState);
 
   return (state, action) => {
     // All undoable actions must have an undo group, which will

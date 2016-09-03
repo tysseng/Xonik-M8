@@ -2,9 +2,7 @@ import { Map } from 'immutable';
 import { types as inputTypes } from '../../../shared/state/actions/inputs';
 import { getUpdatedState } from './reducerTools';
 
-export const virtualInputs = (
-  state = getInitialState(),
-  action) => {
+export const virtualInputs = (state, action) => {
   switch(action.type){
     case 'SET_STATE':
       let updatedState = getUpdatedState(['patches', '0', 'virtualInputs'], action);
@@ -23,7 +21,7 @@ export const virtualInputs = (
 }
 
 export const physicalInputs = (
-  state = getInitialState(),
+  state = emptyState,
   action) => {
   switch(action.type){
     case 'SET_STATE':
@@ -41,10 +39,8 @@ export const physicalInputs = (
   return state;
 }
 
-export const getInitialState = () => {
-  return Map({
-    byId: Map(),
-    groups: Map(),
-    frontend: Map()
-  });
-}
+export const emptyState = Map({
+  byId: Map(),
+  groups: Map(),
+  frontend: Map()
+});

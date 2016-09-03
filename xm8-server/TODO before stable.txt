@@ -4,9 +4,8 @@ Fjerne ubrukt showFileDialog
 Ikke lage undopositions for inputgroups før drag slippes opp
 
 TODO:
-- Gjøre load fra disk til undoable
-- la initialState være const og send denne med til undobufferinit og state init. Da garanterer vi at første state i undobuffer
-  har samme referanse som første state i state.
+- Gjøre load fra disk til undoable action
+- Gjøre load fra disk til initial undoable state
 
 Større
 - Serialisering av matrix - lag noder i første omgang

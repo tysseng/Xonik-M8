@@ -64,9 +64,7 @@ const removeElementFromGroups = (state, elementId) => {
 }
 
 // Element in a group id is equal to whatever the element contains - input id if it is an id etc.
-const inputgroups = (
-  state = getInitialState(), 
-  action) => {
+const inputgroups = (state, action) => {
 
   updateHasChanged(action);
 
@@ -97,17 +95,14 @@ const inputgroups = (
     case inputgroupsActionTypes.RENAME_GROUP:
       return state.setIn(['groups', action.groupId, 'name'], action.name);
     case patchActionTypes.RESET_PATCH:
-      return getInitialState();
+      return emptyState;
     default:
       return state;
   }
 }
 
-export const getInitialState = () => {
-  return Map({
-    groups: Map()
-  });
-}
-
+export const emptyState = Map({
+  groups: Map()
+});
 
 export default inputgroups;

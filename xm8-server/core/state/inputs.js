@@ -146,18 +146,14 @@ const getInputType = action => {
   return reducer;
 }
 
-const getInitialPhysicalState = () => {
-  return Map({
-    byId: fromJS(inputsById),
-    groups: fromJS(inputGroupsById)
-  })  
-}
+const emptyPhysicalState = Map({
+  byId: fromJS(inputsById),
+  groups: fromJS(inputGroupsById)
+});
 
-export const getInitialVirtualState = () => {
-  return Map({
-    byId: Map()
-  })  
-}
+export const emptyVirtualState = Map({
+  byId: Map()
+});
 
 // physical inputs reducer
 const physicalRoot = (
@@ -169,14 +165,14 @@ const physicalRoot = (
     return action.physicalInputs;
   } else if(action.type === types.RESET_PHYSICAL_INPUTS) {
     onChangePhysical();
-    return getInitialPhysicalState()
+    return emptyPhysicalState;
   }
   return state;
 }
 
-export const physicalUndoWrapper = getUndoWrapper(undoGroups.PHYSICAL_INPUTS, undoableActions, physicalRoot, getInitialPhysicalState);
+export const physicalUndoWrapper = getUndoWrapper(undoGroups.PHYSICAL_INPUTS, undoableActions, physicalRoot, emptyPhysicalState);
 
-export const physicalInputs = (state = getInitialPhysicalState(), action) => {
+export const physicalInputs = (state = emptyPhysicalState, action) => {
   if(getInputType(action) === 'physical' ||
      action.type === types.LOAD_PHYSICAL_INPUTS_FROM_FILE ||
      action.type === types.RESET_PHYSICAL_INPUTS) {
@@ -187,16 +183,13 @@ export const physicalInputs = (state = getInitialPhysicalState(), action) => {
 }
 
 // virtual inputs reducer
-export const virtualInputs = (
-  state = getInitialVirtualState(),
-  action) => {
-
+export const virtualInputs = (state, action) => {
   if(getInputType(action) === 'virtual'){
     if(action.type === nodeActionTypes.LOAD_PATCH_FROM_FILE){
       return action.virtualInputs;
     } else if(action.type === patchActionTypes.RESET_PATCH) {
       onChangeVirtual();
-      return getInitialVirtualState();
+      return emptyVirtualState;
     } else {
       return inputs(state, action, onChangeVirtual);
     }

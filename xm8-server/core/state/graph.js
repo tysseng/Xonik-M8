@@ -50,17 +50,14 @@ const removeOutputFromCurrentParameter = (state, action) => {
   return state;
 }
 
-export const getInitialState = () => {
-  return Map({
-    nodes: OrderedMap({      
-    }),
-    outputs: Map(),
-    nextAvailableNodeId: 0
-  });
-}
+export const emptyState = Map({
+  nodes: OrderedMap({}),
+  outputs: Map(),
+  nextAvailableNodeId: 0
+});
 
 // root reducer
-const graph = (state = getInitialState(), action) => {
+const graph = (state, action) => {
   updateHasChanged(action);
 
   // any existing usage of the currenly selected output must be removed before we add
@@ -71,7 +68,7 @@ const graph = (state = getInitialState(), action) => {
       return action.graph;
     case patchActionTypes.RESET_PATCH:
     case types.RESET_GRAPH:
-      return getInitialState();
+      return emptyState;
   }
 
   if (action.type === types.CHANGE_NODE_PARAM_VALUE) {

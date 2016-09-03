@@ -26,9 +26,7 @@ const directoutputs = (state, action) => {
   return state;
 }
 
-const root = (
-  state = getInitialState(),
-  action) => {
+const root = (state, action) => {
 
   switch(action.type){
     case nodeActionTypes.LOAD_PATCH_FROM_FILE:
@@ -40,17 +38,14 @@ const root = (
     case patchActionTypes.RESET_PATCH:
     case types.RESET_MATRIX:
       setHasChanged();
-      return getInitialState();
+      return emptyState;
     default:
       return state;
   }
 }
 
-export const getInitialState = () => {
-  return Map({
-    directoutputs: Map({      
-    })
-  });
-}
+export const emptyState = Map({
+  directoutputs: Map({})
+});
 
 export default root;

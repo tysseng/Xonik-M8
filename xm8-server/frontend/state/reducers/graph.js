@@ -1,7 +1,7 @@
 import { OrderedMap, Map } from 'immutable';
 import { getUpdatedState } from './reducerTools';
 
-const nodes = (state = getInitialState(), action) => {
+const nodes = (state, action) => {
   switch (action.type){
     case 'SET_STATE':
       let updatedState = getUpdatedState(['patches', '0', 'graph'], action);
@@ -14,11 +14,9 @@ const nodes = (state = getInitialState(), action) => {
   }
 }
 
-export const getInitialState = () => {
-  return Map({
-    nodes: OrderedMap(),
-    outputs: Map()
-  });
-}
+export const emptyState = Map({
+  nodes: OrderedMap(),
+  outputs: Map()
+});
 
 export default nodes

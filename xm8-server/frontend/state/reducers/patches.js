@@ -2,10 +2,10 @@ import {Map} from 'immutable';
 
 import config from '../../../shared/config';
 
-import { getInitialState as getInitialGraphState } from './graph';
-import { getInitialState as getInitialMatrixState } from './matrix';
-import { getInitialState as getInitialVirtualInputState } from './inputs';
-import { getInitialState as getInitialInputGroupsState } from './inputgroups';
+import { emptyState as emptyGraphState } from './graph';
+import { emptyState as emptyMatrixState } from './matrix';
+import { emptyState as emptyVirtualInputsState } from './inputs';
+import { emptyState as emptyInputGroupsState } from './inputgroups';
 
 import graph from './graph';
 import matrix from './matrix';
@@ -24,24 +24,22 @@ const patch = (state, action) => {
     .updateIn(['inputgroups'], substate => inputgroups(substate, action))
 }
 
-const getInitialPatchState = () => {
-  return new Map({
-    graph: getInitialGraphState(),
-    matrix: getInitialMatrixState(),
-    virtualInputs: getInitialVirtualInputState(),
-    inputgroups: getInitialInputGroupsState()
-  });
-}
+const emptyPatchState = new Map({
+  graph: emptyGraphState,
+  matrix: emptyMatrixState,
+  virtualInputs: emptyVirtualInputsState,
+  inputgroups: emptyInputGroupsState
+});
 
-const getInitialState = () => {
+const emptyState = (() => {
   let patches = new Map();
   for(let i=0; i<config.voices.numberOfGroups; i++){
-    patches = patches.set('' + i, getInitialPatchState());
+    patches = patches.set('' + i, emptyPatchState);
   }
   return patches;
-}
+})();
 
-const patches = (state = getInitialState(), action) => {
+const patches = (state = emptyState, action) => {
 
   // TODO: Change later.
   action.patchNumber = '0';

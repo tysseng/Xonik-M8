@@ -4,29 +4,26 @@ import { getUpdatedState } from './reducerTools';
 
 // Element in a group id is equal to whatever the element contains - input id if it is an id etc.
 
-export const getInitialState = () => {
-  return Map({
-    selectedElementId: '',
-    dragElementId: '',
-    selectedGroup: '',
-    dragStart: Map({
-      x: '',
-      y: '',
-      originX: '',
-      originY: ''
-    }),
-    groups: Map(),
-    newElementDialog: Map({
-      show: false,
-      type: '',
-      id: ''
-    })
-  });
-}
+export const emptyState =Map({
+  selectedElementId: '',
+  dragElementId: '',
+  selectedGroup: '',
+  dragStart: Map({
+    x: '',
+    y: '',
+    originX: '',
+    originY: ''
+  }),
+  groups: Map(),
+  newElementDialog: Map({
+    show: false,
+    type: '',
+    id: ''
+  })
+});
 
-const inputs = (
-  state = getInitialState(),
-  action) => {
+
+const inputs = (state, action) => {
   switch(action.type){
     case 'SET_STATE':
       let updatedState = getUpdatedState(['patches', '0', 'inputgroups'], action);
