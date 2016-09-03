@@ -118,7 +118,11 @@ export const saveDirect = (path, contents) => {
 }
 
 export const loadDirect = (path) => {
-  return JSON.parse(fs.readFileSync(path, 'utf8'));
+  if(fileExists(path)) {
+    return JSON.parse(fs.readFileSync(path, 'utf8'));
+  } else {
+    return undefined;
+  }
 }
 
 
@@ -180,7 +184,7 @@ export const createPhysicalFolders = () => {
   // Instead, they are where files of a particular type are put on disk. See saveFile comment.
   let foldersToCreate = [
     config.persistence.filesystemPaths[filetypes.PATCH.id],
-    config.persistence.filesystemPaths.autosave
+    config.persistence.autosave.rootFolder
   ];
 
   _.each(foldersToCreate, folder => {

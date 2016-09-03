@@ -2,10 +2,11 @@ TODO før "stabilt"
 
 Fjerne ubrukt showFileDialog
 Ikke lage undopositions for inputgroups før drag slippes opp
+Utvide autosave til å fungere for alle patcher (Men kanskje støtte å laste de enkeltvis?)
+Fullfør autosave for physicalinputs
 
 TODO:
 - Gjøre load fra disk til undoable action
-- Gjøre load fra disk til initial undoable state
 
 Større
 - Serialisering av matrix - lag noder i første omgang

@@ -19,16 +19,18 @@ import { hasChanged as hasChangedMatrix, clearHasChanged as clearHasChangedMatri
 import { hasChanged as hasChangedControls, clearHasChanged as clearHasChangedControls } from '../state/controllers';
 import { hasChanged as hasChangedVirtualInputGroups, clearHasChanged as clearHasChangedVirtualInputGroups } from '../state/inputgroups';
 
+const autosaveFilename = config.persistence.autosave.rootFolder + config.persistence.autosave.patch.file;
+
 
 // auto-update voices whenever state changes
 // TODO: listen to only graph changes!
-store.subscribe(
+/*store.subscribe(
   () => {
     if(getGraph().get('shouldAutoUpdate')){
       sendPatch();
     }
   }
-);
+);*/
 
 const patchHasChanged = () => {
   return hasChangedGraph ||
@@ -48,15 +50,25 @@ const resetPatchChangedState = () => {
 
 export const autosave = () => {
   if(patchHasChanged()){
-    saveDirect(config.persistence.autosave.patch.file, getAsFile());
+    saveDirect(autosaveFilename, getAsFile());
     resetPatchChangedState();
   }
   setTimeout(autosave, config.persistence.autosave.patch.intervalMs);
 }
 
-export const loadAutosaved = () => {
-  let file = loadDirect(config.persistence.autosave.patch.file);
-  dispatchLoadedFile('', '', file);
+export const getAutosaved = () => {
+  let file = loadDirect(autosaveFilename);
+  if(file) {
+    let state = {
+      graph: file.contents.graph,
+      matrix: file.contents.matrix,
+      virtualInputs: file.contents.virtualInputs,
+      inputgroups: file.contents.virtualInputGroups,
+    }
+    return fromJS(state);
+  } else {
+    return undefined;
+  }
 }
 
 function sendPatch(){
@@ -100,15 +112,27 @@ export const save = (name, folderId) => {
   return result;
 };
 
-const dispatchLoadedFile = (fileId, version, file) => {
+const convertFileToImmutable = (file) => {
+  return {
+    immutableGraph: fromJS(file.contents.graph),
+    immutableMatrix: fromJS(file.contents.matrix),
+    immutableVirtualInputs: fromJS(file.contents.virtualInputs),
+    immutableVirtualInputGroups: fromJS(file.contents.virtualInputGroups),
+    immutableControllers: fromJS(file.contents.controllers)
+  }
+}
+
+const dispatchLoadedFile = (file) => {
   if(file && file.contents && file.contents.graph){
 
     // TODO: Figure out how to make sure this is an orderedMap
-    let immutableGraph = fromJS(file.contents.graph);
-    let immutableMatrix = fromJS(file.contents.matrix);
-    let immutableVirtualInputs = fromJS(file.contents.virtualInputs);
-    let immutableVirtualInputGroups = fromJS(file.contents.virtualInputGroups);
-    let immutableControllers = fromJS(file.contents.controllers);
+    let {
+      immutableGraph,
+      immutableMatrix,
+      immutableVirtualInputs,
+      immutableVirtualInputGroups,
+      immutableControllers } = convertFileToImmutable(fileId, version, file);
+
     store.dispatch(
       loadPatchFromFile(
         fileId, version,

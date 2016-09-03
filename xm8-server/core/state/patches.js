@@ -1,12 +1,13 @@
 import { Map } from 'immutable';
 
 import config from '../../shared/config';
+import { getAutosaved } from '../graph/patchRepository';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 
 import { emptyState as emptyGraphState, undoableActions as undoableGraphActions } from './graph';
 import { emptyState as emptyMatrixState, undoableActions as undoableMatrixActions } from './matrix';
-import { emptyVirtualInputsState, undoableActions as undoableInputActions } from './inputs';
+import { emptyVirtualState as emptyVirtualInputsState, undoableActions as undoableInputActions } from './inputs';
 import { emptyState as emptyInputGroupsState, undoableActions as undoableInputGroupsActions } from './inputgroups';
 
 import graph from './graph';
@@ -25,7 +26,6 @@ const undoableActions = undoableGraphActions
  main patches reducer, includes all sub reducers for patches for all voice groups
   */
 const patch = (state, action) => {
-
   return state
     .updateIn(['graph'], substate => graph(substate, action))
     .updateIn(['matrix'], substate => matrix(substate, action))
@@ -33,28 +33,38 @@ const patch = (state, action) => {
     .updateIn(['inputgroups'], substate => inputgroups(substate, action))
 }
 
-const emptyPatchState = new Map({
-  graph: emptyGraphState,
-  matrix: emptyMatrixState,
-  virtualInputs: emptyVirtualInputsState,
-  inputgroups: emptyInputGroupsState
-});
+const emptyPatchState = (() => {
+  let patchStates = [];
+  let autosaved = getAutosaved();
+  for(let i=0; i<config.voices.numberOfGroups; i++){
+    if(autosaved){
+      patchStates.push(autosaved);
+    } else {
+      patchStates.push(new Map({
+        graph: emptyGraphState,
+        matrix: emptyMatrixState,
+        virtualInputs: emptyVirtualInputsState,
+        inputgroups: emptyInputGroupsState
+      }));
+    }
+  }
+  return patchStates;
+})();
 
 const emptyState = (() => {
   let patches = new Map();
   for(let i=0; i<config.voices.numberOfGroups; i++){
-
     // the same initial state is reused, but this is no problem as it
     // is immutable, changes to state won't bleed across patches.
-    patches = patches.set('' + i, emptyPatchState);
+    patches = patches.set('' + i, emptyPatchState[i]);
   }
   return patches;
 })();
 
 // create an undo wrapper per patch
-let patchUndoReducers = new Array();
+let patchUndoReducers = [];
 for(let i=0; i<config.voices.numberOfGroups; i++){
-  patchUndoReducers.push(getUndoWrapper(undoGroups.PATCH + i, undoableActions, patch, emptyPatchState));
+  patchUndoReducers.push(getUndoWrapper(undoGroups.PATCH + i, undoableActions, patch, emptyPatchState[i]));
 }
 
 const patches = (state = emptyState, action) => {

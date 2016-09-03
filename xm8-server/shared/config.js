@@ -85,13 +85,14 @@ let config = {
       rootFolder: projectRoot + '/persistentStorage/'
     },
     autosave: {
+      rootFolder: projectRoot + '/persistentStorage/autosave/',
       physicalInputs: {
         intervalMs: 3000,
-        file: projectRoot + '/persistentStorage/autosave/physicalinputs'
+        file: 'physicalinputs'
       },
       patch: {
         intervalMs: 3000,
-        file: projectRoot + '/persistentStorage/autosave/patch'
+        file: 'patch'
       }
     }
 

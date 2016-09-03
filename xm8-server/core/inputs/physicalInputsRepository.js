@@ -7,19 +7,20 @@ import { loadPhysicalInputsFromFile } from '../../shared/state/actions/inputs';
 import config from '../../shared/config.js';
 import store from '../state/store.js';
 
-const filename = 'physicalinputs';
+const autosaveFilename = config.persistence.autosave.rootFolder + config.persistence.autosave.physicalInputs.file;
 
 export const autosave = () => {
   if(hasChangedPhysicalInputs){
-    saveDirect(config.persistence.autosave.physicalInputs.file, getAsFile());
+
+    saveDirect(autosaveFilename, getAsFile());
     clearHasChangedPhysicalInputs();
   }
   setTimeout(autosave, config.persistence.autosave.physicalInputs.intervalMs);
 }
 
 export const loadAutosaved = () => {
-  let file = loadDirect(config.persistence.autosave.physicalInputs.file, filename);
-  dispatchLoadedFile(file);
+  //let file = loadDirect(autosaveFilename, filename);
+  //dispatchLoadedFile(file);
 }
 
 const getAsFile = () => {
