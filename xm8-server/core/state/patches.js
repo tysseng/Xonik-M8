@@ -4,6 +4,7 @@ import config from '../../shared/config';
 import { getAutosaved } from '../graph/patchRepository';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
+import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 
 import { emptyState as emptyGraphState, undoableActions as undoableGraphActions } from './graph';
 import { emptyState as emptyMatrixState, undoableActions as undoableMatrixActions } from './matrix';
@@ -19,7 +20,8 @@ import { virtualInputs } from './inputs';
 const undoableActions = undoableGraphActions
   .concat(undoableMatrixActions)
   .concat(undoableInputActions)
-  .concat(undoableInputGroupsActions);
+  .concat(undoableInputGroupsActions)
+  .concat(nodeActionTypes.LOAD_PATCH_FROM_FILE);
 
 
 /*

@@ -8,6 +8,7 @@ import { groups as undoGroups } from '../../shared/state/actions/undo';
 import { panelControllersById } from "../../shared/graph/PanelControllers";
 import { inputsById, inputGroupsById, getEmptyOption, getStepPositions, getInput } from '../../shared/graph/inputs';
 import { inputTypesById as inputTypes } from "../../shared/inputs/InputTypes";
+import { getAutosaved } from '../inputs/physicalInputsRepository';
 
 export const undoableActions = [
   types.CONTROLLER_CHANGE,
@@ -20,6 +21,7 @@ export const undoableActions = [
   types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI,
   types.RESET_PHYSICAL_INPUTS,
   types.RESET_PHYSICAL_INPUT,
+  types.LOAD_PHYSICAL_INPUTS_FROM_FILE,
   patchActionTypes.RESET_PATCH
 ];
 
@@ -146,10 +148,17 @@ const getInputType = action => {
   return reducer;
 }
 
-const emptyPhysicalState = Map({
-  byId: fromJS(inputsById),
-  groups: fromJS(inputGroupsById)
-});
+const emptyPhysicalState = (() => {
+  let autosaved = getAutosaved();
+  if(autosaved){
+    return autosaved;
+  } else {
+    return Map({
+      byId: fromJS(inputsById),
+      groups: fromJS(inputGroupsById)
+    });
+  }
+})();
 
 export const emptyVirtualState = Map({
   byId: Map()

@@ -3,10 +3,13 @@ TODO før "stabilt"
 Fjerne ubrukt showFileDialog
 Ikke lage undopositions for inputgroups før drag slippes opp
 Utvide autosave til å fungere for alle patcher (Men kanskje støtte å laste de enkeltvis?)
-Fullfør autosave for physicalinputs
+    - Slå sammen alle deler av patch til ett felt.
+Autoloade controllers
 
 TODO:
 - Gjøre load fra disk til undoable action
+- Fikse subscribe i patchRepo
+- Flytte load file action til patches isf. nodes
 
 Større
 - Serialisering av matrix - lag noder i første omgang

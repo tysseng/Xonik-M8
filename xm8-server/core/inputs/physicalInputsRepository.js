@@ -18,9 +18,13 @@ export const autosave = () => {
   setTimeout(autosave, config.persistence.autosave.physicalInputs.intervalMs);
 }
 
-export const loadAutosaved = () => {
-  //let file = loadDirect(autosaveFilename, filename);
-  //dispatchLoadedFile(file);
+export const getAutosaved = () => {
+  let file = loadDirect(autosaveFilename);
+  if(file) {
+    return fromJS(file.contents.physicalInputs);
+  } else {
+    return undefined;
+  }
 }
 
 const getAsFile = () => {
