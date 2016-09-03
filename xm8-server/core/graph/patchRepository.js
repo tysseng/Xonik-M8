@@ -6,7 +6,7 @@ import serializer from './serializer.js';
 import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
-import { getGraph, getMatrix, getVirtualInputs, getVirtualInputGroups, getControllers} from '../state/selectors';
+import { getPatch, getGraph, getMatrix, getVirtualInputs, getVirtualInputGroups, getControllers} from '../state/selectors';
 
 import { loadPatchFromFile, setLoadedPatchFileDetails } from '../../shared/state/actions/nodes';
 import { filetypes } from '../../shared/FileTypes';
@@ -49,23 +49,19 @@ const resetPatchChangedState = () => {
 }
 
 export const autosave = () => {
-  if(patchHasChanged()){
-    saveDirect(autosaveFilename, getAsFile());
-    resetPatchChangedState();
+  for(let i = 0; i< config.voices.numberOfGroups; i++) {
+    if (patchHasChanged(i)) {
+      saveDirect(autosaveFilename + i, getPatch('' + i).toJS());
+      resetPatchChangedState(i);
+    }
   }
   setTimeout(autosave, config.persistence.autosave.patch.intervalMs);
 }
 
-export const getAutosaved = () => {
-  let file = loadDirect(autosaveFilename);
+export const getAutosaved = (patchNumber) => {
+  let file = loadDirect(autosaveFilename + patchNumber);
   if(file) {
-    let state = {
-      graph: file.contents.graph,
-      matrix: file.contents.matrix,
-      virtualInputs: file.contents.virtualInputs,
-      inputgroups: file.contents.virtualInputGroups,
-    }
-    return fromJS(state);
+    return fromJS(file);
   } else {
     return undefined;
   }

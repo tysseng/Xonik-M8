@@ -2,8 +2,6 @@ TODO før "stabilt"
 
 Fjerne ubrukt showFileDialog
 Ikke lage undopositions for inputgroups før drag slippes opp
-Utvide autosave til å fungere for alle patcher (Men kanskje støtte å laste de enkeltvis?)
-    - Slå sammen alle deler av patch til ett felt.
 Autoloade controllers
 
 TODO:

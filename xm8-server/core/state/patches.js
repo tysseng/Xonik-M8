@@ -37,8 +37,8 @@ const patch = (state, action) => {
 
 const emptyPatchState = (() => {
   let patchStates = [];
-  let autosaved = getAutosaved();
   for(let i=0; i<config.voices.numberOfGroups; i++){
+    let autosaved = getAutosaved('' + i);
     if(autosaved){
       patchStates.push(autosaved);
     } else {
