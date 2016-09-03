@@ -3,7 +3,6 @@ import { map as paramTypes } from '../../graph/ParameterTypes'
 
 export const types = {
   SET_LOADED_PATCH_FILE_DETAILS: 'SET_LOADED_PATCH_FILE_DETAILS',
-  LOAD_PATCH_FROM_FILE: 'LOAD_NODES_FROM_FILE',
   SELECT_NODE: 'SELECT_NODE',
   SELECT_LINK: 'SELECT_LINK',
   NEW_NODE: 'NEW_NODE',
@@ -40,23 +39,6 @@ export const setLoadedPatchFileDetails = (fileId, version) => {
     fileId,
     version
   };
-};
-
-export const loadPatchFromFile = (
-  fileId, version,
-  graph, matrix,
-  virtualInputs, virtualInputGroups, controllers) => {
-  return {
-    type: types.LOAD_PATCH_FROM_FILE,
-    target: 'SERVER',
-    fileId,
-    version,
-    graph,
-    matrix,
-    virtualInputs,
-    virtualInputGroups,
-    controllers
-  }
 };
 
 export const selectNode = (nodeId) => {

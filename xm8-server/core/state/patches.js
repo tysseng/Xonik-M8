@@ -4,7 +4,7 @@ import config from '../../shared/config';
 import { getAutosaved } from '../graph/patchRepository';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
-import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
+import { types } from '../../shared/state/actions/patch';
 
 import { emptyState as emptyGraphState, undoableActions as undoableGraphActions } from './graph';
 import { emptyState as emptyMatrixState, undoableActions as undoableMatrixActions } from './matrix';
@@ -21,13 +21,17 @@ const undoableActions = undoableGraphActions
   .concat(undoableMatrixActions)
   .concat(undoableInputActions)
   .concat(undoableInputGroupsActions)
-  .concat(nodeActionTypes.LOAD_PATCH_FROM_FILE);
+  .concat(types.LOAD_PATCH_FROM_FILE);
 
 
 /*
  main patches reducer, includes all sub reducers for patches for all voice groups
   */
 const patch = (state, action) => {
+  if(action.type === types.LOAD_PATCH_FROM_FILE){
+    return action.patch;
+  }
+
   return state
     .updateIn(['graph'], substate => graph(substate, action))
     .updateIn(['matrix'], substate => matrix(substate, action))

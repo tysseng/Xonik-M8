@@ -8,7 +8,8 @@ import printer from './printer.js';
 import commands from './commands.js';
 import { getPatch, getGraph, getMatrix, getVirtualInputs, getVirtualInputGroups, getControllers} from '../state/selectors';
 
-import { loadPatchFromFile, setLoadedPatchFileDetails } from '../../shared/state/actions/nodes';
+import { loadPatchFromFile } from '../../shared/state/actions/patch';
+import { setLoadedPatchFileDetails } from '../../shared/state/actions/nodes';
 import { filetypes } from '../../shared/FileTypes';
 import { saveFile, loadFile, saveDirect, loadDirect } from '../persistence/fileRepo';
 import { fromJS } from 'immutable';
@@ -84,68 +85,41 @@ function sendPatch(){
   return {updated: true, message: "Synth voices updated"};  
 }
 
-const getAsFile = () => {
+const getAsFile = (patchNumber) => {
   return {
     contents: {
-      graph: getGraph().toJS(),
-      matrix: getMatrix().toJS(),
-      virtualInputs: getVirtualInputs().toJS(),
-      virtualInputGroups: getVirtualInputGroups().toJS(),
+      patch: getPatch(patchNumber),
       controllers: getControllers().toJS()
     }
   };
 }
 
-export const save = (name, folderId) => {
+export const save = (patchNumber, name, folderId) => {
   if (!name || !folderId) {
     return {fileSaved: false, message: "Name or folder id missing"};
   }
 
-  let result = saveFile(getAsFile(), filetypes.PATCH, name, folderId, true);
+  let result = saveFile(getAsFile(patchNumber), filetypes.PATCH, name, folderId, true);
   if (result.fileSaved) {
     store.dispatch(setLoadedPatchFileDetails(result.fileId, result.version));
   }
   return result;
 };
 
-const convertFileToImmutable = (file) => {
-  return {
-    immutableGraph: fromJS(file.contents.graph),
-    immutableMatrix: fromJS(file.contents.matrix),
-    immutableVirtualInputs: fromJS(file.contents.virtualInputs),
-    immutableVirtualInputGroups: fromJS(file.contents.virtualInputGroups),
-    immutableControllers: fromJS(file.contents.controllers)
-  }
-}
+export const load =(patchNumber, fileId, version) => {
+  let file = loadFile(fileId, version);
 
-const dispatchLoadedFile = (file) => {
-  if(file && file.contents && file.contents.graph){
+  if(file && file.contents && file.contents.patch){
 
     // TODO: Figure out how to make sure this is an orderedMap
-    let {
-      immutableGraph,
-      immutableMatrix,
-      immutableVirtualInputs,
-      immutableVirtualInputGroups,
-      immutableControllers } = convertFileToImmutable(fileId, version, file);
-
     store.dispatch(
       loadPatchFromFile(
+        patchNumber,
         fileId, version,
-        immutableGraph,
-        immutableMatrix,
-        immutableVirtualInputs,
-        immutableVirtualInputGroups,
-        immutableControllers));
+        fromJS(file.contents.patch),
+        fromJS(file.contents.controllers)));
   }
-}
-
-export const load =(fileId, version) => {
-  let file = loadFile(fileId, version);
-  dispatchLoadedFile(fileId, version, file);
 };
-
-
 
 function serialize(){
   var net = preparer.prepareNetForSerialization();

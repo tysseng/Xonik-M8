@@ -4,10 +4,11 @@ Fjerne ubrukt showFileDialog
 Ikke lage undopositions for inputgroups før drag slippes opp
 Autoloade controllers
 
+
 TODO:
-- Gjøre load fra disk til undoable action
 - Fikse subscribe i patchRepo
-- Flytte load file action til patches isf. nodes
+- rename graph-route til patch-route
+- Fjerne File Dialog fra inpug groups center column
 
 Større
 - Serialisering av matrix - lag noder i første omgang

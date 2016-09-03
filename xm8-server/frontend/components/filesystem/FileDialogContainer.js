@@ -121,7 +121,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         url: ownProps.saveUrl,
         type: 'POST',
         contentType:'application/json',
-        data: JSON.stringify({name: filename, folderId: folderId, fileId: fileId}),
+        data: JSON.stringify({name: filename, folderId: folderId, fileId: fileId, customData: ownProps.customData}),
         dataType:'json',
         success: function(response) {
           console.log("success", response);
@@ -138,7 +138,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         url: ownProps.loadUrl,
         type: 'POST',
         contentType:'application/json',
-        data: JSON.stringify({fileId, version}),
+        data: JSON.stringify({fileId, version, customData: ownProps.customData}),
         dataType:'json',
         success: function(response) {
           dispatch(toggleFileDialog(false));

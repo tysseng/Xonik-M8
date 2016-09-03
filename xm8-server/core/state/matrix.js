@@ -1,6 +1,5 @@
 import { Map } from 'immutable';
 import { types } from '../../shared/state/actions/matrix';
-import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { types as patchActionTypes } from '../../shared/state/actions/patch';
 
 export const undoableActions = [
@@ -29,9 +28,6 @@ const directoutputs = (state, action) => {
 const root = (state, action) => {
 
   switch(action.type){
-    case nodeActionTypes.LOAD_PATCH_FROM_FILE:
-      setHasChanged();
-      return action.matrix;    
     case types.DIRECT_OUTPUT_TOGGLE:
       setHasChanged();
       return state.updateIn(['directoutputs'], substate => directoutputs(substate, action));

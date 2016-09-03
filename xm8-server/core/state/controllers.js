@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
 import { types } from '../../shared/state/actions/inputs';
-import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
+import { types as patchActionTypes } from '../../shared/state/actions/patch';
 
 export let hasChanged = false;
 const setHasChanged = () => hasChanged = true;
@@ -15,7 +15,7 @@ const root = (
     case types.CONTROLLER_CHANGE:
       setHasChanged();
       return state.set(action.id, action.value);
-    case nodeActionTypes.LOAD_PATCH_FROM_FILE:
+    case patchActionTypes.LOAD_PATCH_FROM_FILE:
       return action.controllers;
   } 
   return state;

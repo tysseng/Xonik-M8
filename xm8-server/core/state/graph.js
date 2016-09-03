@@ -24,7 +24,7 @@ export const undoableActions = [
 
 export let hasChanged = false;
 const updateHasChanged = (action) => {
-  if(undoableActions.indexOf(action.type) > -1 || action.type === types.LOAD_PATCH_FROM_FILE){
+  if(undoableActions.indexOf(action.type) > -1){
     hasChanged = true;
   }
 }
@@ -64,8 +64,6 @@ const graph = (state, action) => {
   // it to a node AND before we update the outputs mapping.
   // This requires knowledge of both outputs and nodes and has to be at this level.
   switch (action.type) {
-    case types.LOAD_PATCH_FROM_FILE:
-      return action.graph;
     case patchActionTypes.RESET_PATCH:
     case types.RESET_GRAPH:
       return emptyState;

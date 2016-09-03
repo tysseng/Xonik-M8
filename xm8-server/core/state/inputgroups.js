@@ -86,8 +86,6 @@ const inputgroups = (state, action) => {
       return state.deleteIn(['groups', action.groupId, 'elements', action.id]);
     case inputgroupsActionTypes.CHANGE_ELEMENT_TYPE:
       return state.setIn(['groups', action.groupId, 'elements', action.id, 'type'], action.inputType);
-    case nodeActionTypes.LOAD_PATCH_FROM_FILE:
-      return action.virtualInputGroups;
     case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
       return removeElementFromGroups(state, action.inputId);
     case inputgroupsActionTypes.TOGGLE_VISIBILITY:

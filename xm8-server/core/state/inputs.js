@@ -2,7 +2,6 @@ import { Map, fromJS } from 'immutable';
 import _ from 'lodash';
 import { getUndoWrapper } from './undo';
 import { types } from '../../shared/state/actions/inputs';
-import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { types as patchActionTypes } from '../../shared/state/actions/patch';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 import { panelControllersById } from "../../shared/graph/PanelControllers";
@@ -193,10 +192,8 @@ export const physicalInputs = (state = emptyPhysicalState, action) => {
 
 // virtual inputs reducer
 export const virtualInputs = (state, action) => {
-  if(getInputType(action) === 'virtual'){
-    if(action.type === nodeActionTypes.LOAD_PATCH_FROM_FILE){
-      return action.virtualInputs;
-    } else if(action.type === patchActionTypes.RESET_PATCH) {
+  if(getInputType(action) === 'virtual') {
+    if (action.type === patchActionTypes.RESET_PATCH) {
       onChangeVirtual();
       return emptyVirtualState;
     } else {
