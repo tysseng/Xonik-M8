@@ -15,7 +15,7 @@ import path from 'path';
 
 
 //import wifiRoutes from './routes/wifi';
-import graphRoutes from './routes/graph';
+import patchRoutes from './routes/patch';
 import voiceRoutes from './routes/voice';
 import stateRoute from './routes/state';
 import idRoute from './routes/id';
@@ -48,7 +48,7 @@ stateRoute(app, ws);
 //controllerRoute(app, ws);
 
 //app.use('/app/wifi', wifiRoutes);
-app.use('/api/graph', graphRoutes);
+app.use('/api/patch', patchRoutes);
 app.use('/api/voice', voiceRoutes);
 app.use('/api/id', idRoute);
 

@@ -7,7 +7,6 @@ Autoloade controllers
 
 TODO:
 - Fikse subscribe i patchRepo
-- rename graph-route til patch-route
 - Fjerne File Dialog fra inpug groups center column
 
 Større

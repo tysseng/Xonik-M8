@@ -2,7 +2,7 @@ var express = require('express');
 var patchRepository = require('../../core/graph/patchRepository.js');
 var router = express.Router();
 
-// publish graph to voice cards
+// publish patch to voice cards
 router.put('/publish', function(req, res){
   let result = patchRepository.sendPatch();
   if(result.updated){

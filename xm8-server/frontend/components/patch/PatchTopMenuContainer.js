@@ -10,7 +10,7 @@ import { getFileDialog, getPatchView } from '../../state/selectors';
 
 const forceUpdate = () => {
   $.ajax({
-    url: '/api/graph/publish',
+    url: '/api/patch/publish',
     type: 'PUT',
     success: function(response) {
       console.log(response);

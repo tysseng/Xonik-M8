@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onFileSaveClick: (name, id, fileId) => {
       $.ajax({
-        url: '/graph/save',
+        url: '/patch/save',
         type: 'PUT',
         contentType:'application/json',
         data: JSON.stringify({name: name, folderId: id, fileId: fileId}),

@@ -34,7 +34,7 @@ const PatchTopMenu = ({showFileDialog, onPatchSave, onPatchLoad, resetPatch, sel
         </Link>
       </div>
 
-      {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/api/graph/save' loadUrl = '/api/graph/load' customData={{patchNumber: '0'}}/> }
+      {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/api/patch/save' loadUrl = '/api/patch/load' customData={{patchNumber: '0'}}/> }
     </div>
   )
 }
