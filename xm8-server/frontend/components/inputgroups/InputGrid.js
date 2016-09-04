@@ -99,7 +99,7 @@ const InputGrid = ({dragElementId, selectedElementId, selectedGroup, inputs, dra
 
           return (
             <div className={classnames} id={element.id} style={style}>
-              <Controller input={input} value={0}/>
+              <Controller input={input} value={0} readOnly={true}/>
             </div>
           )
         })

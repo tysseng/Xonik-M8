@@ -25,7 +25,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onChange: (e) => dispatch(changeValue(ownProps.input.id, e.target.value))
+    onChange: (e) => {
+      if(!ownProps.readOnly) dispatch(changeValue(ownProps.input.id, e.target.value));
+    }
   }
 }
 
