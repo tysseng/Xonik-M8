@@ -5,7 +5,7 @@ import InputOptionsContainer from '../InputOptionsContainer';
 import InputPreview from '../InputPreview';
 import InputDropdown from '../InputDropdown';
 
-const PhysicalInputForm = ({ input, inputValue, showFileDialog,
+const PhysicalInputForm = ({ input, inputValue,
   selectInput, onCloseDialog, 
   rename, renameShort}) => {
 

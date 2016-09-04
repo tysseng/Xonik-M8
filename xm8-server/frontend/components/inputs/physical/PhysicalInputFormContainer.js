@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { selectInput, rename, renameShort, updateField } from '../../../../shared/state/actions/inputs';
-import { getFileDialog, getPhysicalInputs, getControllers } from '../../../state/selectors';
+import { getPhysicalInputs, getControllers } from '../../../state/selectors';
 
 import PhysicalInputForm from './PhysicalInputForm'
 
@@ -18,8 +18,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     input,
-    inputValue,
-    showFileDialog: getFileDialog(state).get('show')
+    inputValue
   }
 }
 

@@ -6,7 +6,7 @@ import InputPreview from '../InputPreview';
 import PanelControllerDropdown from '../PanelControllerDropdown';
 import InputDropdown from '../InputDropdown';
 
-const VirtualInputForm = ({ input, inputValue, showFileDialog,
+const VirtualInputForm = ({ input, inputValue,
   selectInput, onCloseDialog, 
   rename, renameShort, 
   onControllerChange }) => {
