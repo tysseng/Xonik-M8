@@ -6,7 +6,6 @@ Autoloade controllers
 - Trekk ut hasChanged som egen helper
 - UNDO_POINT trigger ikke autosave i patch
 - Undo/redo autosaves heller ikke.
-- lage getPatchId(i) => '' +i;
 
 
 TODO:

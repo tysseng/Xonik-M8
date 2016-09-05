@@ -14,7 +14,7 @@ import { filetypes } from '../../shared/FileTypes';
 import { saveFile, loadFile, saveDirect, loadDirect } from '../persistence/fileRepo';
 import { fromJS } from 'immutable';
 
-import { hasChanged as hasChangedPatch, clearHasChanged as clearHasChangedPatch } from '../state/patches';
+import { getPatchNum, hasChanged as hasChangedPatch, clearHasChanged as clearHasChangedPatch } from '../state/patches';
 
 const autosaveFilename = config.persistence.autosave.rootFolder + config.persistence.autosave.patch.file;
 
@@ -31,10 +31,11 @@ const autosaveFilename = config.persistence.autosave.rootFolder + config.persist
 
 export const autosave = () => {
   for(let i = 0; i< config.voices.numberOfGroups; i++) {
-    if (hasChangedPatch['' + i]) {
-      saveDirect(autosaveFilename + i, getPatch('' + i).toJS());
-      clearHasChangedPatch('' + i);
-      console.log("Autosaved patch", i);
+    let patchNumber = getPatchNum(i);
+    if (hasChangedPatch[patchNumber]) {
+      saveDirect(autosaveFilename + patchNumber, getPatch(patchNumber).toJS());
+      clearHasChangedPatch(patchNumber);
+      console.log("Autosaved patch", patchNumber);
     }
   }
   setTimeout(autosave, config.persistence.autosave.patch.intervalMs);

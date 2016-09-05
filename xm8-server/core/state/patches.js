@@ -16,11 +16,13 @@ import matrix from './matrix';
 import inputgroups from './inputgroups';
 import { virtualInputs } from './inputs';
 
+// converts patch number to string
+export const getPatchNum = (patchNumber) => '' + patchNumber;
+
 export let hasChanged = (() => {
   let initialChanges = {};
   for(let i=0; i<config.voices.numberOfGroups; i++){
-    let patchNumber = '' + i;
-    initialChanges[patchNumber] = false;
+    initialChanges[getPatchNum(i)] = false;
   }
   return initialChanges;
 })();
@@ -60,7 +62,7 @@ const patch = (state, action) => {
 const emptyPatchState = (() => {
   let patchStates = [];
   for(let i=0; i<config.voices.numberOfGroups; i++){
-    let autosaved = getAutosaved('' + i);
+    let autosaved = getAutosaved(getPatchNum(i));
     if(autosaved){
       patchStates.push(autosaved);
     } else {
@@ -80,7 +82,7 @@ const emptyState = (() => {
   for(let i=0; i<config.voices.numberOfGroups; i++){
     // the same initial state is reused, but this is no problem as it
     // is immutable, changes to state won't bleed across patches.
-    patches = patches.set('' + i, emptyPatchState[i]);
+    patches = patches.set(getPatchNum(i), emptyPatchState[i]);
   }
   return patches;
 })();
