@@ -5,6 +5,7 @@ import { getAutosaved } from '../graph/patchRepository';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 import { types } from '../../shared/state/actions/patch';
+import { getPatchNum, initChangeTrackerForPatches } from './reducerTools';
 
 import { emptyState as emptyGraphState, undoableActions as undoableGraphActions } from './graph';
 import { emptyState as emptyMatrixState, undoableActions as undoableMatrixActions } from './matrix';
@@ -16,19 +17,7 @@ import matrix from './matrix';
 import inputgroups from './inputgroups';
 import { virtualInputs } from './inputs';
 
-// converts patch number to string
-export const getPatchNum = (patchNumber) => '' + patchNumber;
-
-export let hasChanged = (() => {
-  let initialChanges = {};
-  for(let i=0; i<config.voices.numberOfGroups; i++){
-    initialChanges[getPatchNum(i)] = false;
-  }
-  return initialChanges;
-})();
-
-const setHasChanged = (patchNumber) => hasChanged[patchNumber] = true;
-export const clearHasChanged = (patchNumber) => hasChanged[patchNumber] = false;
+export const changeTracker = initChangeTrackerForPatches();
 
 // join all undoable actions from the sub reducers
 const undoableActions = undoableGraphActions
@@ -50,11 +39,11 @@ const patch = (state, action) => {
     .updateIn(['graph'], substate => graph(substate, action))
     .updateIn(['matrix'], substate => matrix(substate, action))
     .updateIn(['virtualInputs'], substate => virtualInputs(substate, action))
-    .updateIn(['inputgroups'], substate => inputgroups(substate, action))
+    .updateIn(['inputgroups'], substate => inputgroups(substate, action));
 
   if(changedState !== state && undoableActions.indexOf(action.type) > -1){
     console.log("Patch changed", action.patchNumber);
-    setHasChanged(action.patchNumber);
+    changeTracker.set(action.patchNumber);
   }
   return changedState;
 }
