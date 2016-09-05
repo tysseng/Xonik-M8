@@ -9,7 +9,7 @@ export const getNodes = state => state.patches.getIn(['0', 'graph', 'nodes']);
 export const getPatchView = state => state.patchview;
 export const getFileDialog = state => state.filedialog;
 export const getFilesystem = state => state.filesystem;
-export const getControllers = state => state.controllers;
+export const getControllers = state => state.controllers.get('0');
 export const getNetwork = state => state.network;
 
 export const getInputsAsJS = state => {

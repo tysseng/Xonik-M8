@@ -16,6 +16,18 @@ import matrix from './matrix';
 import inputgroups from './inputgroups';
 import { virtualInputs } from './inputs';
 
+export let hasChanged = (() => {
+  let initialChanges = {};
+  for(let i=0; i<config.voices.numberOfGroups; i++){
+    let patchNumber = '' + i;
+    initialChanges[patchNumber] = false;
+  }
+  return initialChanges;
+})();
+
+const setHasChanged = (patchNumber) => hasChanged[patchNumber] = true;
+export const clearHasChanged = (patchNumber) => hasChanged[patchNumber] = false;
+
 // join all undoable actions from the sub reducers
 const undoableActions = undoableGraphActions
   .concat(undoableMatrixActions)
@@ -32,11 +44,17 @@ const patch = (state, action) => {
     return action.patch;
   }
 
-  return state
+  let changedState = state
     .updateIn(['graph'], substate => graph(substate, action))
     .updateIn(['matrix'], substate => matrix(substate, action))
     .updateIn(['virtualInputs'], substate => virtualInputs(substate, action))
     .updateIn(['inputgroups'], substate => inputgroups(substate, action))
+
+  if(changedState !== state && undoableActions.indexOf(action.type) > -1){
+    console.log("Patch changed", action.patchNumber);
+    setHasChanged(action.patchNumber);
+  }
+  return changedState;
 }
 
 const emptyPatchState = (() => {
@@ -67,7 +85,7 @@ const emptyState = (() => {
   return patches;
 })();
 
-// create an undo wrapper per patch
+// create one undo wrapper per patch
 let patchUndoReducers = [];
 for(let i=0; i<config.voices.numberOfGroups; i++){
   patchUndoReducers.push(getUndoWrapper(undoGroups.PATCH + i, undoableActions, patch, emptyPatchState[i]));

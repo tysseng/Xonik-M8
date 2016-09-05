@@ -52,6 +52,6 @@ export default (app, ws) => {
   store.dispatch(subscribe('physicalInputs', 'frontend', sendPartialState));
   store.dispatch(subscribe('patches/0/matrix', 'frontend', sendPartialState));
   store.dispatch(subscribe('patches/0/inputgroups', 'frontend', sendPartialState));
-  store.dispatch(subscribe('controllers', 'frontend', sendPartialState));
+  store.dispatch(subscribe('controllers/0', 'frontend', sendPartialState));
 
 };

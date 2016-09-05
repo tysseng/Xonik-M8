@@ -11,5 +11,5 @@ export const getPatch = (patchNumber) => getState().patches.get(patchNumber);
 export const getVirtualInputs = () => getState().patches.getIn(['0', 'virtualInputs']);
 export const getPhysicalInputs = () => getState().physicalInputs;
 export const getVirtualInputGroups = () => getState().patches.getIn(['0', 'inputgroups']);
-export const getControllers = () => getState().controllers;
+export const getControllers = () => getState().controllers.get('0');
 export const getFilesystem = () => getState().filesystem;
