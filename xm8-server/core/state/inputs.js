@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { getUndoWrapper } from './undo';
 import { types } from '../../shared/state/actions/inputs';
 import { types as patchActionTypes } from '../../shared/state/actions/patch';
-import { groups as undoGroups } from '../../shared/state/actions/undo';
+import { types as undoActionTypes, groups as undoGroups } from '../../shared/state/actions/undo';
 import { panelControllersById } from "../../shared/graph/PanelControllers";
 import { inputsById, inputGroupsById, getEmptyOption, getStepPositions, getInput } from '../../shared/graph/inputs';
 import { inputTypesById as inputTypes } from "../../shared/inputs/InputTypes";
@@ -28,9 +28,6 @@ export let hasChangedPhysicalInputs = false;
 
 export const clearHasChangedPhysicalInputs = () => {
   hasChangedPhysicalInputs = false;
-}
-
-const onChangeVirtual = () => {
 }
 
 const onChangePhysical = () => {
@@ -100,7 +97,7 @@ const byId = (state, action) => {
     case types.INPUTCONFIG_DELETE_INPUT:
       return state.delete(action.inputId);
     case types.RESET_PHYSICAL_INPUT:
-      let resetInput = getInitialPhysicalState().getIn(['byId', action.inputId]);
+      let resetInput = initialPhysicalState.getIn(['byId', action.inputId]);
       return state.set(action.inputId, resetInput);
     case types.INPUTCONFIG_UPDATE_FIELD:
     case types.INPUTCONFIG_RENAME:
@@ -114,7 +111,7 @@ const byId = (state, action) => {
   return state;
 }
 
-const inputs = (state, action, hasChanged) => {
+const inputs = (state, action) => {
   switch(action.type){
     case types.INPUTCONFIG_NEW_INPUT:
     case types.INPUTCONFIG_DELETE_INPUT:
@@ -126,7 +123,6 @@ const inputs = (state, action, hasChanged) => {
     case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES:
     case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
     case types.RESET_PHYSICAL_INPUT:
-      hasChanged();
       return state.update('byId', inputByIdMap => byId(inputByIdMap, action));
     default:
       return state; 
@@ -141,15 +137,17 @@ const getInputType = action => {
   return reducer;
 }
 
+const initialPhysicalState = Map({
+  byId: fromJS(inputsById),
+  groups: fromJS(inputGroupsById)
+});
+
 const emptyPhysicalState = (() => {
   let autosaved = getAutosaved();
   if(autosaved){
     return autosaved;
   } else {
-    return Map({
-      byId: fromJS(inputsById),
-      groups: fromJS(inputGroupsById)
-    });
+    return initialPhysicalState;
   }
 })();
 
@@ -162,11 +160,10 @@ const physicalRoot = (
   state,
   action) => {
   if(getInputType(action) === 'physical'){
-    return inputs(state, action, onChangePhysical);
+    return inputs(state, action);
   } else if(action.type === types.LOAD_PHYSICAL_INPUTS_FROM_FILE) {
     return action.physicalInputs;
   } else if(action.type === types.RESET_PHYSICAL_INPUTS) {
-    onChangePhysical();
     return emptyPhysicalState;
   }
   return state;
@@ -176,13 +173,16 @@ export const physicalUndoWrapper = getUndoWrapper({
   undoGroup: undoGroups.PHYSICAL_INPUTS,
   undoableActions: undoableActions,
   reducer: physicalRoot,
-  initialState: emptyPhysicalState
+  initialState: emptyPhysicalState,
+  changeListener: onChangePhysical
 });
 
 export const physicalInputs = (state = emptyPhysicalState, action) => {
   if(getInputType(action) === 'physical' ||
      action.type === types.LOAD_PHYSICAL_INPUTS_FROM_FILE ||
-     action.type === types.RESET_PHYSICAL_INPUTS) {
+     action.type === types.RESET_PHYSICAL_INPUTS ||
+     action.type === undoActionTypes.UNDO ||
+     action.type === undoActionTypes.REDO) {
     return physicalUndoWrapper(state, action);
   } else {
     return state;
@@ -193,10 +193,9 @@ export const physicalInputs = (state = emptyPhysicalState, action) => {
 export const virtualInputs = (state, action) => {
   if(getInputType(action) === 'virtual') {
     if (action.type === patchActionTypes.RESET_PATCH) {
-      onChangeVirtual();
       return emptyVirtualState;
     } else {
-      return inputs(state, action, onChangeVirtual);
+      return inputs(state, action);
     }
   }
   return state;

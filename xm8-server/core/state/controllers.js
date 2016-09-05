@@ -32,7 +32,6 @@ const controllersForPatch = (state, action) => {
 }
 
 const controllers = (state = emptyState, action) => {
-  console.log(state)
   // TODO: Change later.
   action.patchNumber = '0';
   if(action.patchNumber) {

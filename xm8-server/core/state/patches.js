@@ -77,7 +77,7 @@ for(let i=0; i<config.voices.numberOfGroups; i++){
     undoableActions: undoableActions,
     reducer: patch,
     initialState: emptyPatchState[i],
-    trackChange: changeTracker.set.bind(null, getPatchNum(i))
+    changeListener: changeTracker.set.bind(null, getPatchNum(i))
   });
 
   patchUndoReducers.push(undoWrapper);

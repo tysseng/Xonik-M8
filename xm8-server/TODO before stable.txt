@@ -1,7 +1,5 @@
 TODO før "stabilt"
 
-Autoloade controllers
-
 TODO:
 - Fikse subscribe i patchRepo
 
@@ -18,8 +16,6 @@ Småting
 - Luft etter hver gruppe i meny
 - Flytte fil-loading ut av nodes actions, lage patch actions.
 
-- TODO-issues:
- - Undo virker ikke på flere reset physical input etter hverandre.
 
 
 For later:
