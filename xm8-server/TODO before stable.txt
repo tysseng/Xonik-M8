@@ -1,8 +1,6 @@
 TODO før "stabilt"
 
 Autoloade controllers
-- UNDO_POINT trigger ikke autosave i patch
-- Undo/redo autosaves heller ikke.
 
 TODO:
 - Fikse subscribe i patchRepo

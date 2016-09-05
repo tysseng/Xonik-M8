@@ -172,7 +172,12 @@ const physicalRoot = (
   return state;
 }
 
-export const physicalUndoWrapper = getUndoWrapper(undoGroups.PHYSICAL_INPUTS, undoableActions, physicalRoot, emptyPhysicalState);
+export const physicalUndoWrapper = getUndoWrapper({
+  undoGroup: undoGroups.PHYSICAL_INPUTS,
+  undoableActions: undoableActions,
+  reducer: physicalRoot,
+  initialState: emptyPhysicalState
+});
 
 export const physicalInputs = (state = emptyPhysicalState, action) => {
   if(getInputType(action) === 'physical' ||

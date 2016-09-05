@@ -3,7 +3,14 @@ import _ from 'lodash';
 import { types as undoActionTypes } from '../../shared/state/actions/undo';
 import { init, undo, redo, peek, pushToUndobuffer } from '../../shared/state/undobuffer';
 
-export const getUndoWrapper = (undoGroup, undoableActions, reducer, initialState) => {
+export const getUndoWrapper = ({undoGroup, undoableActions, reducer, initialState, trackChange}) => {
+
+  // trackChange is a way to signal to the world that significant changes have happened
+  // to the state. This can be used for autosaving state later. It is best done here
+  // as undo already tracks significant changes.
+  const setChanged = () => {
+    if(trackChange) trackChange();
+  }
 
   init(undoGroup, 'Start', initialState);
 
@@ -14,8 +21,10 @@ export const getUndoWrapper = (undoGroup, undoableActions, reducer, initialState
     if(action.undoGroup && action.undoGroup === undoGroup || _.includes(undoableActions, action.type)){
       switch(action.type){
         case undoActionTypes.UNDO:
+          setChanged();
           return undo(action.undoGroup, state);
         case undoActionTypes.REDO:
+          setChanged();
           return redo(action.undoGroup, state);
         default:
           state = reducer(state, action);
@@ -24,6 +33,7 @@ export const getUndoWrapper = (undoGroup, undoableActions, reducer, initialState
           let previousUndoState = peek(undoGroup, action);
           if(previousUndoState !== state) {
             pushToUndobuffer(undoGroup, action.undoDescription, state);
+            setChanged();
           }
           return state;
       }  

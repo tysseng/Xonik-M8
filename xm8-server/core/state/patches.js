@@ -5,7 +5,7 @@ import { autosaver } from '../patch/patchRepository';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 import { types } from '../../shared/state/actions/patch';
-import { getPatchNum, initChangeTrackerForPatches } from './reducerTools';
+import { getPatchNum } from './reducerTools';
 
 import { emptyState as emptyGraphState, undoableActions as undoableGraphActions } from './graph';
 import { emptyState as emptyMatrixState, undoableActions as undoableMatrixActions } from './matrix';
@@ -34,17 +34,11 @@ const patch = (state, action) => {
     return action.patch;
   }
 
-  let changedState = state
+  return state
     .updateIn(['graph'], substate => graph(substate, action))
     .updateIn(['matrix'], substate => matrix(substate, action))
     .updateIn(['virtualInputs'], substate => virtualInputs(substate, action))
     .updateIn(['inputgroups'], substate => inputgroups(substate, action));
-
-  if(changedState !== state && undoableActions.indexOf(action.type) > -1){
-    console.log("Patch changed", action.patchNumber);
-    changeTracker.set(action.patchNumber);
-  }
-  return changedState;
 }
 
 const emptyPatchState = (() => {
@@ -78,7 +72,15 @@ const emptyState = (() => {
 // create one undo wrapper per patch
 let patchUndoReducers = [];
 for(let i=0; i<config.voices.numberOfGroups; i++){
-  patchUndoReducers.push(getUndoWrapper(undoGroups.PATCH + i, undoableActions, patch, emptyPatchState[i]));
+  let undoWrapper = getUndoWrapper({
+    undoGroup: undoGroups.PATCH + i,
+    undoableActions: undoableActions,
+    reducer: patch,
+    initialState: emptyPatchState[i],
+    trackChange: changeTracker.set.bind(null, getPatchNum(i))
+  });
+
+  patchUndoReducers.push(undoWrapper);
 }
 
 const patches = (state = emptyState, action) => {

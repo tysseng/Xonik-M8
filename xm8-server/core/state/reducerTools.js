@@ -4,14 +4,14 @@ import config from '../../shared/config';
 export const getPatchNum = (patchNumber) => '' + patchNumber;
 
 export const initChangeTrackerForPatches = () => {
-  let initialChanges = {};
+  let hasChanged = {};
   for(let i=0; i<config.voices.numberOfGroups; i++){
-    initialChanges[getPatchNum(i)] = false;
+    hasChanged[getPatchNum(i)] = false;
   }
 
   return {
-    hasChanged: initialChanges,
-    set: function(patchNumber) { this.hasChanged[patchNumber] = true},
-    clear: function(patchNumber) {this.hasChanged[patchNumber] = false}
+    hasChanged,
+    set: function(patchNumber) { hasChanged[patchNumber] = true},
+    clear: function(patchNumber) {hasChanged[patchNumber] = false}
   }
 };
