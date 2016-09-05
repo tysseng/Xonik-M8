@@ -1,8 +1,8 @@
 // kickstarts the controller repo.
-var controllerRepository = require('./controllerRepository.js');
-var ctrlSetup = require('../../shared/controllerSetup.js');
-var eventbus = require('../eventbus.js');
-var controllers = require('./controllers.js');
+import controllerRepository from './controllerRepository.js';
+import ctrlSetup from '../../shared/controllerSetup.js';
+import eventbus from '../eventbus.js';
+import controllers from './controllers.js';
 
 var onControllerChangeCallback;
 

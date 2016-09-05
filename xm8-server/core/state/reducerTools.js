@@ -4,7 +4,6 @@ import config from '../../shared/config';
 export const getPatchNum = (patchNumber) => '' + patchNumber;
 
 export const initChangeTrackerForPatches = () => {
-
   let initialChanges = {};
   for(let i=0; i<config.voices.numberOfGroups; i++){
     initialChanges[getPatchNum(i)] = false;

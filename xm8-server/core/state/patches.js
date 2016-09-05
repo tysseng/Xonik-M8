@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 
 import config from '../../shared/config';
-import { getAutosaved } from '../graph/patchRepository';
+import { autosaver } from '../patch/patchRepository';
 import { getUndoWrapper } from './undo';
 import { groups as undoGroups } from '../../shared/state/actions/undo';
 import { types } from '../../shared/state/actions/patch';
@@ -16,8 +16,7 @@ import graph from './graph';
 import matrix from './matrix';
 import inputgroups from './inputgroups';
 import { virtualInputs } from './inputs';
-
-export const changeTracker = initChangeTrackerForPatches();
+import changeTracker from './patchesChangeTracker';
 
 // join all undoable actions from the sub reducers
 const undoableActions = undoableGraphActions
@@ -51,7 +50,7 @@ const patch = (state, action) => {
 const emptyPatchState = (() => {
   let patchStates = [];
   for(let i=0; i<config.voices.numberOfGroups; i++){
-    let autosaved = getAutosaved(getPatchNum(i));
+    let autosaved = autosaver.getAutosaved(getPatchNum(i));
     if(autosaved){
       patchStates.push(autosaved);
     } else {

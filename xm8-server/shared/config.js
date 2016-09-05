@@ -93,9 +93,12 @@ let config = {
       patch: {
         intervalMs: 3000,
         file: 'patch'
+      },
+      controllers: {
+        intervalMs: 3000,
+        file: 'controllers'
       }
     }
-
   }
 };
 

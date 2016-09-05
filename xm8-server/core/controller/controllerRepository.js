@@ -1,12 +1,18 @@
 // the spi repository serializes, sends and receives data through the SPI bus. 
 // It communicates through events and exports nothing.
 
-var eventbus = require('../eventbus.js');
-var spi = require('../spi/spi-fd.js');
-var config = require('../../shared/config.js');
-var ctrlConfig = require('../../shared/controllerSetup.js');
-var spiType = require('../spi/spiType.js');
-var serializer = require ('./serializer.js');
+import eventbus from '../eventbus.js';
+import spi from '../spi/spi-fd.js';
+import config from '../../shared/config.js';
+import ctrlConfig from '../../shared/controllerSetup.js';
+import spiType from '../spi/spiType.js';
+import serializer from './serializer.js';
+
+import changeTracker from '../state/controllersChangeTracker';
+import { initPatchAutosaver } from '../autosave/autosaver';
+import { getControllers} from '../state/selectors';
+
+export const autosaver = initPatchAutosaver(changeTracker, getControllers, config.persistence.autosave.controllers.file);
 
 function publishControllerChange(buffer){
   var event = serializer.deserializeController(buffer, this);
@@ -39,6 +45,6 @@ function receive(buffer){
   //Todo - implement multiple types here. For now controller messages are the only ones.
   publishControllerChange(buffer);
 }
-
+/*
 listenToControllerChanges();
-spi.onRead(receive); 
+spi.onRead(receive);*/

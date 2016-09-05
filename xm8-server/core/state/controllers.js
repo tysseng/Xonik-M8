@@ -1,10 +1,9 @@
 import { Map } from 'immutable';
 import { types } from '../../shared/state/actions/inputs';
 import { types as patchActionTypes } from '../../shared/state/actions/patch';
-import { getPatchNum, initChangeTrackerForPatches } from './reducerTools';
+import { getPatchNum } from './reducerTools';
 import config from '../../shared/config';
-
-export const changeTracker = initChangeTrackerForPatches();
+import changeTracker from '../state/controllersChangeTracker';
 
 const emptyState = (() => {
   let controllers = new Map();

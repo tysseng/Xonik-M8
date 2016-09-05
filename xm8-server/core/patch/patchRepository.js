@@ -6,19 +6,18 @@ import serializer from './serializer.js';
 import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
-import { getPatch, getControllers} from '../state/selectors';
+import { getPatch, getControllers } from '../state/selectors';
 
 import { loadPatchFromFile } from '../../shared/state/actions/patch';
 import { setLoadedPatchFileDetails } from '../../shared/state/actions/nodes';
+import { initPatchAutosaver } from '../autosave/autosaver';
 import { filetypes } from '../../shared/FileTypes';
-import { saveFile, loadFile, saveDirect, loadDirect } from '../persistence/fileRepo';
+import { saveFile, loadFile } from '../persistence/fileRepo';
 import { fromJS } from 'immutable';
 
-import { changeTracker as patchChangeTracker } from '../state/patches';
-import { getPatchNum } from '../state/reducerTools';
+import changeTracker from '../state/patchesChangeTracker';
 
-const autosaveFilename = config.persistence.autosave.rootFolder + config.persistence.autosave.patch.file;
-
+export let autosaver = initPatchAutosaver(changeTracker, getPatch, config.persistence.autosave.patch.file);
 
 // auto-update voices whenever state changes
 // TODO: listen to only graph changes!
@@ -29,27 +28,6 @@ const autosaveFilename = config.persistence.autosave.rootFolder + config.persist
     }
   }
 );*/
-
-export const autosave = () => {
-  for(let i = 0; i< config.voices.numberOfGroups; i++) {
-    let patchNumber = getPatchNum(i);
-    if (patchChangeTracker.hasChanged[patchNumber]) {
-      saveDirect(autosaveFilename + patchNumber, getPatch(patchNumber).toJS());
-      patchChangeTracker.clear(patchNumber);
-      console.log("Autosaved patch", patchNumber);
-    }
-  }
-  setTimeout(autosave, config.persistence.autosave.patch.intervalMs);
-}
-
-export const getAutosaved = (patchNumber) => {
-  let file = loadDirect(autosaveFilename + patchNumber);
-  if(file) {
-    return fromJS(file);
-  } else {
-    return undefined;
-  }
-}
 
 function sendPatch(){
   if(!preparer.isNetValid()){

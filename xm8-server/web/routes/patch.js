@@ -1,5 +1,5 @@
-var express = require('express');
-var patchRepository = require('../../core/graph/patchRepository.js');
+import express from 'express';
+import patchRepository from '../../core/patch/patchRepository.js';
 var router = express.Router();
 
 // publish patch to voice cards

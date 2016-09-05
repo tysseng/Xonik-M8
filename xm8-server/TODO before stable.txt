@@ -1,11 +1,8 @@
 TODO før "stabilt"
 
 Autoloade controllers
-- Lage autosave av controllers. Legg separat fra patchRepository for å ikke skrive patch hele tiden når man spiller.
-  Kan kanskje ha større intervall mellom saves eller noe annen smartness?
 - UNDO_POINT trigger ikke autosave i patch
 - Undo/redo autosaves heller ikke.
-
 
 TODO:
 - Fikse subscribe i patchRepo
