@@ -18,17 +18,6 @@ export const undoableActions = [
   patchActionTypes.RESET_PATCH
 ];
 
-export let hasChanged = false;
-const updateHasChanged = (action) => {
-  if(undoableActions.indexOf(action.type) > -1 || action.type === nodeActionTypes.LOAD_PATCH_FROM_FILE){
-    hasChanged = true;
-  }
-}
-export const clearHasChanged = () => {
-  hasChanged = false;
-}
-
-
 const createNewGroup = (id) => {
   return Map({
     id,
@@ -65,8 +54,6 @@ const removeElementFromGroups = (state, elementId) => {
 
 // Element in a group id is equal to whatever the element contains - input id if it is an id etc.
 const inputgroups = (state, action) => {
-
-  updateHasChanged(action);
 
   switch(action.type){
     case inputgroupsActionTypes.MOVE_ELEMENT:

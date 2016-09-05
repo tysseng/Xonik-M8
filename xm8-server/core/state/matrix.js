@@ -8,10 +8,6 @@ export const undoableActions = [
   types.RESET_MATRIX
 ];
 
-export let hasChanged = false;
-const setHasChanged = () => hasChanged = true;
-export const clearHasChanged = () => hasChanged = false;
-
 const directoutputs = (state, action) => {
   switch(action.type){
     case types.DIRECT_OUTPUT_TOGGLE:
@@ -29,11 +25,9 @@ const root = (state, action) => {
 
   switch(action.type){
     case types.DIRECT_OUTPUT_TOGGLE:
-      setHasChanged();
       return state.updateIn(['directoutputs'], substate => directoutputs(substate, action));
     case patchActionTypes.RESET_PATCH:
     case types.RESET_MATRIX:
-      setHasChanged();
       return emptyState;
     default:
       return state;

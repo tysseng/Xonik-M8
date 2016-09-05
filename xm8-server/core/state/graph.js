@@ -22,16 +22,6 @@ export const undoableActions = [
   types.RESET_GRAPH
 ];
 
-export let hasChanged = false;
-const updateHasChanged = (action) => {
-  if(undoableActions.indexOf(action.type) > -1){
-    hasChanged = true;
-  }
-}
-export const clearHasChanged = () => {
-  hasChanged = false;
-}
-
 const isOutput = (type) => {
   return type === paramTypes.map.OUTPUT.id;
 }
@@ -58,7 +48,6 @@ export const emptyState = Map({
 
 // root reducer
 const graph = (state, action) => {
-  updateHasChanged(action);
 
   // any existing usage of the currenly selected output must be removed before we add
   // it to a node AND before we update the outputs mapping.

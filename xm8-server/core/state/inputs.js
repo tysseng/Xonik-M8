@@ -24,19 +24,13 @@ export const undoableActions = [
   patchActionTypes.RESET_PATCH
 ];
 
-export let hasChangedVirtualInputs = false;
 export let hasChangedPhysicalInputs = false;
-
-export const clearHasChangedVirtualInputs = () => {
-  hasChangedVirtualInputs = false;
-}
 
 export const clearHasChangedPhysicalInputs = () => {
   hasChangedPhysicalInputs = false;
 }
 
 const onChangeVirtual = () => {
-  hasChangedVirtualInputs = true;
 }
 
 const onChangePhysical = () => {

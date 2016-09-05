@@ -1,13 +1,12 @@
 TODO før "stabilt"
 
 Autoloade controllers
-- Legg til hasChanged-sjekk på controllers
-- Legg til controllers i autosaving saving av patch
+- Lage autosave av controllers. Legg separat fra patchRepository for å ikke skrive patch hele tiden når man spiller.
+  Kan kanskje ha større intervall mellom saves eller noe annen smartness?
 - Trekk ut hasChanged som egen helper
 - UNDO_POINT trigger ikke autosave i patch
-
-Autosave - Flytte changed-sjekk til patch-reducer og sjekk pr. patch (nå brukes ikke patchNumber i patchRepository patchHasChanged)
-
+- Undo/redo autosaves heller ikke.
+- lage getPatchId(i) => '' +i;
 
 
 TODO:
@@ -31,6 +30,7 @@ Småting
 
 
 For later:
+- Reset for controllers, reset to patch default.
 - Split controllers into one-per-patch
 - Split frontend state and backend-state-in-frontend to make state updating simpler (consider Sigurds suggestion
   of reusing the backend reducer and only send actions.

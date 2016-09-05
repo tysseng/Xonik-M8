@@ -6,7 +6,7 @@ import serializer from './serializer.js';
 import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
-import { getPatch, getGraph, getMatrix, getVirtualInputs, getVirtualInputGroups, getControllers} from '../state/selectors';
+import { getPatch, getControllers} from '../state/selectors';
 
 import { loadPatchFromFile } from '../../shared/state/actions/patch';
 import { setLoadedPatchFileDetails } from '../../shared/state/actions/nodes';
@@ -14,11 +14,7 @@ import { filetypes } from '../../shared/FileTypes';
 import { saveFile, loadFile, saveDirect, loadDirect } from '../persistence/fileRepo';
 import { fromJS } from 'immutable';
 
-import { hasChangedVirtualInputs, clearHasChangedVirtualInputs } from '../state/inputs';
-import { hasChanged as hasChangedGraph, clearHasChanged as clearHasChangedGraph } from '../state/graph';
-import { hasChanged as hasChangedMatrix, clearHasChanged as clearHasChangedMatrix } from '../state/matrix';
-import { hasChanged as hasChangedControls, clearHasChanged as clearHasChangedControls } from '../state/controllers';
-import { hasChanged as hasChangedVirtualInputGroups, clearHasChanged as clearHasChangedVirtualInputGroups } from '../state/inputgroups';
+import { hasChanged as hasChangedPatch, clearHasChanged as clearHasChangedPatch } from '../state/patches';
 
 const autosaveFilename = config.persistence.autosave.rootFolder + config.persistence.autosave.patch.file;
 
@@ -33,27 +29,12 @@ const autosaveFilename = config.persistence.autosave.rootFolder + config.persist
   }
 );*/
 
-const patchHasChanged = () => {
-  return hasChangedGraph ||
-    hasChangedMatrix ||
-    hasChangedVirtualInputGroups ||
-    hasChangedControls ||
-    hasChangedVirtualInputs
-}
-
-const resetPatchChangedState = () => {
-  clearHasChangedGraph();
-  clearHasChangedMatrix();
-  clearHasChangedVirtualInputGroups();
-  clearHasChangedControls();
-  clearHasChangedVirtualInputs();
-}
-
 export const autosave = () => {
   for(let i = 0; i< config.voices.numberOfGroups; i++) {
-    if (patchHasChanged(i)) {
+    if (hasChangedPatch['' + i]) {
       saveDirect(autosaveFilename + i, getPatch('' + i).toJS());
-      resetPatchChangedState(i);
+      clearHasChangedPatch('' + i);
+      console.log("Autosaved patch", i);
     }
   }
   setTimeout(autosave, config.persistence.autosave.patch.intervalMs);
