@@ -3,7 +3,7 @@ import GraphLeftMenu from './GraphLeftMenu';
 import { connect } from 'react-redux';
 import { createNewNode, deleteNode, deleteLink, resetGraph} from '../../../shared/state/actions/nodes';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
-import { getPatchView } from '../../state/selectors';
+import { getPatchview } from '../../state/selectors';
 
 const forceUpdate = () => {
   $.ajax({
@@ -19,7 +19,7 @@ const forceUpdate = () => {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  let patchview = getPatchView(state);
+  let patchview = getPatchview(state);
 
   let selectedFileDetails = {
     selectedFileId: patchview.getIn(['patch','fileId']),

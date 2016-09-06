@@ -6,7 +6,7 @@ import { createNewNode, deleteNode, deleteLink} from '../../../shared/state/acti
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
 import { resetPatch } from '../../../shared/state/actions/patch';
-import { getFileDialog, getPatchView } from '../../state/selectors';
+import { getFileDialog, getPatchview } from '../../state/selectors';
 
 const forceUpdate = () => {
   $.ajax({
@@ -23,7 +23,7 @@ const forceUpdate = () => {
 
 const mapStateToProps = (state, ownProps) => {
 
-  let patchview = getPatchView(state);
+  let patchview = getPatchview(state);
 
   let selectedFileDetails = {
     selectedFileId: patchview.getIn(['patch','fileId']),

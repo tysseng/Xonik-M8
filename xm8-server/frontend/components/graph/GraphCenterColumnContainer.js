@@ -8,13 +8,13 @@ import { selectNode, selectLink, createNewLink, toggleAutoUpdate, changeNodeType
 import { startNodeMove, setLinkFromNodeId, setLinkToNodeId, cancelLinkCreation } from '../../../shared/state/actions/graphvisualization';
 import { moveNode } from '../../../shared/state/actions/nodes';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
-import { getNodes, getPatchView } from '../../state/selectors';
+import { getNodes, getPatchview } from '../../state/selectors';
 
 // TODO: Don't update if net does not validate (or send error message)
 
 const mapStateToProps = (state, ownProps) => {
   let nodes = getNodes(state).toJS();
-  let patchview = getPatchView(state);
+  let patchview = getPatchview(state);
   let shouldAutoUpdate = patchview.get('shouldAutoUpdate');
 
   return {

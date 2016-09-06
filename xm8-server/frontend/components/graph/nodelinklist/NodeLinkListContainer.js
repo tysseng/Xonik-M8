@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getLinks } from '../LinkFunctions';
 import { selectNode, selectLink, deleteNode, deleteLink } from '../../../../shared/state/actions/nodes';
-import { getNodes, getPatchView } from '../../../state/selectors';
+import { getNodes, getPatchview } from '../../../state/selectors';
 import NodeLinkList from './NodeLinkList';
 
 const mapStateToProps = (state, ownProps) => {
@@ -11,8 +11,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     links: getLinks(nodes),
     nodes,
-    selectedNodeId: getPatchView(state).get('selectedNode'),
-    selectedLinkId: getPatchView(state).get('selectedLink')
+    selectedNodeId: getPatchview(state).get('selectedNode'),
+    selectedLinkId: getPatchview(state).get('selectedLink')
   }
 }
 
