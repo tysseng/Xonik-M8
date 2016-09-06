@@ -105,7 +105,7 @@ export const newGroup = (groupId) => {
 export const deleteGroup = (groupId) => {
   return {
     type: inputgroupsActionTypes.DELETE_GROUP,
-    target: 'SERVER',
+    target: 'BOTH',
     groupId,
     undoDescription: 'Delete group'
   }
@@ -130,7 +130,7 @@ export const deleteElement = (id, groupId) => {
     type: inputgroupsActionTypes.DELETE_ELEMENT,
     id, 
     groupId,
-    target: 'SERVER',
+    target: 'BOTH',
     undoDescription: 'Delete element'
   }
 }

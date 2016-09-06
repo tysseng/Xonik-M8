@@ -1,5 +1,6 @@
 import { Map } from 'immutable';
-import { types as inputTypes } from '../../../shared/state/actions/inputs';
+import { types as inputActionTypes } from '../../../shared/state/actions/inputs';
+import { types as patchActionTypes } from '../../../shared/state/actions/patch';
 import { getUpdatedState } from './reducerTools';
 
 export const virtualInputs = (state, action) => {
@@ -9,14 +10,15 @@ export const virtualInputs = (state, action) => {
       if(updatedState){
         return state.merge(updatedState);
       }
-      break;
-    case inputTypes.INPUTCONFIG_SELECT_INPUT: 
+      return state;
+    case inputActionTypes.INPUTCONFIG_SELECT_INPUT:
       if(action.inputType === 'virtual'){
         return state.setIn(['frontend', 'selectedInput'], action.selectedInput);   
-      } else {
-        return state;
       }
-  } 
+      return state;
+    case patchActionTypes.RESET_PATCH:
+      return state.setIn(['frontend', 'selectedInput'], '');
+  }
   return state;
 }
 
@@ -29,12 +31,13 @@ export const physicalInputs = (
         return state.merge(action.state.physicalInputs);
       }        
       break;   
-    case inputTypes.INPUTCONFIG_SELECT_INPUT: 
+    case patchActionTypes.INPUTCONFIG_SELECT_INPUT:
       if(action.inputType === 'physical'){
         return state.setIn(['frontend', 'selectedInput'], action.selectedInput);   
-      } else {
-        return state;
       }
+      break;
+    case inputActionTypes.RESET_PHYSICAL_INPUTS:
+      return state.setIn(['frontend', 'selectedInput'], '');
   } 
   return state;
 }

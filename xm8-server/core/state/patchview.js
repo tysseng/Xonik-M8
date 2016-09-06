@@ -1,6 +1,5 @@
-import {Map} from 'immutable';
-
-import types from '../../shared/state/actions/patch';
+import { Map } from 'immutable';
+import { types } from '../../shared/state/actions/patch';
 
 const patchview = (state = Map({shouldAutoUpdate: false, patch: Map()}), action) => {
   switch (action.type){

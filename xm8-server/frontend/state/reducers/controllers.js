@@ -22,7 +22,6 @@ const controllersForPatch = (
     case 'SET_STATE':
       let updatedState = getUpdatedState(['controllers', '0'], action);
       if(updatedState){
-        console.log(updatedState)
         return state.merge(updatedState);
       }
       break;

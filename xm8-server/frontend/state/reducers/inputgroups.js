@@ -1,5 +1,6 @@
 import { Map } from 'immutable';
 import { inputgroupsActionTypes } from '../../../shared/state/actions/inputgroups';
+import { types as patchActionTypes } from '../../../shared/state/actions/patch';
 import { getUpdatedState } from './reducerTools';
 
 // Element in a group id is equal to whatever the element contains - input id if it is an id etc.
@@ -31,6 +32,16 @@ const inputs = (state, action) => {
         return state.merge(updatedState);
       }
       break;
+    case patchActionTypes.RESET_PATCH:
+    case inputgroupsActionTypes.DELETE_GROUP:
+      return state
+        .set('selectedGroup', '')
+        .set('selectedElementId', '');
+    case inputgroupsActionTypes.DELETE_ELEMENT:
+      if(action.id === state.get('selectedElementId')){
+        return state.set('selectedElementId', '');
+      }
+      return state;
     case inputgroupsActionTypes.SELECT_GROUP:
       return state.set('selectedGroup', action.selectedGroupId);
     case inputgroupsActionTypes.SELECT_ELEMENT:

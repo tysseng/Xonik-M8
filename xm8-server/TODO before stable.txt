@@ -12,12 +12,13 @@ Større
 - Bedre ikoner for reset og delete, bedre skille i meny
 
 Småting
-- Fjerne selected fra frontend på reset (inputs, inputgroups etc)
 - Luft etter hver gruppe i meny
 
 
 
 For later:
+- Split frontend state into patchNumbers (patch and controllers) - need to have separate selected states and only reset
+  the affected ones for the patchNumber that has been changed
 - Reset for controllers, reset to patch default.
 - Split controllers into one-per-patch
 - Split frontend state and backend-state-in-frontend to make state updating simpler (consider Sigurds suggestion

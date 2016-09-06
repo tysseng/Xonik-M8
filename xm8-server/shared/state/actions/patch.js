@@ -7,7 +7,7 @@ export const types = {
 export const resetPatch = () => {
   return {
     type: types.RESET_PATCH,
-    target: 'SERVER'
+    target: 'BOTH'
   }
 };
 
