@@ -2,7 +2,6 @@
 import { map as paramTypes } from '../../graph/ParameterTypes'
 
 export const types = {
-  SET_LOADED_PATCH_FILE_DETAILS: 'SET_LOADED_PATCH_FILE_DETAILS',
   SELECT_NODE: 'SELECT_NODE',
   SELECT_LINK: 'SELECT_LINK',
   NEW_NODE: 'NEW_NODE',
@@ -29,15 +28,6 @@ export const moveNode = (nodeId, x, y) => {
     nodeId,
     x,
     y
-  };
-};
-
-export const setLoadedPatchFileDetails = (fileId, version) => {
-  return {
-    type: types.SET_LOADED_PATCH_FILE_DETAILS,
-    target: 'SERVER',
-    fileId,
-    version
   };
 };
 

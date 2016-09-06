@@ -1,6 +1,7 @@
 export const types = {
   RESET_PATCH: 'RESET_PATCH',
   LOAD_PATCH_FROM_FILE: 'LOAD_PATCH_FROM_FILE',
+  SET_LOADED_PATCH_FILE_DETAILS: 'SET_LOADED_PATCH_FILE_DETAILS'
 }
 
 export const resetPatch = () => {
@@ -24,5 +25,13 @@ export const loadPatchFromFile = (
   }
 };
 
+export const setLoadedPatchFileDetails = (fileId, version) => {
+  return {
+    type: types.SET_LOADED_PATCH_FILE_DETAILS,
+    target: 'SERVER',
+    fileId,
+    version
+  };
+};
 
 

@@ -8,8 +8,7 @@ import printer from './printer.js';
 import commands from './commands.js';
 import { getPatch, getControllers } from '../state/selectors';
 
-import { loadPatchFromFile } from '../../shared/state/actions/patch';
-import { setLoadedPatchFileDetails } from '../../shared/state/actions/nodes';
+import { loadPatchFromFile, setLoadedPatchFileDetails } from '../../shared/state/actions/patch';
 import { initPatchAutosaver } from '../autosave/autosaver';
 import { filetypes } from '../../shared/FileTypes';
 import { saveFile, loadFile } from '../persistence/fileRepo';

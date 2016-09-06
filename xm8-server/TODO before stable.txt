@@ -14,7 +14,6 @@ Større
 Småting
 - Fjerne selected fra frontend på reset (inputs, inputgroups etc)
 - Luft etter hver gruppe i meny
-- Flytte fil-loading ut av nodes actions, lage patch actions.
 
 
 
