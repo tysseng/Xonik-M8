@@ -1,5 +1,5 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux';
-import patchview from './patchview';
+import patchviews from './patchviews';
 import network from './network';
 import filesystem from './filesystem';
 import { physicalInputs } from './inputs';
@@ -9,7 +9,7 @@ import reduxSubscribeMiddleware from '../../shared/state/redux-subscribe';
 
 const serverReducers = combineReducers({
   controllers,
-  patchview,
+  patchviews,
   filesystem,
   network,
   physicalInputs,

@@ -8,9 +8,6 @@ Større
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
 - Scrollbars i matrix
-- Ta vare på hvilken fil som er loadet slik at dette også autosaves. Krever antakelig endring i struktur
-   ---> Ha egen autoloader for patchview og la denne også ha multiple patches.
-
 - Bedre ikoner for reset og delete, bedre skille i meny
 
 Småting
