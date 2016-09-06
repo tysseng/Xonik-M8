@@ -11,9 +11,10 @@ export const resetPatch = () => {
   }
 };
 
+// Called whenever a file is loaded
 export const loadPatchFromFile = (
-  patchNumber, fileId, version,
-  patch, controllers) => {
+  {patchNumber, fileId, version,
+  patch, controllers}) => {
   return {
     type: types.LOAD_PATCH_FROM_FILE,
     target: 'SERVER',
@@ -25,12 +26,17 @@ export const loadPatchFromFile = (
   }
 };
 
-export const setLoadedPatchFileDetails = (fileId, version) => {
+// Called when saving a file, updates any info about currently loaded
+// file
+export const setLoadedPatchFileDetails = ({fileId, version, filename, folderId, patchNumber}) => {
   return {
     type: types.SET_LOADED_PATCH_FILE_DETAILS,
     target: 'SERVER',
     fileId,
-    version
+    version,
+    filename,
+    folderId,
+    patchNumber
   };
 };
 

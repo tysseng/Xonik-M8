@@ -54,30 +54,46 @@ const getAsFile = (patchNumber) => {
   };
 }
 
-export const save = (patchNumber, name, folderId) => {
-  if (!name || !folderId) {
+export const save = ({patchNumber, filename, folderId}) => {
+  if (!filename || !folderId) {
     return {fileSaved: false, message: "Name or folder id missing"};
   }
 
-  let result = saveFile(getAsFile(patchNumber), filetypes.PATCH, name, folderId, true);
+  let result = saveFile({
+    file: getAsFile(patchNumber),
+    type: filetypes.PATCH,
+    filename,
+    folderId,
+    versioned: true
+  });
+
   if (result.fileSaved) {
-    store.dispatch(setLoadedPatchFileDetails(result.fileId, result.version));
+    store.dispatch(setLoadedPatchFileDetails({
+      fileId: result.fileId,
+      version: result.version,
+      filename: result.filename,
+      folderId: result.folderId,
+      patchNumber
+    }));
   }
   return result;
 };
 
-export const load =(patchNumber, fileId, version) => {
+export const load =({patchNumber, filename, folderId, fileId, version}) => {
   let file = loadFile(fileId, version);
 
   if(file && file.contents && file.contents.patch){
-
     // TODO: Figure out how to make sure this is an orderedMap
     store.dispatch(
-      loadPatchFromFile(
+      loadPatchFromFile({
+        fileId,
+        version,
+        filename,
+        folderId,
         patchNumber,
-        fileId, version,
-        fromJS(file.contents.patch),
-        fromJS(file.contents.controllers)));
+        patch: fromJS(file.contents.patch),
+        controllers: fromJS(file.contents.controllers)
+      }));
   }
 };
 

@@ -13,8 +13,12 @@ router.put('/publish', function(req, res){
 });
 
 // save graph as a patch
-router.post('/save', function(req, res){  
-  let result = save(req.body.customData.patchNumber, req.body.name, req.body.folderId);
+router.post('/save', function(req, res){
+  let result = save({
+    patchNumber: req.body.customData.patchNumber,
+    filename: req.body.filename,
+    folderId: req.body.folderId
+  });
 
   // TODO: need try/catch here
   if(result.fileSaved){
@@ -26,7 +30,13 @@ router.post('/save', function(req, res){
 
 // load graph from a patch
 router.post('/load', function(req, res){
-  load(req.body.customData.patchNumber, req.body.fileId, req.body.version);
+  load({
+    patchNumber: req.body.customData.patchNumber,
+    filename: req.body.filename,
+    folderId: req.body.folderId,
+    fileId: req.body.fileId,
+    version: req.body.version
+  });
   res.status(200).send('{}');
 });
 

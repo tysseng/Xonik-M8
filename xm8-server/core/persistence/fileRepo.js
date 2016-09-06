@@ -131,7 +131,7 @@ export const loadFile = (fileId, version) => {
     version = getLatestVersion(fileId);
   } 
   if(version === -1) {
-    throw new Error("No version of " + versionFilename + " exists");
+    throw new Error("No version of " + fileId + " exists");
   }
 
   let filename = getFilename(fileId, version);
@@ -148,7 +148,7 @@ export const loadFile = (fileId, version) => {
 // physical folders by their filename - file-to-folder mapping is done by first
 // looking up the filename-to-filetype mapping in FileTypes, then getting the
 // folder for that type from the global config.
-export const saveFile = (file, type, filename, folderId, versioned = true) => {
+export const saveFile = ({file, type, filename, folderId, versioned = true}) => {
 
   // search for existing file by name, reuse id if name is found
   let fileId = getFileIdByFilename(filename, folderId);
@@ -175,7 +175,7 @@ export const saveFile = (file, type, filename, folderId, versioned = true) => {
     store.dispatch(updateFile(fileId, version, folderId));
   }
 
-  return {fileSaved: true, fileId: fileId, version: version};
+  return {fileSaved: true, fileId, version, filename, folderId};
 }
 
 export const createPhysicalFolders = () => {
