@@ -2,30 +2,31 @@ import { Map } from 'immutable';
 import { types } from '../../../shared/state/actions/nodes';
 import { types as vizTypes } from '../../../shared/state/actions/graphvisualization';
 import { types as guiTypes } from '../../../shared/state/actions/graphgui';
+import { getUpdatedState } from './reducerTools';
+import config from '../../../shared/config';
 
-const merge = (state, changes) => Object.assign({}, state, changes);  
+const emptyState = (() => {
+  let controllers = new Map();
+  for(let i=0; i<config.voices.numberOfGroups; i++){
+    let patchNumber = '' + i;
+    controllers = controllers.set(patchNumber, Map({
+      "selectedNode": "",
+      "mode": 'default',
+      "shouldAutoUpdate": false,
+      offsetX: 0,
+      offsetY: 0,
+      linkDialog: Map({
+        show: false,
+        fromNodeId: '',
+        toNodeId: ''
+      })
+    }));
+  }
+  return controllers;
+})();
 
-const patchview = (
-  state = Map({
-    "selectedNode": "",
-    "mode": 'default',
-    "shouldAutoUpdate": false,
-    offsetX: 0,
-    offsetY: 0,
-    linkDialog: Map({
-      show: false,
-      fromNodeId: '',
-      toNodeId: ''
-    }),
-    patchFileDialog: Map({
-      show: false,
-      mode: 'none'
-    })
-  }), 
-  action) => {  
+const patchview = (state, action) => {
   switch (action.type){
-    case types.TOGGLE_PATCH_FILE_DIALOG:
-      return state.setIn(['patchFileDialog', 'show'], action.show).setIn(['patchFileDialog', 'mode'], action.mode);
     case types.DELETE_NODE:
       if(state.get('selectedNode') === action.nodeId){
         return state.set('selectedNode', '');
@@ -55,13 +56,25 @@ const patchview = (
       return closeLinkDialog(state);
     case types.NEW_LINK:
       return closeLinkDialog(state);
-    case types.SET_STATE:
-      if(action.state.patchview){
-        return state.merge(action.state.patchview);
+    case 'SET_STATE':
+      let updatedState = getUpdatedState(['patchviews', '0'], action);
+      console.log("Set state for patcview", action)
+      if(updatedState){
+        return state.merge(updatedState);
       }
-      return state;      
+      return state;
     default: 
       return state;
+  }
+}
+
+const patchviews = (state = emptyState, action) => {
+  // TODO: Change later.
+  action.patchNumber = '0';
+  if(action.patchNumber) {
+    return state.updateIn([action.patchNumber], patchviewState => patchview(patchviewState, action))
+  } else {
+    return state;
   }
 }
 
@@ -72,4 +85,4 @@ const closeLinkDialog = (state) => {
     .setIn(['linkDialog', 'show'], false);  
 }
 
-export default patchview
+export default patchviews

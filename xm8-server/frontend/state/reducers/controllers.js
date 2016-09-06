@@ -24,11 +24,12 @@ const controllersForPatch = (
       if(updatedState){
         return state.merge(updatedState);
       }
-      break;
+      return state;
     case types.SELECT_CONTROL_GROUP:
       return state.set('selectedGroupId', action.selectedGroupId);
-  } 
-  return state;
+    default:
+      return state;
+  }
 }
 
 const controllers = (state = emptyState, action) => {

@@ -16,6 +16,7 @@ Småting
 
 
 For later:
+- Only enable save patch if patch has changed
 - Split frontend state into patchNumbers (patch and controllers) - need to have separate selected states and only reset
   the affected ones for the patchNumber that has been changed
 - Reset for controllers, reset to patch default.

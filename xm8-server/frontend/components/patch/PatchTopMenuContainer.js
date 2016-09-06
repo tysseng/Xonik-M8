@@ -28,7 +28,10 @@ const mapStateToProps = (state, ownProps) => {
   let selectedFileDetails = {
     selectedFileId: patchview.getIn(['patch','fileId']),
     selectedFileVersion: patchview.getIn(['patch', 'version']),
+    selectedFileName: patchview.getIn(['patch', 'filename'])
   }
+
+  console.log(selectedFileDetails)
 
   return {
     selectedFileDetails,

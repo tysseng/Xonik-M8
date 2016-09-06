@@ -18,6 +18,11 @@ const PatchTopMenu = ({showFileDialog, onPatchSave, onPatchLoad, resetPatch, sel
       <div className="topSubMenu">
         <MenuItem label="Reset" icon="garbage.svg" onClick={resetPatch}/>
       </div>
+      <div className="topSubMenu">
+        <span className="patchname">
+        { selectedFileDetails.selectedFileName }
+        </span>
+      </div>
 
       <div className="topSubMenu right">
         <Link to="/patches" activeClassName="selected">

@@ -13,15 +13,15 @@ export const resetPatch = () => {
 };
 
 // Called whenever a file is loaded
-export const loadPatchFromFile = (
-  {patchNumber, fileId, version,
-  patch, controllers}) => {
+export const loadPatchFromFile = ({fileId, version, filename, folderId, patchNumber, patch, controllers}) => {
   return {
     type: types.LOAD_PATCH_FROM_FILE,
     target: 'SERVER',
     patchNumber,
     fileId,
     version,
+    filename,
+    folderId,
     patch,
     controllers
   }

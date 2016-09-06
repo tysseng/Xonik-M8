@@ -6,7 +6,7 @@ export const getPhysicalInputs = state => state.physicalInputs;
 export const getMatrix = state => state.patches.getIn(['0', 'matrix']);
 export const getGraph = state => state.patches.getIn(['0', 'graph']);
 export const getNodes = state => state.patches.getIn(['0', 'graph', 'nodes']);
-export const getPatchview = state => state.patchview.get('0');
+export const getPatchview = state => state.patchviews.get('0');
 export const getFileDialog = state => state.filedialog;
 export const getFilesystem = state => state.filesystem;
 export const getControllers = state => state.controllers.get('0');

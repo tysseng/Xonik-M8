@@ -45,7 +45,7 @@ export default (app, ws) => {
     });
   });
 
-  store.dispatch(subscribe('patchview', 'frontend', sendPartialState));
+  store.dispatch(subscribe('patchviews/0', 'frontend', sendPartialState));
   store.dispatch(subscribe('patches/0/graph', 'frontend', sendPartialState));
   store.dispatch(subscribe('filesystem', 'frontend', sendPartialState));
   store.dispatch(subscribe('patches/0/virtualInputs', 'frontend', sendPartialState));
