@@ -2,11 +2,10 @@ import _ from 'lodash';
 import paramTypes from '../../shared/graph/ParameterTypes.js';
 import nodeTypes from '../../shared/graph/NodeTypes.js';
 import config from '../../shared/config.js';
-import { getNodes } from '../state/selectors';
 
 let paramType = paramTypes.map;
 let nodeType = nodeTypes.map;
-let nodeTypesIdMap = nodeTypes.idMap
+let nodeTypesIdMap = nodeTypes.idMap;
 
 
 const isLink = (type) => {
@@ -138,8 +137,8 @@ function addNode(node, sortedNodes, offset){
     });
 }
 
-function isNetValid(){
-  let nodes = getNodes().toIndexedSeq().toJS();
+function isNetValid(nodesState){
+  let nodes = nodesState.toIndexedSeq().toJS();
 
   let isValid = true;
 
@@ -152,8 +151,8 @@ function isNetValid(){
   return isValid;
 }
 
-function prepareNetForSerialization(){
-  let nodesMap = getNodes().toJS();
+function prepareNetForSerialization(nodesState){
+  let nodesMap = nodesState.toJS();
 
   // convert map to list for further processing.
   let nodes = [];

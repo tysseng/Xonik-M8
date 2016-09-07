@@ -6,7 +6,7 @@ import serializer from './serializer.js';
 import preparer from './preparer.js';
 import printer from './printer.js';
 import commands from './commands.js';
-import { getPatch, getControllers } from '../state/selectors';
+import { getPatch, getControllers, getNodes } from '../state/selectors';
 
 import { loadPatchFromFile, setLoadedPatchFileDetails } from '../../shared/state/actions/patch';
 import { initPatchAutosaver } from '../autosave/autosaver';
@@ -28,15 +28,18 @@ export let autosaver = initPatchAutosaver(changeTracker, getPatch, config.persis
   }
 );*/
 
-function sendPatch(){
-  if(!preparer.isNetValid()){
+function sendPatch(patchNumber){
+
+  let patchState = getNodes(patchNumber);
+
+  if(!preparer.isNetValid(patchState)){
     console.log("Patch has validation errors, synth voices not updated");
     return {updated: false, message: "Graph has validation errors, synth voices not updated"};
   }
   
   spi.write(commands.stop);
 
-  var buffers = serialize();
+  var buffers = serialize(patchState);
   _.each(buffers, function(buffer){
     spi.write(buffer);
   });  
@@ -49,7 +52,7 @@ const getAsFile = (patchNumber) => {
   return {
     contents: {
       patch: getPatch(patchNumber),
-      controllers: getControllers().toJS()
+      controllers: getControllers(patchNumber).toJS()
     }
   };
 }
@@ -97,8 +100,8 @@ export const load =({patchNumber, filename, folderId, fileId, version}) => {
   }
 };
 
-function serialize(){
-  var net = preparer.prepareNetForSerialization();
+function serialize(patchState){
+  var net = preparer.prepareNetForSerialization(patchState);
   printer.printNet(net);
 
   var buffers = [];
