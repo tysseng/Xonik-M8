@@ -6,7 +6,7 @@ import { getUpdatedState } from './reducerTools';
 export const virtualInputs = (state, action) => {
   switch(action.type){
     case 'SET_STATE':
-      let updatedState = getUpdatedState(['patches', '0', 'virtualInputs'], action);
+      let updatedState = getUpdatedState(['virtualInputs'], action);
       if(updatedState){
         return state.merge(updatedState);
       }

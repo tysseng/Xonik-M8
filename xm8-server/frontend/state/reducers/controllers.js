@@ -2,6 +2,7 @@ import { Map } from 'immutable';
 import { types } from '../../../shared/state/actions/controllers';
 import { getUpdatedState, getPatchNum } from './reducerTools';
 import config from '../../../shared/config';
+import { setState } from '../../../shared/state/actions/index';
 
 const emptyState = (() => {
   let controllers = new Map();
@@ -20,11 +21,7 @@ const controllersForPatch = (
 
   switch(action.type){
     case 'SET_STATE':
-      let updatedState = getUpdatedState(['controllers', '0'], action);
-      if(updatedState){
-        return state.merge(updatedState);
-      }
-      return state;
+      return state.merge(action.state);
     case types.SELECT_CONTROL_GROUP:
       return state.set('selectedGroupId', action.selectedGroupId);
     default:
@@ -37,8 +34,14 @@ const controllers = (state = emptyState, action) => {
     return state.updateIn([action.patchNumber], controllerState => controllersForPatch(controllerState, action))
   } else if(action.type === 'SET_STATE') {
     for(let i=0; i<config.voices.numberOfGroups; i++) {
-      if (getUpdatedState(['controllers', getPatchNum(i)], action)) {
-        state = state.updateIn([getPatchNum(i)], controllerState => controllersForPatch(controllerState, action))
+
+      // The sub reducers do not know what patch they are
+      // working on. Extract state for a single patch and
+      // send this to the sub reducer.
+      let updatedState = getUpdatedState(['controllers', getPatchNum(i)], action);
+      if (updatedState) {
+        let subAction = setState(updatedState);
+        state = state.updateIn([getPatchNum(i)], controllerState => controllersForPatch(controllerState, subAction))
       }
     }
     return state;

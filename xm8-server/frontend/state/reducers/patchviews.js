@@ -3,6 +3,7 @@ import { types } from '../../../shared/state/actions/nodes';
 import { types as vizTypes } from '../../../shared/state/actions/graphvisualization';
 import { types as guiTypes } from '../../../shared/state/actions/graphgui';
 import { getUpdatedState, getPatchNum } from './reducerTools';
+import { setState } from '../../../shared/state/actions/index';
 import config from '../../../shared/config';
 
 const emptyState = (() => {
@@ -57,13 +58,8 @@ const patchview = (state, action) => {
     case types.NEW_LINK:
       return closeLinkDialog(state);
     case 'SET_STATE':
-      let updatedState = getUpdatedState(['patchviews', '0'], action);
-      console.log("Set state for patcview", action)
-      if(updatedState){
-        return state.merge(updatedState);
-      }
-      return state;
-    default: 
+      return state.merge(action.state);
+    default:
       return state;
   }
 }
@@ -73,8 +69,14 @@ const patchviews = (state = emptyState, action) => {
     return state.updateIn([action.patchNumber], patchviewState => patchview(patchviewState, action));
   } else if(action.type === 'SET_STATE') {
     for(let i=0; i<config.voices.numberOfGroups; i++) {
-      if (getUpdatedState(['patchviews', getPatchNum(i)], action)) {
-        state = state.updateIn([getPatchNum(i)], patchviewState => patchview(patchviewState, action));
+
+      // The sub reducers do not know what patch they are
+      // working on. Extract state for a single patch and
+      // send this to the sub reducer.
+      let updatedState = getUpdatedState(['patchviews', getPatchNum(i)], action);
+      if (updatedState) {
+        let subAction = setState(updatedState);
+        state = state.updateIn([getPatchNum(i)], patchviewState => patchview(patchviewState, subAction));
       }
     }
     return state;

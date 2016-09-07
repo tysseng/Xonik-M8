@@ -2,6 +2,7 @@ import {Map} from 'immutable';
 
 import config from '../../../shared/config';
 import { getUpdatedState, getPatchNum } from './reducerTools';
+import { setState } from '../../../shared/state/actions/index';
 
 import { emptyState as emptyGraphState } from './graph';
 import { emptyState as emptyMatrixState } from './matrix';
@@ -45,10 +46,17 @@ const patches = (state = emptyState, action) => {
     return state.updateIn([action.patchNumber], patchState => patch(patchState, action))
   } else if(action.type === 'SET_STATE') {
     for(let i=0; i<config.voices.numberOfGroups; i++) {
-      if (getUpdatedState(['patches', getPatchNum(i)], action)) {
-        state = state.updateIn([getPatchNum(i)], patchState => patch(patchState, action))
+
+      // The sub reducers do not know what patch they are
+      // working on. Extract state for a single patch and
+      // send this to the sub reducer.
+      let updatedState = getUpdatedState(['patches', getPatchNum(i)], action);
+      if (updatedState) {
+        let subAction = setState(updatedState);
+        state = state.updateIn([getPatchNum(i)], patchState => patch(patchState, subAction))
       }
     }
+
     return state;
   } else {
     return state;

@@ -4,7 +4,7 @@ import { getUpdatedState } from './reducerTools';
 const nodes = (state, action) => {
   switch (action.type){
     case 'SET_STATE':
-      let updatedState = getUpdatedState(['patches', '0', 'graph'], action);
+      let updatedState = getUpdatedState(['graph'], action);
       if(updatedState){
         return state.clear().merge(updatedState);
       }

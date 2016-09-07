@@ -3,15 +3,13 @@ TODO før "stabilt"
 TODO:
 - Fikse subscribe i patchRepo
 
-- Se over at addPatchNumber ikke gjøres på serverside patches.
-
 Større
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
 - Scrollbars i matrix
 - Bedre ikoner for reset og delete, bedre skille i meny
-- Lage per-patch wrapper til reducers
+- Lage per-patch wrapper til reducers frontend og backend
 
 Småting
 - Luft etter hver gruppe i meny

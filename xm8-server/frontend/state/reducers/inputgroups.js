@@ -27,7 +27,7 @@ export const emptyState =Map({
 const inputs = (state, action) => {
   switch(action.type){
     case 'SET_STATE':
-      let updatedState = getUpdatedState(['patches', '0', 'inputgroups'], action);
+      let updatedState = getUpdatedState(['inputgroups'], action);
       if(updatedState){
         return state.merge(updatedState);
       }
