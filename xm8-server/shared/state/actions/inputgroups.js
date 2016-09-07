@@ -1,3 +1,5 @@
+import { currentVoiceGroupId } from '../voicegroupselector';
+
 export const inputgroupsActionTypes = {
   SELECT_GROUP: 'SELECT_GROUP',
   SELECT_ELEMENT: 'SELECT_ELEMENT',
@@ -19,7 +21,7 @@ export const inputgroupsActionTypes = {
 
 let types = inputgroupsActionTypes;
 
-export const toggleVisibility = (groupId, isVisible, patchNumber = '0') =>{
+export const toggleVisibility = (groupId, isVisible, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.TOGGLE_VISIBILITY,
     groupId,
@@ -29,7 +31,7 @@ export const toggleVisibility = (groupId, isVisible, patchNumber = '0') =>{
   }
 }
 
-export const renameGroup = (groupId, name, patchNumber = '0') =>{
+export const renameGroup = (groupId, name, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.RENAME_GROUP,
     groupId,
@@ -39,7 +41,7 @@ export const renameGroup = (groupId, name, patchNumber = '0') =>{
   }
 }
 
-export const selectGroup = (selectedGroupId, patchNumber = '0') =>{
+export const selectGroup = (selectedGroupId, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.SELECT_GROUP,
     selectedGroupId,
@@ -48,7 +50,7 @@ export const selectGroup = (selectedGroupId, patchNumber = '0') =>{
   }
 }
 
-export const changeElementType = (groupId, id, inputType, patchNumber = '0') =>{
+export const changeElementType = (groupId, id, inputType, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: types.CHANGE_ELEMENT_TYPE,
     groupId,
@@ -60,7 +62,7 @@ export const changeElementType = (groupId, id, inputType, patchNumber = '0') =>{
   };  
 }
 
-export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem, patchNumber = '0') =>{
+export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: types.SELECT_ELEMENT,
     mouseX, 
@@ -73,7 +75,7 @@ export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem, patchNum
   };  
 }
 
-export const moveElement = (groupId, id, offsetXem, offsetYem, patchNumber = '0') =>{
+export const moveElement = (groupId, id, offsetXem, offsetYem, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: types.MOVE_ELEMENT,
     id,
@@ -85,7 +87,7 @@ export const moveElement = (groupId, id, offsetXem, offsetYem, patchNumber = '0'
   }
 }
 
-export const deselectElement = (patchNumber = '0') =>{
+export const deselectElement = (patchNumber = currentVoiceGroupId()) =>{
   return {
     type: types.DESELECT_ELEMENT,
     target: 'GUI',
@@ -93,7 +95,7 @@ export const deselectElement = (patchNumber = '0') =>{
   }
 }
 
-export const deselectDragElement = (patchNumber = '0') =>{
+export const deselectDragElement = (patchNumber = currentVoiceGroupId()) =>{
   return {
     type: types.DESELECT_DRAG_ELEMENT,
     target: 'GUI',
@@ -101,7 +103,7 @@ export const deselectDragElement = (patchNumber = '0') =>{
   }
 }
 
-export const newGroup = (groupId, patchNumber = '0') =>{
+export const newGroup = (groupId, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.NEW_GROUP,
     target: 'SERVER',
@@ -111,7 +113,7 @@ export const newGroup = (groupId, patchNumber = '0') =>{
   }
 }
 
-export const deleteGroup = (groupId, patchNumber = '0') =>{
+export const deleteGroup = (groupId, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.DELETE_GROUP,
     target: 'BOTH',
@@ -121,7 +123,7 @@ export const deleteGroup = (groupId, patchNumber = '0') =>{
   }
 }
 
-export const addElement = (id, groupId, elementId, elementType, offsetXem, offsetYem, patchNumber = '0') =>{
+export const addElement = (id, groupId, elementId, elementType, offsetXem, offsetYem, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.ADD_ELEMENT,
     id, 
@@ -136,7 +138,7 @@ export const addElement = (id, groupId, elementId, elementType, offsetXem, offse
   }
 }
 
-export const deleteElement = (id, groupId, patchNumber = '0') =>{
+export const deleteElement = (id, groupId, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.DELETE_ELEMENT,
     id, 
@@ -147,7 +149,7 @@ export const deleteElement = (id, groupId, patchNumber = '0') =>{
   }
 }
 
-export const openNewElementDialog = (patchNumber = '0') =>{
+export const openNewElementDialog = (patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.OPEN_NEW_ELEMENT_DIALOG,
     target: 'GUI',
@@ -155,7 +157,7 @@ export const openNewElementDialog = (patchNumber = '0') =>{
   }
 }
 
-export const closeNewElementDialog = (patchNumber = '0') =>{
+export const closeNewElementDialog = (patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.CLOSE_NEW_ELEMENT_DIALOG,
     target: 'GUI',
@@ -163,7 +165,7 @@ export const closeNewElementDialog = (patchNumber = '0') =>{
   } 
 }
 
-export const selectInputInNewElementDialog = (elementType, elementId, patchNumber = '0') =>{
+export const selectInputInNewElementDialog = (elementType, elementId, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.SELECT_ID_IN_NEW_ELEMENT_DIALOG,
     elementId,
@@ -173,7 +175,7 @@ export const selectInputInNewElementDialog = (elementType, elementId, patchNumbe
   }   
 }
 
-export const inputgroupsUndoPointPositionChanged = (patchNumber = '0') =>{
+export const inputgroupsUndoPointPositionChanged = (patchNumber = currentVoiceGroupId()) =>{
   return {
     type: inputgroupsActionTypes.SET_UNDO_POINT,
     undoDescription: 'Move element',

@@ -1,5 +1,6 @@
 // TODO: SWITCH TO https://www.npmjs.com/package/es6-enum
 import { map as paramTypes } from '../../graph/ParameterTypes'
+import { currentVoiceGroupId } from '../voicegroupselector';
 
 export const types = {
   SELECT_NODE: 'SELECT_NODE',
@@ -20,7 +21,7 @@ export const types = {
   RESET_GRAPH: 'RESET_GRAPH'
 };
 
-export const moveNode = (nodeId, x, y, patchNumber = '0') => {
+export const moveNode = (nodeId, x, y, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.NODE_MOVE,
     target: 'SERVER',
@@ -31,7 +32,7 @@ export const moveNode = (nodeId, x, y, patchNumber = '0') => {
   };
 };
 
-export const selectNode = (nodeId, patchNumber = '0') => {
+export const selectNode = (nodeId, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.SELECT_NODE,
     target: 'GUI',    
@@ -40,7 +41,7 @@ export const selectNode = (nodeId, patchNumber = '0') => {
   }  
 };
 
-export const selectLink = (linkId, patchNumber = '0') => {
+export const selectLink = (linkId, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.SELECT_LINK,
     target: 'GUI',    
@@ -49,7 +50,7 @@ export const selectLink = (linkId, patchNumber = '0') => {
   }  
 };
 
-export const createNewNode = (patchNumber = '0') => {
+export const createNewNode = (patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.NEW_NODE,
     target: 'SERVER',
@@ -58,7 +59,7 @@ export const createNewNode = (patchNumber = '0') => {
   }
 };
 
-export const deleteNode = (nodeId, patchNumber = '0') => {
+export const deleteNode = (nodeId, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.DELETE_NODE,
     nodeId: nodeId,
@@ -68,7 +69,7 @@ export const deleteNode = (nodeId, patchNumber = '0') => {
   }
 };
 
-export const changeNodeName = (nodeId, name, patchNumber = '0') => {
+export const changeNodeName = (nodeId, name, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.CHANGE_NODE_NAME,
     nodeId,
@@ -78,7 +79,7 @@ export const changeNodeName = (nodeId, name, patchNumber = '0') => {
   }
 };
 
-export const changeNodeType = (nodeId, typeId, patchNumber = '0') => {
+export const changeNodeType = (nodeId, typeId, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.CHANGE_NODE_TYPE,
     nodeId: nodeId,
@@ -89,7 +90,7 @@ export const changeNodeType = (nodeId, typeId, patchNumber = '0') => {
   }
 };
 
-export const changeNodeParamType = (nodeId, paramId, paramType, patchNumber = '0') => {
+export const changeNodeParamType = (nodeId, paramId, paramType, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.CHANGE_NODE_PARAM_TYPE,      
     nodeId,
@@ -101,7 +102,7 @@ export const changeNodeParamType = (nodeId, paramId, paramType, patchNumber = '0
   }
 };
 
-export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue, patchNumber = '0') => {
+export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.CHANGE_NODE_PARAM_VALUE,      
     nodeId,
@@ -114,7 +115,7 @@ export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue, pa
   }
 };
 
-export const changeNodeParamUnit = (nodeId, paramId, paramUnit, patchNumber = '0') => {
+export const changeNodeParamUnit = (nodeId, paramId, paramUnit, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.CHANGE_NODE_PARAM_UNIT,      
     nodeId,
@@ -126,7 +127,7 @@ export const changeNodeParamUnit = (nodeId, paramId, paramUnit, patchNumber = '0
   }
 };
 
-export const createNewLink = (fromNodeId, toNodeId, toParamId, patchNumber = '0') => {
+export const createNewLink = (fromNodeId, toNodeId, toParamId, patchNumber = currentVoiceGroupId()) => {
 
   return {
     type: types.NEW_LINK,
@@ -140,7 +141,7 @@ export const createNewLink = (fromNodeId, toNodeId, toParamId, patchNumber = '0'
   }
 };
 
-export const changeLinkName = (toNodeId, toParamId, name, patchNumber = '0') => {
+export const changeLinkName = (toNodeId, toParamId, name, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.CHANGE_LINK_NAME,
     toNodeId, 
@@ -151,7 +152,7 @@ export const changeLinkName = (toNodeId, toParamId, name, patchNumber = '0') => 
   }
 };
 
-export const toggleLinkNameInGraph = (toNodeId, toParamId, visible, patchNumber = '0') => {
+export const toggleLinkNameInGraph = (toNodeId, toParamId, visible, patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.TOGGLE_LINK_NAME_IN_GRAPH,
     toNodeId, 
@@ -163,7 +164,7 @@ export const toggleLinkNameInGraph = (toNodeId, toParamId, visible, patchNumber 
   }
 };
 
-export const deleteLink = (linkId, patchNumber = '0') => {
+export const deleteLink = (linkId, patchNumber = currentVoiceGroupId()) => {
   // by splitting id into its parts, some of the reducer code may be reused.
   let linkIdParts = linkId.split('-');
   return {
@@ -177,7 +178,7 @@ export const deleteLink = (linkId, patchNumber = '0') => {
 
 // this action is not explicitly treated by the reducer, but it adds an entry in the
 // undo history.
-export const graphUndoPointPositionChanged = (patchNumber = '0') => {
+export const graphUndoPointPositionChanged = (patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.SET_UNDO_POINT,
     undoDescription: 'Move element',
@@ -185,7 +186,7 @@ export const graphUndoPointPositionChanged = (patchNumber = '0') => {
   }
 };
 
-export const resetGraph = (patchNumber = '0') => {
+export const resetGraph = (patchNumber = currentVoiceGroupId()) => {
   return {
     type: types.RESET_GRAPH,
     target: 'SERVER',
