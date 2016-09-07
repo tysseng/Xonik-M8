@@ -4,6 +4,10 @@ TODO:
 - Fikse subscribe i patchRepo
 
 Større
+- Voice-velger med tilhørende frontend reducer.
+    Må sette patchNumber i
+        - voicegroupselector
+
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.

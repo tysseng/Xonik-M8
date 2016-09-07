@@ -7,10 +7,10 @@ import { setState } from '../../../shared/state/actions/index';
 import config from '../../../shared/config';
 
 const emptyState = (() => {
-  let controllers = new Map();
+  let patchviews = new Map();
   for(let i=0; i<config.voices.numberOfGroups; i++){
     let patchNumber = '' + i;
-    controllers = controllers.set(patchNumber, Map({
+    patchviews = patchviews.set(patchNumber, Map({
       "selectedNode": "",
       "mode": 'default',
       "shouldAutoUpdate": false,
@@ -23,7 +23,8 @@ const emptyState = (() => {
       })
     }));
   }
-  return controllers;
+  patchviews = patchviews.set('selectedPatchNumber', '0');
+  return patchviews;
 })();
 
 const patchview = (state, action) => {
@@ -79,6 +80,7 @@ const patchviews = (state = emptyState, action) => {
         state = state.updateIn([getPatchNum(i)], patchviewState => patchview(patchviewState, subAction));
       }
     }
+
     return state;
   } else {
     return state;

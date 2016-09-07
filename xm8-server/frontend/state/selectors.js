@@ -7,6 +7,7 @@ export const getMatrix = state => state.patches.getIn([currentVoiceGroupId(), 'm
 export const getGraph = state => state.patches.getIn([currentVoiceGroupId(), 'graph']);
 export const getNodes = state => state.patches.getIn([currentVoiceGroupId(), 'graph', 'nodes']);
 export const getPatchview = state => state.patchviews.get(currentVoiceGroupId());
+export const getPatchviews = state => state.patchviews;
 export const getFileDialog = state => state.filedialog;
 export const getFilesystem = state => state.filesystem;
 export const getControllers = state => state.controllers.get(currentVoiceGroupId());

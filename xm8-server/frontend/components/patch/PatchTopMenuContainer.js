@@ -6,9 +6,9 @@ import { createNewNode, deleteNode, deleteLink} from '../../../shared/state/acti
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
 import { resetPatch } from '../../../shared/state/actions/patch';
-import { getFileDialog, getPatchview } from '../../state/selectors';
+import { getFileDialog, getPatchview, getPatchviews } from '../../state/selectors';
 
-const forceUpdate = () => {
+/*const forceUpdate = () => {
   $.ajax({
     url: '/api/patch/publish',
     type: 'PUT',
@@ -19,11 +19,12 @@ const forceUpdate = () => {
       console.log(response.responseText);
     }
   });
-}
+}      */
 
 const mapStateToProps = (state, ownProps) => {
 
   let patchview = getPatchview(state);
+  let patchviewsRoot = getPatchviews(state);
 
   let selectedFileDetails = {
     selectedFileId: patchview.getIn(['patch','fileId']),
@@ -34,6 +35,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     selectedFileDetails,
     mode: patchview.get('mode'),
+    selectedPatchNumber: patchviewsRoot.get('selectedPatchNumber'),
     selectedNodeId: patchview.get('selectedNode'),
     selectedLinkId: patchview.get('selectedLink'),
     shouldAutoUpdate: patchview.get('shouldAutoUpdate'),
@@ -47,7 +49,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onPatchSaveAs: (options) => dispatch(toggleFileDialog(true, 'saveas', options)),
     onPatchLoad: () => dispatch(toggleFileDialog(true, 'load')),
     resetPatch: () => dispatch(resetPatch()),
-    onUpdateVoice: forceUpdate,
+    //onUpdateVoice: forceUpdate,
     onDelete: (nodeId, linkId) => {
       if(nodeId){
         dispatch(deleteNode(nodeId));

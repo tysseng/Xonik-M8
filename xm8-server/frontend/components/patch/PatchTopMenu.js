@@ -2,7 +2,7 @@ import MenuItem from '../framework/MenuItem';
 import { Link } from 'react-router';
 import FileDialogContainer from '../filesystem/FileDialogContainer';
 
-const PatchTopMenu = ({showFileDialog, onPatchSave, onPatchLoad, resetPatch, selectedFileDetails, onUndo, onRedo}) => {
+const PatchTopMenu = ({selectedPatchNumber, showFileDialog, onPatchSave, onPatchLoad, resetPatch, selectedFileDetails, onUndo, onRedo}) => {
   
   return (
     <div>
@@ -39,7 +39,7 @@ const PatchTopMenu = ({showFileDialog, onPatchSave, onPatchLoad, resetPatch, sel
         </Link>
       </div>
 
-      {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/api/patch/save' loadUrl = '/api/patch/load' customData={{patchNumber: '0'}}/> }
+      {showFileDialog && <FileDialogContainer path='/patches' headingPostfix='patch' saveUrl='/api/patch/save' loadUrl = '/api/patch/load' customData={{patchNumber: selectedPatchNumber}}/> }
     </div>
   )
 }

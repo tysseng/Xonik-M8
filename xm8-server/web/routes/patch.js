@@ -5,7 +5,7 @@ var router = express.Router();
 // publish patch to voice cards
 router.put('/publish', function(req, res){
   //TODO: Ta inn id her
-  let result = sendPatch('0');
+  let result = sendPatch(req.body.patchNumber);
   if(result.updated){
     res.status(200).send(result.message);
   } else {
