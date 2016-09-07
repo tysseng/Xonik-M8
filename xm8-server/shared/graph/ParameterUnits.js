@@ -86,11 +86,7 @@ const from = (unit, value) => {
 
   if(shouldNotBeFormatted(value)) return value;
 
-  console.log(value);
-
   value = padStartWithZero(value);
-
-  console.log('conv', value);
 
   let convertedValue = Math.floor(value * factors[unit].mult);
   if(hasDecimalPoint(value)){

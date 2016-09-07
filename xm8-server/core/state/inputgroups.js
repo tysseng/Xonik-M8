@@ -69,7 +69,6 @@ const inputgroups = (state, action) => {
       let wrappedElement = getWrappedElement(action.id, action.groupId, action.offsetXem, action.offsetYem, action.elementId, action.elementType);
       return state.setIn(['groups', action.groupId, 'elements', action.id], wrappedElement);
     case inputgroupsActionTypes.DELETE_ELEMENT:
-      console.log("delete", action);
       return state.deleteIn(['groups', action.groupId, 'elements', action.id]);
     case inputgroupsActionTypes.CHANGE_ELEMENT_TYPE:
       return state.setIn(['groups', action.groupId, 'elements', action.id, 'type'], action.inputType);

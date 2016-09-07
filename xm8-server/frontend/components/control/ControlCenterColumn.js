@@ -6,7 +6,7 @@ const ControlCenterColumn = ({selectedGroup, inputs, inputValues, onControllerCh
   if(!selectedGroup || selectedGroup.isVisible === false){
     return null;
   }
-  console.log("something", selectedGroup)
+
   return (
     <div>
       <div>{selectedGroup.name}</div>
