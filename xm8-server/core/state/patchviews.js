@@ -41,8 +41,6 @@ const patchview = (state, action) => {
 }
 
 const patchviews = (state = emptyState, action) => {
-  // TODO: Change later.
-  action.patchNumber = '0';
   if(action.patchNumber) {
     return state.updateIn([action.patchNumber], patchviewState => patchview(patchviewState, action));
   } else {

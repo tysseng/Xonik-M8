@@ -6,34 +6,38 @@ export const types = {
   GRAPH_START_NODE_MOVE: 'GRAPH_START_NODE_MOVE'
 }
 
-export const setLinkFromNodeId = (nodeId) => {
+export const setLinkFromNodeId = (nodeId, patchNumber = '0') => {
   return {
     type: types.GRAPH_SET_LINK_FROM,
     target: 'GUI',
-    nodeId
+    nodeId,
+    patchNumber
   };
 }
 
-export const setLinkToNodeId = (nodeId) => {
+export const setLinkToNodeId = (nodeId, patchNumber = '0') => {
   return {
     type: types.GRAPH_SET_LINK_TO,
     target: 'GUI',
-    nodeId
+    nodeId,
+    patchNumber
   };
 }
 
-export const cancelLinkCreation = () => {
+export const cancelLinkCreation = (patchNumber = '0') => {
   return {
     type: types.GRAPH_CANCEL_LINK_CREATION,
-    target: 'GUI'
+    target: 'GUI',
+    patchNumber
   };
 }
 
-export const startNodeMove = (offsetX, offsetY) => {
+export const startNodeMove = (offsetX, offsetY, patchNumber = '0') => {
   return {
     type: types.GRAPH_START_NODE_MOVE,
     target: 'GUI',
     offsetX,
-    offsetY
+    offsetY,
+    patchNumber
   };
 }

@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
 import { types } from '../../../shared/state/actions/controllers';
-import { getUpdatedState } from './reducerTools';
+import { getUpdatedState, getPatchNum } from './reducerTools';
 import config from '../../../shared/config';
 
 const emptyState = (() => {
@@ -33,10 +33,15 @@ const controllersForPatch = (
 }
 
 const controllers = (state = emptyState, action) => {
-  // TODO: Change later.
-  action.patchNumber = '0';
   if(action.patchNumber) {
     return state.updateIn([action.patchNumber], controllerState => controllersForPatch(controllerState, action))
+  } else if(action.type === 'SET_STATE') {
+    for(let i=0; i<config.voices.numberOfGroups; i++) {
+      if (getUpdatedState(['controllers', getPatchNum(i)], action)) {
+        state = state.updateIn([getPatchNum(i)], controllerState => controllersForPatch(controllerState, action))
+      }
+    }
+    return state;
   } else {
     return state;
   }

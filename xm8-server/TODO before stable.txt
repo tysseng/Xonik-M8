@@ -3,12 +3,15 @@ TODO før "stabilt"
 TODO:
 - Fikse subscribe i patchRepo
 
+- Se over at addPatchNumber ikke gjøres på serverside patches.
+
 Større
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
 - Scrollbars i matrix
 - Bedre ikoner for reset og delete, bedre skille i meny
+- Lage per-patch wrapper til reducers
 
 Småting
 - Luft etter hver gruppe i meny
@@ -16,6 +19,7 @@ Småting
 
 
 For later:
+- "LEDS" for patch saved and autosaved.
 - Only enable save patch if patch has changed
 - Split frontend state into patchNumbers (patch and controllers) - need to have separate selected states and only reset
   the affected ones for the patchNumber that has been changed

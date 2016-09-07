@@ -4,28 +4,31 @@ export const types = {
   RESET_MATRIX: 'RESET_MATRIX'
 }
 
-export const toggleDirectOutput = (inputId, outputId) => {
+export const toggleDirectOutput = (inputId, outputId, patchNumber = '0') => {
   return {
     type: types.DIRECT_OUTPUT_TOGGLE,
     inputId,
     outputId,
-    target: 'BOTH'
+    target: 'BOTH',
+    patchNumber
   }
 }
 
-export const toggleHover = (inputId, outputId) => {
+export const toggleHover = (inputId, outputId, patchNumber = '0') => {
   return {
     type: types.DIRECT_OUTPUT_HOVER,
     inputId,
     outputId,
-    target: 'GUI'
+    target: 'GUI',
+    patchNumber
   }
 }
 
-export const resetMatrix = () => {
+export const resetMatrix = (patchNumber = '0') => {
   return {
     type: types.RESET_MATRIX,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 };
 

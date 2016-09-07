@@ -2,7 +2,7 @@ import { Map } from 'immutable';
 import { types } from '../../../shared/state/actions/nodes';
 import { types as vizTypes } from '../../../shared/state/actions/graphvisualization';
 import { types as guiTypes } from '../../../shared/state/actions/graphgui';
-import { getUpdatedState } from './reducerTools';
+import { getUpdatedState, getPatchNum } from './reducerTools';
 import config from '../../../shared/config';
 
 const emptyState = (() => {
@@ -69,10 +69,15 @@ const patchview = (state, action) => {
 }
 
 const patchviews = (state = emptyState, action) => {
-  // TODO: Change later.
-  action.patchNumber = '0';
   if(action.patchNumber) {
-    return state.updateIn([action.patchNumber], patchviewState => patchview(patchviewState, action))
+    return state.updateIn([action.patchNumber], patchviewState => patchview(patchviewState, action));
+  } else if(action.type === 'SET_STATE') {
+    for(let i=0; i<config.voices.numberOfGroups; i++) {
+      if (getUpdatedState(['patchviews', getPatchNum(i)], action)) {
+        state = state.updateIn([getPatchNum(i)], patchviewState => patchview(patchviewState, action));
+      }
+    }
+    return state;
   } else {
     return state;
   }

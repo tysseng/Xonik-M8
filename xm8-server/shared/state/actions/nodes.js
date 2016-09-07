@@ -20,80 +20,88 @@ export const types = {
   RESET_GRAPH: 'RESET_GRAPH'
 };
 
-export const moveNode = (nodeId, x, y) => {
+export const moveNode = (nodeId, x, y, patchNumber = '0') => {
   return {
     type: types.NODE_MOVE,
     target: 'SERVER',
     nodeId,
     x,
-    y
+    y,
+    patchNumber
   };
 };
 
-export const selectNode = (nodeId) => {
+export const selectNode = (nodeId, patchNumber = '0') => {
   return {
     type: types.SELECT_NODE,
     target: 'GUI',    
-    nodeId: nodeId
+    nodeId: nodeId,
+    patchNumber
   }  
 };
 
-export const selectLink = (linkId) => {
+export const selectLink = (linkId, patchNumber = '0') => {
   return {
     type: types.SELECT_LINK,
     target: 'GUI',    
-    linkId
+    linkId,
+    patchNumber
   }  
 };
 
-export const createNewNode = () => {
+export const createNewNode = (patchNumber = '0') => {
   return {
     type: types.NEW_NODE,
     target: 'SERVER',
-    undoDescription: 'Create new node'
+    undoDescription: 'Create new node',
+    patchNumber
   }
 };
 
-export const deleteNode = (nodeId) => {
+export const deleteNode = (nodeId, patchNumber = '0') => {
   return {
     type: types.DELETE_NODE,
     nodeId: nodeId,
     target: 'BOTH',
-    undoDescription: 'Delete node'
+    undoDescription: 'Delete node',
+    patchNumber
   }
 };
 
-export const changeNodeName = (nodeId, name) => {
+export const changeNodeName = (nodeId, name, patchNumber = '0') => {
   return {
     type: types.CHANGE_NODE_NAME,
     nodeId,
     name,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 };
 
-export const changeNodeType = (nodeId, typeId) => {
+export const changeNodeType = (nodeId, typeId, patchNumber = '0') => {
   return {
     type: types.CHANGE_NODE_TYPE,
     nodeId: nodeId,
     typeId: typeId,
     target: 'SERVER',    
-    undoDescription: 'Change node type'
+    undoDescription: 'Change node type',
+    patchNumber
   }
 };
 
-export const changeNodeParamType = (nodeId, paramId, paramType) => {
+export const changeNodeParamType = (nodeId, paramId, paramType, patchNumber = '0') => {
   return {
     type: types.CHANGE_NODE_PARAM_TYPE,      
     nodeId,
     paramId,
     paramType,
     target: 'SERVER',    
-    undoDescription: 'Change parameter type'
+    undoDescription: 'Change parameter type',
+    patchNumber
   }
 };
 
-export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue) => { 
+export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue, patchNumber = '0') => {
   return {
     type: types.CHANGE_NODE_PARAM_VALUE,      
     nodeId,
@@ -101,22 +109,24 @@ export const changeNodeParamValue  = (nodeId, paramId, paramType, paramValue) =>
     paramType,
     paramValue,
     target: 'SERVER',    
-    undoDescription: 'Change parameter value'
+    undoDescription: 'Change parameter value',
+    patchNumber
   }
 };
 
-export const changeNodeParamUnit = (nodeId, paramId, paramUnit) => {
+export const changeNodeParamUnit = (nodeId, paramId, paramUnit, patchNumber = '0') => {
   return {
     type: types.CHANGE_NODE_PARAM_UNIT,      
     nodeId,
     paramId,
     paramUnit,
     target: 'SERVER',    
-    undoDescription: 'Change unit'
+    undoDescription: 'Change unit',
+    patchNumber
   }
 };
 
-export const createNewLink = (fromNodeId, toNodeId, toParamId) => {
+export const createNewLink = (fromNodeId, toNodeId, toParamId, patchNumber = '0') => {
 
   return {
     type: types.NEW_LINK,
@@ -125,54 +135,60 @@ export const createNewLink = (fromNodeId, toNodeId, toParamId) => {
     nodeId: toNodeId,
     paramId: toParamId,
     target: 'BOTH',    
-    undoDescription: 'Link nodes'
+    undoDescription: 'Link nodes',
+    patchNumber
   }
 };
 
-export const changeLinkName = (toNodeId, toParamId, name) => {
+export const changeLinkName = (toNodeId, toParamId, name, patchNumber = '0') => {
   return {
     type: types.CHANGE_LINK_NAME,
     toNodeId, 
     toParamId,
     name,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 };
 
-export const toggleLinkNameInGraph = (toNodeId, toParamId, visible) => {
+export const toggleLinkNameInGraph = (toNodeId, toParamId, visible, patchNumber = '0') => {
   return {
     type: types.TOGGLE_LINK_NAME_IN_GRAPH,
     toNodeId, 
     toParamId,
     visible,
     target: 'SERVER',    
-    undoDescription: 'Toggle link name visibility'
+    undoDescription: 'Toggle link name visibility',
+    patchNumber
   }
 };
 
-export const deleteLink = (linkId) => {
+export const deleteLink = (linkId, patchNumber = '0') => {
   // by splitting id into its parts, some of the reducer code may be reused.
   let linkIdParts = linkId.split('-');
   return {
     type: types.DELETE_LINK,
     linkId,
     target: 'BOTH',
-    undoDescription: 'Delete link'
+    undoDescription: 'Delete link',
+    patchNumber
   }
 };
 
 // this action is not explicitly treated by the reducer, but it adds an entry in the
 // undo history.
-export const graphUndoPointPositionChanged = () => {
+export const graphUndoPointPositionChanged = (patchNumber = '0') => {
   return {
     type: types.SET_UNDO_POINT,
-    undoDescription: 'Move element'
+    undoDescription: 'Move element',
+    patchNumber
   }
 };
 
-export const resetGraph = () => {
+export const resetGraph = (patchNumber = '0') => {
   return {
     type: types.RESET_GRAPH,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 };

@@ -19,44 +19,48 @@ export const inputgroupsActionTypes = {
 
 let types = inputgroupsActionTypes;
 
-export const toggleVisibility = (groupId, isVisible) => {
+export const toggleVisibility = (groupId, isVisible, patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.TOGGLE_VISIBILITY,
     groupId,
     isVisible,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 }
 
-export const renameGroup = (groupId, name) => {
+export const renameGroup = (groupId, name, patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.RENAME_GROUP,
     groupId,
     name,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 }
 
-export const selectGroup = (selectedGroupId) => {
+export const selectGroup = (selectedGroupId, patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.SELECT_GROUP,
     selectedGroupId,
-    target: 'GUI'
+    target: 'GUI',
+    patchNumber
   }
 }
 
-export const changeElementType = (groupId, id, inputType) => {
+export const changeElementType = (groupId, id, inputType, patchNumber = '0') =>{
   return {
     type: types.CHANGE_ELEMENT_TYPE,
     groupId,
     id,
     inputType,
     target: 'SERVER',
-    undoDescription: 'Change element type'
+    undoDescription: 'Change element type',
+    patchNumber
   };  
 }
 
-export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem) => {
+export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem, patchNumber = '0') =>{
   return {
     type: types.SELECT_ELEMENT,
     mouseX, 
@@ -64,54 +68,60 @@ export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem) => {
     offsetXem, 
     offsetYem,    
     id,
-    target: 'GUI'
+    target: 'GUI',
+    patchNumber
   };  
 }
 
-export const moveElement = (groupId, id, offsetXem, offsetYem) => {
+export const moveElement = (groupId, id, offsetXem, offsetYem, patchNumber = '0') =>{
   return {
     type: types.MOVE_ELEMENT,
     id,
     groupId,    
     offsetXem, 
     offsetYem,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 }
 
-export const deselectElement = () => {
+export const deselectElement = (patchNumber = '0') =>{
   return {
     type: types.DESELECT_ELEMENT,
-    target: 'GUI'
+    target: 'GUI',
+    patchNumber
   }
 }
 
-export const deselectDragElement = () => {
+export const deselectDragElement = (patchNumber = '0') =>{
   return {
     type: types.DESELECT_DRAG_ELEMENT,
-    target: 'GUI'
+    target: 'GUI',
+    patchNumber
   }
 }
 
-export const newGroup = (groupId) => {
+export const newGroup = (groupId, patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.NEW_GROUP,
     target: 'SERVER',
     groupId,
-    undoDescription: 'New group'
+    undoDescription: 'New group',
+    patchNumber
   }
 }
 
-export const deleteGroup = (groupId) => {
+export const deleteGroup = (groupId, patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.DELETE_GROUP,
     target: 'BOTH',
     groupId,
-    undoDescription: 'Delete group'
+    undoDescription: 'Delete group',
+    patchNumber
   }
 }
 
-export const addElement = (id, groupId, elementId, elementType, offsetXem, offsetYem) => {
+export const addElement = (id, groupId, elementId, elementType, offsetXem, offsetYem, patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.ADD_ELEMENT,
     id, 
@@ -121,46 +131,52 @@ export const addElement = (id, groupId, elementId, elementType, offsetXem, offse
     offsetXem, 
     offsetYem,
     target: 'BOTH',
-    undoDescription: 'Add element'
+    undoDescription: 'Add element',
+    patchNumber
   }
 }
 
-export const deleteElement = (id, groupId) => {
+export const deleteElement = (id, groupId, patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.DELETE_ELEMENT,
     id, 
     groupId,
     target: 'BOTH',
-    undoDescription: 'Delete element'
+    undoDescription: 'Delete element',
+    patchNumber
   }
 }
 
-export const openNewElementDialog = () => {
+export const openNewElementDialog = (patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.OPEN_NEW_ELEMENT_DIALOG,
-    target: 'GUI'
+    target: 'GUI',
+    patchNumber
   }
 }
 
-export const closeNewElementDialog = () => {
+export const closeNewElementDialog = (patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.CLOSE_NEW_ELEMENT_DIALOG,
-    target: 'GUI'
+    target: 'GUI',
+    patchNumber
   } 
 }
 
-export const selectInputInNewElementDialog = (elementType, elementId) => {
+export const selectInputInNewElementDialog = (elementType, elementId, patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.SELECT_ID_IN_NEW_ELEMENT_DIALOG,
     elementId,
     elementType,
-    target: 'GUI'
+    target: 'GUI',
+    patchNumber
   }   
 }
 
-export const inputgroupsUndoPointPositionChanged = () => {
+export const inputgroupsUndoPointPositionChanged = (patchNumber = '0') =>{
   return {
     type: inputgroupsActionTypes.SET_UNDO_POINT,
-    undoDescription: 'Move element'
+    undoDescription: 'Move element',
+    patchNumber
   }
 }

@@ -1,6 +1,7 @@
 import {Map} from 'immutable';
 
 import config from '../../../shared/config';
+import { getUpdatedState, getPatchNum } from './reducerTools';
 
 import { emptyState as emptyGraphState } from './graph';
 import { emptyState as emptyMatrixState } from './matrix';
@@ -40,11 +41,15 @@ const emptyState = (() => {
 })();
 
 const patches = (state = emptyState, action) => {
-
-  // TODO: Change later.
-  action.patchNumber = '0';
   if(action.patchNumber) {
     return state.updateIn([action.patchNumber], patchState => patch(patchState, action))
+  } else if(action.type === 'SET_STATE') {
+    for(let i=0; i<config.voices.numberOfGroups; i++) {
+      if (getUpdatedState(['patches', getPatchNum(i)], action)) {
+        state = state.updateIn([getPatchNum(i)], patchState => patch(patchState, action))
+      }
+    }
+    return state;
   } else {
     return state;
   }

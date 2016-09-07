@@ -18,94 +18,103 @@ export const types = {
 }
 
 // It is only possible to create new inputs, so virt is hard coded as part of the id 
-export const newInput = (inputId, panelControllerId) => {
+export const newInput = (inputId, panelControllerId, patchNumber = '0') => {
 
   return {
     type: types.INPUTCONFIG_NEW_INPUT,
     inputId,
     panelControllerId,
     target: 'SERVER',
-    undoDescription: 'New input'
+    undoDescription: 'New input',
+    patchNumber
   }
 }
 
-export const deleteInput = (inputId) => {
+export const deleteInput = (inputId, patchNumber = '0') => {
   return {
     type: types.INPUTCONFIG_DELETE_INPUT,
     inputId,
     target: 'SERVER',
-    undoDescription: 'Delete input'
+    undoDescription: 'Delete input',
+    patchNumber
   }
 }
 
-export const changeValue = (id, value) => {
+export const changeValue = (id, value, patchNumber = '0') => {
   return {
     type: types.CONTROLLER_CHANGE,
     id,
     value,
     target: 'BOTH',
-    undoDescription: 'Change value'    
+    undoDescription: 'Change value',
+    patchNumber
   };  
 }
 
-export const selectInput = (inputType, id) => {
+export const selectInput = (inputType, id, patchNumber = '0') => {
   return {
     type: types.INPUTCONFIG_SELECT_INPUT,
     inputType,
     selectedInput: id,
-    target: 'GUI'
+    target: 'GUI',
+    patchNumber
   }
 }
 
-export const rename = (inputId, name) => {
+export const rename = (inputId, name, patchNumber = '0') => {
   return {
     type: types.INPUTCONFIG_RENAME,
     inputId,
     name,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 }
 
-export const renameShort = (inputId, name) => {
+export const renameShort = (inputId, name, patchNumber = '0') => {
   return {
     type: types.INPUTCONFIG_RENAME_SHORT,
     inputId,
     name,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 }
 
-export const updateField = (inputId, fieldPath, value) => {
+export const updateField = (inputId, fieldPath, value, patchNumber = '0') => {
   return {
     type: types.INPUTCONFIG_UPDATE_FIELD,
     inputId,
     fieldPath,
     value,
     target: 'SERVER',
-    undoDescription: 'Update field'
+    undoDescription: 'Update field',
+    patchNumber
   }
 }
 
-export const deleteOption = (inputId, index) => {
+export const deleteOption = (inputId, index, patchNumber = '0') => {
   return {
     type: types.INPUTCONFIG_DELETE_OPTION,
     inputId,
     index,
     target: 'SERVER',
-    undoDescription: 'Delete option'
+    undoDescription: 'Delete option',
+    patchNumber
   }
 }
 
-export const newOption = (inputId) => {
+export const newOption = (inputId, patchNumber = '0') => {
   return {
     type: types.INPUTCONFIG_NEW_OPTION,
     inputId,
     target: 'SERVER',
-    undoDescription: 'New option'
+    undoDescription: 'New option',
+    patchNumber
   }
 }
 
-export const spreadOptionValues = (inputId, centered, endToEnd, min, max) => {
+export const spreadOptionValues = (inputId, centered, endToEnd, min, max, patchNumber = '0') => {
   return {
     type: types.INPUTCONFIG_SPREAD_OPTIONS_VALUES,
     inputId,
@@ -114,52 +123,58 @@ export const spreadOptionValues = (inputId, centered, endToEnd, min, max) => {
     min, 
     max,
     target: 'SERVER',
-    undoDescription: 'Spread option values'
+    undoDescription: 'Spread option values',
+    patchNumber
   }
 }
 
-export const spreadOptionValuesMidi = (inputId, centered, endToEnd) => {
+export const spreadOptionValuesMidi = (inputId, centered, endToEnd, patchNumber = '0') => {
   return {
     type: types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI,
     inputId,
     centered, 
     endToEnd,
     target: 'SERVER',
-    undoDescription: 'Spread midi values'
+    undoDescription: 'Spread midi values',
+    patchNumber
   }
 }
 
-export const toggleDirectOutput = (inputId, outputId) => {
+export const toggleDirectOutput = (inputId, outputId, patchNumber = '0') => {
   return {
     type: types.INPUT_DIRECT_OUTPUT_TOGGLE,
     inputId,
     outputId,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 }
 
-export const loadPhysicalInputsFromFile = (fileId, version, physicalInputs) => {
+export const loadPhysicalInputsFromFile = (fileId, version, physicalInputs, patchNumber = '0') => {
   return {
     type: types.LOAD_PHYSICAL_INPUTS_FROM_FILE,
     target: 'SERVER',
     fileId,
     version,
-    physicalInputs
+    physicalInputs,
+    patchNumber
   }
 };
 
-export const resetPhysicalInputs = () => {
+export const resetPhysicalInputs = (patchNumber = '0') => {
   return {
     type: types.RESET_PHYSICAL_INPUTS,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 };
 
-export const resetPhysicalInput = (inputId) => {
+export const resetPhysicalInput = (inputId, patchNumber = '0') => {
   return {
     type: types.RESET_PHYSICAL_INPUT,
     inputId,
-    target: 'SERVER'
+    target: 'SERVER',
+    patchNumber
   }
 };
 

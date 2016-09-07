@@ -3,7 +3,7 @@ import { Map } from 'immutable';
 import config from '../../shared/config';
 import { autosaver } from '../patch/patchRepository';
 import { getUndoWrapper } from './undo';
-import { groups as undoGroups } from '../../shared/state/actions/undo';
+import { groups as undoGroups, types as undoActionTypes } from '../../shared/state/actions/undo';
 import { types } from '../../shared/state/actions/patch';
 import { getPatchNum } from './reducerTools';
 
@@ -81,12 +81,10 @@ for(let i=0; i<config.voices.numberOfGroups; i++){
     changeListener: changeTracker.set.bind(null, getPatchNum(i))
   });
 
-  patchUndoReducers.push(undoWrapper);
+  patchUndoReducers[getPatchNum(i)] = undoWrapper;
 }
 
 const patches = (state = emptyState, action) => {
-  // TODO: Change later.
-  action.patchNumber = '0';
   if(action.patchNumber) {
     return state.updateIn([action.patchNumber], patchState => patchUndoReducers[action.patchNumber](patchState, action))
   } else {

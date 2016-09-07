@@ -3,9 +3,7 @@ import { fromJS } from 'immutable';
 import { saveDirect, loadDirect } from '../persistence/fileRepo';
 import { hasChangedPhysicalInputs, clearHasChangedPhysicalInputs } from '../state/inputs';
 import { getPhysicalInputs } from '../state/selectors';
-import { loadPhysicalInputsFromFile } from '../../shared/state/actions/inputs';
 import config from '../../shared/config.js';
-import store from '../state/store.js';
 
 const autosaveFilename = config.persistence.autosave.rootFolder + config.persistence.autosave.physicalInputs.file;
 
@@ -33,15 +31,4 @@ const getAsFile = () => {
       physicalInputs: getPhysicalInputs().toJS(),
     }
   };
-}
-
-const dispatchLoadedFile = (file) => {
-  if(file && file.contents && file.contents.physicalInputs){
-
-    let immutablePhysicalInputs = fromJS(file.contents.physicalInputs);
-
-    store.dispatch(
-      loadPhysicalInputsFromFile('', '', immutablePhysicalInputs)
-    );
-  }
 }

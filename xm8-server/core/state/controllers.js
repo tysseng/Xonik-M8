@@ -32,8 +32,6 @@ const controllersForPatch = (state, action) => {
 }
 
 const controllers = (state = emptyState, action) => {
-  // TODO: Change later.
-  action.patchNumber = '0';
   if(action.patchNumber) {
     return state.updateIn([action.patchNumber], controllerState => controllersForPatch(controllerState, action))
   } else {

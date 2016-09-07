@@ -18,3 +18,7 @@ export const getUpdatedState = (path, action) => {
 
   return state;
 }
+
+// converts patch number to string
+export const getPatchNum = (patchNumber) => '' + patchNumber;
+
