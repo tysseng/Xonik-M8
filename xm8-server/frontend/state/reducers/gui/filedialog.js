@@ -1,7 +1,5 @@
 import {Map} from 'immutable';
 
-const merge = (state, changes) => Object.assign({}, state, changes);  
-
 const filedialog = (
   state = Map({
     show: false,

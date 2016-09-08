@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
 import { closeNewElementDialog, addElement, selectInputInNewElementDialog, selectGroup } from '../../../shared/state/actions/inputgroups';
-import { getVirtualInputGroups } from '../../state/selectors';
+import { getGuiVirtualInputGroups } from '../../state/selectors';
 import InputGroupsCenterColumn from './InputGroupsCenterColumn';
 
 const mapStateToProps = (state, ownProps) => {
 
-  let inputgroups = getVirtualInputGroups(state);
+  let inputgroups = getGuiVirtualInputGroups(state);
   let selectedGroupId = inputgroups.get('selectedGroup');
 
   return {

@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import GroupPropsForm from './GroupPropsForm';
 import { renameGroup, toggleVisibility } from '../../../shared/state/actions/inputgroups';
-import { getVirtualInputGroups } from '../../state/selectors';
+import { getVirtualInputGroups, getGuiVirtualInputGroups } from '../../state/selectors';
 
 const mapStateToProps = (state, ownProps) => {
 
   let inputgroups = getVirtualInputGroups(state);
-  let selectedGroupId = inputgroups.get('selectedGroup');
+  let guiinputgroups = getGuiVirtualInputGroups(state);
+  let selectedGroupId = guiinputgroups.get('selectedGroup');
   let group = inputgroups.getIn(['groups', selectedGroupId]);
   if(group) group = group.toJS();
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
 import { selectElement, deselectElement, deselectDragElement, moveElement, inputgroupsUndoPointPositionChanged } from '../../../shared/state/actions/inputgroups.js'
-import { getVirtualInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
+import { getGuiVirtualInputGroups, getVirtualInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
 
 import InputGrid from './InputGrid';
 
@@ -9,8 +9,9 @@ const mapStateToProps = (state, ownProps) => {
 
   // TODO: Maybe selected group should be part of the undo buffer? This means mixing frontend and backend undo buffers though.
   let inputGroups = getVirtualInputGroups(state);
+  let guiinputGroups = getGuiVirtualInputGroups(state);
 
-  let selectedGroupId = inputGroups.get('selectedGroup');
+  let selectedGroupId = guiinputGroups.get('selectedGroup');
   let selectedGroup = inputGroups.getIn(['groups', selectedGroupId]);
   if(selectedGroup) selectedGroup = selectedGroup.toJS();
 
@@ -20,9 +21,9 @@ const mapStateToProps = (state, ownProps) => {
   return {
     selectedGroup,
     inputs,
-    dragElementId: inputGroups.get('dragElementId'),
-    selectedElementId: inputGroups.get('selectedElementId'),
-    dragStart: inputGroups.get('dragStart').toJS()
+    dragElementId: guiinputGroups.get('dragElementId'),
+    selectedElementId: guiinputGroups.get('selectedElementId'),
+    dragStart: guiinputGroups.get('dragStart').toJS()
   }
 }
 

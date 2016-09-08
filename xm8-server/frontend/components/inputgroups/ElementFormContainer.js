@@ -3,16 +3,17 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { changeElementType, deselectElement } from '../../../shared/state/actions/inputgroups';
-import { getVirtualInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
+import { getGuiVirtualInputGroups, getVirtualInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
 import ElementForm from './ElementForm'
 
 const getSelectedElement = (state) => {
   let inputgroups = getVirtualInputGroups(state);
-  let selectedGroupId = inputgroups.get('selectedGroup');
+  let guiinputgroups = getGuiVirtualInputGroups(state);
+  let selectedGroupId = guiinputgroups.get('selectedGroup');
   let selectedGroup = selectedGroupId !== '' ? inputgroups.getIn(['groups', selectedGroupId]) : undefined;
 
   if(selectedGroup){
-    let selectedElementId = inputgroups.get('selectedElementId');
+    let selectedElementId = guiinputgroups.get('selectedElementId');
     let selectedElement = selectedGroup.getIn(['elements', selectedElementId]);
     if(selectedElement) {       
       return selectedElement.toJS();

@@ -1,6 +1,7 @@
 import { currentVoiceGroupId } from '../../shared/state/voicegroupselector';
 
 export const getVirtualInputGroups = state => state.patches.getIn([currentVoiceGroupId(), 'inputgroups']);
+export const getGuiVirtualInputGroups = state => state.guiinputgroups.get(currentVoiceGroupId());
 export const getVirtualInputs = state => state.patches.getIn([currentVoiceGroupId(), 'virtualInputs']);
 export const getPhysicalInputs = state => state.physicalInputs;
 export const getMatrix = state => state.patches.getIn([currentVoiceGroupId(), 'matrix']);

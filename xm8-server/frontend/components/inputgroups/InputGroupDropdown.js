@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
 import Dropdown from '../framework/Dropdown';
-import { getVirtualInputGroups } from '../../state/selectors';
+import { getGuiVirtualInputGroups, getVirtualInputGroups } from '../../state/selectors';
 
 const mapStateToProps = (state, ownProps) => {
   let groupsState = getVirtualInputGroups(state).toJS();
+  let guigroupsState = getGuiVirtualInputGroups(state).toJS();
 
   return {
     values: groupsState.groups,
-    value: groupsState.selectedGroup
+    value: guigroupsState.selectedGroup
   }
 }
 

@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
 import { types } from '../../../shared/state/actions/controllers';
-import { getPerPatchWrapper } from './reducerTools';
+import { getPerPatchWrapper, getPatchNum } from './reducerTools';
 import config from '../../../shared/config';
 
 const emptyState = (() => {

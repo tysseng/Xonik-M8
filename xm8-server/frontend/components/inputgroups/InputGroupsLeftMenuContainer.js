@@ -2,11 +2,11 @@ import InputGroupsLeftMenu from './InputGroupsLeftMenu';
 import { connect } from 'react-redux';
 import { openNewElementDialog, newGroup, selectGroup, deleteGroup, deleteElement } from '../../../shared/state/actions/inputgroups';
 import { getNextId } from '../../repositories/idRepository';
-import { getVirtualInputGroups } from '../../state/selectors';
+import { getGuiVirtualInputGroups } from '../../state/selectors';
 import { virtualInputGroupIdPrefix } from '../../../shared/graph/Inputs';
 
 const mapStateToProps = (state, ownProps) => {
-  let inputgroups = getVirtualInputGroups(state);
+  let inputgroups = getGuiVirtualInputGroups(state);
 
   return {
     newElementDialog: inputgroups.get('newElementDialog').toJS(),
