@@ -51,6 +51,24 @@ function subscribeMiddleware ({dispatch, getState}) {
     return updatedPathElements;
   }
 
+  const checkAndNotifyWithWildcard = (prev, next, subscriptionPath, pathElements) => {
+    // Loop over all subState elements if wildcard is used.
+    for (const key of next.keys()) {
+
+      // replace wildcard with real key
+      const pathWithoutWildcard = replaceWildcardWithKey(pathElements, key);
+
+      // extract subPath for current wildcard-key
+      const subpathWithoutWildcard = pathWithoutWildcard.slice(1);
+
+      let subPrev, subNext;
+      if (prev) subPrev = prev.getIn(subpathWithoutWildcard);
+      if (next) subNext = next.getIn(subpathWithoutWildcard);
+
+      notifySubscribersIfChanged(subPrev, subNext, subscriptionPath, pathWithoutWildcard);
+    }
+  }
+
   return next => action => {
     switch (action.type) {
       case SUBSCRIBE: {
@@ -80,6 +98,7 @@ function subscribeMiddleware ({dispatch, getState}) {
 
         _.each(paths, pathObj => {
           let pathElements = pathObj.pathElements;
+          let subscriptionPath = pathObj.path;
 
           let prev = prevState[pathElements[0]];
           let next = nextState[pathElements[0]];
@@ -88,31 +107,15 @@ function subscribeMiddleware ({dispatch, getState}) {
             if (pathElements.length > 1) {
 
               let subPath = pathElements.slice(1);
-
               if (subPath[0] === '*') {
-
-                // Loop over all subState elements if wildcard is used.
-                for (const key of next.keys()) {
-
-                  // replace wildcard with real key
-                  const pathWithoutWildcard = replaceWildcardWithKey(pathElements, key);
-
-                  // extract subPath for current wildcard-key
-                  const subpathWithoutWildcard = pathWithoutWildcard.slice(1);
-
-                  let subPrev, subNext;
-                  if (prev) subPrev = prev.getIn(subpathWithoutWildcard);
-                  if (next) subNext = next.getIn(subpathWithoutWildcard);
-
-                  notifySubscribersIfChanged(subPrev, subNext, pathObj.path, pathWithoutWildcard);
-                }
+                checkAndNotifyWithWildcard(prev, next, subscriptionPath, pathElements)
               } else {
                 if (prev) prev = prev.getIn(subPath);
                 if (next) next = next.getIn(subPath);
-                notifySubscribersIfChanged(prev, next, pathObj.path, pathObj.pathElements);
+                notifySubscribersIfChanged(prev, next, subscriptionPath, pathElements);
               }
             } else {
-              notifySubscribers(prev, next, pathObj.path, pathObj.pathElements);
+              notifySubscribers(prev, next, subscriptionPath, pathElements);
             }
           }
         });
