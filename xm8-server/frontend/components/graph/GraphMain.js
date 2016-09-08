@@ -23,6 +23,10 @@ const GraphMain = () => {
         </div>
         <div className="centercolumn">
           <GraphCenterColumnContainer/>
+        </div>
+      </div>
+      <div className="row">
+        <div className="rightcolumn">
           <VoiceGroupSelectorContainer/>
         </div>
       </div>

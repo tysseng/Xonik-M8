@@ -3,6 +3,7 @@ import InputGroupsLeftMenuContainer from './InputGroupsLeftMenuContainer';
 import ElementFormContainer from './ElementFormContainer';
 import GroupPropsFormContainer from './GroupPropsFormContainer';
 import PatchTopMenuContainer from '../patch/PatchTopMenuContainer';
+import VoiceGroupSelectorContainer from '../patch/VoiceGroupSelectorContainer';
 
 const InputGroupsPage = () => {    
   return (  
@@ -23,6 +24,11 @@ const InputGroupsPage = () => {
         </div>
         <div className="centercolumn">
           <InputGroupsCenterColumnContainer/>
+        </div>
+      </div>
+      <div className="row">
+        <div className="rightcolumn">
+          <VoiceGroupSelectorContainer/>
         </div>
       </div>
     </div>

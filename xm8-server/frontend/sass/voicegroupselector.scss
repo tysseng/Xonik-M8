@@ -1,0 +1,29 @@
+#voiceGroupSelector{
+  float: right;
+
+  $voice-group-button-height: 24px;
+
+  .voiceGroupButton{
+    border: 1px solid #aeb6bd;
+    width: 24px;
+    height: $voice-group-button-height;
+    float: left;
+    margin-right: 5px;
+
+    text-align: center;
+    vertical-align: middle;
+    line-height: $voice-group-button-height;
+
+    &.selected{
+      border: 1px solid #0f0;
+      color: #0f0;
+      text-shadow: 0 0 3px #0f0;
+    }
+
+    &:hover{
+      border: 1px solid #fff;
+      color: #fff;
+      text-shadow: 0 0 3px #fff;
+    }
+  }
+}

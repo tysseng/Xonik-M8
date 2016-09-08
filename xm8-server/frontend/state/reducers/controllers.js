@@ -1,8 +1,7 @@
 import { Map } from 'immutable';
 import { types } from '../../../shared/state/actions/controllers';
-import { getUpdatedState, getPatchNum } from './reducerTools';
+import { getPerPatchWrapper } from './reducerTools';
 import config from '../../../shared/config';
-import { setState } from '../../../shared/state/actions/index';
 
 const emptyState = (() => {
   let controllers = new Map();
@@ -29,25 +28,10 @@ const controllersForPatch = (
   }
 }
 
-const controllers = (state = emptyState, action) => {
-  if(action.patchNumber) {
-    return state.updateIn([action.patchNumber], controllerState => controllersForPatch(controllerState, action))
-  } else if(action.type === 'SET_STATE') {
-    for(let i=0; i<config.voices.numberOfGroups; i++) {
-
-      // The sub reducers do not know what patch they are
-      // working on. Extract state for a single patch and
-      // send this to the sub reducer.
-      let updatedState = getUpdatedState(['controllers', getPatchNum(i)], action);
-      if (updatedState) {
-        let subAction = setState(updatedState);
-        state = state.updateIn([getPatchNum(i)], controllerState => controllersForPatch(controllerState, subAction))
-      }
-    }
-    return state;
-  } else {
-    return state;
-  }
-}
+const controllers = getPerPatchWrapper({
+  emptyState,
+  wrappedReducer: controllersForPatch,
+  updateStatePath: 'controllers'
+});
 
 export default controllers;

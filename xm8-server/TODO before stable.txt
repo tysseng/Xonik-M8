@@ -2,11 +2,8 @@ TODO før "stabilt"
 
 TODO:
 - Fikse subscribe i patchRepo
-
-Større
-- Voice-velger med tilhørende frontend reducer.
---> Vurdere å flytte til route isteden? Hvorda da få tak i det?
-
+- Sticky row for patch-icons
+- Voice selector alltid nederst i høyre hjørne
 
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch

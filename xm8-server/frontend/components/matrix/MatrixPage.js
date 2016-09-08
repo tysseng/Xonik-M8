@@ -1,6 +1,7 @@
 import PatchTopMenuContainer from '../patch/PatchTopMenuContainer';
 import MatrixCenterColumnContainer from './MatrixCenterColumnContainer';
 import MatrixLeftMenuContainer from './MatrixLeftMenuContainer';
+import VoiceGroupSelectorContainer from '../patch/VoiceGroupSelectorContainer';
 
 const MatrixPage = () => {    
   return (  
@@ -20,6 +21,11 @@ const MatrixPage = () => {
         </div>
         <div className="centercolumn">
           <MatrixCenterColumnContainer/>
+        </div>
+      </div>
+      <div className="row">
+        <div className="rightcolumn">
+          <VoiceGroupSelectorContainer/>
         </div>
       </div>
     </div>
