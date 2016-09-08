@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import PatchTopMenu from './PatchTopMenu';
 import { connect } from 'react-redux';
 import { toggleFileDialog } from '../../../shared/state/actions/filedialog';
@@ -6,7 +5,7 @@ import { createNewNode, deleteNode, deleteLink} from '../../../shared/state/acti
 import { undo, redo, groups as undoGroups } from '../../../shared/state/actions/undo';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
 import { resetPatch } from '../../../shared/state/actions/patch';
-import { getFileDialog, getPatchview, getPatchviews } from '../../state/selectors';
+import { getFileDialog, getPatchview, getGuiPatchview, getGuiPatchviews } from '../../state/selectors';
 
 /*const forceUpdate = () => {
   $.ajax({
@@ -24,7 +23,8 @@ import { getFileDialog, getPatchview, getPatchviews } from '../../state/selector
 const mapStateToProps = (state, ownProps) => {
 
   let patchview = getPatchview(state);
-  let patchviewsRoot = getPatchviews(state);
+  let guipatchview = getGuiPatchview(state);
+  let guipatchviewsRoot = getGuiPatchviews(state);
 
   let selectedFileDetails = {
     selectedFileId: patchview.getIn(['patch','fileId']),
@@ -34,11 +34,11 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     selectedFileDetails,
-    mode: patchview.get('mode'),
-    selectedPatchNumber: patchviewsRoot.get('selectedPatchNumber'),
-    selectedNodeId: patchview.get('selectedNode'),
-    selectedLinkId: patchview.get('selectedLink'),
-    shouldAutoUpdate: patchview.get('shouldAutoUpdate'),
+    mode: guipatchview.get('mode'),
+    selectedPatchNumber: guipatchviewsRoot.get('selectedPatchNumber'),
+    selectedNodeId: guipatchview.get('selectedNode'),
+    selectedLinkId: guipatchview.get('selectedLink'),
+    shouldAutoUpdate: guipatchview.get('shouldAutoUpdate'),
     showFileDialog: getFileDialog(state).get('show')
   }
 }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { selectLink, changeLinkName, toggleLinkNameInGraph } from '../../../../shared/state/actions/nodes';
 import paramTypes from '../../../../shared/graph/ParameterTypes.js';
 import LinkForm from './LinkForm'
-import { getNodes, getPatchview } from '../../../state/selectors';
+import { getNodes, getGuiPatchview } from '../../../state/selectors';
 
 const isLink = (type) => {
   return type === paramTypes.map.LINK.id;
@@ -21,7 +21,7 @@ const mapStateToProps = (state, ownProps) => {
     });
   });
 
-  let selecedLinkId = getPatchview(state).get('selectedLink');
+  let selecedLinkId = getGuiPatchview(state).get('selectedLink');
   let link = links[selecedLinkId];
   
   return {

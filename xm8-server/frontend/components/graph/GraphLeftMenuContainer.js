@@ -3,7 +3,7 @@ import GraphLeftMenu from './GraphLeftMenu';
 import { connect } from 'react-redux';
 import { createNewNode, deleteNode, deleteLink, resetGraph} from '../../../shared/state/actions/nodes';
 import { toggleMode } from '../../../shared/state/actions/graphgui';
-import { getPatchview, getPatchviews } from '../../state/selectors';
+import { getPatchview, getGuiPatchview, getGuiPatchviews } from '../../state/selectors';
 
 const forceUpdate = (patchNumber) => {
   $.ajax({
@@ -22,8 +22,9 @@ const forceUpdate = (patchNumber) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
+  let guipatchview = getGuiPatchview(state);
   let patchview = getPatchview(state);
-  let patchviewsRoot = getPatchviews(state);
+  let guipatchviewsRoot = getGuiPatchviews(state);
 
   let selectedFileDetails = {
     selectedFileId: patchview.getIn(['patch','fileId']),
@@ -32,11 +33,11 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     selectedFileDetails,
-    mode: patchview.get('mode'),
-    selectedPatchNumber: patchviewsRoot.get('selectedPatchNumber'),
-    selectedNodeId: patchview.get('selectedNode'),
-    selectedLinkId: patchview.get('selectedLink'),
-    shouldAutoUpdate: patchview.get('shouldAutoUpdate')
+    mode: guipatchview.get('mode'),
+    selectedPatchNumber: guipatchviewsRoot.get('selectedPatchNumber'),
+    selectedNodeId: guipatchview.get('selectedNode'),
+    selectedLinkId: guipatchview.get('selectedLink'),
+    shouldAutoUpdate: guipatchview.get('shouldAutoUpdate')
   }
 }
 

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import patches from './patches';
 import links from './links';
 import patchviews from './patchviews';
+import guipatchviews from './gui/guipatchviews';
 import network from './network';
 import filesystem from './filesystem';
 import filedialog from './filedialog';
@@ -13,6 +14,7 @@ const guiReducers = combineReducers({
   patches,
   links,
   patchviews,
+  guipatchviews,
   filedialog,
   filesystem,
   network,

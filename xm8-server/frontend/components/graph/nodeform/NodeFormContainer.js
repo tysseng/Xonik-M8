@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { selectNode, changeNodeName, changeNodeType, changeNodeParamType, changeNodeParamValue, changeNodeParamUnit } from '../../../../shared/state/actions/nodes';
-import nodeTypes from '../../../../shared/graph/NodeTypes.js';
-import { getNodes, getPatchview } from '../../../state/selectors';
+import { getNodes, getGuiPatchview } from '../../../state/selectors';
 
 import NodeForm from './NodeForm'
 
@@ -11,7 +10,7 @@ import NodeForm from './NodeForm'
 const mapStateToProps = (state, ownProps) => {
 
   let nodes = getNodes(state).toJS();
-  let selectedNodeId = getPatchview(state).get('selectedNode');
+  let selectedNodeId = getGuiPatchview(state).get('selectedNode');
   let node = nodes[selectedNodeId];
 
   return {

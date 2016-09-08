@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import VoiceGroupSelector from './VoiceGroupSelector';
 import { changeVoiceGroup } from '../../../shared/state/actions/patch';
-import { getPatchviews } from '../../state/selectors';
+import { getGuiPatchviews } from '../../state/selectors';
 
 const mapStateToProps = (state, ownProps) => {
-  let patchviewsRoot = getPatchviews(state);
+  let guipatchviewsRoot = getGuiPatchviews(state);
   return {
-    selectedVoiceGroupId: patchviewsRoot.get('selectedPatchNumber'),
+    selectedVoiceGroupId: guipatchviewsRoot.get('selectedPatchNumber'),
   }
 }
 

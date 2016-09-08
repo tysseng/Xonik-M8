@@ -1,6 +1,7 @@
 TODO før "stabilt"
 
 TODO:
+- Flytte GUI-only reducers til separate filer - patchActionTypes.CHANGE_VOICE_GROUP
 - Fikse subscribe i patchRepo
 - Sticky row for patch-icons
 - Voice selector alltid nederst i høyre hjørne
