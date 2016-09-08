@@ -35,6 +35,22 @@ function subscribeMiddleware ({dispatch, getState}) {
     }
   }
 
+  const notifySubscribers = (prev, next, subscriptionPath, pathElements) => {
+    _.each(subscriptions[subscriptionPath], callback  => callback({pathElements, prev, next}));
+  }
+
+  const notifySubscribersIfChanged = (prev, next, subscriptionPath, pathElements) => {
+    if (prev !== next) {
+      notifySubscribers(prev, next, subscriptionPath, pathElements);
+    }
+  }
+
+  const replaceWildcardWithKey = (pathElements, key) => {
+    const updatedPathElements = pathElements.slice();
+    updatedPathElements[1] = key;
+    return updatedPathElements;
+  }
+
   return next => action => {
     switch (action.type) {
       case SUBSCRIBE: {
@@ -68,40 +84,35 @@ function subscribeMiddleware ({dispatch, getState}) {
           let prev = prevState[pathElements[0]];
           let next = nextState[pathElements[0]];
 
-          if(pathElements.length > 1){
-            let subPath = pathElements.slice(1);
+          if(prev !== next) {
+            if (pathElements.length > 1) {
 
-            if(subPath[0] === '*'){
+              let subPath = pathElements.slice(1);
 
-              // This won't discover changes where existing subpaths have been
-              // removed.
-              for(const key of next.keys()){
+              if (subPath[0] === '*') {
 
-                //console.log(pathObj.path, "Key: ", key)
-                // replace wildcard with real key
-                let realPath = pathElements.slice();
-                realPath[1] = key;
-                let realSubPath = realPath.slice(1);
+                // Loop over all subState elements if wildcard is used.
+                for (const key of next.keys()) {
 
-                let subPrev, subNext;
-                if (prev) subPrev = prev.getIn(realSubPath);
-                if (next) subNext = next.getIn(realSubPath);
+                  // replace wildcard with real key
+                  const pathWithoutWildcard = replaceWildcardWithKey(pathElements, key);
 
-                if (subPrev !== subNext) {
-                  _.each(subscriptions[pathObj.path], callback  => callback({pathElements: realPath, prev: subPrev, next: subNext}));
+                  // extract subPath for current wildcard-key
+                  const subpathWithoutWildcard = pathWithoutWildcard.slice(1);
+
+                  let subPrev, subNext;
+                  if (prev) subPrev = prev.getIn(subpathWithoutWildcard);
+                  if (next) subNext = next.getIn(subpathWithoutWildcard);
+
+                  notifySubscribersIfChanged(subPrev, subNext, pathObj.path, pathWithoutWildcard);
                 }
+              } else {
+                if (prev) prev = prev.getIn(subPath);
+                if (next) next = next.getIn(subPath);
+                notifySubscribersIfChanged(prev, next, pathObj.path, pathObj.pathElements);
               }
             } else {
-              if (prev) prev = prev.getIn(subPath);
-              if (next) next = next.getIn(subPath);
-              if (prev !== next) {
-                _.each(subscriptions[pathObj.path], callback  => callback({pathElements: pathObj.pathElements, prev, next}));
-              }
-            }
-
-          } else {
-            if (prev !== next) {
-              _.each(subscriptions[pathObj.path], callback => callback({pathElements: pathObj.pathElements, prev, next}));
+              notifySubscribers(prev, next, pathObj.path, pathObj.pathElements);
             }
           }
         });
