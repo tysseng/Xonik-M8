@@ -39,7 +39,7 @@ let config = {
   },
   voices: {
     numberOfVoices: 8,
-    numberOfGroups: 1
+    numberOfGroups: 2
   },
   wifi: {
     adapter: "wlan0",

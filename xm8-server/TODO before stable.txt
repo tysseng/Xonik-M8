@@ -5,8 +5,8 @@ TODO:
 
 Større
 - Voice-velger med tilhørende frontend reducer.
-    Må sette patchNumber i
-        - voicegroupselector
+--> Vurdere å flytte til route isteden? Hvorda da få tak i det?
+
 
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch

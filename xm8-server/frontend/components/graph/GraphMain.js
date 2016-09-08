@@ -3,6 +3,7 @@ import GraphLeftMenuContainer from './GraphLeftMenuContainer';
 import GraphRightColumn from './GraphRightColumn';
 import GraphCenterColumnContainer from './GraphCenterColumnContainer';
 import PatchTopMenuContainer from '../patch/PatchTopMenuContainer';
+import VoiceGroupSelectorContainer from '../patch/VoiceGroupSelectorContainer';
 
 const GraphMain = () => {    
   return (
@@ -22,6 +23,7 @@ const GraphMain = () => {
         </div>
         <div className="centercolumn">
           <GraphCenterColumnContainer/>
+          <VoiceGroupSelectorContainer/>
         </div>
       </div>
     </div>

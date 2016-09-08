@@ -24,7 +24,7 @@ export default (app, ws) => {
 
     */
     let state = change.next;
-    _.eachRight(change.pathObj.pathElements, pathElement => {
+    _.eachRight(change.pathElements, pathElement => {
       state = {[pathElement]: state};
     });
 
@@ -45,13 +45,13 @@ export default (app, ws) => {
     });
   });
 
-  store.dispatch(subscribe('patchviews/0', 'frontend', sendPartialState));
-  store.dispatch(subscribe('patches/0/graph', 'frontend', sendPartialState));
+  store.dispatch(subscribe('controllers/*', 'frontend', sendPartialState));
+  store.dispatch(subscribe('patchviews/*', 'frontend', sendPartialState));
+  store.dispatch(subscribe('patches/*/graph', 'frontend', sendPartialState));
   store.dispatch(subscribe('filesystem', 'frontend', sendPartialState));
-  store.dispatch(subscribe('patches/0/virtualInputs', 'frontend', sendPartialState));
+  store.dispatch(subscribe('patches/*/virtualInputs', 'frontend', sendPartialState));
   store.dispatch(subscribe('physicalInputs', 'frontend', sendPartialState));
-  store.dispatch(subscribe('patches/0/matrix', 'frontend', sendPartialState));
-  store.dispatch(subscribe('patches/0/inputgroups', 'frontend', sendPartialState));
-  store.dispatch(subscribe('controllers/0', 'frontend', sendPartialState));
+  store.dispatch(subscribe('patches/*/matrix', 'frontend', sendPartialState));
+  store.dispatch(subscribe('patches/*/inputgroups', 'frontend', sendPartialState));
 
 };

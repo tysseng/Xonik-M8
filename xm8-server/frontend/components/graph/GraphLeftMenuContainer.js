@@ -30,8 +30,6 @@ const mapStateToProps = (state, ownProps) => {
     selectedFileVersion: patchview.getIn(['patch', 'version']),
   }
 
-  console.log("Root", patchviewsRoot.toJS())
-
   return {
     selectedFileDetails,
     mode: patchview.get('mode'),

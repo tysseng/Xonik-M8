@@ -1,9 +1,11 @@
 import { Map } from 'immutable';
 import { types } from '../../../shared/state/actions/nodes';
+import { types as patchActionTypes} from '../../../shared/state/actions/patch';
 import { types as vizTypes } from '../../../shared/state/actions/graphvisualization';
 import { types as guiTypes } from '../../../shared/state/actions/graphgui';
 import { getUpdatedState, getPatchNum } from './reducerTools';
 import { setState } from '../../../shared/state/actions/index';
+import { setCurrentVoiceGroupId } from '../../../shared/state/voicegroupselector';
 import config from '../../../shared/config';
 
 const emptyState = (() => {
@@ -82,6 +84,10 @@ const patchviews = (state = emptyState, action) => {
     }
 
     return state;
+  } else if(action.type === patchActionTypes.CHANGE_VOICE_GROUP){
+    console.log("Patchview", action)
+    setCurrentVoiceGroupId(action.voiceGroupId);
+    return state.set('selectedPatchNumber', action.voiceGroupId);
   } else {
     return state;
   }

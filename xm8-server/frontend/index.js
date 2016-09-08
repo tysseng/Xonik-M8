@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { Router, IndexRoute, Route, Link, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { setState } from '../shared/state/actions';
+import { setState } from '../shared/state/actions/index';
 import remoteActionMiddleware from './remoteActionMiddleware';
 import initWsclientForState from './wsclient-state.js';
 import guiReducers from './state/reducers';
