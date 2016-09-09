@@ -2,14 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { selectInput, rename, renameShort, updateField } from '../../../../shared/state/actions/inputs';
-import { getPhysicalInputs, getControllers } from '../../../state/selectors';
+import { getPhysicalInputs, getGuiPhysicalInputs, getControllers } from '../../../state/selectors';
 
 import PhysicalInputForm from './PhysicalInputForm'
 
 const mapStateToProps = (state, ownProps) => {
 
+  let guiPhysicalInputs = getGuiPhysicalInputs(state);
+  let selectedInputId = guiPhysicalInputs.getIn(['frontend', 'selectedInput']);
+
   let physicalInputs = getPhysicalInputs(state);
-  let selectedInputId = physicalInputs.getIn(['frontend', 'selectedInput']);
   let inputs = physicalInputs.get('byId').toJS();
   let input = inputs[selectedInputId];
 

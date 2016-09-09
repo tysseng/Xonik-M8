@@ -4,11 +4,11 @@ import { newInput, deleteInput, selectInput } from '../../../../shared/state/act
 import { panelControllersById } from "../../../../shared/graph/PanelControllers";
 import { getNextId } from '../../../repositories/idRepository';
 import { virtualInputIdPrefix } from '../../../../shared/graph/Inputs';
-import { getVirtualInputs } from '../../../state/selectors';
+import { getGuiVirtualInputs } from '../../../state/selectors';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    selectedInput: getVirtualInputs(state).getIn(['frontend', 'selectedInput'])
+    selectedInput: getGuiVirtualInputs(state).getIn(['frontend', 'selectedInput'])
   }
 }
 

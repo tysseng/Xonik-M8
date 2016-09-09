@@ -5,12 +5,12 @@ import { getPerPatchWrapper } from './reducerTools';
 
 import { emptyState as emptyGraphState } from './graph';
 import { emptyState as emptyMatrixState } from './matrix';
-import { emptyState as emptyVirtualInputsState } from './inputs';
+import { emptyState as emptyVirtualInputsState } from './virtualinputs';
 import { emptyState as emptyInputGroupsState } from './inputgroups';
 
 import graph from './graph';
 import matrix from './matrix';
-import { virtualInputs } from './inputs';
+import virtualInputs from './virtualinputs';
 import inputgroups from './inputgroups';
 
 /*

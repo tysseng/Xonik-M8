@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 
 import { selectInput, rename, renameShort, updateField } from '../../../../shared/state/actions/inputs';
 import VirtualInputForm from './VirtualInputForm'
-import { getVirtualInputs, getControllers } from '../../../state/selectors';
+import { getVirtualInputs, getGuiVirtualInputs, getControllers } from '../../../state/selectors';
 
 const mapStateToProps = (state, ownProps) => {
 
-  let virtualInputs = getVirtualInputs(state);
-  let selectedInputId = virtualInputs.getIn(['frontend', 'selectedInput']);
 
+  let selectedInputId = getGuiVirtualInputs(state).getIn(['frontend', 'selectedInput']);
+
+  let virtualInputs = getVirtualInputs(state);
   let inputs = virtualInputs.get('byId').toJS();
   let input = inputs[selectedInputId];
 

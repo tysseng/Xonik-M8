@@ -26,6 +26,14 @@ const emptyState = (() => {
   return patchviews;
 })();
 
+
+const closeLinkDialog = (state) => {
+  return state
+    .setIn(['linkDialog', 'fromNodeId'], '')
+    .setIn(['linkDialog', 'toNodeId'], '')
+    .setIn(['linkDialog', 'show'], false);
+}
+
 const patchview = (state, action) => {
   switch (action.type){
     case types.DELETE_NODE:
@@ -72,13 +80,6 @@ const patchviews = (state = emptyState, action) => {
   } else {
     return state;
   }
-}
-
-const closeLinkDialog = (state) => {
-  return state
-    .setIn(['linkDialog', 'fromNodeId'], '')
-    .setIn(['linkDialog', 'toNodeId'], '')
-    .setIn(['linkDialog', 'show'], false);  
 }
 
 export default patchviews

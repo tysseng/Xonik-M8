@@ -4,11 +4,13 @@ import links from './links';
 import patchviews from './patchviews';
 import network from './network';
 import filesystem from './filesystem';
-import { physicalInputs } from './inputs';
+import physicalInputs from './physicalinputs';
 import controllers from './controllers';
 
 import filedialog from './gui/filedialog';
 import guipatchviews from './gui/guipatchviews';
+import guiphysicalinputs from './gui/guiphysicalinputs';
+import guivirtualinputs from './gui/guivirtualinputs';
 import guiinputgroups from './gui/guiinputgroups';
 import guicontrollers from './gui/guicontrollers';
 import guimatrix from './gui/guimatrix';
@@ -23,6 +25,8 @@ const guiReducers = combineReducers({
   filesystem,
   network,
   physicalInputs,
+  guivirtualinputs,
+  guiphysicalinputs,
   guipatchviews,
   guiinputgroups,
   guimatrix
