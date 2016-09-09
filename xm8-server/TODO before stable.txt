@@ -2,7 +2,6 @@ TODO før "stabilt"
 
 TODO:
 - Flytte GUI-only reducer parts til separate filer
-    - controllers
     - inputs
     - matrix
 
@@ -16,6 +15,7 @@ TODO:
     case inputgroupsActionTypes.OPEN_NEW_ELEMENT_DIALOG:
     case inputgroupsActionTypes.CLOSE_NEW_ELEMENT_DIALOG:
     case inputgroupsActionTypes.SELECT_ID_IN_NEW_ELEMENT_DIALOG:
+    case controllerTypes.SELECT_CONTROL_GROUP:
 
 
 - Fikse subscribe i patchRepo

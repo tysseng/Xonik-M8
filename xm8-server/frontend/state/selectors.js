@@ -5,6 +5,7 @@ export const getGuiVirtualInputGroups = state => state.guiinputgroups.get(curren
 export const getVirtualInputs = state => state.patches.getIn([currentVoiceGroupId(), 'virtualInputs']);
 export const getPhysicalInputs = state => state.physicalInputs;
 export const getMatrix = state => state.patches.getIn([currentVoiceGroupId(), 'matrix']);
+export const getGuiMatrix = state => state.guimatrix;
 export const getGraph = state => state.patches.getIn([currentVoiceGroupId(), 'graph']);
 export const getNodes = state => state.patches.getIn([currentVoiceGroupId(), 'graph', 'nodes']);
 export const getPatchview = state => state.patchviews.get(currentVoiceGroupId());

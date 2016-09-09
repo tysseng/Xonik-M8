@@ -11,7 +11,7 @@ import filedialog from './gui/filedialog';
 import guipatchviews from './gui/guipatchviews';
 import guiinputgroups from './gui/guiinputgroups';
 import guicontrollers from './gui/guicontrollers';
-
+import guimatrix from './gui/guimatrix';
 
 const guiReducers = combineReducers({
   controllers,
@@ -19,12 +19,13 @@ const guiReducers = combineReducers({
   patches,
   links,
   patchviews,
-  guipatchviews,
   filedialog,
   filesystem,
   network,
   physicalInputs,
-  guiinputgroups
+  guipatchviews,
+  guiinputgroups,
+  guimatrix
 });
 
 export default guiReducers;
