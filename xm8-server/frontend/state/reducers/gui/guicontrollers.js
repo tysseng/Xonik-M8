@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
-import { getPerPatchWrapper } from './reducerTools';
-import config from '../../../shared/config';
+import { types } from '../../../../shared/state/actions/controllers';
+import config from '../../../../shared/config';
 
 const emptyState = (() => {
   let controllers = new Map();
@@ -18,17 +18,19 @@ const controllersForPatch = (
   action) => {
 
   switch(action.type){
-    case 'SET_STATE':
-      return state.merge(action.state);
+    case types.SELECT_CONTROL_GROUP:
+      return state.set('selectedGroupId', action.selectedGroupId);
     default:
       return state;
   }
 }
 
-const controllers = getPerPatchWrapper({
-  emptyState,
-  wrappedReducer: controllersForPatch,
-  updateStatePath: 'controllers'
-});
+const controllers = (state = emptyState, action) => {
+  if(action.patchNumber) {
+    return state.updateIn([action.patchNumber], subState => controllersForPatch(subState, action))
+  } else {
+    return state;
+  }
+}
 
 export default controllers;

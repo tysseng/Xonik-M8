@@ -11,7 +11,8 @@ const network = (state =
     case 'SET_STATE':
       if(action.state.network){
         return state.clear().merge(action.state.network);
-      }          
+      }
+      return state;
     default: 
       return state;
   }

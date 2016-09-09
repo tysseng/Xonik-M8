@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
   let inputs = virtualInputs.get('byId').toJS();
   let input = inputs[selectedInputId];
 
-  let controllers = getControllers(state).toJS()
+  let controllers = getControllers(state).toJS();
   let inputValue = controllers[selectedInputId];
 
   return {

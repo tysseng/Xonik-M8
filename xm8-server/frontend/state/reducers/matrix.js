@@ -9,11 +9,12 @@ const root = (state, action) => {
       if(updatedState){
         return state.merge(updatedState);
       }
-      break;
+      return state;
     case types.DIRECT_OUTPUT_HOVER:
-        return state.set('hover', Map({inputId: action.inputId, outputId: action.outputId}));
-  } 
-  return state;
+      return state.set('hover', Map({inputId: action.inputId, outputId: action.outputId}));
+    default:
+      return state;
+  }
 }
 
 export const emptyState = Map({

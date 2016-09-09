@@ -5,7 +5,8 @@ const links = (state = OrderedMap(), action) => {
     case 'SET_STATE':
       if(action.state.links){
         return state.clear().merge(action.state.links);
-      }          
+      }
+      return state;
     default: 
       return state;
   }

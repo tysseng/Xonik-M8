@@ -1,7 +1,14 @@
 TODO før "stabilt"
 
 TODO:
-- Flytte GUI-only reducers til separate filer - patchActionTypes.CHANGE_VOICE_GROUP
+- Flytte GUI-only reducer parts til separate filer
+    - controllers
+    - inputs
+    - matrix
+
+
+- Flyte actions som er gui only til gui actions (?)
+- patchActionTypes.CHANGE_VOICE_GROUP
     case inputgroupsActionTypes.SELECT_GROUP:
     case inputgroupsActionTypes.SELECT_ELEMENT:
     case inputgroupsActionTypes.DESELECT_ELEMENT:
@@ -13,8 +20,9 @@ TODO:
 
 - Fikse subscribe i patchRepo
 - Sticky row for patch-icons
-- Voice selector alltid nederst i høyre hjørne
-
+    - Se etter alternativ, StickyDiv fungerer ikke når scroll er nedover siden (altså ved routing). Burde kanskje uansett scrolle eller
+      ta vare på scrollpos på den siden man er:
+        - https://github.com/reactjs/react-router/blob/73e6c85f427c48f90bae0bb0e9745b6b48536e2f/CHANGES.md#scrolling
 - Serialisering av matrix - lag noder i første omgang
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.

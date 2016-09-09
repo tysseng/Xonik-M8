@@ -14,6 +14,7 @@ export const getGuiPatchviews = state => state.guipatchviews;
 export const getFileDialog = state => state.filedialog;
 export const getFilesystem = state => state.filesystem;
 export const getControllers = state => state.controllers.get(currentVoiceGroupId());
+export const getGuiControllers = state => state.guicontrollers.get(currentVoiceGroupId());
 export const getNetwork = state => state.network;
 
 export const getInputsAsJS = state => {

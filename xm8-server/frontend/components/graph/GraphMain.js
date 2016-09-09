@@ -5,15 +5,11 @@ import GraphCenterColumnContainer from './GraphCenterColumnContainer';
 import PatchTopMenuContainer from '../patch/PatchTopMenuContainer';
 import VoiceGroupSelectorContainer from '../patch/VoiceGroupSelectorContainer';
 
-const GraphMain = () => {    
+
+const GraphMain = () => {
   return (
     <div>
-      <div className="row">
-        <div className="topcorner"></div>
-        <div className="topsubmenu">
-          <PatchTopMenuContainer/>
-        </div>
-      </div>
+      <PatchTopMenuContainer/>
       <div className="row">
         <div className="leftcolumn">
           <GraphLeftMenuContainer/>
@@ -31,7 +27,7 @@ const GraphMain = () => {
         </div>
       </div>
     </div>
-  ) 
+  )
 }
 
 export default GraphMain;  

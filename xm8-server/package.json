@@ -42,6 +42,7 @@
     "react-rangeslider": "^1.0.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.5.1",
+    "react-stickydiv": "^3.4.19",
     "redux": "^3.5.2",
     "round-to": "^1.1.0",
     "rpi-gpio": "^0.7.0"
