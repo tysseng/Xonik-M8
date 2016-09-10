@@ -1,19 +1,18 @@
 import _ from 'lodash';
 import { Map } from 'immutable';
-import { inputgroupsActionTypes } from '../../shared/state/actions/inputgroups';
+import { types } from '../../shared/state/actions/inputgroups';
 import { types as inputActionTypes } from '../../shared/state/actions/inputs';
-import { types as nodeActionTypes } from '../../shared/state/actions/nodes';
 import { types as patchActionTypes } from '../../shared/state/actions/patch';
 
 
 export const undoableActions = [
-  inputgroupsActionTypes.CHANGE_ELEMENT_TYPE,
-  inputgroupsActionTypes.NEW_GROUP,
-  inputgroupsActionTypes.DELETE_GROUP,
-  inputgroupsActionTypes.ADD_ELEMENT,
-  inputgroupsActionTypes.DELETE_ELEMENT,
-  inputgroupsActionTypes.SET_UNDO_POINT,
-  inputgroupsActionTypes.TOGGLE_VISIBILITY,
+  types.CHANGE_ELEMENT_TYPE,
+  types.NEW_GROUP,
+  types.DELETE_GROUP,
+  types.ADD_ELEMENT,
+  types.DELETE_ELEMENT,
+  types.SET_UNDO_POINT,
+  types.TOGGLE_VISIBILITY,
   inputActionTypes.INPUTCONFIG_DELETE_INPUT,
   patchActionTypes.RESET_PATCH
 ];
@@ -56,27 +55,27 @@ const removeElementFromGroups = (state, elementId) => {
 const inputgroups = (state, action) => {
 
   switch(action.type){
-    case inputgroupsActionTypes.MOVE_ELEMENT:
+    case types.MOVE_ELEMENT:
       return state
         .setIn(['groups', action.groupId, 'elements', action.id, 'offset', 'x'], action.offsetXem)
         .setIn(['groups', action.groupId, 'elements', action.id, 'offset', 'y'], action.offsetYem);
-    case inputgroupsActionTypes.NEW_GROUP:
+    case types.NEW_GROUP:
       let newGroup = createNewGroup(action.groupId);
       return state.setIn(['groups', action.groupId], newGroup);
-    case inputgroupsActionTypes.DELETE_GROUP:
+    case types.DELETE_GROUP:
       return state.deleteIn(['groups', action.groupId]);
-    case inputgroupsActionTypes.ADD_ELEMENT:
+    case types.ADD_ELEMENT:
       let wrappedElement = getWrappedElement(action.id, action.groupId, action.offsetXem, action.offsetYem, action.elementId, action.elementType);
       return state.setIn(['groups', action.groupId, 'elements', action.id], wrappedElement);
-    case inputgroupsActionTypes.DELETE_ELEMENT:
+    case types.DELETE_ELEMENT:
       return state.deleteIn(['groups', action.groupId, 'elements', action.id]);
-    case inputgroupsActionTypes.CHANGE_ELEMENT_TYPE:
+    case types.CHANGE_ELEMENT_TYPE:
       return state.setIn(['groups', action.groupId, 'elements', action.id, 'type'], action.inputType);
     case inputActionTypes.INPUTCONFIG_DELETE_INPUT:
       return removeElementFromGroups(state, action.inputId);
-    case inputgroupsActionTypes.TOGGLE_VISIBILITY:
+    case types.TOGGLE_VISIBILITY:
       return state.setIn(['groups', action.groupId, 'isVisible'], action.isVisible);
-    case inputgroupsActionTypes.RENAME_GROUP:
+    case types.RENAME_GROUP:
       return state.setIn(['groups', action.groupId, 'name'], action.name);
     case patchActionTypes.RESET_PATCH:
       return emptyState;

@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { changeElementType, deselectElement } from '../../../shared/state/actions/inputgroups';
+import { changeElementType } from '../../../shared/state/actions/inputgroups';
+import { deselectElement } from '../../../shared/state/actions/gui/guiinputgroups';
 import { getGuiVirtualInputGroups, getVirtualInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
 import ElementForm from './ElementForm'
 

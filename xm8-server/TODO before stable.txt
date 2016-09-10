@@ -3,13 +3,6 @@ TODO før "stabilt"
 TODO:
 - Flyte actions som er gui only til gui actions (?)
 - patchActionTypes.CHANGE_VOICE_GROUP
-    case inputgroupsActionTypes.SELECT_GROUP:
-    case inputgroupsActionTypes.SELECT_ELEMENT:
-    case inputgroupsActionTypes.DESELECT_ELEMENT:
-    case inputgroupsActionTypes.DESELECT_DRAG_ELEMENT:
-    case inputgroupsActionTypes.OPEN_NEW_ELEMENT_DIALOG:
-    case inputgroupsActionTypes.CLOSE_NEW_ELEMENT_DIALOG:
-    case inputgroupsActionTypes.SELECT_ID_IN_NEW_ELEMENT_DIALOG:
     case controllerTypes.SELECT_CONTROL_GROUP:
     matrixActionTypes.DIRECT_OUTPUT_HOVER
     case inputActionTypes.INPUTCONFIG_SELECT_INPUT:

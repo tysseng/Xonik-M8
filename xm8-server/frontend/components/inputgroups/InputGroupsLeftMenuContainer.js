@@ -1,6 +1,7 @@
 import InputGroupsLeftMenu from './InputGroupsLeftMenu';
 import { connect } from 'react-redux';
-import { openNewElementDialog, newGroup, selectGroup, deleteGroup, deleteElement } from '../../../shared/state/actions/inputgroups';
+import { newGroup, deleteGroup, deleteElement } from '../../../shared/state/actions/inputgroups';
+import { openNewElementDialog, selectGroup } from '../../../shared/state/actions/gui/guiinputgroups';
 import { getNextId } from '../../repositories/idRepository';
 import { getGuiVirtualInputGroups } from '../../state/selectors';
 import { virtualInputGroupIdPrefix } from '../../../shared/graph/Inputs';

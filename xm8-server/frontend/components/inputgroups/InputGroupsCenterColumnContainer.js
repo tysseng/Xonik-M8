@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
-import { closeNewElementDialog, addElement, selectInputInNewElementDialog, selectGroup } from '../../../shared/state/actions/inputgroups';
+import { addElement } from '../../../shared/state/actions/inputgroups';
+import { closeNewElementDialog, selectInputInNewElementDialog, selectGroup } from '../../../shared/state/actions/gui/guiinputgroups';
 import { getGuiVirtualInputGroups } from '../../state/selectors';
 import InputGroupsCenterColumn from './InputGroupsCenterColumn';
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
-import { selectElement, deselectElement, deselectDragElement, moveElement, inputgroupsUndoPointPositionChanged } from '../../../shared/state/actions/inputgroups.js'
+import { moveElement, inputgroupsUndoPointPositionChanged } from '../../../shared/state/actions/inputgroups.js'
+import { selectElement, deselectElement, deselectDragElement } from '../../../shared/state/actions/gui/guiinputgroups.js'
 import { getGuiVirtualInputGroups, getVirtualInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
 
 import InputGrid from './InputGrid';

@@ -1,29 +1,20 @@
 import { currentVoiceGroupId } from '../voicegroupselector';
 
-export const inputgroupsActionTypes = {
-  SELECT_GROUP: 'SELECT_GROUP',
-  SELECT_ELEMENT: 'SELECT_ELEMENT',
+export const types = {
   MOVE_ELEMENT: 'MOVE_ELEMENT',
-  DESELECT_ELEMENT: 'DESELECT_ELEMENT',
-  DESELECT_DRAG_ELEMENT: 'DESELECT_DRAG_ELEMENT',
   NEW_GROUP: 'NEW_GROUP',
   DELETE_GROUP: 'DELETE_GROUP',
   ADD_ELEMENT: 'ADD_ELEMENT',
   DELETE_ELEMENT: 'DELETE_ELEMENT',
-  OPEN_NEW_ELEMENT_DIALOG: 'OPEN_NEW_ELEMENT_DIALOG',
-  CLOSE_NEW_ELEMENT_DIALOG: 'CLOSE_NEW_ELEMENT_DIALOG',
-  SELECT_ID_IN_NEW_ELEMENT_DIALOG: 'SELECT_ID_IN_NEW_ELEMENT_DIALOG',
   CHANGE_ELEMENT_TYPE: 'CHANGE_ELEMENT_TYPE',
   SET_UNDO_POINT: 'SET_UNDO_POINT',
   TOGGLE_VISIBILITY: 'TOGGLE_VISIBILITY',
   RENAME_GROUP: 'RENAME_GROUP'
 }
 
-let types = inputgroupsActionTypes;
-
 export const toggleVisibility = (groupId, isVisible, patchNumber = currentVoiceGroupId()) =>{
   return {
-    type: inputgroupsActionTypes.TOGGLE_VISIBILITY,
+    type: types.TOGGLE_VISIBILITY,
     groupId,
     isVisible,
     target: 'SERVER',
@@ -33,19 +24,10 @@ export const toggleVisibility = (groupId, isVisible, patchNumber = currentVoiceG
 
 export const renameGroup = (groupId, name, patchNumber = currentVoiceGroupId()) =>{
   return {
-    type: inputgroupsActionTypes.RENAME_GROUP,
+    type: types.RENAME_GROUP,
     groupId,
     name,
     target: 'SERVER',
-    patchNumber
-  }
-}
-
-export const selectGroup = (selectedGroupId, patchNumber = currentVoiceGroupId()) =>{
-  return {
-    type: inputgroupsActionTypes.SELECT_GROUP,
-    selectedGroupId,
-    target: 'GUI',
     patchNumber
   }
 }
@@ -62,19 +44,6 @@ export const changeElementType = (groupId, id, inputType, patchNumber = currentV
   };  
 }
 
-export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem, patchNumber = currentVoiceGroupId()) =>{
-  return {
-    type: types.SELECT_ELEMENT,
-    mouseX, 
-    mouseY, 
-    offsetXem, 
-    offsetYem,    
-    id,
-    target: 'GUI',
-    patchNumber
-  };  
-}
-
 export const moveElement = (groupId, id, offsetXem, offsetYem, patchNumber = currentVoiceGroupId()) =>{
   return {
     type: types.MOVE_ELEMENT,
@@ -87,25 +56,9 @@ export const moveElement = (groupId, id, offsetXem, offsetYem, patchNumber = cur
   }
 }
 
-export const deselectElement = (patchNumber = currentVoiceGroupId()) =>{
-  return {
-    type: types.DESELECT_ELEMENT,
-    target: 'GUI',
-    patchNumber
-  }
-}
-
-export const deselectDragElement = (patchNumber = currentVoiceGroupId()) =>{
-  return {
-    type: types.DESELECT_DRAG_ELEMENT,
-    target: 'GUI',
-    patchNumber
-  }
-}
-
 export const newGroup = (groupId, patchNumber = currentVoiceGroupId()) =>{
   return {
-    type: inputgroupsActionTypes.NEW_GROUP,
+    type: types.NEW_GROUP,
     target: 'SERVER',
     groupId,
     undoDescription: 'New group',
@@ -115,7 +68,7 @@ export const newGroup = (groupId, patchNumber = currentVoiceGroupId()) =>{
 
 export const deleteGroup = (groupId, patchNumber = currentVoiceGroupId()) =>{
   return {
-    type: inputgroupsActionTypes.DELETE_GROUP,
+    type: types.DELETE_GROUP,
     target: 'BOTH',
     groupId,
     undoDescription: 'Delete group',
@@ -125,7 +78,7 @@ export const deleteGroup = (groupId, patchNumber = currentVoiceGroupId()) =>{
 
 export const addElement = (id, groupId, elementId, elementType, offsetXem, offsetYem, patchNumber = currentVoiceGroupId()) =>{
   return {
-    type: inputgroupsActionTypes.ADD_ELEMENT,
+    type: types.ADD_ELEMENT,
     id, 
     groupId, 
     elementId, 
@@ -140,7 +93,7 @@ export const addElement = (id, groupId, elementId, elementType, offsetXem, offse
 
 export const deleteElement = (id, groupId, patchNumber = currentVoiceGroupId()) =>{
   return {
-    type: inputgroupsActionTypes.DELETE_ELEMENT,
+    type: types.DELETE_ELEMENT,
     id, 
     groupId,
     target: 'BOTH',
@@ -149,35 +102,9 @@ export const deleteElement = (id, groupId, patchNumber = currentVoiceGroupId()) 
   }
 }
 
-export const openNewElementDialog = (patchNumber = currentVoiceGroupId()) =>{
-  return {
-    type: inputgroupsActionTypes.OPEN_NEW_ELEMENT_DIALOG,
-    target: 'GUI',
-    patchNumber
-  }
-}
-
-export const closeNewElementDialog = (patchNumber = currentVoiceGroupId()) =>{
-  return {
-    type: inputgroupsActionTypes.CLOSE_NEW_ELEMENT_DIALOG,
-    target: 'GUI',
-    patchNumber
-  } 
-}
-
-export const selectInputInNewElementDialog = (elementType, elementId, patchNumber = currentVoiceGroupId()) =>{
-  return {
-    type: inputgroupsActionTypes.SELECT_ID_IN_NEW_ELEMENT_DIALOG,
-    elementId,
-    elementType,
-    target: 'GUI',
-    patchNumber
-  }   
-}
-
 export const inputgroupsUndoPointPositionChanged = (patchNumber = currentVoiceGroupId()) =>{
   return {
-    type: inputgroupsActionTypes.SET_UNDO_POINT,
+    type: types.SET_UNDO_POINT,
     undoDescription: 'Move element',
     patchNumber
   }
