@@ -1,6 +1,6 @@
 import ControlLeftMenu from './ControlLeftMenu';
 import { connect } from 'react-redux';
-import { selectControllerGroup } from '../../../shared/state/actions/controllers';
+import { selectControllerGroup } from '../../../shared/state/actions/gui/guicontrollers';
 import { getGroups, getSelectedGroupId } from './groupTools';
 import {getInputsAsJS} from "../../state/selectors";
 

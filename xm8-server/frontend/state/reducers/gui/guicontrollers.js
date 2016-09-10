@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { types } from '../../../../shared/state/actions/controllers';
+import { types } from '../../../../shared/state/actions/gui/guicontrollers';
 import config from '../../../../shared/config';
 
 const emptyState = (() => {
