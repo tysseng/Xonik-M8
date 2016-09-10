@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { selectInput, rename, renameShort, updateField } from '../../../shared/state/actions/inputs';
+import { updateField } from '../../../shared/state/actions/inputs';
 import DisplayOptionsForm from './DisplayOptionsForm'
 
 const mapStateToProps = (state, ownProps) => {

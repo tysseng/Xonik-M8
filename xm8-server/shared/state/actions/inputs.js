@@ -4,7 +4,6 @@ export const types = {
   CONTROLLER_CHANGE: 'CONTROLLER_CHANGE',
   INPUTCONFIG_NEW_INPUT: 'INPUTCONFIG_NEW_INPUT',
   INPUTCONFIG_DELETE_INPUT: 'INPUTCONFIG_DELETE_INPUT',
-  INPUTCONFIG_SELECT_INPUT: 'INPUTCONFIG_SELECT_INPUT',
   INPUTCONFIG_RENAME: 'INPUTCONFIG_RENAME',
   INPUTCONFIG_RENAME_SHORT: 'INPUTCONFIG_RENAME_SHORT',
   INPUTCONFIG_UPDATE_FIELD: 'INPUTCONFIG_UPDATE_FIELD',
@@ -51,16 +50,6 @@ export const changeValue = (id, value, patchNumber = currentVoiceGroupId()) => {
     undoDescription: 'Change value',
     patchNumber
   };  
-}
-
-export const selectInput = (inputType, id, patchNumber = currentVoiceGroupId()) => {
-  return {
-    type: types.INPUTCONFIG_SELECT_INPUT,
-    inputType,
-    selectedInput: id,
-    target: 'GUI',
-    patchNumber
-  }
 }
 
 export const rename = (inputId, name, patchNumber = currentVoiceGroupId()) => {

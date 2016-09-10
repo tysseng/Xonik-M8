@@ -1,5 +1,6 @@
 import { Map } from 'immutable';
 import { types as inputActionTypes } from '../../../../shared/state/actions/inputs';
+import { types as guiInputActionTypes } from '../../../../shared/state/actions/gui/guiinputs';
 
 export const emptyState = Map({
   frontend: Map()
@@ -7,7 +8,7 @@ export const emptyState = Map({
 
 export const physicalInputs = (state = emptyState, action) => {
   switch(action.type){
-    case inputActionTypes.INPUTCONFIG_SELECT_INPUT:
+    case guiInputActionTypes.INPUTCONFIG_SELECT_INPUT:
       if(action.inputType === 'physical'){
         return state.setIn(['frontend', 'selectedInput'], action.selectedInput);   
       }

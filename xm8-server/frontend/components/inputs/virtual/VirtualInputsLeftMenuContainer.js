@@ -1,6 +1,7 @@
 import VirtualInputsLeftMenu from './VirtualInputsLeftMenu';
 import { connect } from 'react-redux';
-import { newInput, deleteInput, selectInput } from '../../../../shared/state/actions/inputs';
+import { newInput, deleteInput } from '../../../../shared/state/actions/inputs';
+import { selectInput } from '../../../../shared/state/actions/gui/guiinputs';
 import { panelControllersById } from "../../../../shared/graph/PanelControllers";
 import { getNextId } from '../../../repositories/idRepository';
 import { virtualInputIdPrefix } from '../../../../shared/graph/Inputs';

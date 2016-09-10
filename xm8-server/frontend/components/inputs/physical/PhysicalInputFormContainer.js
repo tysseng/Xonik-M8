@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectInput, rename, renameShort, updateField } from '../../../../shared/state/actions/inputs';
+import { rename, renameShort, updateField } from '../../../../shared/state/actions/inputs';
+import { selectInput } from '../../../../shared/state/actions/gui/guiinputs';
 import { getPhysicalInputs, getGuiPhysicalInputs, getControllers } from '../../../state/selectors';
 
 import PhysicalInputForm from './PhysicalInputForm'

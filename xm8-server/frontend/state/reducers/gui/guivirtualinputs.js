@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { types as inputActionTypes } from '../../../../shared/state/actions/inputs';
+import { types as guiInputActionTypes } from '../../../../shared/state/actions/gui/guiinputs';
 import { types as patchActionTypes } from '../../../../shared/state/actions/patch';
 import config from '../../../../shared/config';
 
@@ -18,7 +18,7 @@ const emptyState = (() => {
 
 export const virtualInputs = (state, action) => {
   switch(action.type){
-    case inputActionTypes.INPUTCONFIG_SELECT_INPUT:
+    case guiInputActionTypes.INPUTCONFIG_SELECT_INPUT:
       if(action.inputType === 'virtual'){
         return state.setIn(['frontend', 'selectedInput'], action.selectedInput);   
       }
