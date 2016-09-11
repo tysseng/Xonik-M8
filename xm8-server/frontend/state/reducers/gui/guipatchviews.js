@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
 import { types } from '../../../../shared/state/actions/nodes';
-import { types as patchActionTypes} from '../../../../shared/state/actions/patch';
+import { types as guiPatchActionTypes} from '../../../../shared/state/actions/gui/guipatch';
 import { types as vizTypes } from '../../../../shared/state/actions/graphvisualization';
 import { types as guiTypes } from '../../../../shared/state/actions/graphgui';
 import { setCurrentVoiceGroupId } from '../../../../shared/state/voicegroupselector';
@@ -73,7 +73,7 @@ const patchview = (state, action) => {
 const patchviews = (state = emptyState, action) => {
   if(action.patchNumber) {
     return state.updateIn([action.patchNumber], patchviewState => patchview(patchviewState, action));
-  } else if(action.type === patchActionTypes.CHANGE_VOICE_GROUP){
+  } else if(action.type === guiPatchActionTypes.CHANGE_VOICE_GROUP){
     console.log("Patchview", action)
     setCurrentVoiceGroupId(action.voiceGroupId);
     return state.set('selectedPatchNumber', action.voiceGroupId);

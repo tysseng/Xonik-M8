@@ -3,7 +3,6 @@ TODO før "stabilt"
 TODO:
 - Flyte actions som er gui only til gui actions (?)
 - patchActionTypes.CHANGE_VOICE_GROUP
-    matrixActionTypes.DIRECT_OUTPUT_HOVER
 
 - vurdere middleware for å legge på patchNumber
 

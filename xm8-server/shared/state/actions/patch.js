@@ -2,8 +2,7 @@ export const types = {
   RESET_PATCH: 'RESET_PATCH',
   LOAD_PATCH_FROM_FILE: 'LOAD_PATCH_FROM_FILE',
   SET_LOADED_PATCH_FILE_DETAILS: 'SET_LOADED_PATCH_FILE_DETAILS',
-  TOGGLE_AUTO_UPDATE: 'TOGGLE_AUTO_UPDATE',
-  CHANGE_VOICE_GROUP: 'CHANGE_VOICE_GROUP'
+  TOGGLE_AUTO_UPDATE: 'TOGGLE_AUTO_UPDATE'
 }
 
 export const resetPatch = () => {
@@ -41,13 +40,4 @@ export const setLoadedPatchFileDetails = ({fileId, version, filename, folderId, 
     patchNumber
   };
 };
-
-export const changeVoiceGroup = (voiceGroupId) => {
-  return {
-    type: types.CHANGE_VOICE_GROUP,
-    target: 'GUI',
-    voiceGroupId
-  };
-}
-
 
