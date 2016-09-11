@@ -1,5 +1,3 @@
-import { currentVoiceGroupId } from '../voicegroupselector';
-
 export const types = {
   NODE_MOVE: 'NODE_MOVE',
   GRAPH_SET_LINK_FROM: 'GRAPH_SET_LINK_FROM',
@@ -8,7 +6,7 @@ export const types = {
   GRAPH_START_NODE_MOVE: 'GRAPH_START_NODE_MOVE'
 }
 
-export const setLinkFromNodeId = (nodeId, patchNumber = currentVoiceGroupId()) => {
+export const setLinkFromNodeId = (nodeId, patchNumber = '-') => {
   return {
     type: types.GRAPH_SET_LINK_FROM,
     target: 'GUI',
@@ -17,7 +15,7 @@ export const setLinkFromNodeId = (nodeId, patchNumber = currentVoiceGroupId()) =
   };
 }
 
-export const setLinkToNodeId = (nodeId, patchNumber = currentVoiceGroupId()) => {
+export const setLinkToNodeId = (nodeId, patchNumber = '-') => {
   return {
     type: types.GRAPH_SET_LINK_TO,
     target: 'GUI',
@@ -26,7 +24,7 @@ export const setLinkToNodeId = (nodeId, patchNumber = currentVoiceGroupId()) => 
   };
 }
 
-export const cancelLinkCreation = (patchNumber = currentVoiceGroupId()) => {
+export const cancelLinkCreation = (patchNumber = '-') => {
   return {
     type: types.GRAPH_CANCEL_LINK_CREATION,
     target: 'GUI',
@@ -34,7 +32,7 @@ export const cancelLinkCreation = (patchNumber = currentVoiceGroupId()) => {
   };
 }
 
-export const startNodeMove = (offsetX, offsetY, patchNumber = currentVoiceGroupId()) => {
+export const startNodeMove = (offsetX, offsetY, patchNumber = '-') => {
   return {
     type: types.GRAPH_START_NODE_MOVE,
     target: 'GUI',

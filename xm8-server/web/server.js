@@ -45,7 +45,7 @@ app.use(express.static('web/static'));
 
 //web socket routes
 stateRoute(app, ws);
-//controllerRoute(app, ws);
+//controllerRoute(app, stateWsclient);
 
 //app.use('/app/wifi', wifiRoutes);
 app.use('/api/patch', patchRoutes);
@@ -59,7 +59,7 @@ app.get('*', function (request, response){
 
 // Capture all requests not yet handled and redirect them to the captive portal
 // page as they may origin from wifi logon.
-// TODO: Seems to capture all ws calls too
+// TODO: Seems to capture all stateWsclient calls too
 /*app.use(function(req, res, next){
   console.log("User requested " + req.originalUrl + ", redirecting to captive portal page");
   res.redirect("/xm8-captive-portal.html");

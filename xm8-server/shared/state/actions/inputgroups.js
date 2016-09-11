@@ -1,5 +1,3 @@
-import { currentVoiceGroupId } from '../voicegroupselector';
-
 export const types = {
   MOVE_ELEMENT: 'MOVE_ELEMENT',
   NEW_GROUP: 'NEW_GROUP',
@@ -12,7 +10,7 @@ export const types = {
   RENAME_GROUP: 'RENAME_GROUP'
 }
 
-export const toggleVisibility = (groupId, isVisible, patchNumber = currentVoiceGroupId()) =>{
+export const toggleVisibility = (groupId, isVisible, patchNumber = '-') =>{
   return {
     type: types.TOGGLE_VISIBILITY,
     groupId,
@@ -22,7 +20,7 @@ export const toggleVisibility = (groupId, isVisible, patchNumber = currentVoiceG
   }
 }
 
-export const renameGroup = (groupId, name, patchNumber = currentVoiceGroupId()) =>{
+export const renameGroup = (groupId, name, patchNumber = '-') =>{
   return {
     type: types.RENAME_GROUP,
     groupId,
@@ -32,7 +30,7 @@ export const renameGroup = (groupId, name, patchNumber = currentVoiceGroupId()) 
   }
 }
 
-export const changeElementType = (groupId, id, inputType, patchNumber = currentVoiceGroupId()) =>{
+export const changeElementType = (groupId, id, inputType, patchNumber = '-') =>{
   return {
     type: types.CHANGE_ELEMENT_TYPE,
     groupId,
@@ -44,7 +42,7 @@ export const changeElementType = (groupId, id, inputType, patchNumber = currentV
   };  
 }
 
-export const moveElement = (groupId, id, offsetXem, offsetYem, patchNumber = currentVoiceGroupId()) =>{
+export const moveElement = (groupId, id, offsetXem, offsetYem, patchNumber = '-') =>{
   return {
     type: types.MOVE_ELEMENT,
     id,
@@ -56,7 +54,7 @@ export const moveElement = (groupId, id, offsetXem, offsetYem, patchNumber = cur
   }
 }
 
-export const newGroup = (groupId, patchNumber = currentVoiceGroupId()) =>{
+export const newGroup = (groupId, patchNumber = '-') =>{
   return {
     type: types.NEW_GROUP,
     target: 'SERVER',
@@ -66,7 +64,7 @@ export const newGroup = (groupId, patchNumber = currentVoiceGroupId()) =>{
   }
 }
 
-export const deleteGroup = (groupId, patchNumber = currentVoiceGroupId()) =>{
+export const deleteGroup = (groupId, patchNumber = '-') =>{
   return {
     type: types.DELETE_GROUP,
     target: 'BOTH',
@@ -76,7 +74,7 @@ export const deleteGroup = (groupId, patchNumber = currentVoiceGroupId()) =>{
   }
 }
 
-export const addElement = (id, groupId, elementId, elementType, offsetXem, offsetYem, patchNumber = currentVoiceGroupId()) =>{
+export const addElement = (id, groupId, elementId, elementType, offsetXem, offsetYem, patchNumber = '-') =>{
   return {
     type: types.ADD_ELEMENT,
     id, 
@@ -91,7 +89,7 @@ export const addElement = (id, groupId, elementId, elementType, offsetXem, offse
   }
 }
 
-export const deleteElement = (id, groupId, patchNumber = currentVoiceGroupId()) =>{
+export const deleteElement = (id, groupId, patchNumber = '-') =>{
   return {
     type: types.DELETE_ELEMENT,
     id, 
@@ -102,7 +100,7 @@ export const deleteElement = (id, groupId, patchNumber = currentVoiceGroupId()) 
   }
 }
 
-export const inputgroupsUndoPointPositionChanged = (patchNumber = currentVoiceGroupId()) =>{
+export const inputgroupsUndoPointPositionChanged = (patchNumber = '-') =>{
   return {
     type: types.SET_UNDO_POINT,
     undoDescription: 'Move element',

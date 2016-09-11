@@ -1,11 +1,9 @@
-import { currentVoiceGroupId } from '../voicegroupselector';
-
 export const types = {
   DIRECT_OUTPUT_TOGGLE: 'DIRECT_OUTPUT_TOGGLE',
   RESET_MATRIX: 'RESET_MATRIX'
 }
 
-export const toggleDirectOutput = (inputId, outputId, patchNumber = currentVoiceGroupId()) => {
+export const toggleDirectOutput = (inputId, outputId, patchNumber = '-') => {
   return {
     type: types.DIRECT_OUTPUT_TOGGLE,
     inputId,
@@ -15,7 +13,7 @@ export const toggleDirectOutput = (inputId, outputId, patchNumber = currentVoice
   }
 }
 
-export const resetMatrix = (patchNumber = currentVoiceGroupId()) => {
+export const resetMatrix = (patchNumber = '-') => {
   return {
     type: types.RESET_MATRIX,
     target: 'SERVER',

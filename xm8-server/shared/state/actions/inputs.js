@@ -1,5 +1,3 @@
-import { currentVoiceGroupId } from '../voicegroupselector';
-
 export const types = {
   CONTROLLER_CHANGE: 'CONTROLLER_CHANGE',
   INPUTCONFIG_NEW_INPUT: 'INPUTCONFIG_NEW_INPUT',
@@ -19,7 +17,7 @@ export const types = {
 }
 
 // It is only possible to create new inputs, so virt is hard coded as part of the id 
-export const newInput = (inputId, panelControllerId, patchNumber = currentVoiceGroupId()) => {
+export const newInput = (inputId, panelControllerId, patchNumber = '-') => {
 
   return {
     type: types.INPUTCONFIG_NEW_INPUT,
@@ -31,7 +29,7 @@ export const newInput = (inputId, panelControllerId, patchNumber = currentVoiceG
   }
 }
 
-export const deleteInput = (inputId, patchNumber = currentVoiceGroupId()) => {
+export const deleteInput = (inputId, patchNumber = '-') => {
   return {
     type: types.INPUTCONFIG_DELETE_INPUT,
     inputId,
@@ -41,7 +39,7 @@ export const deleteInput = (inputId, patchNumber = currentVoiceGroupId()) => {
   }
 }
 
-export const changeValue = (id, value, patchNumber = currentVoiceGroupId()) => {
+export const changeValue = (id, value, patchNumber = '-') => {
   return {
     type: types.CONTROLLER_CHANGE,
     id,
@@ -52,7 +50,7 @@ export const changeValue = (id, value, patchNumber = currentVoiceGroupId()) => {
   };  
 }
 
-export const rename = (inputId, name, patchNumber = currentVoiceGroupId()) => {
+export const rename = (inputId, name, patchNumber = '-') => {
   return {
     type: types.INPUTCONFIG_RENAME,
     inputId,
@@ -62,7 +60,7 @@ export const rename = (inputId, name, patchNumber = currentVoiceGroupId()) => {
   }
 }
 
-export const renameShort = (inputId, name, patchNumber = currentVoiceGroupId()) => {
+export const renameShort = (inputId, name, patchNumber = '-') => {
   return {
     type: types.INPUTCONFIG_RENAME_SHORT,
     inputId,
@@ -72,7 +70,7 @@ export const renameShort = (inputId, name, patchNumber = currentVoiceGroupId()) 
   }
 }
 
-export const updateField = (inputId, fieldPath, value, patchNumber = currentVoiceGroupId()) => {
+export const updateField = (inputId, fieldPath, value, patchNumber = '-') => {
   return {
     type: types.INPUTCONFIG_UPDATE_FIELD,
     inputId,
@@ -84,7 +82,7 @@ export const updateField = (inputId, fieldPath, value, patchNumber = currentVoic
   }
 }
 
-export const deleteOption = (inputId, index, patchNumber = currentVoiceGroupId()) => {
+export const deleteOption = (inputId, index, patchNumber = '-') => {
   return {
     type: types.INPUTCONFIG_DELETE_OPTION,
     inputId,
@@ -95,7 +93,7 @@ export const deleteOption = (inputId, index, patchNumber = currentVoiceGroupId()
   }
 }
 
-export const newOption = (inputId, patchNumber = currentVoiceGroupId()) => {
+export const newOption = (inputId, patchNumber = '-') => {
   return {
     type: types.INPUTCONFIG_NEW_OPTION,
     inputId,
@@ -105,7 +103,7 @@ export const newOption = (inputId, patchNumber = currentVoiceGroupId()) => {
   }
 }
 
-export const spreadOptionValues = (inputId, centered, endToEnd, min, max, patchNumber = currentVoiceGroupId()) => {
+export const spreadOptionValues = (inputId, centered, endToEnd, min, max, patchNumber = '-') => {
   return {
     type: types.INPUTCONFIG_SPREAD_OPTIONS_VALUES,
     inputId,
@@ -119,7 +117,7 @@ export const spreadOptionValues = (inputId, centered, endToEnd, min, max, patchN
   }
 }
 
-export const spreadOptionValuesMidi = (inputId, centered, endToEnd, patchNumber = currentVoiceGroupId()) => {
+export const spreadOptionValuesMidi = (inputId, centered, endToEnd, patchNumber = '-') => {
   return {
     type: types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI,
     inputId,
@@ -131,7 +129,7 @@ export const spreadOptionValuesMidi = (inputId, centered, endToEnd, patchNumber 
   }
 }
 
-export const toggleDirectOutput = (inputId, outputId, patchNumber = currentVoiceGroupId()) => {
+export const toggleDirectOutput = (inputId, outputId, patchNumber = '-') => {
   return {
     type: types.INPUT_DIRECT_OUTPUT_TOGGLE,
     inputId,
@@ -141,7 +139,7 @@ export const toggleDirectOutput = (inputId, outputId, patchNumber = currentVoice
   }
 }
 
-export const loadPhysicalInputsFromFile = (fileId, version, physicalInputs, patchNumber = currentVoiceGroupId()) => {
+export const loadPhysicalInputsFromFile = (fileId, version, physicalInputs, patchNumber = '-') => {
   return {
     type: types.LOAD_PHYSICAL_INPUTS_FROM_FILE,
     target: 'SERVER',
@@ -152,7 +150,7 @@ export const loadPhysicalInputsFromFile = (fileId, version, physicalInputs, patc
   }
 };
 
-export const resetPhysicalInputs = (patchNumber = currentVoiceGroupId()) => {
+export const resetPhysicalInputs = (patchNumber = '-') => {
   return {
     type: types.RESET_PHYSICAL_INPUTS,
     target: 'SERVER',
@@ -160,7 +158,7 @@ export const resetPhysicalInputs = (patchNumber = currentVoiceGroupId()) => {
   }
 };
 
-export const resetPhysicalInput = (inputId, patchNumber = currentVoiceGroupId()) => {
+export const resetPhysicalInput = (inputId, patchNumber = '-') => {
   return {
     type: types.RESET_PHYSICAL_INPUT,
     inputId,

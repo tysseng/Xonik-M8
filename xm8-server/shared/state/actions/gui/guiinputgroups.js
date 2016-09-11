@@ -1,5 +1,3 @@
-import { currentVoiceGroupId } from '../voicegroupselector';
-
 export const types = {
   SELECT_GROUP: 'SELECT_GROUP',
   SELECT_ELEMENT: 'SELECT_ELEMENT',
@@ -10,7 +8,7 @@ export const types = {
   SELECT_ID_IN_NEW_ELEMENT_DIALOG: 'SELECT_ID_IN_NEW_ELEMENT_DIALOG'
 }
 
-export const selectGroup = (selectedGroupId, patchNumber = currentVoiceGroupId()) =>{
+export const selectGroup = (selectedGroupId, patchNumber = '-') =>{
   return {
     type: types.SELECT_GROUP,
     selectedGroupId,
@@ -19,7 +17,7 @@ export const selectGroup = (selectedGroupId, patchNumber = currentVoiceGroupId()
   }
 }
 
-export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem, patchNumber = currentVoiceGroupId()) =>{
+export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem, patchNumber = '-') =>{
   return {
     type: types.SELECT_ELEMENT,
     mouseX, 
@@ -32,7 +30,7 @@ export const selectElement = (id, mouseX, mouseY, offsetXem, offsetYem, patchNum
   };  
 }
 
-export const deselectElement = (patchNumber = currentVoiceGroupId()) =>{
+export const deselectElement = (patchNumber = '-') =>{
   return {
     type: types.DESELECT_ELEMENT,
     target: 'GUI',
@@ -40,7 +38,7 @@ export const deselectElement = (patchNumber = currentVoiceGroupId()) =>{
   }
 }
 
-export const deselectDragElement = (patchNumber = currentVoiceGroupId()) =>{
+export const deselectDragElement = (patchNumber = '-') =>{
   return {
     type: types.DESELECT_DRAG_ELEMENT,
     target: 'GUI',
@@ -48,7 +46,7 @@ export const deselectDragElement = (patchNumber = currentVoiceGroupId()) =>{
   }
 }
 
-export const openNewElementDialog = (patchNumber = currentVoiceGroupId()) =>{
+export const openNewElementDialog = (patchNumber = '-') =>{
   return {
     type: types.OPEN_NEW_ELEMENT_DIALOG,
     target: 'GUI',
@@ -56,7 +54,7 @@ export const openNewElementDialog = (patchNumber = currentVoiceGroupId()) =>{
   }
 }
 
-export const closeNewElementDialog = (patchNumber = currentVoiceGroupId()) =>{
+export const closeNewElementDialog = (patchNumber = '-') =>{
   return {
     type: types.CLOSE_NEW_ELEMENT_DIALOG,
     target: 'GUI',
@@ -64,7 +62,7 @@ export const closeNewElementDialog = (patchNumber = currentVoiceGroupId()) =>{
   } 
 }
 
-export const selectInputInNewElementDialog = (elementType, elementId, patchNumber = currentVoiceGroupId()) =>{
+export const selectInputInNewElementDialog = (elementType, elementId, patchNumber = '-') =>{
   return {
     type: types.SELECT_ID_IN_NEW_ELEMENT_DIALOG,
     elementId,

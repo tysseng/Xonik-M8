@@ -5,7 +5,8 @@ import { Router, IndexRoute, Route, Link, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { setState } from '../shared/state/actions/index';
-import remoteActionMiddleware from './remoteActionMiddleware';
+import remoteActionMiddleware from './state/middleware/remoteActionMiddleware';
+import voiceGroupIdMiddleware from './state/middleware/voiceGroupIdMiddleware';
 import initWsclientForState from './wsclient-state.js';
 import guiReducers from './state/reducers';
 
@@ -26,15 +27,16 @@ import TrashPage from './components/trash/TrashPage';
 
 import NotFound from './components/NotFound';
 
-import ws from './wsclient-state.js';
+import stateWsClient from './wsclient-state.js';
 
-ws.onmessage = (msg) => { 
+stateWsClient.onmessage = (msg) => {
   let state = JSON.parse(msg.data);
   store.dispatch(setState(state));
 };
 
 const createStoreWithMiddleware = applyMiddleware(
-  remoteActionMiddleware(ws)
+  voiceGroupIdMiddleware,
+  remoteActionMiddleware(stateWsClient)
 )(createStore);
 
 const store = createStoreWithMiddleware(guiReducers);

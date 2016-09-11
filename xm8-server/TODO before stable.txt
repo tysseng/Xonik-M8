@@ -1,11 +1,6 @@
 TODO før "stabilt"
 
 TODO:
-- Flyte actions som er gui only til gui actions (?)
-- patchActionTypes.CHANGE_VOICE_GROUP
-
-- vurdere middleware for å legge på patchNumber
-
 - Fikse subscribe i patchRepo
 - Sticky row for patch-icons
     - Se etter alternativ, StickyDiv fungerer ikke når scroll er nedover siden (altså ved routing). Burde kanskje uansett scrolle eller

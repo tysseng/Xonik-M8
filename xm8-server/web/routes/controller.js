@@ -20,13 +20,13 @@ module.exports = function(app, ws){
   controller.onControllerChange(tools.sendToAllClients.bind(null, controllerWss));
 
   /*
-  app.ws('/echo', function(ws, req) {
+  app.stateWsclient('/echo', function(stateWsclient, req) {
     console.log("Something connected to echo resource");
-    ws.on('message', function(msg) {
+    stateWsclient.on('message', function(msg) {
       console.log("message received");
       publishControllerChange(msg);
 
-      var aWebSocketService = ws.getWss('/echo');
+      var aWebSocketService = stateWsclient.getWss('/echo');
       aWebSocketService.clients.forEach(function (client) {
         try{
           console.log("Resending " + msg);

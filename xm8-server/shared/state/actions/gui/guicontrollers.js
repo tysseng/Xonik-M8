@@ -1,10 +1,8 @@
-import { currentVoiceGroupId } from '../voicegroupselector';
-
 export const types = {
   SELECT_CONTROL_GROUP: 'SELECT_CONTROL_GROUP'
 }
 
-export const selectControllerGroup = (selectedGroupId, patchNumber = currentVoiceGroupId()) => {
+export const selectControllerGroup = (selectedGroupId, patchNumber = '-') => {
   return {
     type: types.SELECT_CONTROL_GROUP,
     selectedGroupId,
