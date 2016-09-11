@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { types } from '../../../../shared/state/actions/matrix';
+import { types } from '../../../../shared/state/actions/gui/guimatrix';
 
 const emptyState = Map({
   hover: Map({inputId: '', outputId: ''})

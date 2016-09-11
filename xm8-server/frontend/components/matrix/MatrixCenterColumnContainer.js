@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
-import { toggleDirectOutput, toggleHover} from '../../../shared/state/actions/matrix';
+import { toggleDirectOutput} from '../../../shared/state/actions/matrix';
+import { toggleHover} from '../../../shared/state/actions/gui/guimatrix';
 import { getPhysicalInputs, getMatrix, getGuiMatrix, getGraph } from '../../state/selectors';
 
 import MatrixCenterColumn from './MatrixCenterColumn';
