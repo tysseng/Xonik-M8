@@ -2,23 +2,33 @@ TODO før "stabilt"
 
 TODO:
 - Fikse subscribe i patchRepo
-- Sticky row for patch-icons
-    - Se etter alternativ, StickyDiv fungerer ikke når scroll er nedover siden (altså ved routing). Burde kanskje uansett scrolle eller
-      ta vare på scrollpos på den siden man er:
-        - https://github.com/reactjs/react-router/blob/73e6c85f427c48f90bae0bb0e9745b6b48536e2f/CHANGES.md#scrolling
 - Serialisering av matrix - lag noder i første omgang
+- Serialisering
+    - voice group id
+    - serialisering av input, output, link - sjekk om det er noe spesielt som må til
+    - sende input config (?)
+    - sjekke at virtual inputs kan brukes
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
 - Scrollbars i matrix
 - Bedre ikoner for reset og delete, bedre skille i meny
-- Lage per-patch wrapper til reducers frontend og backend
+
+- Reset patch virket ikke på inputs og matrix
 
 Småting
+
+
 - Luft etter hver gruppe i meny
 
 
 
 For later:
+- React recompose
+- Sticky row for patch-icons
+    - Se etter alternativ, StickyDiv fungerer ikke når scroll er nedover siden (altså ved routing). Burde kanskje uansett scrolle eller
+      ta vare på scrollpos på den siden man er:
+        - https://github.com/reactjs/react-router/blob/73e6c85f427c48f90bae0bb0e9745b6b48536e2f/CHANGES.md#scrolling
+    - background color
 - "LEDS" for patch saved and autosaved.
 - Only enable save patch if patch has changed
 - Split frontend state into patchNumbers (patch and controllers) - need to have separate selected states and only reset

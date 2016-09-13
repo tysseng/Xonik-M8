@@ -2,9 +2,7 @@ import _ from 'lodash';
 import store from '../state/store.js';
 import config from '../../shared/config.js';
 import spi from '../spi/spi-fd.js';
-import serializer from './serializer.js';
 import preparer from './preparer.js';
-import printer from './printer.js';
 import commands from './commands.js';
 import { getPatch, getControllers, getNodes } from '../state/selectors';
 
@@ -30,16 +28,16 @@ export let autosaver = initPatchAutosaver(changeTracker, getPatch, config.persis
 
 function sendPatch(patchNumber){
 
-  let patchState = getNodes(patchNumber);
+  let nodesState = getNodes(patchNumber);
 
-  if(!preparer.isNetValid(patchState)){
+  if(!preparer.isNetValid(nodesState)){
     console.log("Patch has validation errors, synth voices not updated");
     return {updated: false, message: "Graph has validation errors, synth voices not updated"};
   }
   
   spi.write(commands.stop);
 
-  var buffers = serialize(patchState);
+  var buffers = serialize(nodesState.toJS());
   _.each(buffers, function(buffer){
     spi.write(buffer);
   });  
@@ -99,28 +97,5 @@ export const load =({patchNumber, filename, folderId, fileId, version}) => {
       }));
   }
 };
-
-function serialize(patchState){
-  var net = preparer.prepareNetForSerialization(patchState);
-  printer.printNet(net);
-
-  var buffers = [];
-
-  // add all constants and constant lengths
-  for(var i = 0; i<net.constants.length; i++){
-    var serializedConstant = serializer.serializeConstant(i + config.graph.numberOfInputs, net.constants[i]);
-    buffers.push(serializedConstant);
-  }
-  buffers.push(serializer.serializeConstantsCount(net.constants));
-
-  // add all nodes and node array length
-  _.each(net.nodes, function(node){
-    var serializedNode = serializer.serializeNode(node);
-    buffers.push(serializedNode);
-  });
-  buffers.push(serializer.serializeNodeCount(net.nodes));
-
-  return buffers;
-}
 
 module.exports.sendPatch = sendPatch;

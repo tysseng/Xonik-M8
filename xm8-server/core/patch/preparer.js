@@ -60,9 +60,9 @@ const convertLinkValuesToRefs = (nodes) => {
   });
 }
 
-const markReachable = (nodes) => {
+export const markReachable = (nodes) => {
   _.each(nodes, function(node){
-    if(node.type === nodeType.OUTPUT.id || node.type === nodeType.DELAY_LINE.id){
+    if(node.type === nodeType.OUTPUT.id || node.type === nodeType.OUTPUT_TUNED.id || node.type === nodeType.DELAY_LINE.id){
       markAsReachable(node);
     }
   });
@@ -101,6 +101,8 @@ function setParamNodePosAndExtractConstants(nodes){
   return constants;
 }
 
+// Returns all nodes that are only linked FROM, not to, and that are at
+// the start of a path that leads to an output or delay line
 function getReachableIndependentNodes(nodes){
   var independentNodes = [];
   _.each(nodes, function(node){
@@ -115,6 +117,9 @@ function getReachableIndependentNodes(nodes){
   return independentNodes;
 }
 
+// Traverses the node tree from independent nodes to all their outputs. This orders them in an array in a way
+// that makes sure that if we calculate any outputs in the same order, we can traverse the array only once to
+// calculate all outputs.
 function sortNodes(independentNodes, offset){
   var sortedNodes = [];
 
@@ -151,8 +156,7 @@ function isNetValid(nodesState){
   return isValid;
 }
 
-function prepareNetForSerialization(nodesState){
-  let nodesMap = nodesState.toJS();
+function prepareNetForSerialization(nodesMap){
 
   // convert map to list for further processing.
   let nodes = [];
