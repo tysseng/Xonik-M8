@@ -41,7 +41,6 @@ const setParamsInUse = (node) => {
   } else {
     node.paramsInUse = typedef.params.length;
   }
-
 }
 
 const convertLinkValuesToRefs = (nodes) => {
@@ -56,7 +55,6 @@ const convertLinkValuesToRefs = (nodes) => {
         param.value.to = nodes[param.value.to];
       }
     });
-    console.log(node);  
   });
 }
 
@@ -91,6 +89,8 @@ function setParamNodePosAndExtractConstants(nodes){
       _.each(node.params, function(param){
         if(param.type === paramType.CONSTANT.id || param.type === paramType.OUTPUT.id){
           param.nodePos = constants.length + config.graph.numberOfInputs;
+
+          // TODO: Extract OUTPUT hw id if this is an output!
           constants.push(param.value);
         } else if(param.type === paramType.INPUT.id){
           param.nodePos = param.value;
