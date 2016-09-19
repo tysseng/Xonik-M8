@@ -4,9 +4,11 @@ import { expect } from 'chai';
 
 import { getNode } from '../../../core/state/selectors';
 import { resetGraph,
-  createNewNode, changeNodeType,
+  createNewNode, changeNodeType, changeNodeName, moveNode, deleteNode,
   changeNodeParamType, changeNodeParamValue, changeNodeParamUnit,
-  createNewLink, deleteLink } from '../../../shared/state/actions/nodes';
+  createNewLink, deleteLink, changeLinkName, toggleLinkNameInGraph } from '../../../shared/state/actions/nodes';
+import { deleteInput } from '../../../shared/state/actions/inputs';
+
 import { map as nodeTypesMap } from '../../../shared/graph/NodeTypes';
 import { map as paramTypesMap } from '../../../shared/graph/ParameterTypes';
 import { unitsById } from '../../../shared/graph/ParameterUnits';
@@ -40,11 +42,16 @@ describe('Nodes reducer:', function() {
     it('should not be valid', function () {
       node.valid.should.equal(false);
     });
+
+    it('should set initial position', function () {
+      node.vis.x.should.equal(10);
+      node.vis.y.should.equal(10);
+    });
   });
 
   describe('Setting node type', function () {
 
-    before(function() {
+    beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
     });
@@ -105,9 +112,104 @@ describe('Nodes reducer:', function() {
     });
   });
 
+  describe('Renaming node', function () {
+
+    beforeEach(function() {
+      store.dispatch(resetGraph(voiceGroupId));
+      store.dispatch(createNewNode(voiceGroupId));
+    });
+
+    it('should set node name', function () {
+      store.dispatch(changeNodeName('0', "New node name", voiceGroupId));
+      let node = getNode(voiceGroupId, '0').toJS();
+
+      node.name.should.equal("New node name");
+    });
+  });
+
+  describe('Move node', function () {
+
+    beforeEach(function() {
+      store.dispatch(resetGraph(voiceGroupId));
+      store.dispatch(createNewNode(voiceGroupId));
+    });
+
+    it('should set new coordinates', function () {
+      store.dispatch(moveNode('0', 30, 20, voiceGroupId));
+      let node = getNode(voiceGroupId, '0').toJS();
+
+      node.vis.x.should.equal(30);
+      node.vis.y.should.equal(20);
+    });
+  });
+
+  describe('Delete node', function () {
+
+    beforeEach(function() {
+      store.dispatch(resetGraph(voiceGroupId));
+      store.dispatch(createNewNode(voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+    });
+
+    it('should remove node', function () {
+      store.dispatch(deleteNode('0', voiceGroupId));
+
+      let node = getNode(voiceGroupId, '0');
+      expect(node).to.equal(undefined);
+    });
+
+    it('should remove to-node from consumers', function () {
+
+      // node to consume as invert value parameter
+      store.dispatch(createNewNode(voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+
+      // link nodes
+      store.dispatch(createNewLink('1', '0', '0', voiceGroupId));
+
+      // delete to-node, should clear consumer
+      store.dispatch(deleteNode('0', voiceGroupId));
+
+      let fromNode = getNode(voiceGroupId, '1').toJS();
+      expect(fromNode.consumers['1-0-0']).to.equal(undefined);
+    });
+
+    it('should remove from-node from parameters', function () {
+
+      // node to consume as invert value parameter
+      store.dispatch(createNewNode(voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+
+      // link nodes
+      store.dispatch(createNewLink('1', '0', '0', voiceGroupId));
+
+      // delete from-node, should remove parameter value from to-node
+      store.dispatch(deleteNode('1', voiceGroupId));
+
+      let toNode = getNode(voiceGroupId, '0').toJS();
+      toNode.params['0'].value.should.equal('');
+    });
+
+    it('should leave parameter type unchanged when deleting from-node', function () {
+
+      // node to consume as invert value parameter
+      store.dispatch(createNewNode(voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+
+      // link nodes
+      store.dispatch(createNewLink('1', '0', '0', voiceGroupId));
+
+      // delete from-node, should remove parameter value from to-node
+      store.dispatch(deleteNode('1', voiceGroupId));
+
+      let toNode = getNode(voiceGroupId, '0').toJS();
+      toNode.params['0'].type.should.equal(paramTypesMap.LINK.id);
+    });
+  });
+
   describe('Setting param type', function () {
 
-    before(function() {
+    beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
       store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
@@ -160,7 +262,7 @@ describe('Nodes reducer:', function() {
 
   describe('Setting param value', function () {
 
-    before(function() {
+    beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
       store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
@@ -242,15 +344,31 @@ describe('Nodes reducer:', function() {
 
       let fromNode = getNode(voiceGroupId, '1').toJS();
       expect(fromNode.consumers['1-0-0']).to.equal(undefined);
-
-
     });
-    // TODO: Delete from consumers if changing link value
+  });
+
+  describe('Deleting virtual input', function () {
+
+    beforeEach(function() {
+      store.dispatch(resetGraph(voiceGroupId));
+      store.dispatch(createNewNode(voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.VIRTUALINPUT.id, voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.VIRTUALINPUT.id, 'virt|123', voiceGroupId));
+    });
+
+    it('should clear any parameter using that virtual input', function () {
+
+      store.dispatch(deleteInput('virt|123', voiceGroupId));
+
+      let node = getNode(voiceGroupId, '0').toJS();
+      node.params['0'].value.should.equal('');
+    });
   });
 
   describe('Setting param unit', function () {
 
-    before(function() {
+    beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
       store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
@@ -268,7 +386,7 @@ describe('Nodes reducer:', function() {
 
   describe('Linking nodes', function () {
 
-    before(function() {
+    beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
       store.dispatch(changeNodeType('0', nodeTypesMap.SUM.id, voiceGroupId));
@@ -328,9 +446,43 @@ describe('Nodes reducer:', function() {
     });
   });
 
+  describe('Link name changes', function () {
+
+    beforeEach(function() {
+      store.dispatch(resetGraph(voiceGroupId));
+      store.dispatch(createNewNode(voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesMap.SUM.id, voiceGroupId));
+      store.dispatch(createNewNode(voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(createNewLink('1', '0', '2', voiceGroupId));
+    });
+
+    it('should change the name on link', function () {
+
+      // link nodes
+      store.dispatch(changeLinkName('0', '2', 'New link name', voiceGroupId));
+      let consumingNode = getNode(voiceGroupId, '0').toJS();
+      let consumingParam = consumingNode.params['2'];
+
+      let link = consumingParam.value;
+      link.name.should.equal('New link name');
+    });
+
+    it('should toggle name visibility', function () {
+
+      // link nodes
+      store.dispatch(toggleLinkNameInGraph('0', '2', false, voiceGroupId));
+      let consumingNode = getNode(voiceGroupId, '0').toJS();
+      let consumingParam = consumingNode.params['2'];
+
+      let link = consumingParam.value;
+      link.showNameInGraph.should.equal(false);
+    });
+  });
+
   describe('Deleting link', function () {
 
-    before(function() {
+    beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
       store.dispatch(changeNodeType('0', nodeTypesMap.SUM.id, voiceGroupId));
@@ -361,13 +513,9 @@ describe('Nodes reducer:', function() {
     });
   });
 
-
-  //TODO: Set node name
-  //TODO: Node move
-  //TODO: Delete input
-  //TODO: Delete node should remove from consumers
-  //TODO: Delete node should remove from params
-  //TODO: case types.CHANGE_LINK_NAME:
-  //TODO: case types.TOGGLE_LINK_NAME_IN_GRAPH:
-
+  // IN OUTPUTS REDUCER
+  //TODO: Delete node should update output collition detection
+  //TODO: Change node type should update output collition detection
+  //TODO: Change param type should update output collition detection
+  //TODO: Change param value should update output collition detection
 });

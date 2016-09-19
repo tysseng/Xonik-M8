@@ -148,15 +148,15 @@ const getAddToConsumersAction = action => {
 }
 
 const removeFromConsumers = (state, toNodeId, paramId) => {
-    let param = state.getIn([toNodeId, 'params', paramId]);
-    if(isLink(param.get('type'))) {
-      let currentFromNodeId = getFromNodeId(param);
-      if(currentFromNodeId){
-        let linkId = getLinkIdFromIds(currentFromNodeId, toNodeId, paramId);
-        state = state.deleteIn([currentFromNodeId, 'consumers', linkId]);
-      }
-    }  
-    return state;  
+  let param = state.getIn([toNodeId, 'params', paramId]);
+  if(isLink(param.get('type'))) {
+    let currentFromNodeId = getFromNodeId(param);
+    if(currentFromNodeId){
+      let linkId = getLinkIdFromIds(currentFromNodeId, toNodeId, paramId);
+      state = state.deleteIn([currentFromNodeId, 'consumers', linkId]);
+    }
+  }
+  return state;
 }
 
 const param = (state, action) => {
@@ -284,19 +284,12 @@ const nodes = (state, action) => {
     case types.NEW_LINK:   
     case types.CHANGE_NODE_PARAM_VALUE:
       if(isLink(action.paramType)){
-        // add or remove consumer link
-        if(action.paramValue && action.paramValue !== ""){
-          let oldParamValue = state.getIn([action.nodeId, 'params', action.paramId, 'value', 'from']);
-          if(oldParamValue !== undefined && action.paramValue !== oldParamValue){
-            // value has changed, remove old value
-            state = removeFromConsumers(state, action.nodeId, action.paramId);
-          }
+        // remove existing consumer link. Slightly brute force as it will delete even if link has not changed.
+        state = removeFromConsumers(state, action.nodeId, action.paramId);
 
-          // add
+        if(action.paramValue && action.paramValue !== ""){
+          // add new consumer link
           state = state.updateIn([action.paramValue], (aNode) => node(aNode, getAddToConsumersAction(action)));
-        } else {
-          // remove existing
-          state = removeFromConsumers(state, action.nodeId, action.paramId);
         }
       }
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
