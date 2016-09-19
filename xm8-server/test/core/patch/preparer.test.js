@@ -4,51 +4,23 @@ import _ from 'lodash';
 import config from '../../../shared/config';
 import { outputsById } from '../../../shared/graph/Outputs';
 import spiType from '../../../core/spi/spiType.js';
-import { prepareNetForSerialization, markReachable, setParamsInUse } from '../../../core/patch/preparer';
+import { prepareNetForSerialization } from '../../../core/patch/preparer';
 import testPatch from './mockedNodes/test-patch';
 import nodesWithInvalid from './mockedNodes/nodes-with-invalid';
 import nodesWithUnreachable from './mockedNodes/nodes-with-unreachable';
 import nodesWithLinks from './mockedNodes/nodes-with-links';
 import nodesWithConstants from './mockedNodes/nodes-with-constants';
 import nodesWithParamsInUse from './mockedNodes/nodes-with-params-in-use';
+import nodesForSorting from './mockedNodes/nodes-for-sorting';
 
 chai.should();
 
 describe('Patch preparation:', function() {
 
   let nodes = testPatch.contents.patch.graph.nodes;
-  let preparedNet = prepareNetForSerialization(nodes);
 
-  describe('Constant extraction:', function() {
+  //TODO: Add missing fields test
 
-    let result = prepareNetForSerialization(nodesWithConstants);
-    let constants = result.constants;
-
-    it('should have extracted 4 constants', function() {
-      constants.length.should.equal(4);
-    });
-
-    it('should have calculated correct positions for constants', function() {
-
-      let pos0 = nodesWithConstants['1'].params['0'].nodePos;
-      let pos1 = nodesWithConstants['1'].params['1'].nodePos;
-      let pos2 = nodesWithConstants['0'].params['1'].nodePos;
-
-      // Three constants
-      constants[pos0 - config.graph.numberOfInputs].should.equal('1');
-      constants[pos1 - config.graph.numberOfInputs].should.equal('2');
-      constants[pos2 - config.graph.numberOfInputs].should.equal('3');
-    });
-
-    it('should have calculated correct position for output id and use hwId instead of id', function() {
-
-      // Output node's 'output to' parameter, value is VCO1 pitch hwId.
-      let pos3 = nodesWithConstants['2'].params['1'].nodePos;
-      // TODO: This should be 0, not '0', which means that we do not use hwId here. Check that it is done during serialization
-      constants[pos3 - config.graph.numberOfInputs].should.equal(0)
-    });
-
-  });
 
   describe('Params in use calculation:', function() {
 
@@ -76,15 +48,23 @@ describe('Patch preparation:', function() {
 
   describe('Reachable-preparer:', function() {
 
-    prepareNetForSerialization(nodesWithUnreachable);
+    let result = prepareNetForSerialization(nodesWithUnreachable);
 
     it('should mark all nodes as reachable', function() {
       // We have three initialy reachable node types
-      let preparedNodes = preparedNet.nodes;
+      let preparedNodes = result.nodes;
 
       _.each(preparedNodes, node => {
         node.reachable.should.equal(true);
       });
+    });
+
+    it('should have removed unreachable node', function() {
+      // We have three initialy reachable node types
+      let preparedNodes = result.nodes;
+
+      // There were initially 5 nodes, one should have been removed.
+      preparedNodes.length.should.equal(4);
     });
 
     it('should mark nodes that do not lead to an output as unreachable', function() {
@@ -112,6 +92,61 @@ describe('Patch preparation:', function() {
       nodesWithUnreachable['4'].reachable.should.equal(true);
     });
   });
+
+  describe('Constant extraction:', function() {
+
+    let result = prepareNetForSerialization(nodesWithConstants);
+    let constants = result.constants;
+
+    it('should have extracted 4 constants', function() {
+      constants.length.should.equal(4);
+    });
+
+    it('should have calculated correct positions for constants', function() {
+
+      let pos0 = nodesWithConstants['1'].params['0'].nodePos;
+      let pos1 = nodesWithConstants['1'].params['1'].nodePos;
+      let pos2 = nodesWithConstants['0'].params['1'].nodePos;
+
+      // Three constants
+      constants[pos0 - config.graph.numberOfInputs].should.equal('1');
+      constants[pos1 - config.graph.numberOfInputs].should.equal('2');
+      constants[pos2 - config.graph.numberOfInputs].should.equal('3');
+    });
+
+    it('should have calculated correct position for output id and use hwId instead of id', function() {
+
+      // Output node's 'output to' parameter, value is VCO1 pitch hwId.
+      let pos3 = nodesWithConstants['2'].params['1'].nodePos;
+      constants[pos3 - config.graph.numberOfInputs].should.equal(outputsById['0'].hwId)
+    });
+
+  });
+
+  /*
+  describe('Node sorting:', function() {
+
+    let result = prepareNetForSerialization(nodesForSorting);
+    let sortedNodes = result.nodes;
+    let firstNodeIndex = config.graph.numberOfInputs + result.constants.length;
+
+    console.log(sortedNodes);
+
+    it('Should put independent nodes first', function() {
+      sortedNodes[0].should.equal(nodesForSorting['2']);
+      sortedNodes[1].should.equal(nodesForSorting['1']);
+      sortedNodes[2].should.equal(nodesForSorting['5']);
+    });
+
+  });
+  */
+  // TODO: Sort nodes
+  /**
+   * should start with independent reachable
+   *
+   */
+
+  // TODO: Is valid
 
   // TODO: Node tre legges til to ganger. Det ser ut som consumer-kalkulering har sviktet, både node 1 og 2 linker til param 0
   // på node 3

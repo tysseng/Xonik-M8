@@ -5,6 +5,7 @@ const getState = () => {
 }
 
 export const getNodes = (patchNumber) => getState().patches.getIn([patchNumber, 'graph', 'nodes']);
+export const getNode = (patchNumber, nodeId) => getState().patches.getIn([patchNumber, 'graph', 'nodes', nodeId]);
 export const getGraph = (patchNumber) => getState().patches.getIn([patchNumber, 'graph']);
 export const getMatrix = (patchNumber) => getState().patches.getIn([patchNumber, 'matrix']);
 export const getPatch = (patchNumber) => getState().patches.get(patchNumber);

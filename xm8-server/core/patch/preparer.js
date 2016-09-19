@@ -1,7 +1,8 @@
 import _ from 'lodash';
-import paramTypes from '../../shared/graph/ParameterTypes.js';
-import nodeTypes from '../../shared/graph/NodeTypes.js';
-import config from '../../shared/config.js';
+import paramTypes from '../../shared/graph/ParameterTypes';
+import nodeTypes from '../../shared/graph/NodeTypes';
+import { outputsById } from '../../shared/graph/Outputs';
+import config from '../../shared/config';
 
 let paramType = paramTypes.map;
 let nodeType = nodeTypes.map;
@@ -90,8 +91,12 @@ function setParamNodePosAndExtractConstants(nodes){
         if(param.type === paramType.CONSTANT.id || param.type === paramType.OUTPUT.id){
           param.nodePos = constants.length + config.graph.numberOfInputs;
 
-          // TODO: Extract OUTPUT hw id if this is an output!
-          constants.push(param.value);
+          if(param.type === paramType.OUTPUT.id){
+            constants.push(outputsById[param.value].hwId);
+
+          } else {
+            constants.push(param.value);
+          }
         } else if(param.type === paramType.INPUT.id){
           param.nodePos = param.value;
         }
