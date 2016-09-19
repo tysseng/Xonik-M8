@@ -286,6 +286,12 @@ const nodes = (state, action) => {
       if(isLink(action.paramType)){
         // add or remove consumer link
         if(action.paramValue && action.paramValue !== ""){
+          let oldParamValue = state.getIn([action.nodeId, 'params', action.paramId, 'value', 'from']);
+          if(oldParamValue !== undefined && action.paramValue !== oldParamValue){
+            // value has changed, remove old value
+            state = removeFromConsumers(state, action.nodeId, action.paramId);
+          }
+
           // add
           state = state.updateIn([action.paramValue], (aNode) => node(aNode, getAddToConsumersAction(action)));
         } else {
