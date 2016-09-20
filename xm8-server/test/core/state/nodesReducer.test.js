@@ -1,7 +1,7 @@
-import store from '../../../core/state/store';
 import chai from 'chai';
 import { expect } from 'chai';
 
+import store from '../../../core/state/store';
 import { getNode } from '../../../core/state/selectors';
 import { resetGraph,
   createNewNode, changeNodeType, changeNodeName, moveNode, deleteNode,

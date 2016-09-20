@@ -1,9 +1,12 @@
 import chai from 'chai';
 import _ from 'lodash';
 
+import store from '../../../core/state/store';
+import { getNode } from '../../../core/state/selectors';
+
 import config from '../../../shared/config';
 import { outputsById } from '../../../shared/graph/Outputs';
-import spiType from '../../../core/spi/spiType.js';
+
 import { prepareNetForSerialization } from '../../../core/patch/preparer';
 import testPatch from './mockedNodes/test-patch';
 import nodesWithInvalid from './mockedNodes/nodes-with-invalid';
@@ -17,7 +20,8 @@ chai.should();
 
 describe('Patch preparation:', function() {
 
-  let nodes = testPatch.contents.patch.graph.nodes;
+  //TODO: Remove this, let load persisted be configurable
+  let voiceGroupId = '0';
 
   //TODO: Add missing fields test
 
