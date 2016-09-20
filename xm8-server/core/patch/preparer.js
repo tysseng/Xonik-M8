@@ -137,14 +137,64 @@ function sortNodes(independentNodes, offset){
 }
 
 function addNode(node, sortedNodes, offset){
-    var nodePos = sortedNodes.length + offset;
-    node.nodePos = nodePos;
-    sortedNodes.push(node);
+  var nodePos = sortedNodes.length + offset;
+  node.nodePos = nodePos;
+  sortedNodes.push(node);
 
-    _.each(node.consumers, function(link){
-      link.to.params[link.toParam].nodePos = nodePos;
-      addNode(link.to, sortedNodes, offset);
-    });
+  _.each(node.consumers, function(link){
+    link.to.params[link.toParam].nodePos = nodePos;
+    addNode(link.to, sortedNodes, offset);
+  });
+}
+
+/**
+for each independent node
+ - add node to list
+ - label node as sorted
+  - for each node in consumers list
+     - if all params are sorted, add to list
+     - call sortNodes again with new list of independent nodes
+
+
+ */
+
+const sortNodes2 = (independentNodes, offset) => {
+  var sortedNodes = [];
+
+  let i = 0;
+  while (i < independentNodes.length) {
+
+    let node = independentNodes[i];
+
+    if(node.nodePos === -1){
+      var nodePos = sortedNodes.length + offset;
+      node.nodePos = nodePos;
+      sortedNodes.push(node);
+
+      _.each(node.consumers, link => {
+        let toNode = link.to;
+        toNode.params[link.toParam].nodePos = nodePos;
+
+        // check if all nodes linking to the toNode has been
+        // assigned a position in the sortedNodes array.
+        // If true, it is safe to add the to-node as well.
+        // If false, the to-node will be visited later when the missing
+        // dependencies have been added.
+        let allDependenciesResolved = true;
+        _.each(toNode.params, param => {
+          if(isLink(param.type) && param.nodePos === -1){
+            allDependenciesResolved = false;
+          }
+        });
+
+        if(allDependenciesResolved){
+          independentNodes.push(toNode);
+        }
+      });
+    }
+
+    i++;
+  }
 }
 
 function isNetValid(nodesState){

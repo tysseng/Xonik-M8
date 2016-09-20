@@ -1,4 +1,5 @@
 import chai from 'chai';
+import _ from 'lodash'
 
 import spiType from '../../../core/spi/spiType.js';
 import { serialize } from '../../../core/patch/patchSerializer';
