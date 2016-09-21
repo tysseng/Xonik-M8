@@ -15,6 +15,7 @@ import nodesWithLinks from './mockedNodes/nodes-with-links';
 import nodesWithConstants from './mockedNodes/nodes-with-constants';
 import nodesWithParamsInUse from './mockedNodes/nodes-with-params-in-use';
 import nodesForSorting from './mockedNodes/nodes-for-sorting';
+import nodesForSorting2 from './mockedNodes/nodes-for-sorting2';
 
 chai.should();
 
@@ -127,23 +128,22 @@ describe('Patch preparation:', function() {
 
   });
 
-  /*
   describe('Node sorting:', function() {
 
-    let result = prepareNetForSerialization(nodesForSorting);
+    let result = prepareNetForSerialization(nodesForSorting2);
     let sortedNodes = result.nodes;
-    let firstNodeIndex = config.graph.numberOfInputs + result.constants.length;
-
-    console.log(sortedNodes);
 
     it('Should put independent nodes first', function() {
-      sortedNodes[0].should.equal(nodesForSorting['2']);
-      sortedNodes[1].should.equal(nodesForSorting['1']);
-      sortedNodes[2].should.equal(nodesForSorting['5']);
+      sortedNodes[0].id.should.equal(nodesForSorting2['3'].id);
+      sortedNodes[1].id.should.equal(nodesForSorting2['4'].id);
+      sortedNodes[2].id.should.equal(nodesForSorting2['5'].id);
+      sortedNodes[3].id.should.equal(nodesForSorting2['2'].id);
+      sortedNodes[4].id.should.equal(nodesForSorting2['1'].id);
+      sortedNodes[5].id.should.equal(nodesForSorting2['0'].id);
     });
 
   });
-  */
+
   // TODO: Sort nodes
   /**
    * should start with independent reachable

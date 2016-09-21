@@ -125,40 +125,10 @@ function getReachableIndependentNodes(nodes){
 // Traverses the node tree from independent nodes to all their outputs. This orders them in an array in a way
 // that makes sure that if we calculate any outputs in the same order, we can traverse the array only once to
 // calculate all outputs.
-function sortNodes(independentNodes, offset){
-  var sortedNodes = [];
+const sortNodes = (independentNodes, offset) => {
 
-  _.each(independentNodes, function(node){
-    if(node.nodePos == -1){
-      addNode(node, sortedNodes, offset);
-    }
-  });
-  return sortedNodes;
-}
+  let debugSorting = true;
 
-function addNode(node, sortedNodes, offset){
-  var nodePos = sortedNodes.length + offset;
-  node.nodePos = nodePos;
-  sortedNodes.push(node);
-
-  _.each(node.consumers, function(link){
-    link.to.params[link.toParam].nodePos = nodePos;
-    addNode(link.to, sortedNodes, offset);
-  });
-}
-
-/**
-for each independent node
- - add node to list
- - label node as sorted
-  - for each node in consumers list
-     - if all params are sorted, add to list
-     - call sortNodes again with new list of independent nodes
-
-
- */
-
-const sortNodes2 = (independentNodes, offset) => {
   var sortedNodes = [];
 
   let i = 0;
@@ -171,6 +141,10 @@ const sortNodes2 = (independentNodes, offset) => {
       node.nodePos = nodePos;
       sortedNodes.push(node);
 
+      if(debugSorting) console.log("\nSorted: pushing", node.name);
+
+      if(debugSorting) console.log("\nChecking consumers of node", node.name);
+
       _.each(node.consumers, link => {
         let toNode = link.to;
         toNode.params[link.toParam].nodePos = nodePos;
@@ -181,13 +155,24 @@ const sortNodes2 = (independentNodes, offset) => {
         // If false, the to-node will be visited later when the missing
         // dependencies have been added.
         let allDependenciesResolved = true;
+
+        if(debugSorting) console.log("Checking consumer node", toNode.name);
+
         _.each(toNode.params, param => {
-          if(isLink(param.type) && param.nodePos === -1){
-            allDependenciesResolved = false;
+          if(isLink(param.type)){
+
+            if(debugSorting) console.log("Checking param", param.id, "of", toNode.name, ", pos is", param.nodePos);
+
+            if(param.nodePos === undefined) {
+              allDependenciesResolved = false;
+            }
           }
         });
 
         if(allDependenciesResolved){
+
+          if(debugSorting) console.log("\nIndependent: pushing", toNode.name);
+
           independentNodes.push(toNode);
         }
       });
@@ -195,6 +180,15 @@ const sortNodes2 = (independentNodes, offset) => {
 
     i++;
   }
+
+  if(debugSorting) {
+    console.log("\nSorting completed. Ordering:\n---");
+    _.each(sortedNodes, node => {
+      console.log(node.name);
+    });
+  }
+
+  return sortedNodes;
 }
 
 function isNetValid(nodesState){
