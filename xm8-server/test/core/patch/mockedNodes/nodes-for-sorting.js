@@ -1,36 +1,52 @@
-import { init, invert, output, sum, param, link, getMutableNodes } from './graphTestTools';
+import { init, invert, output, sum, param, link, name, getMutableNodes } from './graphTestTools';
 import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
 
 /*
 A graph that has been entered in a weird sequence.
+sorting should happen like this:
+- Independent nodes are identified and ordered 3,2,1
+- outputSummer is evaluated and found to not be complete as inputSummer has not been added  (consumers on independent 3)
+- inputSummer is evaluated and found to be complete, added to independentNodes (consumers on independent 2)
+- inputSummer is evaluated again and found to be added already  (consumers on independent 1)
+- outputSummer is evaluated and found to be complete since inputSummer has been added (consumers on inputSummer). Added to independentNodes
+- outputNode is evaluated and found to be complete. Added to sortedNodes
 
-node2 and node1 are summed by node3 in that order.
-node3 and node5 are summed by node4
-node0 outputs the result of node4
+ORder should be
+3 indep3, 4 indep2, 5 indep1, 2 inputSummer, 1 outputSummer, 0 outputNode
+
 
  */
 
 init();
 
 let outputNode = output('0');
+name(outputNode, 'outputNode');
+
+let outputSummer = sum();
+name(outputSummer, 'outputSummer');
+
+let inputSummer = sum();
+name(inputSummer, 'inputSummer');
+
+let independent3 = invert();
+name(independent3, 'independent3');
+param(independent3, '0', paramTypesMap.CONSTANT.id, '3');
 
 let independent2 = invert();
+name(independent2, 'independent2');
 param(independent2, '0', paramTypesMap.CONSTANT.id, '2');
 
 let independent1 = invert();
+name(independent1, 'independent1');
 param(independent1, '0', paramTypesMap.CONSTANT.id, '1');
 
-let summer = sum();
-link(independent1, summer, '0');
-link(independent2, summer, '1');
+link(independent1, inputSummer, '0');
+link(independent2, inputSummer, '1');
 
-let summer2 = sum();
-link(summer2, outputNode, '0');
+link(inputSummer, outputSummer, '0');
+link(independent3, outputSummer, '1');
 
-let independent3 = invert();
-param(independent3, '0', paramTypesMap.CONSTANT.id, '4');
-link(summer, summer2, '0');
-link(independent3, summer2, '1');
+link(outputSummer, outputNode, '0');
 
 let graph = getMutableNodes();
 

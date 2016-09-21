@@ -1,6 +1,8 @@
 TODO før "stabilt"
 
 TODO:
+- Må ikke være mulig å linke FRA en output node.
+- Må kunne sette initial value på en delay line node...
 - Fikse subscribe i patchRepo
 - Serialisering av matrix - lag noder i første omgang
 - Serialisering

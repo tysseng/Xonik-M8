@@ -114,9 +114,14 @@ function getReachableIndependentNodes(nodes){
     var independent = true;
     if(node.reachable){
       _.each(node.params, function(param){
-        if(param.type === paramType.LINK.id) independent = false;
+        // nodes depending on a previous delay line are per definition not dependent of those,
+        // the result of the delay line is used in the NEXT cycle of the calulation.
+        if(param.type === paramType.LINK.id && param.value.from.type !== nodeType.DELAY_LINE.id) {
+          independent = false;
+        }
       });
     }
+
     if(independent) independentNodes.push(node);
   });
   return independentNodes;
@@ -127,7 +132,7 @@ function getReachableIndependentNodes(nodes){
 // calculate all outputs.
 const sortNodes = (independentNodes, offset) => {
 
-  let debugSorting = true;
+  let debugSorting = false;
 
   var sortedNodes = [];
 
