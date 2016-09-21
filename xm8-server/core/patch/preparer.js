@@ -197,7 +197,7 @@ const sortNodes = (independentNodes, offset) => {
 }
 
 function isNetValid(nodesState){
-  let nodes = nodesState.toIndexedSeq().toJS();
+  let nodes = nodesState;
 
   let isValid = true;
 

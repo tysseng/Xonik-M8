@@ -28,7 +28,7 @@ export let autosaver = initPatchAutosaver(changeTracker, getPatch, config.persis
 
 function sendPatch(patchNumber){
 
-  let nodesState = getNodes(patchNumber);
+  let nodesState = getNodes(patchNumber).toJS();
 
   if(!preparer.isNetValid(nodesState)){
     console.log("Patch has validation errors, synth voices not updated");
@@ -37,7 +37,7 @@ function sendPatch(patchNumber){
   
   spi.write(commands.stop);
 
-  var buffers = serialize(nodesState.toJS());
+  var buffers = serialize(nodesState);
   _.each(buffers, function(buffer){
     spi.write(buffer);
   });  

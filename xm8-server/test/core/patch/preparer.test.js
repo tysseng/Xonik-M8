@@ -4,8 +4,7 @@ import _ from 'lodash';
 import config from '../../../shared/config';
 import { outputsById } from '../../../shared/graph/Outputs';
 
-import { prepareNetForSerialization } from '../../../core/patch/preparer';
-import testPatch from './mockedNodes/test-patch';
+import { prepareNetForSerialization, isNetValid } from '../../../core/patch/preparer';
 import nodesWithInvalid from './mockedNodes/nodes-with-invalid';
 import nodesWithUnreachable from './mockedNodes/nodes-with-unreachable';
 import nodesWithLinks from './mockedNodes/nodes-with-links';
@@ -176,35 +175,35 @@ describe('Patch preparation:', function() {
         sortedNodes[3].id.should.equal(outputNode.id);
       });
     });
+
+    describe('Is valid', function() {
+      it('should be false if one node is invalid', function() {
+
+        let invalidNode = nodesWithInvalid['0'];
+        let validNode = nodesWithInvalid['1'];
+
+        let isValid = isNetValid(nodesWithInvalid);
+
+        invalidNode.valid.should.equal(false);
+        validNode.valid.should.equal(true);
+        isValid.should.equal(false);
+
+      });
+
+      it('should be true if all nodes are valid', function() {
+
+        let isValid = isNetValid(nodesWithConstants);
+
+        _.each(nodesWithConstants, node => {
+          node.valid.should.equal(true);
+        });
+
+        isValid.should.equal(true);
+      });
+
+    });
   });
 });
-
-  // TODO: Is valid
-
- /*
-  describe('Is valid', function() {
-    it('should be false if one node is invalid', function() {
-
-      let preparedNet = prepareNetForSerialization(nodesWithInvalid);
-      let preparedNodes = preparedNet.nodes;
-
-      _.each(preparedNodes, node => {
-        node.reachable.should.equal(true);
-      });
-    });
-
-    it('should be true if all nodes are valid', function() {
-
-      let preparedNet = prepareNetForSerialization(nodesWithInvalid);
-      let preparedNodes = preparedNet.nodes;
-
-      _.each(preparedNodes, node => {
-        node.reachable.should.equal(true);
-      });
-    });
-
-  });
-  */
 
 
 /**
