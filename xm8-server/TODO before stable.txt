@@ -10,9 +10,8 @@ TODO:
     - serialisering av input, output, link - sjekk om det er noe spesielt som må til
     - sende input config (?)
     - sjekke at virtual inputs kan brukes
-    - Sjekke om output serialiseres riktig - er det Outputs.id eller Outputs.hwId som sendes som constant?
-        - Ser ikke sånn ut, må fikses i preparer.
     - Sjekk at constants serialiseres som strings, ikke tall
+    - Sjekk at konstanter transformeres korrekt iht unit
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
 - Scrollbars i matrix

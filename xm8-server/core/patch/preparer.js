@@ -234,6 +234,8 @@ function prepareNetForSerialization(nodesMap){
   }
 
   var constants = setParamNodePosAndExtractConstants(nodes);
+  // TODO: Find used virtualinputs
+  // --> virtualinputs that are mapped to physicalinputs should be replaced with that physical input.
   var independentNodes = getReachableIndependentNodes(nodes);
   var sortedNodes = sortNodes(independentNodes, config.graph.numberOfInputs + constants.length);
 

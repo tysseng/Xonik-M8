@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var spiType = require('../spi/spiType.js');
 
-function serializeNode(node){
+export const serializeNode = node => {
 
   var nodeBuffer = new Buffer(spiType.NODE.size);
   nodeBuffer.writeUInt8(spiType.NODE.size, 0);
@@ -24,7 +24,16 @@ function serializeNode(node){
   return nodeBuffer;
 }
 
-function serializeConstant(position, value){
+export const serializeVoiceGroupId = voiceGroupId => {
+  var constantBuffer = new Buffer(spiType.VOICEGROUPID.size);
+  constantBuffer.writeUInt8(spiType.VOICEGROUPID.size, 0);
+  constantBuffer.writeUInt8(spiType.VOICEGROUPID.id, 1);
+  constantBuffer.writeUInt8(voiceGroupId, 2);
+
+  return constantBuffer;
+}
+
+export const serializeConstant = (position, value) => {
   var constantBuffer = new Buffer(spiType.CONSTANT.size);
   constantBuffer.writeUInt8(spiType.CONSTANT.size, 0);
   constantBuffer.writeUInt8(spiType.CONSTANT.id, 1);
@@ -34,7 +43,7 @@ function serializeConstant(position, value){
   return constantBuffer;
 }
 
-function serializeConstantsCount(constants){
+export const serializeConstantsCount = constants => {
   var countBuffer = new Buffer(spiType.CONSTANTS_COUNT.size);
   countBuffer.writeUInt8(spiType.CONSTANTS_COUNT.size, 0);
   countBuffer.writeUInt8(spiType.CONSTANTS_COUNT.id, 1);
@@ -43,7 +52,7 @@ function serializeConstantsCount(constants){
   return countBuffer;
 }
 
-function serializeNodeCount(nodes){
+export const serializeNodeCount = nodes => {
   var countBuffer = new Buffer(spiType.NODE_COUNT.size);
   countBuffer.writeUInt8(spiType.NODE_COUNT.size, 0);
   countBuffer.writeUInt8(spiType.NODE_COUNT.id, 1);
@@ -51,14 +60,4 @@ function serializeNodeCount(nodes){
 
   return countBuffer;
 }
-
-
-
-
-//console.log(constantBuffer.toString('hex'));
-
-module.exports.serializeNode = serializeNode;
-module.exports.serializeConstant = serializeConstant;
-module.exports.serializeConstantsCount = serializeConstantsCount;
-module.exports.serializeNodeCount = serializeNodeCount;
 

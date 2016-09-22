@@ -18,7 +18,31 @@
  * 8) One virtual input without any link to midi or physical inputs
    */
 
+import { init, invert, sum, output, outputTuned, param, link, getMutableNodes } from './graphTestTools';
+import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
+import { inputsById } from '../../../../shared/graph/Inputs';
+import { unitsById } from '../../../../shared/graph/ParameterUnits';
 
+init();
+
+let node0 = sum();
+param(node0, '0', paramTypesMap.CONSTANT.id, 12, unitsById.SEMITONES.id);
+param(node0, '1', paramTypesMap.CONSTANT.id, 1, unitsById.VOLTS.id);
+param(node0, '2', paramTypesMap.INPUT.id, inputsById.OSC_1_SQUARE.id);
+param(node0, '3', paramTypesMap.VIRTUALINPUT.id, 'virt|30');
+
+let node1 = invert();
+link(node0, node1, '0');
+
+let outputNode = output('0');
+link(node1, outputNode, '0');
+
+let outputTunedNode = outputTuned('5');
+link(node1, outputTunedNode, '0');
+
+export default getMutableNodes;
+
+/*
 export default {
   "contents": {
     "patch": {
@@ -148,13 +172,13 @@ export default {
               "x": 413,
               "y": 166
             },
-            "consumers": {/*
+            "consumers": {
               "2-3-0": {
                 "id": "2-3-0",
                 "from": "2",
                 "to": "3",
                 "toParam": "0"
-              }             */
+              }
             },
             "valid": true,
             "params": [
@@ -323,3 +347,4 @@ export default {
     }
   }
 }
+*/

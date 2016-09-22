@@ -1,5 +1,4 @@
 import chai from 'chai';
-import _ from 'lodash'
 
 import spiType from '../../../core/spi/spiType.js';
 import { serialize } from '../../../core/patch/patchSerializer';
@@ -9,8 +8,7 @@ chai.should();
 
 describe('Patch serialization:', function() {
 
-  let nodes = testPatch.contents.patch.graph.nodes;
-  let buffers = serialize(nodes);
+  let buffers = serialize(testPatch);
 
   describe('Node count buffer', function() {
     it('should be correct length', function() {
@@ -30,7 +28,9 @@ describe('Patch serialization:', function() {
 
     it('should have correct node count', function() {
       let countBuffer = buffers[buffers.length - 1];
-      countBuffer.readUInt16BE(2).should.equal(nodes.length);
+      let nodesInPatch = Object.keys(testPatch).length;
+
+      countBuffer.readUInt16BE(2).should.equal(nodesInPatch);
     });
 
   });
@@ -41,8 +41,6 @@ describe('Patch serialization:', function() {
    * Should map virtual input id
    * Should prepopulate ParamVal-fields
    * Should handle links
-   * All nodes should be reachable (TODO: Test unreachable later)
-   * All nodes should be valid (TODO: Test invalid later)
    * Should set paramsInUse correctly
    * Should set functon id correctly
    * Should convert output id to constant in results list

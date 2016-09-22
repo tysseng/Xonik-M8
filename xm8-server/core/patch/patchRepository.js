@@ -11,6 +11,7 @@ import { initPatchAutosaver } from '../autosave/autosaver';
 import { filetypes } from '../../shared/FileTypes';
 import { saveFile, loadFile } from '../persistence/fileRepo';
 import { fromJS } from 'immutable';
+import { serialize } from './patchSerializer';
 
 import changeTracker from '../state/patchesChangeTracker';
 
