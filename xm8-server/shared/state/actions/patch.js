@@ -5,10 +5,11 @@ export const types = {
   TOGGLE_AUTO_UPDATE: 'TOGGLE_AUTO_UPDATE'
 }
 
-export const resetPatch = () => {
+export const resetPatch = (patchNumber = '-') => {
   return {
     type: types.RESET_PATCH,
-    target: 'BOTH'
+    target: 'BOTH',
+    patchNumber
   }
 };
 

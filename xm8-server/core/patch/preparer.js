@@ -210,7 +210,35 @@ function isNetValid(nodesState){
   return isValid;
 }
 
-function prepareNetForSerialization(nodesMap){
+// TODO: This must support direct matrix as well? (Or should that be a completely separate affair
+const findPureVirtualInputsInUse = (virtualInputs, physicalInputs, nodes, offset) => {
+  let pureVirtualInputs = [];
+
+  _.each(nodes, node => {
+     _.each(node.params, param => {
+       if(param.type === paramTypes.map.VIRTUALINPUT.id){
+         let virtualInput = virtualInputs[param.value];
+
+         // virtual inputs that are just alternative representations of a physical inputs are
+         // replaced with the id of the physical input, no need to duplicate.
+         if(virtualInput.physicalInput.id === -1){
+           let inputIndex = pureVirtualInputs.indexOf(virtualInput.id);
+           if(inputIndex === -1){
+             inputIndex = pureVirtualInputs.length;
+             pureVirtualInputs.push(virtualInput.id);
+           }
+           inputIndex = inputIndex + offset;
+
+           param.value = inputIndex;
+         } else {
+           param.value = virtualInput.physicalInput.id;
+         }
+       }
+     });
+  });
+}
+
+function prepareNetForSerialization(nodesMap, virtualInputs = [], physicalInputs = []){
 
   // convert map to list for further processing.
   let nodes = [];
@@ -233,15 +261,19 @@ function prepareNetForSerialization(nodesMap){
     console.log((nodeCount - reachableNodeCount) + " nodes were not reachable and will not be sent to synth");
   }
 
-  var constants = setParamNodePosAndExtractConstants(nodes);
-  // TODO: Find used virtualinputs
-  // --> virtualinputs that are mapped to physicalinputs should be replaced with that physical input.
-  var independentNodes = getReachableIndependentNodes(nodes);
-  var sortedNodes = sortNodes(independentNodes, config.graph.numberOfInputs + constants.length);
+  let constants = setParamNodePosAndExtractConstants(nodes);
+
+  let firstVirtualInputIndex = config.graph.numberOfInputs;
+  let pureVirtualInputs = findPureVirtualInputsInUse(virtualInputs, physicalInputs, nodes, firstVirtualInputIndex);
+
+  let independentNodes = getReachableIndependentNodes(nodes);
+  let firstNodeIndex = firstVirtualInputIndex + pureVirtualInputs.length + constants.length;
+  let sortedNodes = sortNodes(independentNodes, firstNodeIndex );
 
   return {
     constants: constants,
-    nodes: sortedNodes
+    nodes: sortedNodes,
+    virtualInputs: pureVirtualInputs
   }
 }
 

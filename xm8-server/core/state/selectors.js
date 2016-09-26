@@ -12,6 +12,7 @@ export const getMatrix = (patchNumber) => getState().patches.getIn([patchNumber,
 export const getPatch = (patchNumber) => getState().patches.get(patchNumber);
 export const getPatchview = (patchNumber) => getState().patchviews.get(patchNumber);
 export const getVirtualInputs = (patchNumber) => getState().patches.getIn([patchNumber, 'virtualInputs']);
+export const getVirtualInput = (patchNumber, inputId) => getState().patches.getIn([patchNumber, 'virtualInputs', 'byId', inputId]);
 export const getPhysicalInputs = () => getState().physicalInputs;
 export const getVirtualInputGroups = (patchNumber) => getState().patches.getIn([patchNumber, 'inputgroups']);
 export const getControllers = (patchNumber) => getState().controllers.get(patchNumber);

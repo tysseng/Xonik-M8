@@ -2,7 +2,7 @@ import chai from 'chai';
 
 import spiType from '../../../core/spi/spiType.js';
 import { prepareNetForSerialization } from '../../../core/patch/preparer';
-import { serializeNodeCount, serializeConstantsCount, serializeConstant } from '../../../core/patch/serializer';
+import { serializeNodeCount, serializeNode, serializeConstantsCount, serializeConstant } from '../../../core/patch/serializer';
 import testPatchFactory from './mockedNodes/test-patch';
 
 chai.should();
@@ -62,8 +62,6 @@ describe('Serializer:', function() {
     let position = 1;
     let constant = preparedNet.constants[position];
 
-    console.log("constant", constant)
-
     let countBuffer = serializeConstant(position, constant);
 
     it('should be correct length', function() {
@@ -86,6 +84,62 @@ describe('Serializer:', function() {
       countBuffer.readUInt16BE(4).should.equal(1);
     });
   });
+
+  describe('Node buffer', function() {
+
+
+    // TODO - test node serialization
+
+    let preparedNet = prepareNetForSerialization(testPatchFactory());
+    let nodeWithConstants = preparedNet.nodes['0'];
+
+    console.log(nodeWithConstants)
+
+    let nodeBuffer = serializeNode(nodeWithConstants);
+
+    it('should be correct length', function() {
+      nodeBuffer.length.should.equal(spiType.NODE.size);
+    });
+
+    it('should have correct command size', function() {
+      nodeBuffer.readUInt8(0).should.equal(spiType.NODE.size);
+    });
+
+    it('should have correct command id', function() {
+      nodeBuffer.readUInt8(1).should.equal(spiType.NODE.id);
+    });
+
+    it('should have correct position', function() {
+      nodeBuffer.readUInt16BE(2).should.equal(nodeWithConstants.nodePos);
+    });
+
+    it('should have correct type', function() {
+      nodeBuffer.readUInt8(4).should.equal(parseInt(nodeWithConstants.type));
+    });
+
+    it('should have correct parameter values', function() {
+      nodeBuffer.readUInt16BE(5).should.equal(nodeWithConstants.params['0'].nodePos);
+      nodeBuffer.readUInt16BE(7).should.equal(nodeWithConstants.params['1'].nodePos);
+      nodeBuffer.readUInt16BE(9).should.equal(nodeWithConstants.params['2'].nodePos);
+      nodeBuffer.readUInt16BE(11).should.equal(nodeWithConstants.params['3'].nodePos);
+
+      //params not in use
+      nodeBuffer.readUInt16BE(13).should.equal(0);
+      nodeBuffer.readUInt16BE(15).should.equal(0);
+      nodeBuffer.readUInt16BE(17).should.equal(0);
+      nodeBuffer.readUInt16BE(19).should.equal(0);
+    });
+
+    it('should have correct number of params in use', function() {
+      nodeBuffer.readUInt8(21).should.equal(nodeWithConstants.paramsInUse);
+    });
+
+    it('should have correct result', function() {
+      nodeBuffer.readUInt8(22).should.equal(0); // no result in use
+    });
+  });
+
+  //TODO: Test node with result set.
 
   /**
    * Should convert volts and cents by unit
