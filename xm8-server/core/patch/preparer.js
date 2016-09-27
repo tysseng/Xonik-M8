@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import paramTypes from '../../shared/graph/ParameterTypes';
 import nodeTypes from '../../shared/graph/NodeTypes';
+import { panelControllersById } from '../../shared/graph/PanelControllers';
+import { inputs as inputArray, inputsById } from '../../shared/graph/Inputs';
 import { outputsById } from '../../shared/graph/Outputs';
 import config from '../../shared/config';
 
@@ -211,7 +213,7 @@ function isNetValid(nodesState){
 }
 
 // TODO: This must support direct matrix as well? (Or should that be a completely separate affair
-const findPureVirtualInputsInUse = (virtualInputs, physicalInputs, nodes, offset) => {
+const findPureVirtualInputsInUse = (virtualInputs, nodes, offset) => {
   let pureVirtualInputs = [];
 
   _.each(nodes, node => {
@@ -221,7 +223,7 @@ const findPureVirtualInputsInUse = (virtualInputs, physicalInputs, nodes, offset
 
          // virtual inputs that are just alternative representations of a physical inputs are
          // replaced with the id of the physical input, no need to duplicate.
-         if(virtualInput.physicalInput.id === -1){
+         if(virtualInput.panelController === panelControllersById.VIRTUAL.id){
            let inputIndex = pureVirtualInputs.indexOf(virtualInput.id);
            if(inputIndex === -1){
              inputIndex = pureVirtualInputs.length;
@@ -229,16 +231,19 @@ const findPureVirtualInputsInUse = (virtualInputs, physicalInputs, nodes, offset
            }
            inputIndex = inputIndex + offset;
 
-           param.value = inputIndex;
+           param.nodePos = inputIndex;
          } else {
-           param.value = virtualInput.physicalInput.id;
+           let input = inputsById[virtualInput.panelController]; // find what input uses this panelController
+           param.nodePos = inputArray.indexOf(input); // find the position of that input in the list of all physical inputs
          }
        }
      });
   });
+
+  return pureVirtualInputs;
 }
 
-function prepareNetForSerialization(nodesMap, virtualInputs = [], physicalInputs = []){
+function prepareNetForSerialization(nodesMap, virtualInputs = []){
 
   // convert map to list for further processing.
   let nodes = [];
@@ -264,7 +269,7 @@ function prepareNetForSerialization(nodesMap, virtualInputs = [], physicalInputs
   let constants = setParamNodePosAndExtractConstants(nodes);
 
   let firstVirtualInputIndex = config.graph.numberOfInputs;
-  let pureVirtualInputs = findPureVirtualInputsInUse(virtualInputs, physicalInputs, nodes, firstVirtualInputIndex);
+  let pureVirtualInputs = findPureVirtualInputsInUse(virtualInputs, nodes, firstVirtualInputIndex);
 
   let independentNodes = getReachableIndependentNodes(nodes);
   let firstNodeIndex = firstVirtualInputIndex + pureVirtualInputs.length + constants.length;

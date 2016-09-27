@@ -10,10 +10,10 @@ import nodesWithUnreachable from './mockedNodes/nodes-with-unreachable';
 import nodesWithLinks from './mockedNodes/nodes-with-links';
 import nodesWithConstants from './mockedNodes/nodes-with-constants';
 import nodesWithParamsInUse from './mockedNodes/nodes-with-params-in-use';
-import nodesWithVirtualInputs from './mockedNodes/nodes-with-virtual-inputs';
 import nodesForSorting from './mockedNodes/nodes-for-sorting';
 import nodesForSortingWithLoop from './mockedNodes/nodes-for-sorting-with-loop';
-import virtualInputs from './mockedInputs/virtual-inputs-for-node-testing';
+import nodesWithVirtualInputs from './mockedNodes/nodes-with-virtual-inputs';
+import virtualInputsForNodeTesting, { pureVirtual1, pureVirtual2 } from './mockedInputs/virtual-inputs-for-node-testing';
 
 chai.should();
 
@@ -208,25 +208,27 @@ describe('Patch preparation:', function() {
 
   describe('Virtual inputs:', function () {
 
-    describe('Virtual inputs:', function () {
+    let result = prepareNetForSerialization(nodesWithVirtualInputs, virtualInputsForNodeTesting);
+    let virtualInputs = result.virtualInputs;
+    let nodes = result.nodes;
 
-      console.log("VIRTUAL", virtualInputs)
-
-      let physicalInputs = [
-        physicalInput1
-      ];
-
-      let result = prepareNetForSerialization(nodesWithVirtualInputs, virtualInputs, physicalInputs);
-
-      it('Should extract pure virtual inputs', function () {
-        result.virtualInputs.length.should.equal(2);
-        result.virtualInputs[0].should.equal('virt|1');
-        result.virtualInputs[1].should.equal('virt|3');
-      });
-
-      // Test that unreachable ikke telles med
-      // test thath physical ikke tas med.
+    it('Should extract pure virtual inputs', function () {
+      virtualInputs.length.should.equal(2);
+      virtualInputs[0].should.equal(pureVirtual1.id);
+      virtualInputs[1].should.equal(pureVirtual2.id);
+      // pureVirtual3 is unreachable and should not be part of the result
+      // virtualWithPhysical is, as the name implies, connected to a panel controller should not be part of the result
     });
+
+    it('Should set correct index for virtual inputs', function () {
+      // virtual inputs
+      let firstVirtualInputIndex = config.graph.numberOfInputs;
+      nodes[0].params[0].nodePos.should.equal(firstVirtualInputIndex); // virtual
+      nodes[0].params[1].nodePos.should.equal(0); // replaced with physical
+      nodes[1].params[0].nodePos.should.equal(firstVirtualInputIndex); // virtual, duplicate
+      nodes[1].params[1].nodePos.should.equal(firstVirtualInputIndex + 1); // virtual
+    });
+
   });
 });
 

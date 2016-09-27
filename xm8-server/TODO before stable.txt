@@ -18,6 +18,7 @@ TODO:
 - Bedre ikoner for reset og delete, bedre skille i meny
 
 - Reset patch virket ikke på inputs og matrix
+- rename physicalInputs til panelInputs?
 
 Småting
 

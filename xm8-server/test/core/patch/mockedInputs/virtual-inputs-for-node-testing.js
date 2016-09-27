@@ -8,7 +8,7 @@ name(pureVirtual1, 'Pure virtual 1');
 
 export let virtualWithPhysical = createVirtualInput();
 name(virtualWithPhysical, 'Virtual with physical');
-panelController(virtualWithPhysical, panelControllersById.OSC_1_PITCH.id);
+panelController(virtualWithPhysical, panelControllersById.OSC_1_SQUARE.id);
 
 export let pureVirtual2 = createVirtualInput();
 name(pureVirtual2, 'Pure virtual 2');
