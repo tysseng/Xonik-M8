@@ -3,13 +3,14 @@ TODO før "stabilt"
 TODO:
 - Må ikke være mulig å linke FRA en output node.
 - Må kunne sette initial value på en delay line node...
+- Fjerne groups fra inputs (physical), bruke inputgroups isteden?
+- Rydde i panelControllers vs physicalInputs vs. inputs. Burde antakelig ha en hardkodet hwId isteden, så slipper man enda en
+  mapping i hardware.
 - Fikse subscribe i patchRepo
 - Serialisering av matrix - lag noder i første omgang
 - Serialisering
     - voice group id
-    - serialisering av input, output, link - sjekk om det er noe spesielt som må til
     - sende input config (?)
-    - sjekke at virtual inputs kan brukes
     - Sjekk at constants serialiseres som strings, ikke tall
     - Sjekk at konstanter transformeres korrekt iht unit
 - Faner med matrix/graph/inputs/groups under patch

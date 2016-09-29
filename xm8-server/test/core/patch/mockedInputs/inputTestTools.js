@@ -45,5 +45,5 @@ export const getMutableVirtualInputs = () => {
 }
 
 export const getMutablePhysicalInputs = () => {
-  return getPhysicalInputs(voiceGroupId).toJS();
+  return getPhysicalInputs(voiceGroupId).toJS().byId;
 }

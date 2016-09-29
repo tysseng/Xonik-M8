@@ -100,7 +100,8 @@ function setParamNodePosAndExtractConstants(nodes){
             constants.push(param.value);
           }
         } else if(param.type === paramType.INPUT.id){
-          param.nodePos = param.value;
+          let input = inputsById[param.value]; // find what input uses this id
+          param.nodePos = inputArray.indexOf(input); // find the position of that input in the list of all physical inputs
         }
       });
     }

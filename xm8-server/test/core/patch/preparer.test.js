@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import config from '../../../shared/config';
 import { outputsById } from '../../../shared/graph/Outputs';
+import { inputs as inputArray, inputsById } from '../../../shared/graph/Inputs';
 
 import { prepareNetForSerialization, isNetValid } from '../../../core/patch/preparer';
 import nodesWithInvalid from './mockedNodes/nodes-with-invalid';
@@ -13,6 +14,7 @@ import nodesWithParamsInUse from './mockedNodes/nodes-with-params-in-use';
 import nodesForSorting from './mockedNodes/nodes-for-sorting';
 import nodesForSortingWithLoop from './mockedNodes/nodes-for-sorting-with-loop';
 import nodesWithVirtualInputs from './mockedNodes/nodes-with-virtual-inputs';
+import nodesWithPhysicalInputs from './mockedNodes/nodes-with-physical-inputs';
 import virtualInputsForNodeTesting, { pureVirtual1, pureVirtual2 } from './mockedInputs/virtual-inputs-for-node-testing';
 
 chai.should();
@@ -228,7 +230,20 @@ describe('Patch preparation:', function() {
       nodes[1].params[0].nodePos.should.equal(firstVirtualInputIndex); // virtual, duplicate
       nodes[1].params[1].nodePos.should.equal(firstVirtualInputIndex + 1); // virtual
     });
+  });
 
+  describe('Physical inputs:', function () {
+
+    let result = prepareNetForSerialization(nodesWithPhysicalInputs, virtualInputsForNodeTesting);
+    let nodes = result.nodes;
+
+    it('Should set correct index for physical inputs', function () {
+      let filterEnvReleaseInput = inputsById['FILTER_1_ENV_RELEASE'];
+      let filterCutoffInput = inputsById['FILTER_1_CUTOFF'];
+
+      nodes[0].params[0].nodePos.should.equal(inputArray.indexOf(filterEnvReleaseInput));
+      nodes[0].params[1].nodePos.should.equal(inputArray.indexOf(filterCutoffInput));
+    });
   });
 });
 
