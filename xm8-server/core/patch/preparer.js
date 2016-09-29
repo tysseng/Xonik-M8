@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import paramTypes from '../../shared/graph/ParameterTypes';
 import nodeTypes from '../../shared/graph/NodeTypes';
+import { unitsById } from '../../shared/graph/ParameterUnits';
 import { panelControllersById } from '../../shared/graph/PanelControllers';
 import { inputs as inputArray, inputsById } from '../../shared/graph/Inputs';
 import { outputsById } from '../../shared/graph/Outputs';
@@ -85,6 +86,18 @@ const removeUnreachable = (nodes) => {
   return _.filter(nodes, node => node.reachable);
 }
 
+export const convertTo16BitSigned = param => {
+  let unit = unitsById[param.unit];
+  let value = unit.converters.from(param.value);
+
+  if(value > 32767){
+    value = 32767;
+  } else if(value < -32768){
+    value = -32768;
+  }
+  return value;
+}
+
 function setParamNodePosAndExtractConstants(nodes){
   var constants = [];
   _.each(nodes, function(node){
@@ -97,7 +110,8 @@ function setParamNodePosAndExtractConstants(nodes){
             constants.push(outputsById[param.value].hwId);
 
           } else {
-            constants.push(param.value);
+            let value = convertTo16BitSigned(param);
+            constants.push(value);
           }
         } else if(param.type === paramType.INPUT.id){
           let input = inputsById[param.value]; // find what input uses this id

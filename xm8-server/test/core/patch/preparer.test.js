@@ -5,7 +5,7 @@ import config from '../../../shared/config';
 import { outputsById } from '../../../shared/graph/Outputs';
 import { inputs as inputArray, inputsById } from '../../../shared/graph/Inputs';
 
-import { prepareNetForSerialization, isNetValid } from '../../../core/patch/preparer';
+import { prepareNetForSerialization, isNetValid, convertTo16BitSigned } from '../../../core/patch/preparer';
 import nodesWithInvalid from './mockedNodes/nodes-with-invalid';
 import nodesWithUnreachable from './mockedNodes/nodes-with-unreachable';
 import nodesWithLinks from './mockedNodes/nodes-with-links';
@@ -20,8 +20,6 @@ import virtualInputsForNodeTesting, { pureVirtual1, pureVirtual2 } from './mocke
 chai.should();
 
 describe('Patch preparation:', function() {
-
-  //TODO: Add missing fields test
 
   describe('Params in use calculation:', function () {
 
@@ -94,6 +92,32 @@ describe('Patch preparation:', function() {
     });
   });
 
+  describe('Constant conversion:', function () {
+    it('should convert param using unit converter', function () {
+      let param = {
+        unit: 'PERCENTAGE',
+        value: '10'
+      }
+      convertTo16BitSigned(param).should.equal(3276);
+    });
+
+    it('should cap value at max positive signed 16bit int', function () {
+      let param = {
+        unit: 'PERCENTAGE',
+        value: '101'
+      }
+      convertTo16BitSigned(param).should.equal(32767);
+    });
+
+    it('should cap value at min positive signed 16bit int', function () {
+      let param = {
+        unit: 'PERCENTAGE',
+        value: '-101'
+      }
+      convertTo16BitSigned(param).should.equal(-32768);
+    });
+  });
+
   describe('Constant extraction:', function () {
 
     let result = prepareNetForSerialization(nodesWithConstants);
@@ -103,16 +127,32 @@ describe('Patch preparation:', function() {
       constants.length.should.equal(4);
     });
 
+    it('should convert constant from unit to 16bit signed int ', function () {
+      var nodeParam0 = nodesWithConstants['1'].params['0'];
+      let pos0 = nodeParam0.nodePos;
+      let convertedValue0 = convertTo16BitSigned(nodeParam0);
+
+      constants[pos0 - config.graph.numberOfInputs].should.equal(convertedValue0);
+    });
+
     it('should have calculated correct positions for constants', function () {
 
-      let pos0 = nodesWithConstants['1'].params['0'].nodePos;
-      let pos1 = nodesWithConstants['1'].params['1'].nodePos;
-      let pos2 = nodesWithConstants['0'].params['1'].nodePos;
+      var nodeParam0 = nodesWithConstants['1'].params['0'];
+      var nodeParam1 = nodesWithConstants['1'].params['1'];
+      var nodeParam2 = nodesWithConstants['0'].params['1'];
+
+      let pos0 = nodeParam0.nodePos;
+      let pos1 = nodeParam1.nodePos;
+      let pos2 = nodeParam2.nodePos;
+
+      let convertedValue0 = convertTo16BitSigned(nodeParam0);
+      let convertedValue1 = convertTo16BitSigned(nodeParam1);
+      let convertedValue2 = convertTo16BitSigned(nodeParam2);
 
       // Three constants
-      constants[pos0 - config.graph.numberOfInputs].should.equal('1');
-      constants[pos1 - config.graph.numberOfInputs].should.equal('2');
-      constants[pos2 - config.graph.numberOfInputs].should.equal('3');
+      constants[pos0 - config.graph.numberOfInputs].should.equal(convertedValue0);
+      constants[pos1 - config.graph.numberOfInputs].should.equal(convertedValue1);
+      constants[pos2 - config.graph.numberOfInputs].should.equal(convertedValue2);
     });
 
     it('should have calculated correct position for output id and use hwId instead of id', function () {
@@ -247,18 +287,4 @@ describe('Patch preparation:', function() {
   });
 });
 
-
-
-// TODO: Test input og virtual input-params. Disse ser ut til å ikke bli byttet ut.
 // TODO: Test constants, ser ikke ut som det er 16bitsverdien som settes.
-
-/**
- Test that single node nets with each of these three types are reachable:
- const markReachable = (nodes) => {
-  _.each(nodes, function(node){
-    if(node.type === nodeType.OUTPUT.id || node.type === nodeType.OUTPUT_TUNED.id || node.type === nodeType.DELAY_LINE.id){
-      markAsReachable(node);
-    }
-  });
-}
- */

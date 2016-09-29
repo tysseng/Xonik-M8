@@ -2,7 +2,7 @@ import _ from 'lodash';
 import roundTo from 'round-to';
 
 // The voice controller hardware is using 16bit signed integers to represent the dac values. With this scheme, the max input
-// value is 32767 while the mininum value is -32768. This is a bit of a pain in the ass to work with, so to  make the math a 
+// value is 32767 while the mininum value is -32768. This is a bit of a pain in the ass to work with, so to make the math a
 // bit simpler, we pretend that the max positive value is 32768 and instead cap the value to 32767 before sending it to the 
 // voice controller.
 
@@ -62,6 +62,7 @@ const shouldNotBeFormatted = (value) => {
 }
 
 // general conversion formulas
+// Convert to a unit from signed 32bit int.
 const to = (unit, value) => {
   if(value === undefined || value === '') return '';
 
@@ -78,6 +79,7 @@ const to = (unit, value) => {
   return convertedValue;
 }
 
+// Convert to signed 32bit int from a unit.
 const from = (unit, value) => {
 
   //TODO: Crop decimal string to current precision level
