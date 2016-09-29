@@ -6,5 +6,6 @@ module.exports = {
   NODE_COUNT: {id: 4, size: 4},
   CONSTANTS_COUNT: {id: 5, size: 4},
   GRAPH_COMMAND: {id: 6, size: 3},
+  VOICE_GROUP_ID: {id: 7, size: 3},
   UNKNOWN: {id: 255, size: 0}
 }

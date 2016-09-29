@@ -2,7 +2,7 @@ import chai from 'chai';
 
 import spiType from '../../../core/spi/spiType.js';
 import { prepareNetForSerialization } from '../../../core/patch/preparer';
-import { serializeNodeCount, serializeNode, serializeConstantsCount, serializeConstant } from '../../../core/patch/serializer';
+import { serializeNodeCount, serializeNode, serializeConstantsCount, serializeConstant, serializeVoiceGroupId } from '../../../core/patch/serializer';
 import testPatchFactory from './mockedNodes/test-patch';
 
 chai.should();
@@ -81,19 +81,14 @@ describe('Serializer:', function() {
     });
 
     it('should have correct value', function() {
-      countBuffer.readUInt16BE(4).should.equal(1);
+      countBuffer.readUInt16BE(4).should.equal(constant);
     });
   });
 
   describe('Node buffer', function() {
 
-
-    // TODO - test node serialization
-
     let preparedNet = prepareNetForSerialization(testPatchFactory());
     let nodeWithConstants = preparedNet.nodes['0'];
-
-    console.log(nodeWithConstants)
 
     let nodeBuffer = serializeNode(nodeWithConstants);
 
@@ -139,18 +134,26 @@ describe('Serializer:', function() {
     });
   });
 
-  //TODO: Test node with result set.
+  describe('Voice group id buffer', function() {
 
-  /**
-   * Should convert volts and cents by unit
-   * Should map output id to constant
-   * Should map physical input id
-   * Should map virtual input id
-   * Should prepopulate ParamVal-fields
-   * Should handle links
-   * Should set paramsInUse correctly
-   * Should set functon id correctly
-   * Should convert output id to constant in results list
-   * Should order nodes correctly
-   */
+    let voiceGroupIdBuffer = serializeVoiceGroupId(7);
+
+    it('should be correct length', function() {
+      voiceGroupIdBuffer.length.should.equal(spiType.VOICE_GROUP_ID.size);
+    });
+
+    it('should have correct command size', function() {
+      voiceGroupIdBuffer.readUInt8(0).should.equal(spiType.VOICE_GROUP_ID.size);
+    });
+
+    it('should have correct command id', function() {
+      voiceGroupIdBuffer.readUInt8(1).should.equal(spiType.VOICE_GROUP_ID.id);
+    });
+
+    it('should have correct voice group id', function() {
+      voiceGroupIdBuffer.readUInt8(2).should.equal(7);
+    });
+  });
+
+  //TODO: Test node with result set.
 });

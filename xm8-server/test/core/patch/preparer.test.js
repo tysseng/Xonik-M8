@@ -286,5 +286,3 @@ describe('Patch preparation:', function() {
     });
   });
 });
-
-// TODO: Test constants, ser ikke ut som det er 16bitsverdien som settes.

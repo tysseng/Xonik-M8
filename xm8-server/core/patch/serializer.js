@@ -13,7 +13,6 @@ export const serializeNode = node => {
 
   for(var i = 0; i<8; i++){
     var paramVal = (i < paramsInUse ? node.params[i].nodePos : 0);
-    console.log("ParamVal: " + paramVal)
     nodeBuffer.writeUInt16BE(paramVal, i * 2 + 5);
   }
 
@@ -25,9 +24,9 @@ export const serializeNode = node => {
 }
 
 export const serializeVoiceGroupId = voiceGroupId => {
-  var constantBuffer = new Buffer(spiType.VOICEGROUPID.size);
-  constantBuffer.writeUInt8(spiType.VOICEGROUPID.size, 0);
-  constantBuffer.writeUInt8(spiType.VOICEGROUPID.id, 1);
+  var constantBuffer = new Buffer(spiType.VOICE_GROUP_ID.size);
+  constantBuffer.writeUInt8(spiType.VOICE_GROUP_ID.size, 0);
+  constantBuffer.writeUInt8(spiType.VOICE_GROUP_ID.id, 1);
   constantBuffer.writeUInt8(voiceGroupId, 2);
 
   return constantBuffer;

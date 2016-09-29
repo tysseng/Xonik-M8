@@ -3,16 +3,13 @@ TODO før "stabilt"
 TODO:
 - Må ikke være mulig å linke FRA en output node.
 - Må kunne sette initial value på en delay line node...
-- Fjerne groups fra inputs (physical), bruke inputgroups isteden?
+
 - Rydde i panelControllers vs physicalInputs vs. inputs. Burde antakelig ha en hardkodet hwId isteden, så slipper man enda en
   mapping i hardware.
 - Fikse subscribe i patchRepo
 - Serialisering av matrix - lag noder i første omgang
 - Serialisering
-    - voice group id
     - sende input config (?)
-    - Sjekk at constants serialiseres som strings, ikke tall
-    - Sjekk at konstanter transformeres korrekt iht unit
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
 - Scrollbars i matrix
@@ -29,6 +26,7 @@ Småting
 
 
 For later:
+- Fjerne groups fra inputs (physical), bruke inputgroups isteden?
 - React recompose
 - Sticky row for patch-icons
     - Se etter alternativ, StickyDiv fungerer ikke når scroll er nedover siden (altså ved routing). Burde kanskje uansett scrolle eller
