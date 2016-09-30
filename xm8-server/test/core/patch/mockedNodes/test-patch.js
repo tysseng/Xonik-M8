@@ -22,6 +22,7 @@ import { init, invert, sum, output, outputTuned, param, link, getMutableNodes } 
 import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
 import { inputsById } from '../../../../shared/graph/Inputs';
 import { unitsById } from '../../../../shared/graph/ParameterUnits';
+import { outputsById } from '../../../../shared/graph/Outputs';
 
 init();
 
@@ -34,10 +35,10 @@ param(node0, '3', paramTypesMap.INPUT.id, inputsById.OSC_1_SAW.id);
 let node1 = invert();
 link(node0, node1, '0');
 
-let outputNode = output('0');
+let outputNode = output(outputsById.VCO_1_PITCH);
 link(node1, outputNode, '0');
 
-let outputTunedNode = outputTuned('5');
+let outputTunedNode = outputTuned(outputsById.FILTER_1_RESONANCE);
 link(node1, outputTunedNode, '0');
 
 export default getMutableNodes;

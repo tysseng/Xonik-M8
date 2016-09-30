@@ -1,4 +1,5 @@
 import { init, invert, output, delay, link, name, getMutableNodes } from './nodesTestTools';
+import { outputsById } from '../../../../shared/graph/Outputs';
 
 /*
 A graph with a loop - invert1 is an independent node as it only depends on the delay node
@@ -6,7 +7,7 @@ A graph with a loop - invert1 is an independent node as it only depends on the d
 
 init();
 
-let outputNode = output('0');
+let outputNode = output(outputsById.VCO_1_PITCH);
 name(outputNode, 'outputNode');
 
 let invert2 = invert();

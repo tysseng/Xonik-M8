@@ -1,5 +1,6 @@
 import { init, invert, output, sum, param, link, name, getMutableNodes } from './nodesTestTools';
 import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
+import { outputsById } from '../../../../shared/graph/Outputs';
 
 /*
 A graph that has been entered in a weird sequence.
@@ -19,7 +20,7 @@ ORder should be
 
 init();
 
-let outputNode = output('0');
+let outputNode = output(outputsById.VCO_1_PITCH);
 name(outputNode, 'outputNode');
 
 let outputSummer = sum();

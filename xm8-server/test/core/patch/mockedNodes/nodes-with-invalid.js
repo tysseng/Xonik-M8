@@ -1,12 +1,10 @@
-import { init, sum, invert, output, param, link, getMutableNodes } from './nodesTestTools';
-import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
-import { unitsById } from '../../../../shared/graph/ParameterUnits';
-import { inputsById } from '../../../../shared/graph/Inputs';
+import { init, invert, output, link, getMutableNodes } from './nodesTestTools';
+import { outputsById } from '../../../../shared/graph/Outputs';
 
 init();
 
 let invalidNode = invert(); // missing input param
-let outputNode = output('0');
+let outputNode = output(outputsById.VCO_1_PITCH);
 link(invalidNode, outputNode, '0');
 
 let graph = getMutableNodes();

@@ -54,7 +54,7 @@ export const output = (output) => {
   let nodeId = getNextNodeId();
   store.dispatch(createNewNode(voiceGroupId));
   store.dispatch(changeNodeType(nodeId, nodeTypesMap.OUTPUT.id, voiceGroupId));
-  if(output) setParamFromNodeId(nodeId, '1', paramTypesMap.OUTPUT.id, output, voiceGroupId);
+  if(output) setParamFromNodeId(nodeId, '1', paramTypesMap.OUTPUT.id, output.id, voiceGroupId);
   return getNode(voiceGroupId, nodeId).toJS();
 }
 
@@ -62,7 +62,7 @@ export const outputTuned = (output) => {
   let nodeId = getNextNodeId();
   store.dispatch(createNewNode(voiceGroupId));
   store.dispatch(changeNodeType(nodeId, nodeTypesMap.OUTPUT_TUNED.id, voiceGroupId));
-  if(output) setParamFromNodeId(nodeId, '1', paramTypesMap.OUTPUT.id, output, voiceGroupId);
+  if(output) setParamFromNodeId(nodeId, '1', paramTypesMap.OUTPUT.id, output.id, voiceGroupId);
   return getNode(voiceGroupId, nodeId).toJS();
 }
 

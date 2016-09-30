@@ -1,49 +1,52 @@
 import _ from 'lodash';
 
-let outputs = [
-  {
-    id: '0',
-    hwId: 0, 
+let outputsById = {
+  VCO_1_PITCH: {
+    hwId: 0,
     name: "VCO 1 pitch"
   },
-  {
-    id: '1',
-    hwId: 1,    
+  VCO_2_PITCH: {
+    hwId: 1,
     name: "VCO 2 pitch"
-  },  
-  {
-    id: '2',
-    hwId: 2,    
+  },
+  VCO_3_PITCH: {
+    hwId: 2,
     name: "VCO 3 pitch"
-  },  
-  {
-    id: '3',
-    hwId: 3,    
+  },
+  FILTER_1_CUTOFF: {
+    hwId: 3,
     name: "Filter 1 cut-off"
   },
-  {
-    id: '4',
-    hwId: 4,    
+  FILTER_1_RESONANCE: {
+    hwId: 4,
     name: "Filter 1 resonance"
   },
-  {
-    id: '5',
-    hwId: 5,    
+  FILTER_1_SLOPE: {
+    hwId: 5,
     name: "Filter 1 slope" //12/24 dB
   },
-  {
-    id: '6',
-    hwId: 6,    
+  FILTER_1_MODE: {
+    hwId: 6,
     name: "Filter 1 mode" //hp, bp, lp
-  } 
-];
+  }
+}
 
-let outputsById = {};
-
-_.each(outputs, output => {
-  outputsById[output.id] = output;
+// add ids to each object
+_.each(outputsById, (output, id) => {
+  output.id = id;
 });
 
-export {outputsById};
- 
+// sorted list of outputs
+let outputs = [
+  outputsById.VCO_1_PITCH,
+  outputsById.VCO_2_PITCH,
+  outputsById.VCO_3_PITCH,
+  outputsById.FILTER_1_CUTOFF,
+  outputsById.FILTER_1_RESONANCE,
+  outputsById.FILTER_1_SLOPE,
+  outputsById.FILTER_1_MODE
+];
+
+export { outputsById };
+
 export default outputs;
