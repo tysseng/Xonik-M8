@@ -2,9 +2,8 @@
 // TODO: Send panel cc should be toggleable.
 import _ from 'lodash';
 
-let panelControllers = [
-  {
-    id: 'VIRTUAL',
+let panelControllersById = {
+  VIRTUAL: {
     name: {
       full: "None (virtual)",
       short: 'virtual'
@@ -12,9 +11,8 @@ let panelControllers = [
     type: 'VIRTUAL',
     midi: {status: '', data1: ''}
 
-  },  
-  {
-    id: 'OSC_1_PITCH',
+  },
+  OSC_1_PITCH: {
     name: {
       full: "Osc 1 pitch",
       short: 'pitch'
@@ -23,8 +21,7 @@ let panelControllers = [
     midi: {status: 0xB0, data1: ''}
 
   },
-  {
-    id: 'OSC_1_SQUARE',
+  OSC_1_SQUARE: {
     name: {
       full: "Osc 1 square",
       short: 'square'
@@ -32,8 +29,7 @@ let panelControllers = [
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'OSC_1_SAW',
+  OSC_1_SAW: {
     name: {
       full: "Osc 1 saw",
       short: 'saw'
@@ -41,35 +37,31 @@ let panelControllers = [
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'OSC_1_TRIANGLE',
+  OSC_1_TRIANGLE: {
     name: {
       full: "Osc 1 triangle",
       short: 'triangle'
     },
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
-  },    
-  {
-    id: 'OSC_2_PITCH',
+  },
+  OSC_2_PITCH: {
     name: {
       full: "Osc 1 pitch",
       short: 'pitch'
     },
     type: 'POT',
-    midi: {status: 0xB0, data1: ''}  
-  },  
-  {
-    id: 'OSC_3_PITCH', 
+    midi: {status: 0xB0, data1: ''}
+  },
+  OSC_3_PITCH: {
     name: {
       full: "Osc 1 pitch",
       short: 'pitch'
     },
     type: 'POT',
-    midi: {status: 0xB0, data1: ''}  
-  },  
-  {
-    id: 'FILTER_1_CUTOFF', 
+    midi: {status: 0xB0, data1: ''}
+  },
+  FILTER_1_CUTOFF: {
     name: {
       full: "Filter 1 cut-off",
       short: 'cut-off'
@@ -77,8 +69,7 @@ let panelControllers = [
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'FILTER_1_RESONANCE', 
+  FILTER_1_RESONANCE: {
     name: {
       full: "Filter 1 resonance",
       short: 'resonance'
@@ -86,12 +77,11 @@ let panelControllers = [
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'FILTER_1_SLOPE', 
+  FILTER_1_SLOPE: {
     name: {
       full: "Filter 1 slope",
       short: 'slope'
-    },    
+    },
     type: 'SWITCH',
     midi: {status: 0xB0, data1: ''},
     options: [
@@ -99,12 +89,11 @@ let panelControllers = [
       {id: '1', label: '24 dB'}
     ]
   },
-  {
-    id: 'FILTER_1_MODE', 
+  FILTER_1_MODE: {
     name: {
       full: "Filter 1 mode",
       short: 'mode'
-    },       
+    },
     type: 'SWITCH',
     midi: {status: 0xB0, data1: ''},
     options: [
@@ -113,17 +102,15 @@ let panelControllers = [
       {id: '2', label: 'LP'}
     ]
   },
-  {
-    id: 'AMP_ENV_ATTACK', 
+  AMP_ENV_ATTACK: {
     name: {
       full: "Amp attack",
       short: 'attack'
     },
     type: 'POT',
-    midi: {status: 0xB0, data1: ''}   
+    midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'AMP_ENV_DECAY', 
+  AMP_ENV_DECAY: {
     name: {
       full: "Amp decay",
       short: 'decay'
@@ -131,8 +118,7 @@ let panelControllers = [
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'AMP_ENV_SUSTAIN', 
+  AMP_ENV_SUSTAIN: {
     name: {
       full: "Amp sustain",
       short: 'sustain'
@@ -140,8 +126,7 @@ let panelControllers = [
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'AMP_ENV_RELEASE', 
+  AMP_ENV_RELEASE: {
     name: {
       full: "Amp release",
       short: 'release'
@@ -149,8 +134,7 @@ let panelControllers = [
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'FILTER_1_ENV_ATTACK', 
+  FILTER_1_ENV_ATTACK: {
     name: {
       full: "Filter 1 attack",
       short: 'attack'
@@ -158,8 +142,7 @@ let panelControllers = [
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'FILTER_1_ENV_DECAY', 
+  FILTER_1_ENV_DECAY: {
     name: {
       full: "Filter 1 decay",
       short: 'decay'
@@ -167,8 +150,7 @@ let panelControllers = [
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'FILTER_1_ENV_SUSTAIN', 
+  FILTER_1_ENV_SUSTAIN: {
     name: {
       full: "Filter 1 sustain",
       short: 'sustain'
@@ -176,20 +158,21 @@ let panelControllers = [
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  {
-    id: 'FILTER_1_ENV_RELEASE', 
+  FILTER_1_ENV_RELEASE: {
     name: {
       full: "Filter 1 release",
       short: 'release'
     },
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
-  }  
-];
+  }
+}
 
-let panelControllersById = {};
-_.each(panelControllers, panelController => {
-  panelControllersById[panelController.id] = panelController;
+// Add id to controllers and add to a list.
+let panelControllers = [];
+_.each(panelControllersById, (panelController, id) => {
+  panelController.id = id;
+  panelControllers.push(panelController);
 });
 
 export { panelControllers, panelControllersById };
