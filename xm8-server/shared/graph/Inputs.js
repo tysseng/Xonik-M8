@@ -25,52 +25,6 @@ import { panelControllersById } from "./PanelControllers";
 import { unitsById } from "./ParameterUnits";
 import { inputTypesById as inputTypes } from "..//inputs/InputTypes";
 
-/*
-const getOptions = (controller) => {
-
-  if(!controller.options){
-    return [];
-  }
-
-  let options = [];
-  let optionsLength = controller.options.length;  
-  let optionWidth = Math.floor(65536 / optionsLength);
-  let optionWidthMidi = Math.floor(128 / optionsLength);
-
-  let max = 65535;
-  let maxMidi = 127;
-
-  let lower = 0;
-  let lowermidi = 0;
-
-  let currentOption = 1;
-
-  // Send will always send lower values, while receive is valid for any value within lower-upper range.
-  _.each(controller.options, option => {
-
-    let upper = (currentOption < optionsLength) ? currentOption * optionWidth - 1 : max;
-    let uppermidi = (currentOption < optionsLength) ? currentOption * optionWidthMidi - 1 : maxMidi;
-
-    console.log("norm", options.label, lower, upper);
-    console.log("midi", options.label, lowermidi, uppermidi)
-
-    options.push({
-      id: option.id,
-      label: option.label,
-      lower,
-      upper,
-      lowermidi,
-      uppermidi
-    });
-
-    currentOption++;
-    lower = upper + 1;
-    lowermidi = uppermidi + 1;
-  });  
-
-  return options;
-}*/
-
 const getNextIndex = (options) => {
   let highest = 0;
   _.each(options, option => {
@@ -115,7 +69,6 @@ export const getStepPositions = ({numberOfSteps, centered = false, min = 0, max 
   let stepWidthMidi = Math.floor(128 / partitions);
 
   let value = 0;
-  let valuemidi = 0;
 
   for(let i=0; i<numberOfSteps; i++){
 
@@ -159,7 +112,7 @@ const getOptions = (controller) => {
   return options;
 }
 
-const getInput = (id, type, controller) => {
+const getInput = (type, controller) => {
 
   let midi = controller.midi;
   midi.hires = false;
@@ -170,7 +123,6 @@ const getInput = (id, type, controller) => {
   let optionsLength = Object.keys(options).length;
 
   return {
-    id,
     type,
     scale: unitsById.DAC_VALUE.id,
     panelController: controller.id,
@@ -186,45 +138,56 @@ const getInput = (id, type, controller) => {
   }
 }
 
+const getInputWithId = (id, type, controller) => {
+  let input = getInput(type, controller);
+  input.id = id;
+  return input;
+}
 
-let OSC_1_SQUARE = getInput('OSC_1_SQUARE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_OSC_1_SQUARE);
-let OSC_1_SAW = getInput('OSC_1_SAW', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_OSC_1_SAW);
-let OSC_1_TRIANGLE = getInput('OSC_1_TRIANGLE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_OSC_1_TRIANGLE);
+let inputsById = {
+  OSC_1_SQUARE: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_OSC_1_SQUARE),
+  OSC_1_SAW: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_OSC_1_SAW),
+  OSC_1_TRIANGLE: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_OSC_1_TRIANGLE),
 
-let FILTER_1_CUTOFF = getInput('FILTER_1_CUTOFF', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_CUTOFF);
-let FILTER_1_RESONANCE = getInput('FILTER_1_RESONANCE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_RESONANCE);
-let FILTER_1_SLOPE = getInput('FILTER_1_SLOPE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_SLOPE);
-let FILTER_1_MODE = getInput('FILTER_1_MODE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_MODE);
+  FILTER_1_CUTOFF: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_CUTOFF),
+  FILTER_1_RESONANCE: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_RESONANCE),
+  FILTER_1_SLOPE: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_SLOPE),
+  FILTER_1_MODE: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_MODE),
 
-let AMP_ENV_ATTACK = getInput('AMP_ENV_ATTACK', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_ATTACK);
-let AMP_ENV_DECAY = getInput('AMP_ENV_DECAY', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_DECAY);
-let AMP_ENV_SUSTAIN = getInput('AMP_ENV_SUSTAIN', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_SUSTAIN);
-let AMP_ENV_RELEASE = getInput('AMP_ENV_RELEASE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_RELEASE);
+  AMP_ENV_ATTACK: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_ATTACK),
+  AMP_ENV_DECAY: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_DECAY),
+  AMP_ENV_SUSTAIN: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_SUSTAIN),
+  AMP_ENV_RELEASE: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_RELEASE),
 
-let FILTER_1_ENV_ATTACK = getInput('FILTER_1_ENV_ATTACK', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_ATTACK);
-let FILTER_1_ENV_DECAY = getInput('FILTER_1_ENV_DECAY', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_DECAY);
-let FILTER_1_ENV_SUSTAIN = getInput('FILTER_1_ENV_SUSTAIN', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_SUSTAIN);
-let FILTER_1_ENV_RELEASE = getInput('FILTER_1_ENV_RELEASE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_RELEASE);
+  FILTER_1_ENV_ATTACK: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_ATTACK),
+  FILTER_1_ENV_DECAY: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_DECAY),
+  FILTER_1_ENV_SUSTAIN: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_SUSTAIN),
+  FILTER_1_ENV_RELEASE: getInput(inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_RELEASE)
+}
 
+console.log("After")
 
-
+// add ids to each object
+_.each(inputsById, (input, id) => {
+  input.id = id;
+});
 
 let inputs = [
-  OSC_1_SQUARE,
-  OSC_1_SAW,
-  OSC_1_TRIANGLE,
-  FILTER_1_CUTOFF,
-  FILTER_1_RESONANCE,
-  FILTER_1_SLOPE,
-  FILTER_1_MODE,
-  AMP_ENV_ATTACK,
-  AMP_ENV_DECAY,
-  AMP_ENV_SUSTAIN,
-  AMP_ENV_RELEASE,
-  FILTER_1_ENV_ATTACK,
-  FILTER_1_ENV_DECAY,
-  FILTER_1_ENV_SUSTAIN,
-  FILTER_1_ENV_RELEASE  
+  inputsById.OSC_1_SQUARE,
+  inputsById.OSC_1_SAW,
+  inputsById.OSC_1_TRIANGLE,
+  inputsById.FILTER_1_CUTOFF,
+  inputsById.FILTER_1_RESONANCE,
+  inputsById.FILTER_1_SLOPE,
+  inputsById.FILTER_1_MODE,
+  inputsById.AMP_ENV_ATTACK,
+  inputsById.AMP_ENV_DECAY,
+  inputsById.AMP_ENV_SUSTAIN,
+  inputsById.AMP_ENV_RELEASE,
+  inputsById.FILTER_1_ENV_ATTACK,
+  inputsById.FILTER_1_ENV_DECAY,
+  inputsById.FILTER_1_ENV_SUSTAIN,
+  inputsById.FILTER_1_ENV_RELEASE
 ];
 
 // TODO: Physical controllers must be mapped to inputs (hw id) by the voice controller (NOT by the main controller) as each
@@ -232,26 +195,14 @@ let inputs = [
 // TODO: Keep controller values separate from controller definitions in state, to eliminate the need to traverse/deep update
 // state.
 
+// add an id
+
 // add a sort order key to be able to sort inputsById later
 let sortKey = 0;
-
-let inputsById = {};
 _.each(inputs, input => {
   input.sortKey = sortKey++;
   inputsById[input.id] = input;
 });
-
-/*
-  return Map({
-    id,
-    groupId,
-    elementId,
-    offset: Map({
-      x: offsetXem,
-      y: offsetYem
-    })
-  }
-*/
 
 const createGroup = (id, name) => {
   return {
@@ -274,27 +225,27 @@ const addInput = (group, input, x, y) => {
 }
 
 let osc1 = createGroup('OSC_1', 'Oscillator 1');
-addInput(osc1, OSC_1_SQUARE, 0, 0);
-addInput(osc1, OSC_1_SAW, 4, 0);
-addInput(osc1, OSC_1_TRIANGLE, 8, 0);
+addInput(osc1, inputsById.OSC_1_SQUARE, 0, 0);
+addInput(osc1, inputsById.OSC_1_SAW, 4, 0);
+addInput(osc1, inputsById.OSC_1_TRIANGLE, 8, 0);
 
 let filter1 = createGroup('FILTER_1', 'Filter 1');
-addInput(filter1, FILTER_1_CUTOFF, 0, 0);
-addInput(filter1, FILTER_1_RESONANCE, 4, 0);
-addInput(filter1, FILTER_1_SLOPE, 8, 0);
-addInput(filter1, FILTER_1_RESONANCE, 12, 0);
+addInput(filter1, inputsById.FILTER_1_CUTOFF, 0, 0);
+addInput(filter1, inputsById.FILTER_1_RESONANCE, 4, 0);
+addInput(filter1, inputsById.FILTER_1_SLOPE, 8, 0);
+addInput(filter1, inputsById.FILTER_1_RESONANCE, 12, 0);
 
 let ampEnv = createGroup('AMP_ENV', 'Amplifier envelope');
-addInput(ampEnv, AMP_ENV_ATTACK, 0, 0);
-addInput(ampEnv, AMP_ENV_DECAY, 4, 0);
-addInput(ampEnv, AMP_ENV_SUSTAIN, 8, 0);
-addInput(ampEnv, AMP_ENV_RELEASE, 12, 0);
+addInput(ampEnv, inputsById.AMP_ENV_ATTACK, 0, 0);
+addInput(ampEnv, inputsById.AMP_ENV_DECAY, 4, 0);
+addInput(ampEnv, inputsById.AMP_ENV_SUSTAIN, 8, 0);
+addInput(ampEnv, inputsById.AMP_ENV_RELEASE, 12, 0);
 
 let filter1env = createGroup('FILTER_1_ENV', 'Filter 1 envelope');
-addInput(filter1env, FILTER_1_ENV_ATTACK, 0, 0);
-addInput(filter1env, FILTER_1_ENV_DECAY, 4, 0);
-addInput(filter1env, FILTER_1_ENV_SUSTAIN, 8, 0);
-addInput(filter1env, FILTER_1_ENV_RELEASE, 12, 0);
+addInput(filter1env, inputsById.FILTER_1_ENV_ATTACK, 0, 0);
+addInput(filter1env, inputsById.FILTER_1_ENV_DECAY, 4, 0);
+addInput(filter1env, inputsById.FILTER_1_ENV_SUSTAIN, 8, 0);
+addInput(filter1env, inputsById.FILTER_1_ENV_RELEASE, 12, 0);
 
 let inputGroups = {
   osc1,
@@ -310,7 +261,7 @@ _.each(inputGroups, group => {
   inputGroupsById[group.id] = group;
 });
 
-export {getInput, inputs, inputsById, inputGroups, inputGroupsById}; 
+export { getInputWithId, inputs, inputsById, inputGroups, inputGroupsById };
 
 export const virtualInputGroupIdPrefix = 'virtgroup|';
 export const virtualInputIdPrefix = 'virt|';

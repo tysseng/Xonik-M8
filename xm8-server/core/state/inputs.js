@@ -5,7 +5,7 @@ import { types } from '../../shared/state/actions/inputs';
 import { types as patchActionTypes } from '../../shared/state/actions/patch';
 import { types as undoActionTypes, groups as undoGroups } from '../../shared/state/actions/undo';
 import { panelControllersById } from "../../shared/graph/PanelControllers";
-import { inputsById, inputGroupsById, getEmptyOption, getStepPositions, getInput } from '../../shared/graph/inputs';
+import { inputsById, inputGroupsById, getEmptyOption, getStepPositions, getInputWithId } from '../../shared/graph/inputs';
 import { inputTypesById as inputTypes } from "../../shared/inputs/InputTypes";
 import { getAutosaved } from '../inputs/physicalInputsRepository';
 
@@ -92,7 +92,7 @@ const input = (state, action) => {
 const byId = (state, action) => {
   switch(action.type){
     case types.INPUTCONFIG_NEW_INPUT:
-      let newInput = getInput(action.inputId, inputTypes.VERTICAL_RANGE.id, panelControllersById[action.panelControllerId]);
+      let newInput = getInputWithId(action.inputId, inputTypes.VERTICAL_RANGE.id, panelControllersById[action.panelControllerId]);
       return state.set(action.inputId, fromJS(newInput));
     case types.INPUTCONFIG_DELETE_INPUT:
       return state.delete(action.inputId);
