@@ -279,9 +279,6 @@ describe('Patch preparation:', function() {
     let nodes = result.nodes;
 
     it('Should set correct index for physical inputs', function () {
-      let filterEnvReleaseInput = inputsById['FILTER_1_ENV_RELEASE'];
-      let filterCutoffInput = inputsById['FILTER_1_CUTOFF'];
-
       nodes[0].params[0].nodePos.should.equal(panelControllersById.PC_FILTER_1_ENV_RELEASE.hwId);
       nodes[0].params[1].nodePos.should.equal(panelControllersById.PC_FILTER_1_CUTOFF.hwId);
     });
