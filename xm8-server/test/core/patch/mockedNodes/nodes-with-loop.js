@@ -1,4 +1,4 @@
-import { init, invert, output, delay, link, getMutableNodes } from './graphTestTools';
+import { init, invert, output, delay, link, getMutableNodes } from './nodesTestTools';
 
 // patch with a loop through a delay node: node0->node1->delayNode->node0
 init();

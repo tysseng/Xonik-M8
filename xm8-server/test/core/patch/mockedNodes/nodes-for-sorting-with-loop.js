@@ -1,4 +1,4 @@
-import { init, invert, output, delay, link, name, getMutableNodes } from './graphTestTools';
+import { init, invert, output, delay, link, name, getMutableNodes } from './nodesTestTools';
 
 /*
 A graph with a loop - invert1 is an independent node as it only depends on the delay node

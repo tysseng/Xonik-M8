@@ -1,4 +1,4 @@
-import { init, invert, output, outputTuned, delay, param, link, name, getMutableNodes } from './graphTestTools';
+import { init, invert, output, outputTuned, delay, param, link, name, getMutableNodes } from './nodesTestTools';
 import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
 
 init();

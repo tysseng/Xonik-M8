@@ -1,4 +1,4 @@
-import { init, invert, sum, output, param, link, getMutableNodes } from './graphTestTools';
+import { init, invert, sum, output, param, link, getMutableNodes } from './nodesTestTools';
 import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
 
 import  { pureVirtual1, pureVirtual2, pureVirtual3, virtualWithPhysical } from '../mockedInputs/virtual-inputs-for-node-testing';

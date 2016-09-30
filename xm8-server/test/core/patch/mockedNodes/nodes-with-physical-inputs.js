@@ -1,4 +1,4 @@
-import { init, sum, output, param, link, getMutableNodes } from './graphTestTools';
+import { init, sum, output, param, link, getMutableNodes } from './nodesTestTools';
 import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
 
 import { filterEnvRelease, filterCutoff } from '../mockedInputs/physical-inputs-for-node-testing';

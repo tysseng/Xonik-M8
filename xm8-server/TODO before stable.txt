@@ -10,6 +10,7 @@ TODO:
 - Serialisering av matrix - lag noder i første omgang
 - Serialisering
     - sende input config (?)
+- Ta vare på virtual input ordering i state for å kunne sende virtual controllers
 - Faner med matrix/graph/inputs/groups under patch
     - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
 - Scrollbars i matrix

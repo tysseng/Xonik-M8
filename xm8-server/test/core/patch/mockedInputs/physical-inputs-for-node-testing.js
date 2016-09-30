@@ -1,4 +1,4 @@
-import { init, createVirtualInput, getMutablePhysicalInputs } from './inputTestTools';
+import { init, getMutablePhysicalInputs } from './inputTestTools';
 
 init();
 

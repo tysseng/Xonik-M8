@@ -98,6 +98,11 @@ export const convertTo16BitSigned = param => {
   return value;
 }
 
+const getInputIndexById = inputId => {
+  let input = inputsById[inputId]; // find what input uses this id
+  return inputArray.indexOf(input); // find the position of that input in the list of all physical inputs
+}
+
 function setParamNodePosAndExtractConstants(nodes){
   var constants = [];
   _.each(nodes, function(node){
@@ -114,8 +119,7 @@ function setParamNodePosAndExtractConstants(nodes){
             constants.push(value);
           }
         } else if(param.type === paramType.INPUT.id){
-          let input = inputsById[param.value]; // find what input uses this id
-          param.nodePos = inputArray.indexOf(input); // find the position of that input in the list of all physical inputs
+          param.nodePos = getInputIndexById(param.value);
         }
       });
     }
@@ -248,8 +252,7 @@ const findPureVirtualInputsInUse = (virtualInputs, nodes, offset) => {
 
            param.nodePos = inputIndex;
          } else {
-           let input = inputsById[virtualInput.panelController]; // find what input uses this panelController
-           param.nodePos = inputArray.indexOf(input); // find the position of that input in the list of all physical inputs
+           param.nodePos = getInputIndexById(virtualInput.panelController);
          }
        }
      });
@@ -295,6 +298,11 @@ function prepareNetForSerialization(nodesMap, virtualInputs = []){
     nodes: sortedNodes,
     virtualInputs: pureVirtualInputs
   }
+}
+
+export const prepareMatrixForSerialization = matrix => {
+  console.log(matrix);
+  getInputIndexById();
 }
 
 module.exports.prepareNetForSerialization = prepareNetForSerialization;
