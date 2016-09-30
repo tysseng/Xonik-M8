@@ -3,7 +3,7 @@
 import _ from 'lodash';
 
 let panelControllersById = {
-  VIRTUAL: {
+  PC_VIRTUAL: {
     name: {
       full: "None (virtual)",
       short: 'virtual'
@@ -12,7 +12,7 @@ let panelControllersById = {
     midi: {status: '', data1: ''}
 
   },
-  OSC_1_PITCH: {
+  PC_OSC_1_PITCH: {
     name: {
       full: "Osc 1 pitch",
       short: 'pitch'
@@ -21,7 +21,7 @@ let panelControllersById = {
     midi: {status: 0xB0, data1: ''}
 
   },
-  OSC_1_SQUARE: {
+  PC_OSC_1_SQUARE: {
     name: {
       full: "Osc 1 square",
       short: 'square'
@@ -29,7 +29,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  OSC_1_SAW: {
+  PC_OSC_1_SAW: {
     name: {
       full: "Osc 1 saw",
       short: 'saw'
@@ -37,7 +37,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  OSC_1_TRIANGLE: {
+  PC_OSC_1_TRIANGLE: {
     name: {
       full: "Osc 1 triangle",
       short: 'triangle'
@@ -45,7 +45,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  OSC_2_PITCH: {
+  PC_OSC_2_PITCH: {
     name: {
       full: "Osc 1 pitch",
       short: 'pitch'
@@ -53,7 +53,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  OSC_3_PITCH: {
+  PC_OSC_3_PITCH: {
     name: {
       full: "Osc 1 pitch",
       short: 'pitch'
@@ -61,7 +61,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  FILTER_1_CUTOFF: {
+  PC_FILTER_1_CUTOFF: {
     name: {
       full: "Filter 1 cut-off",
       short: 'cut-off'
@@ -69,7 +69,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  FILTER_1_RESONANCE: {
+  PC_FILTER_1_RESONANCE: {
     name: {
       full: "Filter 1 resonance",
       short: 'resonance'
@@ -77,7 +77,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  FILTER_1_SLOPE: {
+  PC_FILTER_1_SLOPE: {
     name: {
       full: "Filter 1 slope",
       short: 'slope'
@@ -89,7 +89,7 @@ let panelControllersById = {
       {id: '1', label: '24 dB'}
     ]
   },
-  FILTER_1_MODE: {
+  PC_FILTER_1_MODE: {
     name: {
       full: "Filter 1 mode",
       short: 'mode'
@@ -102,7 +102,7 @@ let panelControllersById = {
       {id: '2', label: 'LP'}
     ]
   },
-  AMP_ENV_ATTACK: {
+  PC_AMP_ENV_ATTACK: {
     name: {
       full: "Amp attack",
       short: 'attack'
@@ -110,7 +110,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  AMP_ENV_DECAY: {
+  PC_AMP_ENV_DECAY: {
     name: {
       full: "Amp decay",
       short: 'decay'
@@ -118,7 +118,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  AMP_ENV_SUSTAIN: {
+  PC_AMP_ENV_SUSTAIN: {
     name: {
       full: "Amp sustain",
       short: 'sustain'
@@ -126,7 +126,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  AMP_ENV_RELEASE: {
+  PC_AMP_ENV_RELEASE: {
     name: {
       full: "Amp release",
       short: 'release'
@@ -134,7 +134,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  FILTER_1_ENV_ATTACK: {
+  PC_FILTER_1_ENV_ATTACK: {
     name: {
       full: "Filter 1 attack",
       short: 'attack'
@@ -142,7 +142,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  FILTER_1_ENV_DECAY: {
+  PC_FILTER_1_ENV_DECAY: {
     name: {
       full: "Filter 1 decay",
       short: 'decay'
@@ -150,7 +150,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  FILTER_1_ENV_SUSTAIN: {
+  PC_FILTER_1_ENV_SUSTAIN: {
     name: {
       full: "Filter 1 sustain",
       short: 'sustain'
@@ -158,7 +158,7 @@ let panelControllersById = {
     type: 'POT',
     midi: {status: 0xB0, data1: ''}
   },
-  FILTER_1_ENV_RELEASE: {
+  PC_FILTER_1_ENV_RELEASE: {
     name: {
       full: "Filter 1 release",
       short: 'release'

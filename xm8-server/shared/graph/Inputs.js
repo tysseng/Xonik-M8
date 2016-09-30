@@ -187,24 +187,24 @@ const getInput = (id, type, controller) => {
 }
 
 
-let OSC_1_SQUARE = getInput('OSC_1_SQUARE', inputTypes.VERTICAL_RANGE.id, panelControllersById.OSC_1_SQUARE);
-let OSC_1_SAW = getInput('OSC_1_SAW', inputTypes.VERTICAL_RANGE.id, panelControllersById.OSC_1_SAW);
-let OSC_1_TRIANGLE = getInput('OSC_1_TRIANGLE', inputTypes.VERTICAL_RANGE.id, panelControllersById.OSC_1_TRIANGLE);
+let OSC_1_SQUARE = getInput('OSC_1_SQUARE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_OSC_1_SQUARE);
+let OSC_1_SAW = getInput('OSC_1_SAW', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_OSC_1_SAW);
+let OSC_1_TRIANGLE = getInput('OSC_1_TRIANGLE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_OSC_1_TRIANGLE);
 
-let FILTER_1_CUTOFF = getInput('FILTER_1_CUTOFF', inputTypes.VERTICAL_RANGE.id, panelControllersById.FILTER_1_CUTOFF);
-let FILTER_1_RESONANCE = getInput('FILTER_1_RESONANCE', inputTypes.VERTICAL_RANGE.id, panelControllersById.FILTER_1_RESONANCE);
-let FILTER_1_SLOPE = getInput('FILTER_1_SLOPE', inputTypes.VERTICAL_RANGE.id, panelControllersById.FILTER_1_SLOPE);
-let FILTER_1_MODE = getInput('FILTER_1_MODE', inputTypes.VERTICAL_RANGE.id, panelControllersById.FILTER_1_MODE);
+let FILTER_1_CUTOFF = getInput('FILTER_1_CUTOFF', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_CUTOFF);
+let FILTER_1_RESONANCE = getInput('FILTER_1_RESONANCE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_RESONANCE);
+let FILTER_1_SLOPE = getInput('FILTER_1_SLOPE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_SLOPE);
+let FILTER_1_MODE = getInput('FILTER_1_MODE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_MODE);
 
-let AMP_ENV_ATTACK = getInput('AMP_ENV_ATTACK', inputTypes.VERTICAL_RANGE.id, panelControllersById.AMP_ENV_ATTACK);
-let AMP_ENV_DECAY = getInput('AMP_ENV_DECAY', inputTypes.VERTICAL_RANGE.id, panelControllersById.AMP_ENV_DECAY);
-let AMP_ENV_SUSTAIN = getInput('AMP_ENV_SUSTAIN', inputTypes.VERTICAL_RANGE.id, panelControllersById.AMP_ENV_SUSTAIN);
-let AMP_ENV_RELEASE = getInput('AMP_ENV_RELEASE', inputTypes.VERTICAL_RANGE.id, panelControllersById.AMP_ENV_RELEASE);
+let AMP_ENV_ATTACK = getInput('AMP_ENV_ATTACK', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_ATTACK);
+let AMP_ENV_DECAY = getInput('AMP_ENV_DECAY', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_DECAY);
+let AMP_ENV_SUSTAIN = getInput('AMP_ENV_SUSTAIN', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_SUSTAIN);
+let AMP_ENV_RELEASE = getInput('AMP_ENV_RELEASE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_AMP_ENV_RELEASE);
 
-let FILTER_1_ENV_ATTACK = getInput('FILTER_1_ENV_ATTACK', inputTypes.VERTICAL_RANGE.id, panelControllersById.FILTER_1_ENV_ATTACK);
-let FILTER_1_ENV_DECAY = getInput('FILTER_1_ENV_DECAY', inputTypes.VERTICAL_RANGE.id, panelControllersById.FILTER_1_ENV_DECAY);
-let FILTER_1_ENV_SUSTAIN = getInput('FILTER_1_ENV_SUSTAIN', inputTypes.VERTICAL_RANGE.id, panelControllersById.FILTER_1_ENV_SUSTAIN);
-let FILTER_1_ENV_RELEASE = getInput('FILTER_1_ENV_RELEASE', inputTypes.VERTICAL_RANGE.id, panelControllersById.FILTER_1_ENV_RELEASE);
+let FILTER_1_ENV_ATTACK = getInput('FILTER_1_ENV_ATTACK', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_ATTACK);
+let FILTER_1_ENV_DECAY = getInput('FILTER_1_ENV_DECAY', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_DECAY);
+let FILTER_1_ENV_SUSTAIN = getInput('FILTER_1_ENV_SUSTAIN', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_SUSTAIN);
+let FILTER_1_ENV_RELEASE = getInput('FILTER_1_ENV_RELEASE', inputTypes.VERTICAL_RANGE.id, panelControllersById.PC_FILTER_1_ENV_RELEASE);
 
 
 

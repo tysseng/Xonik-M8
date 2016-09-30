@@ -99,6 +99,8 @@ export const convertTo16BitSigned = param => {
 }
 
 const getInputIndexById = inputId => {
+  // TODO: Denne er gal, den må gå veien om panelControllers isteden.
+
   let input = inputsById[inputId]; // find what input uses this id
   return inputArray.indexOf(input); // find the position of that input in the list of all physical inputs
 }
@@ -242,7 +244,7 @@ const findPureVirtualInputsInUse = (virtualInputs, nodes, offset) => {
 
          // virtual inputs that are just alternative representations of a physical inputs are
          // replaced with the id of the physical input, no need to duplicate.
-         if(virtualInput.panelController === panelControllersById.VIRTUAL.id){
+         if(virtualInput.panelController === panelControllersById.PC_VIRTUAL.id){
            let inputIndex = pureVirtualInputs.indexOf(virtualInput.id);
            if(inputIndex === -1){
              inputIndex = pureVirtualInputs.length;

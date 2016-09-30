@@ -21,7 +21,7 @@ const getNextVirtualInputId = () => {
 
 export const createVirtualInput = () => {
   let id = getNextVirtualInputId();
-  store.dispatch(newInput(id, panelControllersById.VIRTUAL.id, voiceGroupId));
+  store.dispatch(newInput(id, panelControllersById.PC_VIRTUAL.id, voiceGroupId));
   return getVirtualInput(voiceGroupId, id).toJS();
 }
 

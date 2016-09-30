@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onCreate: () => getNextId(
       (id) => {
         let inputId = virtualInputIdPrefix + id;
-        dispatch(newInput(inputId, panelControllersById.VIRTUAL.id));
+        dispatch(newInput(inputId, panelControllersById.PC_VIRTUAL.id));
         dispatch(selectInput('virtual', inputId));
       }),
     onDelete: (inputId) => dispatch(deleteInput(inputId))
