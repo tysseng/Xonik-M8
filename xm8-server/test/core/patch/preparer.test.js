@@ -159,7 +159,7 @@ describe('Patch preparation:', function() {
 
       // Output node's 'output to' parameter, value is VCO1 pitch hwId.
       let pos3 = nodesWithConstants['2'].params['1'].nodePos;
-      constants[pos3 - config.graph.numberOfInputs].should.equal(outputsById.VCO_1_PITCH.hwId)
+      constants[pos3 - config.graph.numberOfInputs].should.equal(outputsById.OUT_VCO_1_PITCH.hwId)
     });
 
   });

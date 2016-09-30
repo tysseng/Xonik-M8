@@ -10,7 +10,7 @@ param(node0, '0', paramTypesMap.CONSTANT.id, 3);
 let node1 = invert();
 link(node0, node1, '0');
 
-let node2 = output(outputsById.VCO_1_PITCH);
+let node2 = output(outputsById.OUT_VCO_1_PITCH);
 link(node1, node2, '0');
 
 let graph = getMutableNodes();

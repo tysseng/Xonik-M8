@@ -20,7 +20,7 @@ ORder should be
 
 init();
 
-let outputNode = output(outputsById.VCO_1_PITCH);
+let outputNode = output(outputsById.OUT_VCO_1_PITCH);
 name(outputNode, 'outputNode');
 
 let outputSummer = sum();

@@ -8,7 +8,7 @@ let node0 = invert();
 let node1 = invert();
 link(node0, node1, '0');
 
-let outputNode = output(outputsById.VCO_1_PITCH);
+let outputNode = output(outputsById.OUT_VCO_1_PITCH);
 link(node1, outputNode, '0');
 
 let delayNode = delay();

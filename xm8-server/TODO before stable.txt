@@ -6,6 +6,9 @@ TODO:
 
 - Rydde i panelControllers vs physicalInputs vs. inputs. Burde antakelig ha en hardkodet hwId isteden, så slipper man enda en
   mapping i hardware.
+- Fikse InputTypes til å ha ID på samme måte som outputs fke.s
+
+
 - Fikse subscribe i patchRepo
 - Serialisering av matrix - lag noder i første omgang
 - Serialisering

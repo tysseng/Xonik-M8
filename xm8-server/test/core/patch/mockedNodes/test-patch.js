@@ -35,10 +35,10 @@ param(node0, '3', paramTypesMap.INPUT.id, inputsById.OSC_1_SAW.id);
 let node1 = invert();
 link(node0, node1, '0');
 
-let outputNode = output(outputsById.VCO_1_PITCH);
+let outputNode = output(outputsById.OUT_VCO_1_PITCH);
 link(node1, outputNode, '0');
 
-let outputTunedNode = outputTuned(outputsById.FILTER_1_RESONANCE);
+let outputTunedNode = outputTuned(outputsById.OUT_FILTER_1_RESONANCE);
 link(node1, outputTunedNode, '0');
 
 export default getMutableNodes;

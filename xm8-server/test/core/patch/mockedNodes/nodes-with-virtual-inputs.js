@@ -18,7 +18,7 @@ link(sum1, sum2, '2');
 let unreachableInvert = invert();
 param(unreachableInvert, '0', paramTypesMap.VIRTUALINPUT.id, pureVirtual3.id); // pure virtual but unreachable node
 
-let outputNode = output(outputsById.VCO_1_PITCH);
+let outputNode = output(outputsById.OUT_VCO_1_PITCH);
 link(sum2, outputNode, '0');
 
 let graph = getMutableNodes();

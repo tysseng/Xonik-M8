@@ -8,7 +8,7 @@ init();
 initNodes();
 
 // a graph that uses a physical input, to test collisions with matrix
-let outputNode = output(outputsById.VCO_1_PITCH);
+let outputNode = output(outputsById.OUT_VCO_1_PITCH);
 param(outputNode, '0', paramTypesMap.CONSTANT.id, 1);
 
 //toggle(inputsById.)

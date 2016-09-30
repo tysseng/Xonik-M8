@@ -10,7 +10,7 @@ let sum1 = sum();
 param(sum1, '0', paramTypesMap.INPUT.id, filterEnvRelease.id);
 param(sum1, '1', paramTypesMap.INPUT.id, filterCutoff.id);
 
-let outputNode = output(outputsById.VCO_1_PITCH);
+let outputNode = output(outputsById.OUT_VCO_1_PITCH);
 link(sum1, outputNode, '0');
 
 let graph = getMutableNodes();
