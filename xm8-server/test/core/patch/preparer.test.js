@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import config from '../../../shared/config';
 import { outputsById } from '../../../shared/graph/Outputs';
+import { panelControllersById } from '../../../shared/graph/PanelControllers';
 import { inputs as inputArray, inputsById } from '../../../shared/graph/Inputs';
 
 import { prepareNetForSerialization, isNetValid, convertTo16BitSigned } from '../../../core/patch/preparer';
@@ -266,7 +267,7 @@ describe('Patch preparation:', function() {
       // virtual inputs
       let firstVirtualInputIndex = config.graph.numberOfInputs;
       nodes[0].params[0].nodePos.should.equal(firstVirtualInputIndex); // virtual
-      nodes[0].params[1].nodePos.should.equal(0); // replaced with physical
+      nodes[0].params[1].nodePos.should.equal(panelControllersById.PC_OSC_1_SQUARE.hwId); // replaced with physical
       nodes[1].params[0].nodePos.should.equal(firstVirtualInputIndex); // virtual, duplicate
       nodes[1].params[1].nodePos.should.equal(firstVirtualInputIndex + 1); // virtual
     });
@@ -281,8 +282,8 @@ describe('Patch preparation:', function() {
       let filterEnvReleaseInput = inputsById['FILTER_1_ENV_RELEASE'];
       let filterCutoffInput = inputsById['FILTER_1_CUTOFF'];
 
-      nodes[0].params[0].nodePos.should.equal(inputArray.indexOf(filterEnvReleaseInput));
-      nodes[0].params[1].nodePos.should.equal(inputArray.indexOf(filterCutoffInput));
+      nodes[0].params[0].nodePos.should.equal(panelControllersById.PC_FILTER_1_ENV_RELEASE.hwId);
+      nodes[0].params[1].nodePos.should.equal(panelControllersById.PC_FILTER_1_CUTOFF.hwId);
     });
   });
 });

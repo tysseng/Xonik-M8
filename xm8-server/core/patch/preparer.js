@@ -98,11 +98,9 @@ export const convertTo16BitSigned = param => {
   return value;
 }
 
-const getInputIndexById = inputId => {
-  // TODO: Denne er gal, den må gå veien om panelControllers isteden.
-
-  let input = inputsById[inputId]; // find what input uses this id
-  return inputArray.indexOf(input); // find the position of that input in the list of all physical inputs
+const getControllerHwId = panelControllerId => {
+  let panelController = panelControllersById[panelControllerId];
+  return panelController.hwId;
 }
 
 function setParamNodePosAndExtractConstants(nodes){
@@ -121,7 +119,8 @@ function setParamNodePosAndExtractConstants(nodes){
             constants.push(value);
           }
         } else if(param.type === paramType.INPUT.id){
-          param.nodePos = getInputIndexById(param.value);
+          let input = inputsById[param.value];
+          param.nodePos = getControllerHwId(input.panelController);
         }
       });
     }
@@ -254,7 +253,7 @@ const findPureVirtualInputsInUse = (virtualInputs, nodes, offset) => {
 
            param.nodePos = inputIndex;
          } else {
-           param.nodePos = getInputIndexById(virtualInput.panelController);
+           param.nodePos = getControllerHwId(virtualInput.panelController);
          }
        }
      });
