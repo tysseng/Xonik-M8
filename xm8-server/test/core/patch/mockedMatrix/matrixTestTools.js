@@ -8,8 +8,8 @@ export const init = () => {
   store.dispatch(resetMatrix(voiceGroupId));
 }
 
-export const toggle = (inputId, outputId) => {
-  store.dispatch(toggleDirectOutput(inputId, outputId, voiceGroupId));
+export const toggle = (input, output) => {
+  store.dispatch(toggleDirectOutput(input.id, output.id, voiceGroupId));
 }
 
 export const getMutableMatrix = () => {

@@ -3,10 +3,9 @@ import { resetGraph,
   createNewNode, changeNodeType, changeNodeName, moveNode, deleteNode,
   changeNodeParamType, changeNodeParamValue, changeNodeParamUnit,
   createNewLink, deleteLink, changeLinkName, toggleLinkNameInGraph } from '../../../../shared/state/actions/nodes';
-import { getNode, getNodes, getParameter } from '../../../../core/state/selectors';
+import { getNode, getNodes, getGraphOutputs } from '../../../../core/state/selectors';
 import { map as nodeTypesMap } from '../../../../shared/graph/NodeTypes';
 import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
-import { unitsById } from '../../../../shared/graph/ParameterUnits';
 
 let currentNodeId = 0;
 let voiceGroupId = '0';
@@ -92,4 +91,8 @@ export const setParamFromNodeId = (nodeId, paramId, type, value, unit) => {
 
 export const getMutableNodes = () => {
   return getNodes(voiceGroupId).toJS();
+}
+
+export const getMutableOutputs = () => {
+  return getGraphOutputs(voiceGroupId).toJS();
 }

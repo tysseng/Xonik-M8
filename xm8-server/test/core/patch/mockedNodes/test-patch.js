@@ -29,8 +29,8 @@ init();
 let node0 = sum();
 param(node0, '0', paramTypesMap.CONSTANT.id, 12, unitsById.SEMITONES.id);
 param(node0, '1', paramTypesMap.CONSTANT.id, 1, unitsById.VOLTS.id);
-param(node0, '2', paramTypesMap.INPUT.id, inputsById.PC_OSC_1_SQUARE.id);
-param(node0, '3', paramTypesMap.INPUT.id, inputsById.PC_OSC_1_SAW.id);
+param(node0, '2', paramTypesMap.INPUT.id, inputsById.IN_OSC_1_SQUARE.id);
+param(node0, '3', paramTypesMap.INPUT.id, inputsById.IN_OSC_1_SAW.id);
 
 let node1 = invert();
 link(node0, node1, '0');

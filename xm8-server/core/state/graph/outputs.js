@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {List, Map, OrderedMap} from 'immutable';
+import { List, Map } from 'immutable';
 import paramTypes from '../../../shared/graph/ParameterTypes';
 import { types } from '../../../shared/state/actions/nodes';
 
@@ -51,9 +51,10 @@ const removeExistingOutputMappings = (state, action) => {
 }
 
 const addNewOutputMapping = (state, action) => {
-  if(isOutput(action.paramType) && action.paramValue !== ''){
+
+  if(isOutput(action.paramType) && action.paramValue && action.paramValue !== ''){
     state = state.set(action.paramValue, Map({nodeId: action.nodeId, paramId: action.paramId}));
-  }  
+  }
   return state;
 }
 

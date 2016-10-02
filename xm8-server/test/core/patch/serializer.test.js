@@ -2,7 +2,8 @@ import chai from 'chai';
 
 import spiType from '../../../core/spi/spiType.js';
 import { prepareNetForSerialization } from '../../../core/patch/preparer';
-import { serializeNodeCount, serializeNode, serializeConstantsCount, serializeConstant, serializeVoiceGroupId } from '../../../core/patch/serializer';
+import { serializeNodeCount, serializeNode,
+  serializeConstantsCount, serializeConstant, serializeVoiceGroupId, serializeDirectOutput } from '../../../core/patch/serializer';
 import testPatchFactory from './mockedNodes/test-patch';
 
 chai.should();
@@ -152,6 +153,31 @@ describe('Serializer:', function() {
 
     it('should have correct voice group id', function() {
       voiceGroupIdBuffer.readUInt8(2).should.equal(7);
+    });
+  });
+
+  describe('Voice group id buffer', function() {
+
+    let voiceGroupIdBuffer = serializeDirectOutput(4, 5);
+
+    it('should be correct length', function() {
+      voiceGroupIdBuffer.length.should.equal(spiType.DIRECT_OUTPUT.size);
+    });
+
+    it('should have correct command size', function() {
+      voiceGroupIdBuffer.readUInt8(0).should.equal(spiType.DIRECT_OUTPUT.size);
+    });
+
+    it('should have correct command id', function() {
+      voiceGroupIdBuffer.readUInt8(1).should.equal(spiType.DIRECT_OUTPUT.id);
+    });
+
+    it('should have correct inputHwId', function() {
+      voiceGroupIdBuffer.readUInt16BE(2).should.equal(4);
+    });
+
+    it('should have correct outputHwId', function() {
+      voiceGroupIdBuffer.readUInt16BE(4).should.equal(5);
     });
   });
 

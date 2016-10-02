@@ -4,11 +4,7 @@ TODO:
 - Må ikke være mulig å linke FRA en output node.
 - Må kunne sette initial value på en delay line node...
 
-- Fikse InputTypes til å ha ID på samme måte som outputs fke.s
-
-
 - Fikse subscribe i patchRepo
-- Serialisering av matrix - lag noder i første omgang
 - Serialisering
     - sende input config (?)
 - Ta vare på virtual input ordering i state for å kunne sende virtual controllers
@@ -19,6 +15,8 @@ TODO:
 
 - Reset patch virket ikke på inputs og matrix
 - rename physicalInputs til panelInputs?
+
+- teste outputs-reducer
 
 Småting
 

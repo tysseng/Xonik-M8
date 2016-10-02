@@ -60,3 +60,13 @@ export const serializeNodeCount = nodes => {
   return countBuffer;
 }
 
+export const serializeDirectOutput = (inputHwId, outputHwId) => {
+  var countBuffer = new Buffer(spiType.DIRECT_OUTPUT.size);
+  countBuffer.writeUInt8(spiType.DIRECT_OUTPUT.size, 0);
+  countBuffer.writeUInt8(spiType.DIRECT_OUTPUT.id, 1);
+  countBuffer.writeUInt16BE(inputHwId, 2);
+  countBuffer.writeUInt16BE(outputHwId, 4);
+
+  return countBuffer;
+}
+

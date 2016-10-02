@@ -4,7 +4,6 @@ import _ from 'lodash';
 import config from '../../../shared/config';
 import { outputsById } from '../../../shared/graph/Outputs';
 import { panelControllersById } from '../../../shared/graph/PanelControllers';
-import { inputs as inputArray, inputsById } from '../../../shared/graph/Inputs';
 
 import { prepareNetForSerialization, isNetValid, convertTo16BitSigned } from '../../../core/patch/preparer';
 import nodesWithInvalid from './mockedNodes/nodes-with-invalid';

@@ -4,7 +4,7 @@ import config from '../../shared/config.js';
 import spi from '../spi/spi-fd.js';
 import preparer from './preparer.js';
 import commands from './commands.js';
-import { getPatch, getControllers, getNodes } from '../state/selectors';
+import { getPatch, getControllers, getNodes, getMatrix, getGraphOutputs } from '../state/selectors';
 
 import { loadPatchFromFile, setLoadedPatchFileDetails } from '../../shared/state/actions/patch';
 import { initPatchAutosaver } from '../autosave/autosaver';
@@ -27,9 +27,11 @@ export let autosaver = initPatchAutosaver(changeTracker, getPatch, config.persis
   }
 );*/
 
-function sendPatch(patchNumber){
+function sendPatch(voiceGroupId){
 
-  let nodesState = getNodes(patchNumber).toJS();
+  let nodesState = getNodes(voiceGroupId).toJS();
+  let matrixState = getMatrix(voiceGroupId).toJS();
+  let graphOutputsState = getGraphOutputs(voiceGroupId).toJS();
 
   if(!preparer.isNetValid(nodesState)){
     console.log("Patch has validation errors, synth voices not updated");
@@ -38,7 +40,7 @@ function sendPatch(patchNumber){
   
   spi.write(commands.stop);
 
-  var buffers = serialize(nodesState);
+  var buffers = serialize(nodesState, matrixState, graphOutputsState, voiceGroupId);
   _.each(buffers, function(buffer){
     spi.write(buffer);
   });  
