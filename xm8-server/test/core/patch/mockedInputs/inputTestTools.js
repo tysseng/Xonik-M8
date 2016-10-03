@@ -27,17 +27,45 @@ export const createVirtualInput = () => {
 
 export const name = (input, newName) => {
   store.dispatch(rename(input.id, newName, voiceGroupId));
-  return getVirtualInput(voiceGroupId, input.id).toJS();
 }
 
 export const shortName = (input, newName) => {
   store.dispatch(renameShort(input.id, newName, voiceGroupId));
-  return getVirtualInput(voiceGroupId, input.id).toJS();
 }
 
 export const panelController = (input, panelController) => {
   store.dispatch(updateField(input.id, ['panelController'], panelController, voiceGroupId));
-  return getVirtualInput(voiceGroupId, input.id).toJS();
+}
+
+export const midiStatus = (input, status) => {
+  store.dispatch(updateField(input.id, ['midi', 'status'], status, voiceGroupId));
+}
+
+export const midiData1 = (input, data1) => {
+  store.dispatch(updateField(input.id, ['midi', 'data1'], data1, voiceGroupId));
+}
+
+export const midiHires = (input, isHires) => {
+  store.dispatch(updateField(input.id, ['midi', 'hires'], isHires, voiceGroupId));
+}
+
+export const midiSend = (input, shouldSend) => {
+  store.dispatch(updateField(input.id, ['midi', 'send'], shouldSend, voiceGroupId));
+}
+
+export const midiReceive = (input, shouldReceive) => {
+  store.dispatch(updateField(input.id, ['midi', 'receive'], shouldReceive, voiceGroupId));
+}
+
+export const stepGenerationMode = (input, mode) => {
+  store.dispatch(updateField(input.id, ['stepGenerationMode'], mode, voiceGroupId));
+}
+
+export const option = (input, index, value, valueMidi, label) => {
+  store.dispatch(updateField(input.id, ['stepGenerationMode'], 'OPTIONS', voiceGroupId));
+  if(label) store.dispatch(updateField(input.id, ['options', index, 'label'], value, voiceGroupId));
+  if(valueMidi) store.dispatch(updateField(input.id, ['options', index, 'valuemidi'], value, voiceGroupId));
+  if(value) store.dispatch(updateField(input.id, ['options', index, 'value'], value, voiceGroupId));
 }
 
 export const getMutableVirtualInputs = () => {

@@ -106,7 +106,7 @@ const byId = (state, action) => {
     case types.INPUTCONFIG_NEW_OPTION:
     case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES:
     case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
-      return state.updateIn([action.inputId], inputElem => input(inputElem, action));         
+      return state.update(action.inputId, inputElem => input(inputElem, action));
   } 
   return state;
 }

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const channelVoiceMessages = [
   {id: 0x80, name: "Note off"},
   {id: 0x90, name: "Note on"},

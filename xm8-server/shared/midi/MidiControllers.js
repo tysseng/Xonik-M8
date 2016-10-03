@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const controllers = [
   {id: 0, name: "Bank select", hiRes: true},
   {id: 1, name: "Mod wheel", hiRes: true},
