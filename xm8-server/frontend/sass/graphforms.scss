@@ -19,8 +19,17 @@
       top: 1px;
       width: 80px;
       margin-right: 5px;
-      margin-left: 1px;
+      margin-left: 5px;
       margin-top: 1px;
+    }
+  }
+
+  .resultBlock {
+    .resultValue {
+      position: relative;
+      top: 1px;
+      width: 80px;
+      margin-right: 5px;
     }
   }
 }

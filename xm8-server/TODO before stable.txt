@@ -4,7 +4,8 @@ TODO:
 - Cancel i link-dialog fungerer ikke
 - Standardisere NodeTypes som andre enums
 - Må serialisere initial result ink konvertering av unit
-- Style initial result units.
+
+
 - Tenk gjennom hvordan midi skal fungere hvis mapping til fysisk input
     - steps
     - midi messages

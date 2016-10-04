@@ -53,8 +53,10 @@ const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, on
         </div>
         <div className="resultBlock">
           <label htmlFor="initialResult">Initial result</label>
-          <input id="initialResult" type="text" onChange={(e) => onNodeResultChange(node.id, e.target.value)} value={node.result.value}/>
-          <ParameterUnitDropdown onUnitChange={(value) => onResultUnitChange(node.id, value)} value={node.result.unit}/>
+          <span>
+            <input id="initialResult" className="resultValue" type="text" onChange={(e) => onNodeResultChange(node.id, e.target.value)} value={node.result.value}/>
+            <ParameterUnitDropdown onUnitChange={(value) => onResultUnitChange(node.id, value)} value={node.result.unit}/>
+          </span>
         </div>
       </div>    
     </form>
