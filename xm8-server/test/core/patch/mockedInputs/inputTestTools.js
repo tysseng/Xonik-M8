@@ -1,5 +1,5 @@
 import store from '../../../../core/state/store';
-import { resetPhysicalInputs, newInput, rename, renameShort, updateField } from '../../../../shared/state/actions/inputs';
+import { resetPhysicalInputs, newInput, rename, renameShort, updateField, updatePanelController } from '../../../../shared/state/actions/inputs';
 import { resetPatch } from '../../../../shared/state/actions/patch';
 import { getPhysicalInputs, getVirtualInputs, getVirtualInput } from '../../../../core/state/selectors';
 import { panelControllersById} from '../../../../shared/graph/PanelControllers';
@@ -34,7 +34,7 @@ export const shortName = (input, newName) => {
 }
 
 export const panelController = (input, panelController) => {
-  store.dispatch(updateField(input.id, ['panelController'], panelController, voiceGroupId));
+  store.dispatch(updatePanelController(input.id, panelController, voiceGroupId));
 }
 
 export const midiStatus = (input, status) => {

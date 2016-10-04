@@ -71,7 +71,15 @@ const updateOptionsValues = (state, action, field) => {
 const input = (state, action) => {
   switch(action.type){
     case types.INPUTCONFIG_UPDATE_FIELD:
-      return state.setIn(action.fieldPath, action.value);  
+      return state.setIn(action.fieldPath, action.value);
+    case types.INPUTCONFIG_UPDATE_PANEL_CONTROLLER:
+      if(action.panelControllerId !== panelControllersById.PC_VIRTUAL.id){
+        // clear any midi settings, those from the panel controller are used instead
+        _.each(state.get('options').toJS(), option => {
+          state = state.setIn(['options', option.index, 'valuemidi'], '');
+        });
+      }
+      return state.set('panelController', action.panelControllerId);
     case types.INPUTCONFIG_RENAME:
       return state.setIn(['name', 'full'], action.name);  
     case types.INPUTCONFIG_RENAME_SHORT:
@@ -100,6 +108,7 @@ const byId = (state, action) => {
       let resetInput = initialPhysicalState.getIn(['byId', action.inputId]);
       return state.set(action.inputId, resetInput);
     case types.INPUTCONFIG_UPDATE_FIELD:
+    case types.INPUTCONFIG_UPDATE_PANEL_CONTROLLER:
     case types.INPUTCONFIG_RENAME:
     case types.INPUTCONFIG_RENAME_SHORT:
     case types.INPUTCONFIG_DELETE_OPTION:
@@ -116,6 +125,7 @@ const inputs = (state, action) => {
     case types.INPUTCONFIG_NEW_INPUT:
     case types.INPUTCONFIG_DELETE_INPUT:
     case types.INPUTCONFIG_UPDATE_FIELD:
+    case types.INPUTCONFIG_UPDATE_PANEL_CONTROLLER:
     case types.INPUTCONFIG_RENAME:
     case types.INPUTCONFIG_RENAME_SHORT:
     case types.INPUTCONFIG_DELETE_OPTION:

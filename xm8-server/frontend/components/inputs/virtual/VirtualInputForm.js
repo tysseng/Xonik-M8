@@ -5,6 +5,7 @@ import InputOptionsContainer from '../InputOptionsContainer';
 import InputPreview from '../InputPreview';
 import PanelControllerDropdown from '../PanelControllerDropdown';
 import InputDropdown from '../InputDropdown';
+import { panelControllersById } from '../../../../shared/graph/PanelControllers';
 
 const VirtualInputForm = ({ input, inputValue,
   selectInput, onCloseDialog, 
@@ -45,8 +46,9 @@ const VirtualInputForm = ({ input, inputValue,
                   </div>
                 </div>
               </div>
-
-              <MidiFormContainer id={input.id} midi={input.midi}/> 
+              { input.panelController === panelControllersById.PC_VIRTUAL.id &&
+                <MidiFormContainer id={input.id} midi={input.midi}/>
+              }
             </div>
           }
         </div>

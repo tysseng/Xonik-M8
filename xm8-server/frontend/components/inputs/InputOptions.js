@@ -1,6 +1,5 @@
-import _ from 'lodash';
-
 import InputOption from './InputOption';
+import { panelControllersById } from '../../../shared/graph/PanelControllers'
 
 const InputOptions = ({ input, onLabelChange, onValueMidiChange, onValueChange, onDelete, onNew, onSpreadValues, onSpreadValuesMidi  }) => {
 
@@ -18,11 +17,16 @@ const InputOptions = ({ input, onLabelChange, onValueMidiChange, onValueChange, 
         { Object.keys(options).length > 0 && 
           <table>
             <thead>
-              <tr><th>Label</th><th>Value</th><th>Midi</th></tr>
+              <tr>
+                <th>Label</th>
+                <th>Value</th>
+                { input.panelController === panelControllersById.PC_VIRTUAL.id && <th>Midi</th>}
+              </tr>
             </thead>
             <tbody>          
               {Object.values(options).map(option => {
-                return <InputOption 
+                return <InputOption
+                  input={input}
                   option={option} 
                   scale={scale} 
                   onLabelChange={onLabelChange} 
@@ -33,7 +37,7 @@ const InputOptions = ({ input, onLabelChange, onValueMidiChange, onValueChange, 
               <tr>
                 <td></td>
                 <td><button type='button' onClick={() => onSpreadValues(input)}>Spread</button></td>
-                <td><button type='button' onClick={() => onSpreadValuesMidi(input)}>Spread</button></td>
+                { input.panelController === panelControllersById.PC_VIRTUAL.id && <td><button type='button' onClick={() => onSpreadValuesMidi(input)}>Spread</button></td>}
               </tr>
             </tbody>
           </table>

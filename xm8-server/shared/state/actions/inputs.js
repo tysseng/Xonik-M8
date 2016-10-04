@@ -5,6 +5,7 @@ export const types = {
   INPUTCONFIG_RENAME: 'INPUTCONFIG_RENAME',
   INPUTCONFIG_RENAME_SHORT: 'INPUTCONFIG_RENAME_SHORT',
   INPUTCONFIG_UPDATE_FIELD: 'INPUTCONFIG_UPDATE_FIELD',
+  INPUTCONFIG_UPDATE_PANEL_CONTROLLER: 'INPUTCONFIG_UPDATE_PANEL_CONTROLLER',
   INPUTCONFIG_DELETE_OPTION: 'INPUTCONFIG_DELETE_OPTION',
   INPUTCONFIG_NEW_OPTION: 'INPUTCONFIG_NEW_OPTION',
   INPUTCONFIG_SPREAD_OPTIONS_VALUES: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES',
@@ -66,6 +67,17 @@ export const renameShort = (inputId, name, patchNumber = '-') => {
     inputId,
     name,
     target: 'SERVER',
+    patchNumber
+  }
+}
+
+export const updatePanelController = (inputId, panelControllerId, patchNumber = '-') => {
+  return {
+    type: types.INPUTCONFIG_UPDATE_PANEL_CONTROLLER,
+    inputId,
+    panelControllerId,
+    target: 'SERVER',
+    undoDescription: 'Update panel controller',
     patchNumber
   }
 }

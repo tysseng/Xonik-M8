@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { rename, renameShort, updateField } from '../../../../shared/state/actions/inputs';
+import { rename, renameShort, updateField, updatePanelController } from '../../../../shared/state/actions/inputs';
 import { selectInput} from '../../../../shared/state/actions/gui/guiinputs';
 import VirtualInputForm from './VirtualInputForm'
 import { getVirtualInputs, getGuiVirtualInputs, getControllers } from '../../../state/selectors';
@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onStepGenerationModeChange:  (id, value) => dispatch(updateField(id, ['stepGenerationMode'], value)),
     onStepIntervalChange:  (id, value) => dispatch(updateField(id, ['stepInterval'], value)), 
     onNumberOfStepsChange:  (id, value) => dispatch(updateField(id, ['numberOfSteps'], value)),
-    onControllerChange: (id, value) => dispatch(updateField(id, ['panelController'], value))
+    onControllerChange: (id, value) => dispatch(updatePanelController(id, value))
   }
 }
 
