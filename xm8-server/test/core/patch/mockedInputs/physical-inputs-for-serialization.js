@@ -22,9 +22,4 @@ option(inputWithOptions, 3, 24576, 96, "four");
 
 let physicalInputs = getMutablePhysicalInputs();
 
-export let physicalWithMidi = physicalInputs.IN_OSC_1_SAW;
-export let physicalWithOptions = physicalInputs.IN_OSC_1_TRIANGLE;
-
-console.log(physicalWithMidi, physicalWithOptions);
-
 export default physicalInputs;

@@ -135,7 +135,6 @@ function setParamNodePosAndExtractConstants(nodes){
 const convertResultValues = nodes => {
   _.each(nodes, node => {
      if(node.result.value && node.result.value !== ''){
-
        node.result.value = convertTo16BitSigned(node.result.unit, node.result.value);
      }
   });

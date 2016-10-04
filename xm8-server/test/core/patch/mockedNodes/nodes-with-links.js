@@ -5,7 +5,7 @@ import { outputsById } from '../../../../shared/graph/Outputs';
 init();
 
 let node0 = invert();
-param(node0, '0', paramTypesMap.CONSTANT.id, 3);
+param(node0, '0', paramTypesMap.CONSTANT, 3);
 
 let node1 = invert();
 link(node0, node1, '0');

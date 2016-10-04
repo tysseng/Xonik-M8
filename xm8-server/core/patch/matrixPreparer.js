@@ -9,7 +9,6 @@ export const getUsedDirectOutputs = (directoutputs, graphOutputs) => {
 
   _.each(directoutputs, (value, key) => {
     if(graphOutputs[key] === undefined || graphOutputs[key] === '') {
-      console.log(key, value)
       let input = inputsById[value];
       let output = outputsById[key];
 

@@ -9,7 +9,7 @@ initNodes();
 
 // a graph that uses a physical input, to test collisions with matrix
 let outputNode = output(outputsById.OUT_VCO_1_PITCH);
-param(outputNode, '0', paramTypesMap.CONSTANT.id, 1);
+param(outputNode, '0', paramTypesMap.CONSTANT, 1);
 
 // a colliding direct output
 toggle(inputsById.IN_OSC_1_SAW, outputsById.OUT_VCO_1_PITCH);

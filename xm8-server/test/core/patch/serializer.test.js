@@ -133,11 +133,11 @@ describe('Serializer:', function() {
     });
 
     it('should have result value 0 when no result is set', function() {
-      nodeBuffer.readUInt8(22).should.equal(0); // no result in use
+      nodeBuffer.readUInt16BE(22).should.equal(0); // no result in use
     });
 
     it('should have correct result when result is set', function() {
-      nodeBufferWithResult.readUInt8(22).should.equal(13107);
+      nodeBufferWithResult.readUInt16BE(22).should.equal(13107);
     });
   });
 
@@ -186,6 +186,4 @@ describe('Serializer:', function() {
       voiceGroupIdBuffer.readUInt16BE(4).should.equal(5);
     });
   });
-
-  //TODO: Test node with result set.
 });

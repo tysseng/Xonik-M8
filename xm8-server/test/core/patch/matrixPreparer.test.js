@@ -1,5 +1,4 @@
 import chai from 'chai';
-import _ from 'lodash';
 import { expect } from 'chai';
 
 import { outputsById } from '../../../shared/graph/Outputs';

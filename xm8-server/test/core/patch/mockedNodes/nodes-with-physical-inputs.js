@@ -7,8 +7,8 @@ import { filterEnvRelease, filterCutoff } from '../mockedInputs/physical-inputs-
 init();
 
 let sum1 = sum();
-param(sum1, '0', paramTypesMap.INPUT.id, filterEnvRelease.id);
-param(sum1, '1', paramTypesMap.INPUT.id, filterCutoff.id);
+param(sum1, '0', paramTypesMap.INPUT, filterEnvRelease.id);
+param(sum1, '1', paramTypesMap.INPUT, filterCutoff.id);
 
 let outputNode = output(outputsById.OUT_VCO_1_PITCH);
 link(sum1, outputNode, '0');

@@ -31,15 +31,15 @@ name(inputSummer, 'inputSummer');
 
 let independent3 = invert();
 name(independent3, 'independent3');
-param(independent3, '0', paramTypesMap.CONSTANT.id, '3');
+param(independent3, '0', paramTypesMap.CONSTANT, '3');
 
 let independent2 = invert();
 name(independent2, 'independent2');
-param(independent2, '0', paramTypesMap.CONSTANT.id, '2');
+param(independent2, '0', paramTypesMap.CONSTANT, '2');
 
 let independent1 = invert();
 name(independent1, 'independent1');
-param(independent1, '0', paramTypesMap.CONSTANT.id, '1');
+param(independent1, '0', paramTypesMap.CONSTANT, '1');
 
 link(independent1, inputSummer, '0');
 link(independent2, inputSummer, '1');

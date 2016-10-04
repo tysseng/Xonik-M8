@@ -54,7 +54,7 @@ export const output = (output) => {
   let nodeId = getNextNodeId();
   store.dispatch(createNewNode(voiceGroupId));
   store.dispatch(changeNodeType(nodeId, nodeTypesMap.OUTPUT.id, voiceGroupId));
-  if(output) setParamFromNodeId(nodeId, '1', paramTypesMap.OUTPUT.id, output.id, voiceGroupId);
+  if(output) setParamFromNodeId(nodeId, '1', paramTypesMap.OUTPUT, output.id, voiceGroupId);
   return getNode(voiceGroupId, nodeId).toJS();
 }
 
@@ -62,7 +62,7 @@ export const outputTuned = (output) => {
   let nodeId = getNextNodeId();
   store.dispatch(createNewNode(voiceGroupId));
   store.dispatch(changeNodeType(nodeId, nodeTypesMap.OUTPUT_TUNED.id, voiceGroupId));
-  if(output) setParamFromNodeId(nodeId, '1', paramTypesMap.OUTPUT.id, output.id, voiceGroupId);
+  if(output) setParamFromNodeId(nodeId, '1', paramTypesMap.OUTPUT, output.id, voiceGroupId);
   return getNode(voiceGroupId, nodeId).toJS();
 }
 
@@ -76,23 +76,23 @@ export const name = (node, name) => {
   return getNode(voiceGroupId, node.id).toJS();
 }
 
-export const param = (node, paramId, type, value, unitId) => {
-  store.dispatch(changeNodeParamType(node.id, paramId, type, voiceGroupId));
-  if(value) store.dispatch(changeNodeParamValue(node.id, paramId, type, value, voiceGroupId));
-  if(unitId) store.dispatch(changeNodeParamUnit(node.id, paramId, unitId, voiceGroupId));
+export const param = (node, paramId, type, value, unit) => {
+  store.dispatch(changeNodeParamType(node.id, paramId, type.id, voiceGroupId));
+  if(value) store.dispatch(changeNodeParamValue(node.id, paramId, type.id, value, voiceGroupId));
+  if(unit) store.dispatch(changeNodeParamUnit(node.id, paramId, unit.id, voiceGroupId));
   return getNode(voiceGroupId, node.id).toJS();
 }
 
-export const result = (node, value, unitId) => {
+export const result = (node, value, unit) => {
   store.dispatch(changeNodeResult(node.id, value, voiceGroupId));
-  if(unitId) store.dispatch(changeNodeResultUnit(node.id, unitId, voiceGroupId));
+  if(unit) store.dispatch(changeNodeResultUnit(node.id, unit.id, voiceGroupId));
   return getNode(voiceGroupId, node.id).toJS();
 }
 
 export const setParamFromNodeId = (nodeId, paramId, type, value, unit) => {
-  store.dispatch(changeNodeParamType(nodeId, paramId, type, voiceGroupId));
-  if(value) store.dispatch(changeNodeParamValue(nodeId, paramId, type, value, voiceGroupId));
-  if(unit) store.dispatch(changeNodeParamUnit(nodeId, paramId, unit, voiceGroupId));
+  store.dispatch(changeNodeParamType(nodeId, paramId, type.id, voiceGroupId));
+  if(value) store.dispatch(changeNodeParamValue(nodeId, paramId, type.id, value, voiceGroupId));
+  if(unit) store.dispatch(changeNodeParamUnit(nodeId, paramId, unit.id, voiceGroupId));
   return getNode(voiceGroupId, nodeId).toJS();
 }
 
