@@ -8,7 +8,9 @@ export const types = {
   DELETE_NODE: 'DELETE_NODE',
   CHANGE_NODE_NAME: 'CHANGE_NODE_NAME',
   CHANGE_NODE_TYPE: 'CHANGE_NODE_TYPE',
-  CHANGE_NODE_PARAM_TYPE: 'CHANGE_NODE_PARAM_TYPE',      
+  CHANGE_NODE_RESULT: 'CHANGE_NODE_RESULT',
+  CHANGE_NODE_RESULT_UNIT: 'CHANGE_NODE_RESULT_UNIT',
+  CHANGE_NODE_PARAM_TYPE: 'CHANGE_NODE_PARAM_TYPE',
   CHANGE_NODE_PARAM_VALUE: 'CHANGE_NODE_PARAM_VALUE',      
   CHANGE_NODE_PARAM_UNIT: 'CHANGE_NODE_PARAM_UNIT',      
   NEW_LINK: 'NEW_LINK',  
@@ -81,10 +83,32 @@ export const changeNodeName = (nodeId, name, patchNumber = '-') => {
 export const changeNodeType = (nodeId, typeId, patchNumber = '-') => {
   return {
     type: types.CHANGE_NODE_TYPE,
-    nodeId: nodeId,
-    typeId: typeId,
+    nodeId,
+    typeId,
     target: 'SERVER',    
     undoDescription: 'Change node type',
+    patchNumber
+  }
+};
+
+export const changeNodeResult = (nodeId, result, patchNumber = '-') => {
+  return {
+    type: types.CHANGE_NODE_RESULT,
+    nodeId,
+    result,
+    target: 'SERVER',
+    undoDescription: 'Change node result',
+    patchNumber
+  }
+};
+
+export const changeNodeResultUnit = (nodeId, unit, patchNumber = '-') => {
+  return {
+    type: types.CHANGE_NODE_RESULT_UNIT,
+    nodeId,
+    unit,
+    target: 'SERVER',
+    undoDescription: 'Change node result units',
     patchNumber
   }
 };

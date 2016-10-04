@@ -1,15 +1,15 @@
 // TODO:  TOGGLE DESCRIPTION
 
 import React from 'react';
-import _ from 'lodash';
 
 import NodeTypeDropdown from './NodeTypeDropdown';
 import NodeParameterForm from './NodeParameterForm';
+import ParameterUnitDropdown from './ParameterUnitDropdown';
 import MiniIcon from '../../framework/MiniIcon';
 
 import nodeTypes from '../../../../shared/graph/NodeTypes.js';
 
-const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange, onCloseDialog }) => {
+const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, onNodeResultChange, onResultUnitChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange, onCloseDialog }) => {
 
   if(!node){
     return null;
@@ -50,7 +50,12 @@ const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, on
               onValueChange={(value) => onParameterValueChange(node.id, paramId, parameter.type, value)}
               onUnitChange={(unit) => onParameterUnitChange(node.id, paramId, unit)}/> 
           })}
-        </div> 
+        </div>
+        <div className="resultBlock">
+          <label htmlFor="initialResult">Initial result</label>
+          <input id="initialResult" type="text" onChange={(e) => onNodeResultChange(node.id, e.target.value)} value={node.result.value}/>
+          <ParameterUnitDropdown onUnitChange={(value) => onResultUnitChange(node.id, value)} value={node.result.unit}/>
+        </div>
       </div>    
     </form>
   )

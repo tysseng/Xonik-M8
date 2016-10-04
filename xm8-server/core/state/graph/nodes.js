@@ -60,7 +60,11 @@ const getEmptyNode = (nodeId) => Map({
   name: "Node " + nodeId,  
   type: "-1",
   vis: Map({x: 10, y: 10}),
-  consumers: Map()  
+  consumers: Map(),
+  result: Map({
+    value: '',
+    unit: ''
+  })
 })
 
 const getLinkIdFromAction = (action) => {
@@ -223,6 +227,10 @@ const node = (state, action) => {
         type: action.typeId,
         params: getEmptyParams(action.typeId)
       }));
+    case types.CHANGE_NODE_RESULT:
+      return state.setIn(['result', 'value'], action.result);
+    case types.CHANGE_NODE_RESULT_UNIT:
+      return state.setIn(['result', 'unit'], action.unit);
     case types.NEW_LINK:
     case types.CHANGE_NODE_PARAM_TYPE:
     case types.CHANGE_NODE_PARAM_VALUE:
@@ -305,7 +313,11 @@ const nodes = (state, action) => {
           state = removeFromConsumers(state, action.nodeId, param.get('id'));             
         });        
       }
-      return state.updateIn([action.nodeId], (aNode) => node(aNode, action));  
+      return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
+    case types.CHANGE_NODE_RESULT:
+      return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
+    case types.CHANGE_NODE_RESULT_UNIT:
+      return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     case types.CHANGE_NODE_NAME:
       return state.updateIn([action.nodeId], (aNode) => node(aNode, action));
     case types.CHANGE_NODE_PARAM_UNIT:

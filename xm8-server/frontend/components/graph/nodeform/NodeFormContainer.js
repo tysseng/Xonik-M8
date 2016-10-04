@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectNode, changeNodeName, changeNodeType, changeNodeParamType, changeNodeParamValue, changeNodeParamUnit } from '../../../../shared/state/actions/nodes';
+import { selectNode, changeNodeName, changeNodeType, changeNodeResult, changeNodeResultUnit, changeNodeParamType, changeNodeParamValue, changeNodeParamUnit } from '../../../../shared/state/actions/nodes';
 import { getNodes, getGuiPatchview } from '../../../state/selectors';
 
 import NodeForm from './NodeForm'
@@ -26,6 +26,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onNodeTypeChange: (nodeId, typeId) => {
       dispatch(changeNodeType(nodeId, typeId));
+    },
+    onNodeResultChange: (nodeId, typeId) => {
+      dispatch(changeNodeResult(nodeId, typeId));
+    },
+    onResultUnitChange: (nodeId, typeId) => {
+      dispatch(changeNodeResultUnit(nodeId, typeId));
     },
     onParameterTypeChange: (nodeId, paramId, paramType) => { 
       dispatch(changeNodeParamType(nodeId, paramId, paramType));
