@@ -20,9 +20,10 @@ import d3 from 'd3';
 
 import React from 'react';
 import {Component} from 'react';
-import _ from 'lodash';
 import GraphSvgNode from './GraphSvgNode';
 import GraphSvgLink from './GraphSvgLink';
+import { idMap as nodeTypesById } from '../../../shared/graph/NodeTypes';
+import { publish } from '../../userMessages';
 
 class GraphSvg extends Component {
   constructor(props) {
@@ -66,7 +67,14 @@ class GraphSvg extends Component {
     
     if(this.props.mode === 'create_link'){
       if(!fromNodeId){
-        this.props.setLinkFromNode(nodeId);
+        let node = this.props.nodes[nodeId];
+        let type = nodeTypesById[node.type];
+        if(type.notLinkableFrom){
+          publish("Cannot set link");
+        } else {
+          this.props.setLinkFromNode(nodeId);
+        }
+
       } else if(fromNodeId === nodeId){
         this.props.setLinkFromNode('');
       } else {
@@ -140,15 +148,14 @@ class GraphSvg extends Component {
             let isSelected = this.isNodeSelected(node, this.props);
             return (
               <GraphSvgNode 
-              key={node.id} 
+                key={node.id}
                 mode={this.props.mode}
                 node={node}
                 selected={isSelected}
                 drawingAreaId='graphSvg'                
                 onNodeClick={this.onNodeClick}
                 onNodeMoveEnded={this.props.onNodeMoveEnded}
-                setLinkFromNode={this.props.setLinkFromNode}
-                setLinkToNode={this.props.setLinkToNode}/>
+                />
             )
           })}    
         </svg>

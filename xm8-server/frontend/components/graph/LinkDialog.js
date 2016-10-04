@@ -5,8 +5,8 @@ import NodeTypeDropdown from './nodeform/NodeTypeDropdown';
 import ModalBox from '../framework/ModalBox';     
 
 const isLinkable = (parameterDefinition) => {
-  let whitelist = parameterDefinition.typeWhitelist
-  let blacklist = parameterDefinition.typeBlacklist
+  let whitelist = parameterDefinition.typeWhitelist;
+  let blacklist = parameterDefinition.typeBlacklist;
 
   if(whitelist){
     return _.includes(whitelist, paramTypes.INPUT.id);

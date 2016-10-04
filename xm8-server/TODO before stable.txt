@@ -1,6 +1,8 @@
 TODO før "stabilt"
 
 TODO:
+- Cancel i link-dialog fungerer ikke
+- Standardisere NodeTypes som andre enums
 - Må ikke være mulig å linke FRA en output node.
 - Må kunne sette initial value på en delay line node...
 - Tenk gjennom hvordan midi skal fungere hvis mapping til fysisk input
@@ -12,7 +14,7 @@ TODO:
     - DVS: For virtuelle som har mapping til phys så må alt av midi samsvare med phys, remapping av steps blir bare
       en gui-ting, det påvirker ikke panelControllers.
     - FASIT: mapping til physical: Ikke mulig å sette midi-ting
-    - FASIT: prøv å tillate en midi-melding å mappe til flere controllere (men hvis kanskje kollisjon med farge i gui?)
+    - FASIT: prøv å tillate en midi-melding å mappe til flere controllere (men hvis kanskje kollisjon   med farge i gui?)
 - Teste displayoptions, kalle det noe annet?
 
 - Fikse subscribe i patchRepo

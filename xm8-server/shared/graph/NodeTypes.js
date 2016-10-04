@@ -549,6 +549,7 @@ const nodeTypes = {
     name: "Output",     
     description: "Write output to voice",
     hasVariableParamsLength: false,
+    notLinkableFrom: true,
     params: [{
       id: "0",
       name: "Output value",
@@ -568,6 +569,7 @@ const nodeTypes = {
     name: "Output tuned",
     description: "Write output to voice and correct for vco tuning",
     hasVariableParamsLength: false,
+    notLinkableFrom: true,
     params: [{
       id: "0",
       name: "Output value",
