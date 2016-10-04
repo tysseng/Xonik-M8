@@ -98,6 +98,7 @@ const nodeTypes = {
     name: "Delay line", 
     description: "Delay a value for one cycle, allowing loops in the network",
     hasVariableParamsLength: false,
+    maySetInitialResult: true,
     params: [{
       id: "0",
       name: "Value to delay",

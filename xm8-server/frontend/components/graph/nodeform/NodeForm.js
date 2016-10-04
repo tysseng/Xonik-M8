@@ -51,13 +51,15 @@ const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, on
               onUnitChange={(unit) => onParameterUnitChange(node.id, paramId, unit)}/> 
           })}
         </div>
-        <div className="resultBlock">
-          <label htmlFor="initialResult">Initial result</label>
-          <span>
-            <input id="initialResult" className="resultValue" type="text" onChange={(e) => onNodeResultChange(node.id, e.target.value)} value={node.result.value}/>
-            <ParameterUnitDropdown onUnitChange={(value) => onResultUnitChange(node.id, value)} value={node.result.unit}/>
-          </span>
-        </div>
+        { nodeType.maySetInitialResult && (
+          <div className="resultBlock">
+            <label htmlFor="initialResult">Initial result</label>
+            <span>
+              <input id="initialResult" className="resultValue" type="text" onChange={(e) => onNodeResultChange(node.id, e.target.value)} value={node.result.value}/>
+              <ParameterUnitDropdown onUnitChange={(value) => onResultUnitChange(node.id, value)} value={node.result.unit}/>
+            </span>
+          </div>
+        )}
       </div>    
     </form>
   )

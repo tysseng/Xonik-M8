@@ -55,16 +55,18 @@ const getEmptyParams = (typeId) => {
   return params; 
 }
 
+const getEmptyResult = () => Map({
+  value: '',
+  unit: ''
+});
+
 const getEmptyNode = (nodeId) => Map({
   id: nodeId,
   name: "Node " + nodeId,  
   type: "-1",
   vis: Map({x: 10, y: 10}),
   consumers: Map(),
-  result: Map({
-    value: '',
-    unit: ''
-  })
+  result: getEmptyResult()
 })
 
 const getLinkIdFromAction = (action) => {
@@ -225,6 +227,7 @@ const node = (state, action) => {
     case types.CHANGE_NODE_TYPE:
       return validateNode(state.merge({
         type: action.typeId,
+        result: getEmptyResult(),
         params: getEmptyParams(action.typeId)
       }));
     case types.CHANGE_NODE_RESULT:

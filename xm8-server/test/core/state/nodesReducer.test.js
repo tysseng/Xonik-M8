@@ -6,7 +6,7 @@ import { getNode } from '../../../core/state/selectors';
 import { resetGraph,
   createNewNode, changeNodeType, changeNodeName, moveNode, deleteNode,
   changeNodeParamType, changeNodeParamValue, changeNodeParamUnit,
-  createNewLink, deleteLink, changeLinkName, toggleLinkNameInGraph } from '../../../shared/state/actions/nodes';
+  createNewLink, deleteLink, changeLinkName, toggleLinkNameInGraph, changeNodeResult, changeNodeResultUnit } from '../../../shared/state/actions/nodes';
 import { deleteInput } from '../../../shared/state/actions/inputs';
 
 import { map as nodeTypesMap } from '../../../shared/graph/NodeTypes';
@@ -513,9 +513,34 @@ describe('Nodes reducer:', function() {
     });
   });
 
+  describe('Result manipulation', function () {
+
+    beforeEach(function() {
+      store.dispatch(resetGraph(voiceGroupId));
+      store.dispatch(createNewNode(voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesMap.DELAY_LINE.id, voiceGroupId));
+      store.dispatch(changeNodeResult('0', 10, voiceGroupId));
+      store.dispatch(changeNodeResultUnit('0', unitsById.OCTAVES.id, voiceGroupId));
+    });
+
+    it('should have set node result', function () {
+      let resultNode = getNode(voiceGroupId, '0').toJS();
+      resultNode.result.value.should.equal(10);
+      resultNode.result.unit.should.equal(unitsById.OCTAVES.id);
+    });
+
+    it('should clear result when changing node type', function () {
+      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+
+      let resultNode = getNode(voiceGroupId, '0').toJS();
+      resultNode.result.value.should.equal('');
+      resultNode.result.unit.should.equal('');
+    });
+  });
+
   // IN OUTPUTS REDUCER
   //TODO: Delete node should update output collition detection
-  //TODO: Change node type should update output collition detection
-  //TODO: Change param type should update output collition detection
-  //TODO: Change param value should update output collition detection
+  //TODO: Change node type should update output collision detection
+  //TODO: Change param type should update output collision detection
+  //TODO: Change param value should update output collision detection
 });
