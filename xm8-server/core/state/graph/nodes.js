@@ -57,7 +57,7 @@ const getEmptyParams = (typeId) => {
 
 const getEmptyResult = () => Map({
   value: '',
-  unit: ''
+  unit: unitsById.FRACTION.id
 });
 
 const getEmptyNode = (nodeId) => Map({

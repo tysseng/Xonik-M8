@@ -3,6 +3,7 @@ TODO før "stabilt"
 TODO:
 - Cancel i link-dialog fungerer ikke
 - Standardisere NodeTypes som andre enums
+- Standardisere NodeParamUnits som andre enum
 - Må serialisere initial result ink konvertering av unit
 
 

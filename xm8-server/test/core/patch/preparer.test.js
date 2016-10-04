@@ -5,9 +5,10 @@ import config from '../../../shared/config';
 import { outputsById } from '../../../shared/graph/Outputs';
 import { panelControllersById } from '../../../shared/graph/PanelControllers';
 
-import { prepareNetForSerialization, isNetValid, convertTo16BitSigned } from '../../../core/patch/preparer';
+import { prepareNetForSerialization, isNetValid, convertParamTo16BitSigned } from '../../../core/patch/preparer';
 import nodesWithInvalid from './mockedNodes/nodes-with-invalid';
 import nodesWithUnreachable from './mockedNodes/nodes-with-unreachable';
+import nodesWithResult from './mockedNodes/nodes-with-result';
 import nodesWithLinks from './mockedNodes/nodes-with-links';
 import nodesWithConstants from './mockedNodes/nodes-with-constants';
 import nodesWithParamsInUse from './mockedNodes/nodes-with-params-in-use';
@@ -98,7 +99,7 @@ describe('Patch preparation:', function() {
         unit: 'PERCENTAGE',
         value: '10'
       }
-      convertTo16BitSigned(param).should.equal(3276);
+      convertParamTo16BitSigned(param).should.equal(3276);
     });
 
     it('should cap value at max positive signed 16bit int', function () {
@@ -106,7 +107,7 @@ describe('Patch preparation:', function() {
         unit: 'PERCENTAGE',
         value: '101'
       }
-      convertTo16BitSigned(param).should.equal(32767);
+      convertParamTo16BitSigned(param).should.equal(32767);
     });
 
     it('should cap value at min positive signed 16bit int', function () {
@@ -114,7 +115,7 @@ describe('Patch preparation:', function() {
         unit: 'PERCENTAGE',
         value: '-101'
       }
-      convertTo16BitSigned(param).should.equal(-32768);
+      convertParamTo16BitSigned(param).should.equal(-32768);
     });
   });
 
@@ -130,7 +131,7 @@ describe('Patch preparation:', function() {
     it('should convert constant from unit to 16bit signed int ', function () {
       var nodeParam0 = nodesWithConstants['1'].params['0'];
       let pos0 = nodeParam0.nodePos;
-      let convertedValue0 = convertTo16BitSigned(nodeParam0);
+      let convertedValue0 = convertParamTo16BitSigned(nodeParam0);
 
       constants[pos0 - config.graph.numberOfInputs].should.equal(convertedValue0);
     });
@@ -145,9 +146,9 @@ describe('Patch preparation:', function() {
       let pos1 = nodeParam1.nodePos;
       let pos2 = nodeParam2.nodePos;
 
-      let convertedValue0 = convertTo16BitSigned(nodeParam0);
-      let convertedValue1 = convertTo16BitSigned(nodeParam1);
-      let convertedValue2 = convertTo16BitSigned(nodeParam2);
+      let convertedValue0 = convertParamTo16BitSigned(nodeParam0);
+      let convertedValue1 = convertParamTo16BitSigned(nodeParam1);
+      let convertedValue2 = convertParamTo16BitSigned(nodeParam2);
 
       // Three constants
       constants[pos0 - config.graph.numberOfInputs].should.equal(convertedValue0);
@@ -162,6 +163,16 @@ describe('Patch preparation:', function() {
       constants[pos3 - config.graph.numberOfInputs].should.equal(outputsById.OUT_VCO_1_PITCH.hwId)
     });
 
+  });
+
+  describe('Result conversion:', function () {
+
+    let result = prepareNetForSerialization(nodesWithResult);
+    let nodes = result.nodes;
+
+    it('should convert result value based on result units', function () {
+      nodes[0].result.value.should.equal(13107);
+    });
   });
 
   describe('Node sorting:', function () {

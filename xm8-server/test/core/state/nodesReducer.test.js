@@ -534,7 +534,7 @@ describe('Nodes reducer:', function() {
 
       let resultNode = getNode(voiceGroupId, '0').toJS();
       resultNode.result.value.should.equal('');
-      resultNode.result.unit.should.equal('');
+      resultNode.result.unit.should.equal(unitsById.FRACTION.id);
     });
   });
 

@@ -86,9 +86,13 @@ const removeUnreachable = (nodes) => {
   return _.filter(nodes, node => node.reachable);
 }
 
-export const convertTo16BitSigned = param => {
-  let unit = unitsById[param.unit];
-  let value = unit.converters.from(param.value);
+export const convertParamTo16BitSigned = param => {
+  return convertTo16BitSigned(param.unit, param.value)
+}
+
+export const convertTo16BitSigned = (unitId, inputValue) => {
+  let unit = unitsById[unitId];
+  let value = unit.converters.from(inputValue);
 
   if(value > 32767){
     value = 32767;
@@ -115,7 +119,7 @@ function setParamNodePosAndExtractConstants(nodes){
             constants.push(outputsById[param.value].hwId);
 
           } else {
-            let value = convertTo16BitSigned(param);
+            let value = convertParamTo16BitSigned(param);
             constants.push(value);
           }
         } else if(param.type === paramType.INPUT.id){
@@ -126,6 +130,14 @@ function setParamNodePosAndExtractConstants(nodes){
     }
   });
   return constants;
+}
+
+const convertResultValues = nodes => {
+  _.each(nodes, node => {
+     if(node.result.value){
+       node.result.value = convertTo16BitSigned(node.result.unit, node.result.value);
+     }
+  });
 }
 
 // Returns all nodes that are only linked FROM, not to, and that are at
@@ -291,6 +303,8 @@ function prepareNetForSerialization(nodesMap, virtualInputs = []){
   let pureVirtualInputs = findPureVirtualInputsInUse(virtualInputs, nodes, firstVirtualInputIndex);
 
   let independentNodes = getReachableIndependentNodes(nodes);
+  convertResultValues(independentNodes);
+
   let firstNodeIndex = firstVirtualInputIndex + pureVirtualInputs.length + constants.length;
   let sortedNodes = sortNodes(independentNodes, firstNodeIndex );
 

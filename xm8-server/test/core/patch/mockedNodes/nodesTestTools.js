@@ -1,6 +1,7 @@
 import store from '../../../../core/state/store';
 import { resetGraph,
   createNewNode, changeNodeType, changeNodeName, moveNode, deleteNode,
+  changeNodeResult, changeNodeResultUnit,
   changeNodeParamType, changeNodeParamValue, changeNodeParamUnit,
   createNewLink, deleteLink, changeLinkName, toggleLinkNameInGraph } from '../../../../shared/state/actions/nodes';
 import { getNode, getNodes, getGraphOutputs } from '../../../../core/state/selectors';
@@ -75,10 +76,16 @@ export const name = (node, name) => {
   return getNode(voiceGroupId, node.id).toJS();
 }
 
-export const param = (node, paramId, type, value, unit) => {
+export const param = (node, paramId, type, value, unitId) => {
   store.dispatch(changeNodeParamType(node.id, paramId, type, voiceGroupId));
   if(value) store.dispatch(changeNodeParamValue(node.id, paramId, type, value, voiceGroupId));
-  if(unit) store.dispatch(changeNodeParamUnit(node.id, paramId, unit, voiceGroupId));
+  if(unitId) store.dispatch(changeNodeParamUnit(node.id, paramId, unitId, voiceGroupId));
+  return getNode(voiceGroupId, node.id).toJS();
+}
+
+export const result = (node, value, unitId) => {
+  store.dispatch(changeNodeResult(node.id, value, voiceGroupId));
+  if(unitId) store.dispatch(changeNodeResultUnit(node.id, unitId, voiceGroupId));
   return getNode(voiceGroupId, node.id).toJS();
 }
 
