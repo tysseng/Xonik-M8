@@ -90,8 +90,10 @@ describe('Serializer:', function() {
 
     let preparedNet = prepareNetForSerialization(testPatchFactory());
     let nodeWithConstants = preparedNet.nodes['0'];
+    let nodeWithResult = preparedNet.nodes['1'];
 
     let nodeBuffer = serializeNode(nodeWithConstants);
+    let nodeBufferWithResult = serializeNode(nodeWithResult);
 
     it('should be correct length', function() {
       nodeBuffer.length.should.equal(spiType.NODE.size);
@@ -130,8 +132,12 @@ describe('Serializer:', function() {
       nodeBuffer.readUInt8(21).should.equal(nodeWithConstants.paramsInUse);
     });
 
-    it('should have correct result', function() {
+    it('should have result value 0 when no result is set', function() {
       nodeBuffer.readUInt8(22).should.equal(0); // no result in use
+    });
+
+    it('should have correct result when result is set', function() {
+      nodeBufferWithResult.readUInt8(22).should.equal(13107);
     });
   });
 

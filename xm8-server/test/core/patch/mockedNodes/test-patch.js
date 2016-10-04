@@ -18,7 +18,7 @@
  * 8) One virtual input without any link to midi or physical inputs
    */
 
-import { init, invert, sum, output, outputTuned, param, link, getMutableNodes } from './nodesTestTools';
+import { init, invert, sum, result, output, outputTuned, param, link, getMutableNodes } from './nodesTestTools';
 import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
 import { inputsById } from '../../../../shared/graph/Inputs';
 import { unitsById } from '../../../../shared/graph/ParameterUnits';
@@ -34,6 +34,7 @@ param(node0, '3', paramTypesMap.INPUT.id, inputsById.IN_OSC_1_SAW.id);
 
 let node1 = invert();
 link(node0, node1, '0');
+result(node1, '2', unitsById.OCTAVES.id);
 
 let outputNode = output(outputsById.OUT_VCO_1_PITCH);
 link(node1, outputNode, '0');

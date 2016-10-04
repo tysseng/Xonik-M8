@@ -134,7 +134,8 @@ function setParamNodePosAndExtractConstants(nodes){
 
 const convertResultValues = nodes => {
   _.each(nodes, node => {
-     if(node.result.value){
+     if(node.result.value && node.result.value !== ''){
+
        node.result.value = convertTo16BitSigned(node.result.unit, node.result.value);
      }
   });
@@ -297,14 +298,14 @@ function prepareNetForSerialization(nodesMap, virtualInputs = []){
     console.log((nodeCount - reachableNodeCount) + " nodes were not reachable and will not be sent to synth");
   }
 
+  convertResultValues(nodes);
+
   let constants = setParamNodePosAndExtractConstants(nodes);
 
   let firstVirtualInputIndex = config.graph.numberOfInputs;
   let pureVirtualInputs = findPureVirtualInputsInUse(virtualInputs, nodes, firstVirtualInputIndex);
 
   let independentNodes = getReachableIndependentNodes(nodes);
-  convertResultValues(independentNodes);
-
   let firstNodeIndex = firstVirtualInputIndex + pureVirtualInputs.length + constants.length;
   let sortedNodes = sortNodes(independentNodes, firstNodeIndex );
 
@@ -313,11 +314,6 @@ function prepareNetForSerialization(nodesMap, virtualInputs = []){
     nodes: sortedNodes,
     virtualInputs: pureVirtualInputs
   }
-}
-
-export const prepareMatrixForSerialization = matrix => {
-  console.log(matrix);
-  getInputIndexById();
 }
 
 module.exports.prepareNetForSerialization = prepareNetForSerialization;

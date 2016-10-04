@@ -18,7 +18,7 @@ export const serializeNode = node => {
 
   nodeBuffer.writeUInt8(paramsInUse, 21);
 
-  var result = (node.result ? node.result : 0);
+  var result = (node.result.value && node.result.value !== '' ? node.result.value : 0);
   nodeBuffer.writeInt16BE(result, 22);
   return nodeBuffer;
 }
