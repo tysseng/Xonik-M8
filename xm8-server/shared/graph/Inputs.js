@@ -23,9 +23,13 @@ NB: The hardware id should not be a configurable value. It should be assigned au
 import _ from 'lodash';
 import { panelControllersById } from "./PanelControllers";
 import { unitsById } from "./ParameterUnits";
-import { inputTypesById as inputTypes } from "..//inputs/InputTypes";
+import { inputTypesById as inputTypes } from "../inputs/InputTypes";
 
 const getNextIndex = (options) => {
+  if(options === undefined || Object.keys(options).length === 0){
+    return 0;
+  }
+
   let highest = 0;
   _.each(options, option => {
     let index = parseInt(option.index);
@@ -33,20 +37,22 @@ const getNextIndex = (options) => {
       highest = index;
     }
   });
-  return highest + 1;  
+  return highest + 1;
 }
 
 export const getEmptyOption = (controller) => {
 
   let index = getNextIndex(controller.options);
 
-  return {
+  let opt = {
     index: '' + index,
     id: '',
     label: '',
     value: '',
     valuemidi: ''
   };
+
+  return opt;
 }
 
 // if centered is true, position is centered within step range.

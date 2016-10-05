@@ -1,4 +1,4 @@
-import { init, getMutablePhysicalInputs } from './inputTestTools';
+import { init, getMutablePhysicalInputs } from '../../testHelpers/inputTestTools';
 
 init();
 

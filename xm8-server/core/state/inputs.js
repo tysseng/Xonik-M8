@@ -78,6 +78,12 @@ const input = (state, action) => {
         _.each(state.get('options').toJS(), option => {
           state = state.setIn(['options', option.index, 'valuemidi'], '');
         });
+        state = state
+          .setIn(['midi', 'hires'], false)
+          .setIn(['midi', 'send'], true)
+          .setIn(['midi', 'receive'], true)
+          .setIn(['midi', 'status'], '')
+          .setIn(['midi', 'data1'], '');
       }
       return state.set('panelController', action.panelControllerId);
     case types.INPUTCONFIG_RENAME:
@@ -87,7 +93,7 @@ const input = (state, action) => {
     case types.INPUTCONFIG_DELETE_OPTION:
       return state.deleteIn(['options', action.index]);
     case types.INPUTCONFIG_NEW_OPTION:
-      let option = getEmptyOption(state.toJS());      
+      let option = getEmptyOption(state.toJS());
       return state.setIn(['options', option.index], fromJS(option));
     case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES:
       return updateOptionsValues(state, action, 'value');

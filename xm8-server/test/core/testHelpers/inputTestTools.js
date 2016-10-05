@@ -1,8 +1,8 @@
-import store from '../../../../core/state/store';
-import { resetPhysicalInputs, newInput, rename, renameShort, updateField, updatePanelController } from '../../../../shared/state/actions/inputs';
-import { resetPatch } from '../../../../shared/state/actions/patch';
-import { getPhysicalInputs, getVirtualInputs, getVirtualInput } from '../../../../core/state/selectors';
-import { panelControllersById} from '../../../../shared/graph/PanelControllers';
+import store from '../../../core/state/store';
+import { resetPhysicalInputs, newInput, rename, renameShort, updateField, updatePanelController, newOption } from '../../../shared/state/actions/inputs';
+import { resetPatch } from '../../../shared/state/actions/patch';
+import { getPhysicalInputs, getVirtualInputs, getVirtualInput } from '../../../core/state/selectors';
+import { panelControllersById} from '../../../shared/graph/PanelControllers';
 
 let currentVirtualInputId = 0;
 let voiceGroupId = '0';
@@ -61,11 +61,18 @@ export const stepGenerationMode = (input, mode) => {
   store.dispatch(updateField(input.id, ['stepGenerationMode'], mode, voiceGroupId));
 }
 
-export const option = (input, index, value, valueMidi, label) => {
+export const option = (input, value, valueMidi, label) => {
   store.dispatch(updateField(input.id, ['stepGenerationMode'], 'OPTIONS', voiceGroupId));
-  if(label) store.dispatch(updateField(input.id, ['options', index, 'label'], value, voiceGroupId));
-  if(valueMidi) store.dispatch(updateField(input.id, ['options', index, 'valuemidi'], value, voiceGroupId));
-  if(value) store.dispatch(updateField(input.id, ['options', index, 'value'], value, voiceGroupId));
+  store.dispatch(newOption(input.id, voiceGroupId));
+
+  let inputFromStore = getVirtualInput(voiceGroupId, input.id).toJS();
+  let index = '' + (Object.keys(inputFromStore.options).length -1);
+
+  if(label !== undefined) store.dispatch(updateField(input.id, ['options', index, 'label'], label, voiceGroupId));
+  if(valueMidi !== undefined) store.dispatch(updateField(input.id, ['options', index, 'valuemidi'], value, voiceGroupId));
+  if(value !== undefined) store.dispatch(updateField(input.id, ['options', index, 'value'], value, voiceGroupId));
+
+  let inputFromStore2 = getVirtualInput(voiceGroupId, input.id).toJS();
 }
 
 export const getMutableVirtualInputs = () => {

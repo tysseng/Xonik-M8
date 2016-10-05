@@ -1,4 +1,4 @@
-import { init, createVirtualInput, name, panelController, getMutableVirtualInputs } from './inputTestTools';
+import { init, createVirtualInput, name, panelController, getMutableVirtualInputs } from '../../testHelpers/inputTestTools';
 import { panelControllersById} from '../../../../shared/graph/PanelControllers';
 
 init();

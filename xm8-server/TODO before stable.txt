@@ -5,9 +5,6 @@ TODO:
 - Standardisere NodeTypes som andre enums
 - Standardisere NodeParamUnits som andre enum
 
-- Clear midi settings from virtual inputs on panel controller change
-- Skriv tester for endringen.
-
 - Tenk gjennom hvordan midi skal fungere hvis mapping til fysisk input
     - steps
     - midi messages
