@@ -69,7 +69,7 @@ export const option = (input, value, valueMidi, label) => {
   let index = '' + (Object.keys(inputFromStore.options).length -1);
 
   if(label !== undefined) store.dispatch(updateField(input.id, ['options', index, 'label'], label, voiceGroupId));
-  if(valueMidi !== undefined) store.dispatch(updateField(input.id, ['options', index, 'valuemidi'], value, voiceGroupId));
+  if(valueMidi !== undefined) store.dispatch(updateField(input.id, ['options', index, 'valuemidi'], valueMidi, voiceGroupId));
   if(value !== undefined) store.dispatch(updateField(input.id, ['options', index, 'value'], value, voiceGroupId));
 }
 
