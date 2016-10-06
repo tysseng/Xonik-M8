@@ -1,7 +1,7 @@
 import store from '../../../core/state/store';
 import { resetPhysicalInputs, newInput, rename, renameShort, updateField, updatePanelController, newOption } from '../../../shared/state/actions/inputs';
 import { resetPatch } from '../../../shared/state/actions/patch';
-import { getPhysicalInputs, getVirtualInputs, getVirtualInput } from '../../../core/state/selectors';
+import { getPhysicalInputs, getVirtualInputs, getVirtualInput, getInput } from '../../../core/state/selectors';
 import { panelControllersById} from '../../../shared/graph/PanelControllers';
 
 let currentVirtualInputId = 0;
@@ -65,14 +65,12 @@ export const option = (input, value, valueMidi, label) => {
   store.dispatch(updateField(input.id, ['stepGenerationMode'], 'OPTIONS', voiceGroupId));
   store.dispatch(newOption(input.id, voiceGroupId));
 
-  let inputFromStore = getVirtualInput(voiceGroupId, input.id).toJS();
+  let inputFromStore = getInput(voiceGroupId, input.id).toJS();
   let index = '' + (Object.keys(inputFromStore.options).length -1);
 
   if(label !== undefined) store.dispatch(updateField(input.id, ['options', index, 'label'], label, voiceGroupId));
   if(valueMidi !== undefined) store.dispatch(updateField(input.id, ['options', index, 'valuemidi'], value, voiceGroupId));
   if(value !== undefined) store.dispatch(updateField(input.id, ['options', index, 'value'], value, voiceGroupId));
-
-  let inputFromStore2 = getVirtualInput(voiceGroupId, input.id).toJS();
 }
 
 export const getMutableVirtualInputs = () => {

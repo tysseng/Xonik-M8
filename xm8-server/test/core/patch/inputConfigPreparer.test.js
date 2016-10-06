@@ -1,5 +1,6 @@
 import chai from 'chai';
 import { expect } from 'chai';
+import { prepareInputs } from '../../../core/patch/inputConfigPreparer';
 
 import physicalInputs from './mockedInputs/physical-inputs-for-serialization';
 
@@ -7,9 +8,15 @@ chai.should();
 
 describe('Input config preparation:', function() {
 
-  describe('Physical inputs:', function () {
+  describe('Options:', function () {
 
-    it('should return the correct number of filtered outputs', function () {
+    let preparedInputs = prepareInputs(physicalInputs);
+
+    it('should convert option values to a list', function () {
+      console.log(preparedInputs)
+    });
+
+    it('should convert option midi values to a list', function () {
 
     });
   });

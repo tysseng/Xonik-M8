@@ -15,6 +15,16 @@ export const getPatchview = (patchNumber) => getState().patchviews.get(patchNumb
 export const getVirtualInputs = (patchNumber) => getState().patches.getIn([patchNumber, 'virtualInputs', 'byId']);
 export const getVirtualInput = (patchNumber, inputId) => getState().patches.getIn([patchNumber, 'virtualInputs', 'byId', inputId]);
 export const getPhysicalInputs = () => getState().physicalInputs;
+export const getPhysicalInput = (inputId) => getState().physicalInputs.getIn(['byId', inputId]);
+
+export const getInput = (patchNumber, inputId) => {
+  if(inputId.startsWith('virt')){
+    return getVirtualInput(patchNumber, inputId);
+  } else {
+    return getPhysicalInput(inputId);
+  }
+}
+
 export const getVirtualInputGroups = (patchNumber) => getState().patches.getIn([patchNumber, 'inputgroups']);
 export const getControllers = (patchNumber) => getState().controllers.get(patchNumber);
 export const getController = (patchNumber) => getState().controllers.get(patchNumber);

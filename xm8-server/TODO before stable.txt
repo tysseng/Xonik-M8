@@ -6,14 +6,6 @@ TODO:
 - Standardisere NodeParamUnits som andre enum
 
 - Tenk gjennom hvordan midi skal fungere hvis mapping til fysisk input
-    - steps
-    - midi messages
-    - Fordi: Hvis flere inputs har samme midi så må man løpe over en liste av inputs for å sette verdi
-    - Fordi: Hvis flere inputs med samme physHwId har ulik steps-oppdeling så må man sjekke mapping for
-      hver av de før man setter verdi, dette er ikke mulig hvis de har samme physHwId.
-    - DVS: For virtuelle som har mapping til phys så må alt av midi samsvare med phys, remapping av steps blir bare
-      en gui-ting, det påvirker ikke panelControllers.
-    - FASIT: mapping til physical: Ikke mulig å sette midi-ting
     - FASIT: prøv å tillate en midi-melding å mappe til flere controllere (men hvis kanskje kollisjon   med farge i gui?)
 - Teste displayoptions, kalle det noe annet?
 
@@ -42,6 +34,10 @@ Småting
 
 
 For later:
+- Make preparers work on immutable objects?
+- Consider having only one type of inputs and let all inputs be per-patch configurable. Makes things much easier to understand and
+  means we do not have to handle midi specially for virtual controllers etc.
+
 - We will get collisions if two inputs (physical or virtual, it doesn't matter) map to the same midi controller but use
   different options. This double mapping also means we have to 'search' for any inputs that matches the midi message combination,
   which may be time consuming. Perhaps we should make it impossible to map multiple inputs to the same midi controller - if you
