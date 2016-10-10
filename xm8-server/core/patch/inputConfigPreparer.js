@@ -7,14 +7,12 @@ export const prepareInputs = inputs => {
 
     input.stepGenerationModeHwId = inputStepGenerationTypesById[input.stepGenerationMode].hwId;
 
-    let min = input.min !== '' ? input.min : 0;
-    let max = input.max !== '' ? input.max : 32767;
-
-    input.max = max;
-    input.min = min;
+    input.min = input.min !== '' ? input.min : 0;
+    input.max = input.max !== '' ? input.max : 32767;
 
     if(input.stepGenerationMode === inputStepGenerationTypesById.NUMBER_OF_STEPS.id) {
-      let range = max - min;
+      let range = input.max - input.min;
+      input.numberOfSteps = input.numberOfSteps !== '' ? input.numberOfSteps : 1;
       input.stepInterval = Math.floor(range / input.numberOfSteps);
     }
 

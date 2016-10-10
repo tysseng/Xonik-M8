@@ -45,5 +45,13 @@ describe('Input config preparation:', function() {
       stepInterval.should.equal(8191);
     });
 
+
+    it('should set number of steps to 0 if not set', function () {
+      let numberOfSteps = preparedInputs.IN_OSC_1_SQUARE.numberOfSteps;
+      let stepInterval = preparedInputs.IN_OSC_1_SQUARE.stepInterval;
+
+      numberOfSteps.should.equal(1);
+      stepInterval.should.equal(32767);
+    });
   });
 });

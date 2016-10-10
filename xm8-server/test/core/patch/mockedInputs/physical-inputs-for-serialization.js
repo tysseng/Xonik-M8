@@ -24,6 +24,9 @@ option(inputWithOptions, 8192, 32, "two");
 option(inputWithOptions, 16384, 64, "three");
 option(inputWithOptions, 24576, 96, "four");
 
+// options are converted to DAC values by the GUI code.
+let inputWithNumberOfStepsNotSet = inputsById.IN_OSC_1_SQUARE;
+stepGenerationMode(inputWithNumberOfStepsNotSet, inputStepGenerationTypesById.NUMBER_OF_STEPS);
 
 let physicalInputs = getMutablePhysicalInputs();
 
