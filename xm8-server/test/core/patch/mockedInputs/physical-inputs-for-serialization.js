@@ -1,5 +1,8 @@
-import { init, getMutablePhysicalInputs, midiStatus, midiData1, midiHires, midiSend, midiReceive, option } from '../../testHelpers/inputTestTools';
+import { init, getMutablePhysicalInputs,
+  midiStatus, midiData1, midiHires, midiSend, midiReceive,
+  option, stepGenerationMode, numberOfSteps } from '../../testHelpers/inputTestTools';
 import { inputsById } from '../../../../shared/graph/Inputs';
+import { inputStepGenerationTypesById } from '../../../../shared/inputs/InputStepsGenerationTypes';
 import { midiStatusByNumber } from '../../../../shared/midi/MidiStatusMessages';
 import { controllersById } from '../../../../shared/midi/MidiControllers';
 
@@ -11,6 +14,8 @@ midiData1(inputWithMidi, controllersById[7].id);
 midiHires(inputWithMidi, true);
 midiSend(inputWithMidi, true);
 midiReceive(inputWithMidi, true);
+stepGenerationMode(inputWithMidi, inputStepGenerationTypesById.NUMBER_OF_STEPS);
+numberOfSteps(inputWithMidi, 4);
 
 // options are converted to DAC values by the GUI code.
 let inputWithOptions = inputsById.IN_OSC_1_TRIANGLE;

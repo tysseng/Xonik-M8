@@ -8,5 +8,6 @@ module.exports = {
   GRAPH_COMMAND: {id: 6, size: 3},
   VOICE_GROUP_ID: {id: 7, size: 3},
   DIRECT_OUTPUT: {id: 8, size: 6},
+  INPUT_CONFIG: {id: 9},
   UNKNOWN: {id: 255, size: 0}
 }

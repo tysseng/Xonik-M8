@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var spiType = require('../spi/spiType.js');
+import { inputStepGenerationTypesById } from '../../shared/inputs/InputStepsGenerationTypes';
 
 export const serializeNode = node => {
 
@@ -68,5 +69,34 @@ export const serializeDirectOutput = (inputHwId, outputHwId) => {
   countBuffer.writeUInt16BE(outputHwId, 4);
 
   return countBuffer;
+}
+
+export const serializeInputConfig = inputConfig => {
+
+  let numberOfOptions = inputConfig.optionValuesMidi.length;
+
+  var countBuffer = new Buffer(spiType.INPUT_CONFIG.size);
+  countBuffer.writeUInt8(spiType.INPUT_CONFIG.size, 0);
+  countBuffer.writeUInt8(spiType.INPUT_CONFIG.id, 1);
+  countBuffer.writeUInt16BE(inputConfig.inputPosition, 2); // position in graph input array
+  countBuffer.writeUInt8(inputConfig.midi.status, 4);
+  countBuffer.writeUInt8(inputConfig.midi.data1, 5);
+  countBuffer.writeUInt8(inputConfig.midi.hires ? 1 : 0, 6);
+  countBuffer.writeUInt8(inputConfig.midi.send ? 1 : 0, 7);
+  countBuffer.writeUInt8(inputConfig.midi.receive ? 1 : 0, 8);
+
+  // TODO: Handle other modes. Split mode options into separate command?
+  countBuffer.writeUInt8(inputConfig.stepGenerationModeHwId, 9);
+
+  if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id) {
+    countBuffer.writeUInt8(numberOfOptions, 10);
+    for (i = 0; i < numberOfOptions; i++) {
+      countBuffer.writeUInt8(inputConfig.optionValuesMidi[i], 11 + i);
+    }
+  } else if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id) {
+
+  } else if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id) {
+
+  }
 }
 

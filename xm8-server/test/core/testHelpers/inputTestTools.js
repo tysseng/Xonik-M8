@@ -58,7 +58,15 @@ export const midiReceive = (input, shouldReceive) => {
 }
 
 export const stepGenerationMode = (input, mode) => {
-  store.dispatch(updateField(input.id, ['stepGenerationMode'], mode, voiceGroupId));
+  store.dispatch(updateField(input.id, ['stepGenerationMode'], mode.id, voiceGroupId));
+}
+
+export const numberOfSteps = (input, numberOfSteps) => {
+  store.dispatch(updateField(input.id, ['numberOfSteps'], numberOfSteps, voiceGroupId));
+}
+
+export const stepInterval = (input, stepInterval) => {
+  store.dispatch(updateField(input.id, ['stepInterval'], stepInterval, voiceGroupId));
 }
 
 export const option = (input, value, valueMidi, label) => {

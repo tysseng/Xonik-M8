@@ -6,6 +6,7 @@ import InputPreview from '../InputPreview';
 import PanelControllerDropdown from '../PanelControllerDropdown';
 import InputDropdown from '../InputDropdown';
 import { panelControllersById } from '../../../../shared/graph/PanelControllers';
+import { inputStepGenerationTypesById } from '../../../../shared/inputs/InputStepsGenerationTypes';
 
 const VirtualInputForm = ({ input, inputValue,
   selectInput, onCloseDialog, 
@@ -57,7 +58,7 @@ const VirtualInputForm = ({ input, inputValue,
             <DisplayOptionsFormContainer input={input}/> 
           }
 
-          { input && input.stepGenerationMode === 'OPTIONS' && 
+          { input && input.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id &&
             <InputOptionsContainer input={input}/>
           }
         </div>

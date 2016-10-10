@@ -1,6 +1,7 @@
 import chai from 'chai';
 import { expect } from 'chai';
 import { prepareInputs } from '../../../core/patch/inputConfigPreparer';
+import { inputStepGenerationTypesById } from '../../../shared/inputs/InputStepsGenerationTypes';
 
 import physicalInputs from './mockedInputs/physical-inputs-for-serialization';
 
@@ -23,5 +24,26 @@ describe('Input config preparation:', function() {
       optionValuesMidi.length.should.equal(4);
       optionValuesMidi[3].should.equal(96);
     });
+
+    it('should add input generation mode hwId', function () {
+      let hwId = preparedInputs.IN_OSC_1_TRIANGLE.stepGenerationModeHwId;
+      hwId.should.equal(inputStepGenerationTypesById.OPTIONS.hwId);
+    });
+
+    it('should set min to 0 if not set', function () {
+      let min = preparedInputs.IN_OSC_1_TRIANGLE.min;
+      min.should.equal(0);
+    });
+
+    it('should set max to 32767 if not set', function () {
+      let max = preparedInputs.IN_OSC_1_TRIANGLE.max;
+      max.should.equal(32767);
+    });
+
+    it('should calculate interval if number of steps is set', function () {
+      let stepInterval = preparedInputs.IN_OSC_1_SAW.stepInterval;
+      stepInterval.should.equal(8191);
+    });
+
   });
 });

@@ -4,6 +4,7 @@ import DisplayOptionsFormContainer from '../DisplayOptionsFormContainer';
 import InputOptionsContainer from '../InputOptionsContainer';
 import InputPreview from '../InputPreview';
 import InputDropdown from '../InputDropdown';
+import { inputStepGenerationTypesById } from '../../../../shared/inputs/InputStepsGenerationTypes';
 
 const PhysicalInputForm = ({ input, inputValue,
   selectInput, onCloseDialog, 
@@ -50,7 +51,7 @@ const PhysicalInputForm = ({ input, inputValue,
             <DisplayOptionsFormContainer input={input}/> 
           }
 
-          { input && input.stepGenerationMode === 'OPTIONS' && 
+          { input && input.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id &&
             <InputOptionsContainer input={input}/>
           }
         </div>

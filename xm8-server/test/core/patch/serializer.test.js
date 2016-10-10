@@ -2,9 +2,12 @@ import chai from 'chai';
 
 import spiType from '../../../core/spi/spiType.js';
 import { prepareNetForSerialization } from '../../../core/patch/preparer';
+import { prepareInputs } from '../../../core/patch/inputConfigPreparer';
 import { serializeNodeCount, serializeNode,
-  serializeConstantsCount, serializeConstant, serializeVoiceGroupId, serializeDirectOutput } from '../../../core/patch/serializer';
+  serializeConstantsCount, serializeConstant, serializeVoiceGroupId, serializeDirectOutput,
+serializeInputConfig} from '../../../core/patch/serializer';
 import testPatchFactory from './mockedNodes/test-patch';
+import physicalInputsForSerialization from './mockedInputs/physical-inputs-for-serialization';
 
 chai.should();
 
@@ -180,6 +183,33 @@ describe('Serializer:', function() {
 
     it('should have correct inputHwId', function() {
       voiceGroupIdBuffer.readUInt16BE(2).should.equal(4);
+    });
+
+    it('should have correct outputHwId', function() {
+      voiceGroupIdBuffer.readUInt16BE(4).should.equal(5);
+    });
+  });
+
+
+  describe('InputConfig buffer', function() {
+
+    let inputs = prepareInputs(physicalInputsForSerialization);
+    let inputConfigBuffer = serializeInputConfig(inputs.IN_OSC_1_TRIANGLE);
+
+    it('should be correct length', function() {
+      inputConfigBuffer.length.should.equal(spiType.DIRECT_OUTPUT.size);
+    });
+
+    it('should have correct command size', function() {
+      inputConfigBuffer.readUInt8(0).should.equal(spiType.DIRECT_OUTPUT.size);
+    });
+
+    it('should have correct command id', function() {
+      inputConfigBuffer.readUInt8(1).should.equal(spiType.DIRECT_OUTPUT.id);
+    });
+
+    it('should have correct inputHwId', function() {
+      inputConfigBuffer.readUInt16BE(2).should.equal(4);
     });
 
     it('should have correct outputHwId', function() {
