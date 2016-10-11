@@ -11,23 +11,35 @@ export const prepareInputs = inputs => {
     input.max = input.max !== '' ? input.max : 32767;
 
     if(input.stepGenerationMode === inputStepGenerationTypesById.NUMBER_OF_STEPS.id) {
+
       let range = input.max - input.min;
       input.numberOfSteps = input.numberOfSteps !== '' ? input.numberOfSteps : 1;
-      input.stepInterval = Math.floor(range / input.numberOfSteps);
-    }
+      input.stepGenerationValue = Math.floor(range / input.numberOfSteps);
 
-    if(input.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id) {
-      let optionValues = _.map(input.options, option => {
+    } else if(input.stepGenerationMode === inputStepGenerationTypesById.PREDEFINED_INTERVAL.id) {
+
+      input.stepGenerationValue = input.stepInterval;
+
+    } else if(input.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id) {
+
+      input.stepGenerationValue = Object.keys(input.options).length;
+
+      input.optionValues = _.map(input.options, option => {
         return option.value;
       });
-      input.optionValues = optionValues;
 
       if (isPhysicalInput(input) || hasNoPhysicalController(input)) {
-        let optionValuesMidi = _.map(input.options, option => {
+        input.optionValuesMidi = _.map(input.options, option => {
           return option.valuemidi;
         });
-        input.optionValuesMidi = optionValuesMidi;
       }
+    } else {
+      // continous
+      input.stepGenerationValue = 1;
+    }
+
+    if(isPhysicalInput(input) || hasNoPhysicalController(input)) {
+      input.includeMidi = true;
     }
   });
 

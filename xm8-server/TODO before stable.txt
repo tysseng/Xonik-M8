@@ -1,6 +1,9 @@
 TODO før "stabilt"
 
 TODO:
+
+- Kalkulere interval/antall steps for inputs også for view, nå virker bare options
+
 - Cancel i link-dialog fungerer ikke
 - Standardisere NodeTypes som andre enums
 - Standardisere NodeParamUnits som andre enum

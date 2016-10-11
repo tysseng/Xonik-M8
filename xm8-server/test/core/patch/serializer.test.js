@@ -192,7 +192,6 @@ describe('Serializer:', function() {
 
 
   describe('InputConfig buffer', function() {
-
     let inputs = prepareInputs(physicalInputsForSerialization);
     let inputConfigBuffer = serializeInputConfig(inputs.IN_OSC_1_TRIANGLE);
 
@@ -208,12 +207,56 @@ describe('Serializer:', function() {
       inputConfigBuffer.readUInt8(1).should.equal(spiType.DIRECT_OUTPUT.id);
     });
 
-    it('should have correct inputHwId', function() {
+    it('should have correct position in input array', function() {
       inputConfigBuffer.readUInt16BE(2).should.equal(4);
     });
 
-    it('should have correct outputHwId', function() {
-      voiceGroupIdBuffer.readUInt16BE(4).should.equal(5);
+    it('should include midi', function() {
+      inputConfigBuffer.readUInt8(4).should.equal(1);
     });
+
+    it('should have correct midi status', function() {
+      inputConfigBuffer.readUInt8(5).should.equal(1);
+    });
+
+    it('should have correct midi data1', function() {
+      inputConfigBuffer.readUInt8(6).should.equal(1);
+    });
+
+    it('should have correct midi hires', function() {
+      inputConfigBuffer.readUInt8(7).should.equal(1);
+    });
+
+    it('should have correct midi send', function() {
+      inputConfigBuffer.readUInt8(8).should.equal(1);
+    });
+
+    it('should have correct midi receive', function() {
+      inputConfigBuffer.readUInt8(9).should.equal(1);
+    });
+
+    it('should set correct min', function() {
+      inputConfigBuffer.readUInt8(10).should.equal(1);
+    });
+
+    it('should set correct min', function() {
+      inputConfigBuffer.readUInt8(11).should.equal(1);
+    });
+
+    it('should set correct step generation mode', function() {
+      inputConfigBuffer.readUInt8(12).should.equal(1);
+    });
+
+    /*
+    if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id) {
+      countBuffer.writeUInt8(numberOfOptions, 13);
+      for (i = 0; i < numberOfOptions; i++) {
+        countBuffer.writeUInt8(inputConfig.optionValuesMidi[i], 14 + i);
+      }
+    } else if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.PREDEFINED_INTERVAL.id) {
+      // this is correct even if it looks slightly weird - conversion is done by the preparer
+      countBuffer.writeUInt8(input.stepInterval, 13);
+    } else if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.NUMBER_OF_STEPS.id) {
+      countBuffer.writeUInt8(input.stepInterval, 13*/
   });
 });

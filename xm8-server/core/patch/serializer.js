@@ -79,24 +79,31 @@ export const serializeInputConfig = inputConfig => {
   countBuffer.writeUInt8(spiType.INPUT_CONFIG.size, 0);
   countBuffer.writeUInt8(spiType.INPUT_CONFIG.id, 1);
   countBuffer.writeUInt16BE(inputConfig.inputPosition, 2); // position in graph input array
-  countBuffer.writeUInt8(inputConfig.midi.status, 4);
-  countBuffer.writeUInt8(inputConfig.midi.data1, 5);
-  countBuffer.writeUInt8(inputConfig.midi.hires ? 1 : 0, 6);
-  countBuffer.writeUInt8(inputConfig.midi.send ? 1 : 0, 7);
-  countBuffer.writeUInt8(inputConfig.midi.receive ? 1 : 0, 8);
 
-  // TODO: Handle other modes. Split mode options into separate command?
-  countBuffer.writeUInt8(inputConfig.stepGenerationModeHwId, 9);
+  // midi bytes will be written even if they should not be used by the controller
+  countBuffer.writeUInt8(inputConfig.includeMidi ? 1 : 0, 4);
+  countBuffer.writeUInt8(inputConfig.midi.status, 5);
+  countBuffer.writeUInt8(inputConfig.midi.data1, 6);
+  countBuffer.writeUInt8(inputConfig.midi.hires ? 1 : 0, 7);
+  countBuffer.writeUInt8(inputConfig.midi.send ? 1 : 0, 8);
+  countBuffer.writeUInt8(inputConfig.midi.receive ? 1 : 0, 9);
 
+  countBuffer.writeUInt8(inputConfig.min, 10);
+  countBuffer.writeUInt8(inputConfig.max, 11);
+  countBuffer.writeUInt8(inputConfig.stepGenerationModeHwId, 12);
+
+  //TODO: Separate command for options
+  //TODO: stepGenerationValue instead of other values.
   if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id) {
-    countBuffer.writeUInt8(numberOfOptions, 10);
+    countBuffer.writeUInt8(numberOfOptions, 13);
     for (i = 0; i < numberOfOptions; i++) {
-      countBuffer.writeUInt8(inputConfig.optionValuesMidi[i], 11 + i);
+      countBuffer.writeUInt8(inputConfig.optionValuesMidi[i], 14 + i);
     }
-  } else if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id) {
-
-  } else if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id) {
-
+  } else if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.PREDEFINED_INTERVAL.id) {
+    // this is correct even if it looks slightly weird - conversion is done by the preparer
+    countBuffer.writeUInt8(input.stepInterval, 13);
+  } else if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.NUMBER_OF_STEPS.id) {
+    countBuffer.writeUInt8(input.stepInterval, 13);
   }
 }
 
