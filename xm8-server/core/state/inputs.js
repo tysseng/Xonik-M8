@@ -85,6 +85,7 @@ const input = (state, action) => {
           .setIn(['midi', 'status'], '')
           .setIn(['midi', 'data1'], '');
       }
+      state = state.set('inputPosition', panelControllersById[action.panelControllerId].hwId);
       return state.set('panelController', action.panelControllerId);
     case types.INPUTCONFIG_RENAME:
       return state.setIn(['name', 'full'], action.name);  
