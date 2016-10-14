@@ -53,3 +53,7 @@ const isPhysicalInput = input => {
 const hasNoPhysicalController = input => {
   return input.panelController === panelControllersById.PC_VIRTUAL.id;
 }
+
+const hasPhysicalController = input => {
+  return input.panelController !== panelControllersById.PC_VIRTUAL.id;
+}

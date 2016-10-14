@@ -4,7 +4,7 @@ import { prepareInputs } from '../../../core/patch/inputConfigPreparer';
 import { inputStepGenerationTypesById } from '../../../shared/inputs/InputStepsGenerationTypes';
 
 import physicalInputs from './mockedInputs/physical-inputs-for-serialization';
-import { inputWithMidi, inputWithOptions, inputWithNumberOfSteps, inputWithNumberOfStepsNotSet, inputWithPredefinedStepInterval, inputWithContinousInterval } from './mockedInputs/physical-inputs-for-serialization';
+import { inputWithOptions, inputWithNumberOfSteps, inputWithNumberOfStepsNotSet, inputWithPredefinedStepInterval, inputWithContinousInterval } from './mockedInputs/physical-inputs-for-serialization';
 
 chai.should();
 

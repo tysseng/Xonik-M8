@@ -132,6 +132,7 @@ const getInput = (type, controller) => {
     type,
     scale: unitsById.DAC_VALUE.id,
     panelController: controller.id,
+    inputPosition: controller.hwId,
     name: controller.name,
     midi: midi,
     value: 0,
