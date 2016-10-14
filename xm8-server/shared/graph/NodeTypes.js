@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { map as paramTypes } from './ParameterTypes';
-// TODO: add hw ids
 // TODO: Add property key as key instead, and loop over list to make map?
 
 // global type blacklist is only used if no white or blacklist exists for a parameter
@@ -10,10 +9,10 @@ const globalTypeBlacklist = [
 
 const nodeTypes = {
   NOT_SELECTED: {
-    id: "-1", name: "Type not selected", params: []
+    hwId: "-1", name: "Type not selected", params: []
   },
   SUM: {
-    id: "24", 
+    hwId: 24,
     name: "Sum", 
     description: "Sum two or more values",
     hasVariableParamsLength: true,    
@@ -67,7 +66,7 @@ const nodeTypes = {
     }]
   },
   INVERT: {
-    id: "1", 
+    hwId: 1,
     name: "Invert", 
     description: "Invert around 0",
     hasVariableParamsLength: false,
@@ -79,7 +78,7 @@ const nodeTypes = {
     }]
   },
   INVERT_EACH_SIDE: {
-    id: "2", 
+    hwId: 2,
     name: "Invert each side", 
     description: "Invert around positive or negative center",
     hasVariableParamsLength: false,
@@ -91,10 +90,10 @@ const nodeTypes = {
     }]
   },
   RAMP: {
-    id: "3", name: "Ramp", params: []
+    hwId: 3, name: "Ramp", params: []
   },
   DELAY_LINE: {
-    id: "4", 
+    hwId: 4,
     name: "Delay line", 
     description: "Delay a value for one cycle, allowing loops in the network",
     hasVariableParamsLength: false,
@@ -107,7 +106,7 @@ const nodeTypes = {
     }]
   },
   MULTIPLY: {
-    id: "5", 
+    hwId: 5,
     name: "Multiply",
     description: "Multiply two or more values",
     hasVariableParamsLength: true,
@@ -161,7 +160,7 @@ const nodeTypes = {
     }]
   },
   MEMORY: {
-    id: "6", 
+    hwId: 6,
     name: "Memory",
     description: "Sample and hold a value",    
     hasVariableParamsLength: false,
@@ -185,7 +184,7 @@ const nodeTypes = {
     }]     
   },
   LFO_PULSE: {
-    id: "7", 
+    hwId: 7,
     name: "Lfo - pulse",
     description: "Square wave LFO with variable pulse width and amplitude", 
     hasVariableParamsLength: false,
@@ -227,7 +226,7 @@ const nodeTypes = {
     }]
   },
   SWITCH: {
-    id: "8", 
+    hwId: 8,
     name: "Switch",
     description: "Passes or blocks a signal", 
     hasVariableParamsLength: false,    
@@ -245,7 +244,7 @@ const nodeTypes = {
     }]
   },
   COMPARE: {
-    id: "9", 
+    hwId: 9,
     name: "Compare", 
     description: "Compares values, if value 1 is larger, output is max, else it is min.",
     hasVariableParamsLength: false,    
@@ -263,7 +262,7 @@ const nodeTypes = {
     }]
   },
   MAX: {
-    id: "10", 
+    hwId: 10,
     name: "Max",    
     description: "Maximum of value 1 to value 8",
     hasVariableParamsLength: true,
@@ -317,7 +316,7 @@ const nodeTypes = {
     }]
   },
   MIN: {
-    id: "11", 
+    hwId: 1,
     name: "Min", 
     description: "Minimum of parameter 1 to parameter 8",
     hasVariableParamsLength: true,
@@ -371,7 +370,7 @@ const nodeTypes = {
     }]
   },
   SCALE: {
-    id: "12", 
+    hwId: 12,
     name: "Scale",
     description: "Scales value by factor, where factor / (MAX_POSITIVE + 1)",
     hasVariableParamsLength: false,    
@@ -388,8 +387,8 @@ const nodeTypes = {
       optional: false
     }]
   },
-  TRIGGER: {    
-    id: "13", 
+  TRIGGER: {
+    hwId: 13,
     name: "Trigger", 
     description: "Generates a pulse lasting for one cycle after the input changes from negative to positive.",
     hasVariableParamsLength: false,   
@@ -401,7 +400,7 @@ const nodeTypes = {
     }]
   },
   BINARY_AND: {
-    id: "14", 
+    hwId: 14,
     name: "Binary and", 
     description: "Treat inputs as a binary values and binary AND them",
     hasVariableParamsLength: true,   
@@ -455,7 +454,7 @@ const nodeTypes = {
     }]
   },
   BINARY_OR: {
-    id: "15", 
+    hwId: 15,
     name: "Binary or", 
     description: "Treat inputs as a binary values and binary OR them",
     hasVariableParamsLength: true,   
@@ -509,7 +508,7 @@ const nodeTypes = {
     }]
   },
   BINARY_XOR: {
-    id: "16", 
+    hwId: 16,
     name: "Binary xor", 
     description: "Treat inputs as a binary values and binary XOR them",
     hasVariableParamsLength: false,   
@@ -527,7 +526,7 @@ const nodeTypes = {
     }]
   },
   BINARY_NOT: {
-    id: "17", 
+    hwId: 17,
     name: "Binary not", 
     description: "Treat input as a binary value and binary INVERT it",
     hasVariableParamsLength: false,   
@@ -539,14 +538,14 @@ const nodeTypes = {
     }]
   },
   BUFFER_PARAMETER: {
-    id: "18", 
+    hwId: 18,
     name: "Buffer parameter", 
     description: "Buffer a value for the entire duration of the graph calculation cycle. Use this if an input must be guaranteed to be the same for all nodes during a cycle",
     hasVariableParamsLength: false,   
     params: []
   },
   OUTPUT: {
-    id: "19", 
+    hwId: 19,
     name: "Output",     
     description: "Write output to voice",
     hasVariableParamsLength: false,
@@ -566,7 +565,7 @@ const nodeTypes = {
     }]    
   }, 
   OUTPUT_TUNED: {
-    id: "20", 
+    hwId: 20,
     name: "Output tuned",
     description: "Write output to voice and correct for vco tuning",
     hasVariableParamsLength: false,
@@ -586,7 +585,7 @@ const nodeTypes = {
     }]
   },
   GLIDE: {
-    id: "21", 
+    hwId: 21,
     name: "Glide", 
     description: "Glide any output. Resists change.",
     hasVariableParamsLength: false,
@@ -616,13 +615,13 @@ const nodeTypes = {
     }]
   },  
   QUANTIZE: {
-    id: "22", 
+    hwId: 22,
     name: "Quantize", 
     hasVariableParamsLength: false,
     params: []
   },  
   POSITIVE_EXPONENTIAL: {
-    id: "23", 
+    hwId: 23,
     name: "Positive exponential", 
     description: "Convert linear value to exponential. Only positive values are converted, all others are 0, to allow maximum offness.",
     hasVariableParamsLength: false,
@@ -634,6 +633,11 @@ const nodeTypes = {
     }]
   }
 };
+
+// add ids to each object
+_.each(nodeTypes, (nodeType, id) => {
+  nodeType.id = id;
+});
 
 const nodeTypesList = [
   nodeTypes.NOT_SELECTED,

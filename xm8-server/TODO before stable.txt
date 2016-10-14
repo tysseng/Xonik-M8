@@ -5,7 +5,6 @@ TODO:
 - Range-sjekking på midi options, må være 0-127 eller 0-14bit
 - Cancel i link-dialog fungerer ikke
 - Standardisere NodeTypes som andre enums
-- Standardisere ParameterUnits som andre enum
 
 - Teste displayoptions, kalle det noe annet?
 

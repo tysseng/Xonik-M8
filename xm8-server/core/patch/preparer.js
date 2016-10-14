@@ -161,6 +161,14 @@ function getReachableIndependentNodes(nodes){
   return independentNodes;
 }
 
+const setNodeTypeHwIdOnNode = nodes => {
+  _.each(nodes, node => {
+    let nodeType = nodeTypesIdMap[node.type];
+    node.typeHwId = nodeType.hwId;
+  });
+  return nodes;
+}
+
 // Traverses the node tree from independent nodes to all their outputs. This orders them in an array in a way
 // that makes sure that if we calculate any outputs in the same order, we can traverse the array only once to
 // calculate all outputs.
@@ -290,6 +298,7 @@ function prepareNetForSerialization(nodesMap, virtualInputs = []){
 
   let nodeCount = nodes.length;
   nodes = removeUnreachable(nodes);
+  nodes = setNodeTypeHwIdOnNode(nodes);
 
   let reachableNodeCount = nodes.length;
   if(reachableNodeCount != nodeCount){

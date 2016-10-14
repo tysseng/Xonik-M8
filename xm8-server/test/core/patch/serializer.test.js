@@ -1,6 +1,7 @@
 import chai from 'chai';
 
-import spiType from '../../../core/spi/spiType.js';
+import spiType from '../../../core/spi/spiType';
+import { idMap as nodeTypesById } from '../../../shared/graph/NodeTypes';
 import { prepareNetForSerialization } from '../../../core/patch/preparer';
 import { prepareInputs } from '../../../core/patch/inputConfigPreparer';
 import {
@@ -100,6 +101,7 @@ describe('Serializer:', function() {
   describe('Node buffer', function() {
 
     let preparedNet = prepareNetForSerialization(testPatch.toJS());
+
     let nodeWithConstants = preparedNet.nodes['0'];
     let nodeWithResult = preparedNet.nodes['1'];
 
@@ -123,7 +125,7 @@ describe('Serializer:', function() {
     });
 
     it('should have correct type', function() {
-      nodeBuffer.readUInt8(4).should.equal(parseInt(nodeWithConstants.type));
+      nodeBuffer.readUInt8(4).should.equal(nodeTypesById[nodeWithConstants.type].hwId);
     });
 
     it('should have correct parameter values', function() {

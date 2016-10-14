@@ -6,7 +6,7 @@ export const serializeNode = node => {
   buffer.writeUInt8(spiType.NODE.size, 0);
   buffer.writeUInt8(spiType.NODE.id, 1);
   buffer.writeUInt16BE(node.nodePos, 2);
-  buffer.writeUInt8(node.type, 4);
+  buffer.writeUInt8(node.typeHwId, 4);
 
   let paramsInUse = node.paramsInUse;
 

@@ -102,9 +102,8 @@ const rangeValidator = (unit, value) => value <= unitsById[unit].max && value >=
 const numberValidator = value => !isNaN(value);
 const intValidator = value => value === parseInt(value, 10);
 
-let units = [
-  {
-    id: 'FRACTION', 
+let unitsById = {
+  FRACTION: {
     name: "Fraction", 
     min: -1, 
     max: 1, 
@@ -114,9 +113,8 @@ let units = [
     }, 
     validator: (value) => numberValidator(value) && rangeValidator('FRACTION', value)
   },
-  {
-    id: 'PERCENTAGE', 
-    name: "Percent", 
+  PERCENTAGE: {
+    name: "Percent",
     min: -100, 
     max: 100, 
     converters: {
@@ -125,9 +123,8 @@ let units = [
     }, 
     validator: (value) => numberValidator(value) && rangeValidator('PERCENTAGE', value)
   },
-  {
-    id: 'CENTS', 
-    name: "Cents", 
+  CENTS: {
+    name: "Cents",
     min: -6000,
     max: 6000,
     converters: {
@@ -136,9 +133,8 @@ let units = [
     },  
     validator: (value) => numberValidator(value) && rangeValidator('CENTS', value)
   },
-  {
-    id: 'SEMITONES',
-    name: "Semitones", 
+  SEMITONES: {
+    name: "Semitones",
     min: -60,
     max: 60,    
     converters: {
@@ -147,9 +143,8 @@ let units = [
     },  
     validator: (value) => numberValidator(value) && rangeValidator('SEMITONES', value)
   },
-  {
-    id: 'OCTAVES', 
-    name: "Octaves", 
+  OCTAVES: {
+    name: "Octaves",
     min: -5,
     max: 5,    
     converters: {
@@ -158,9 +153,8 @@ let units = [
     },      
     validator: (value) => numberValidator(value) && rangeValidator('OCTAVES', value)
   },
-  {
-    id: 'VOLTS', 
-    name: "Volts", 
+  VOLTS: {
+    name: "Volts",
     min: -5, 
     max: 5, 
     converters: {
@@ -169,9 +163,8 @@ let units = [
     },      
     validator: (value) => numberValidator(value) && rangeValidator('VOLTS', value)
   },
-  {
-    id: 'BINARY', 
-    name: "Binary", 
+  BINARY: {
+    name: "Binary",
     min: 0, 
     max: 1, 
     converters: {
@@ -180,9 +173,8 @@ let units = [
     },       
     validator: (value) => numberValidator(value) && intValidator(value) && rangeValidator('BINARY', value)
   },
-  {
-    id: 'DAC_VALUE', 
-    name: "Dac value", 
+  DAC_VALUE: {
+    name: "Dac value",
     min: -32768, 
     max: 32768, 
     converters: {
@@ -191,12 +183,23 @@ let units = [
     },  
     validator: (value) => numberValidator(value) && rangeValidator('DAC_VALUE', value)
   }
-];
+};
 
-let unitsById = {};
-_.each(units, unit => {
-  unitsById[unit.id] = unit;
+// add ids to each object
+_.each(unitsById, (unit, id) => {
+  unit.id = id;
 });
+
+let units = [
+  unitsById.FRACTION,
+  unitsById.PERCENTAGE,
+  unitsById.CENTS,
+  unitsById.SEMITONES,
+  unitsById.OCTAVES,
+  unitsById.VOLTS,
+  unitsById.BINARY,
+  unitsById.DAC_VALUE
+]
 
 export {unitsById};
 export default units;
