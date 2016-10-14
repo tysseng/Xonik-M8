@@ -52,7 +52,7 @@ const emptyPatchState = (() => {
       patchStates.push(new Map({
         graph: emptyGraphState,
         matrix: emptyMatrixState,
-        virtualInputs: emptyVirtualInputsState,
+        virtualInputPositions: emptyVirtualInputsState,
         inputgroups: emptyInputGroupsState
       }));
     }

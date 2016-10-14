@@ -5,7 +5,7 @@ import {
   serializeConstant, serializeConstantsCount,
   serializeNode, serializeNodeCount,
   serializeVoiceGroupId, serializeDirectOutput} from './serializer.js';
-import { prepareNetForSerialization } from './preparer.js';
+
 import { getUsedDirectOutputs } from './matrixPreparer.js';
 import printer from './printer.js';
 
@@ -22,8 +22,8 @@ Serialization:
 - Must send physical inputs config to server - midi messages to listen to on MCU
 
  */
-export function serialize(nodes, matrix, graphOutputs, voiceGroupId){
-  var net = prepareNetForSerialization(nodes);
+export function serialize(net, matrix, graphOutputs, voiceGroupId){
+
   var directoutputs = getUsedDirectOutputs(matrix.directoutputs, graphOutputs);
   printer.printNet(net);
 
@@ -50,7 +50,6 @@ export function serialize(nodes, matrix, graphOutputs, voiceGroupId){
     var serializedNode = serializeDirectOutput(inputHwId, outputHwId);
     buffers.push(serializedNode);
   });
-
 
   return buffers;
 }

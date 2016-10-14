@@ -2,31 +2,26 @@ TODO før "stabilt"
 
 TODO:
 
+- flytt offsetgenerering for inputconfig position til preparer og fjern fra reducer. Test reducer
 - Kalkulere interval/antall steps for inputs også for view, nå virker bare options
-
+- Range-sjekking på midi options, må være 0-127 eller 0-14bit
 - Cancel i link-dialog fungerer ikke
 - Standardisere NodeTypes som andre enums
-- Standardisere NodeParamUnits som andre enum
+- Standardisere ParameterUnits som andre enum
 
-- Tenk gjennom hvordan midi skal fungere hvis mapping til fysisk input
-    - FASIT: prøv å tillate en midi-melding å mappe til flere controllere (men hvis kanskje kollisjon   med farge i gui?)
 - Teste displayoptions, kalle det noe annet?
 
 - Fikse subscribe i patchRepo
 - Serialisering
-    - sende input config (?)
     - sende virtual controllers
 - Ta vare på virtual input ordering i state for å kunne sende virtual controllers
-- Faner med matrix/graph/inputs/groups under patch
-    - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
+    - Legge til input array position på input config og serialisere denne
+
 - Scrollbars i matrix
 - Bedre ikoner for reset og delete, bedre skille i meny
-
 - Reset patch virket ikke på inputs og matrix
 - rename physicalInputs til panelInputs?
-
 - teste outputs-reducer
-
 - Trekk ut inputstepsgeneration-konstanter i egen fil
 
 Småting
@@ -37,6 +32,8 @@ Småting
 
 
 For later:
+- Faner med matrix/graph/inputs/groups under patch
+    - Må lage noe som husker hvilken som vises slik at når man klikker patches i hovedmeny så kommer man til sist valgte underkat.
 - Make preparers work on immutable objects?
 - Consider having only one type of inputs and let all inputs be per-patch configurable. Makes things much easier to understand and
   means we do not have to handle midi specially for virtual controllers etc.

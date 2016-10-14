@@ -244,26 +244,25 @@ function isNetValid(nodesState){
   return isValid;
 }
 
-// TODO: This must support direct matrix as well? (Or should that be a completely separate affair
+// TODO: This must support direct matrix as well? (Or should that be a completely separate affair?)
 const findPureVirtualInputsInUse = (virtualInputs, nodes, offset) => {
-  let pureVirtualInputs = [];
+  let pureVirtualInputs = {};
 
   _.each(nodes, node => {
      _.each(node.params, param => {
        if(param.type === paramTypes.map.VIRTUALINPUT.id){
          let virtualInput = virtualInputs[param.value];
 
-         // virtual inputs that are just alternative representations of a physical inputs are
+         // virtual inputs that are just alternative representations of physical inputs are
          // replaced with the id of the physical input, no need to duplicate.
          if(virtualInput.panelController === panelControllersById.PC_VIRTUAL.id){
-           let inputIndex = pureVirtualInputs.indexOf(virtualInput.id);
-           if(inputIndex === -1){
-             inputIndex = pureVirtualInputs.length;
-             pureVirtualInputs.push(virtualInput.id);
+           if(!pureVirtualInputs[virtualInput.id]){
+             let inputIndex = Object.keys(pureVirtualInputs).length + offset;
+             console.log("input index ", inputIndex, "id", virtualInput.id)
+             pureVirtualInputs[virtualInput.id] = inputIndex;
            }
-           inputIndex = inputIndex + offset;
 
-           param.nodePos = inputIndex;
+           param.nodePos = pureVirtualInputs[virtualInput.id];
          } else {
            param.nodePos = getControllerHwId(virtualInput.panelController);
          }
@@ -305,13 +304,13 @@ function prepareNetForSerialization(nodesMap, virtualInputs = []){
   let pureVirtualInputs = findPureVirtualInputsInUse(virtualInputs, nodes, firstVirtualInputIndex);
 
   let independentNodes = getReachableIndependentNodes(nodes);
-  let firstNodeIndex = firstVirtualInputIndex + pureVirtualInputs.length + constants.length;
+  let firstNodeIndex = firstVirtualInputIndex + Object.keys(pureVirtualInputs).length + constants.length;
   let sortedNodes = sortNodes(independentNodes, firstNodeIndex );
 
   return {
     constants: constants,
     nodes: sortedNodes,
-    virtualInputs: pureVirtualInputs
+    virtualInputPositions: pureVirtualInputs
   }
 }
 

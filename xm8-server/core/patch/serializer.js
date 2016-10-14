@@ -1,109 +1,119 @@
 var _ = require('lodash');
 var spiType = require('../spi/spiType.js');
-import { inputStepGenerationTypesById } from '../../shared/inputs/InputStepsGenerationTypes';
 
 export const serializeNode = node => {
-
-  var nodeBuffer = new Buffer(spiType.NODE.size);
-  nodeBuffer.writeUInt8(spiType.NODE.size, 0);
-  nodeBuffer.writeUInt8(spiType.NODE.id, 1);
-  nodeBuffer.writeUInt16BE(node.nodePos, 2);
-  nodeBuffer.writeUInt8(node.type, 4);
+  var buffer = new Buffer(spiType.NODE.size);
+  buffer.writeUInt8(spiType.NODE.size, 0);
+  buffer.writeUInt8(spiType.NODE.id, 1);
+  buffer.writeUInt16BE(node.nodePos, 2);
+  buffer.writeUInt8(node.type, 4);
 
   let paramsInUse = node.paramsInUse;
 
   for(var i = 0; i<8; i++){
     var paramVal = (i < paramsInUse ? node.params[i].nodePos : 0);
-    nodeBuffer.writeUInt16BE(paramVal, i * 2 + 5);
+    buffer.writeUInt16BE(paramVal, i * 2 + 5);
   }
 
-  nodeBuffer.writeUInt8(paramsInUse, 21);
+  buffer.writeUInt8(paramsInUse, 21);
 
   var result = (node.result.value && node.result.value !== '' ? node.result.value : 0);
-  nodeBuffer.writeInt16BE(result, 22);
-  return nodeBuffer;
+  buffer.writeInt16BE(result, 22);
+  return buffer;
 }
 
 export const serializeVoiceGroupId = voiceGroupId => {
-  var constantBuffer = new Buffer(spiType.VOICE_GROUP_ID.size);
-  constantBuffer.writeUInt8(spiType.VOICE_GROUP_ID.size, 0);
-  constantBuffer.writeUInt8(spiType.VOICE_GROUP_ID.id, 1);
-  constantBuffer.writeUInt8(voiceGroupId, 2);
+  var buffer = new Buffer(spiType.VOICE_GROUP_ID.size);
+  buffer.writeUInt8(spiType.VOICE_GROUP_ID.size, 0);
+  buffer.writeUInt8(spiType.VOICE_GROUP_ID.id, 1);
+  buffer.writeUInt8(voiceGroupId, 2);
 
-  return constantBuffer;
+  return buffer;
 }
 
 export const serializeConstant = (position, value) => {
-  var constantBuffer = new Buffer(spiType.CONSTANT.size);
-  constantBuffer.writeUInt8(spiType.CONSTANT.size, 0);
-  constantBuffer.writeUInt8(spiType.CONSTANT.id, 1);
-  constantBuffer.writeUInt16BE(position, 2);
-  constantBuffer.writeInt16BE(value, 4);
+  var buffer = new Buffer(spiType.CONSTANT.size);
+  buffer.writeUInt8(spiType.CONSTANT.size, 0);
+  buffer.writeUInt8(spiType.CONSTANT.id, 1);
+  buffer.writeUInt16BE(position, 2);
+  buffer.writeInt16BE(value, 4);
 
-  return constantBuffer;
+  return buffer;
 }
 
 export const serializeConstantsCount = constants => {
-  var countBuffer = new Buffer(spiType.CONSTANTS_COUNT.size);
-  countBuffer.writeUInt8(spiType.CONSTANTS_COUNT.size, 0);
-  countBuffer.writeUInt8(spiType.CONSTANTS_COUNT.id, 1);
-  countBuffer.writeUInt16BE(constants.length, 2);
+  var buffer = new Buffer(spiType.CONSTANTS_COUNT.size);
+  buffer.writeUInt8(spiType.CONSTANTS_COUNT.size, 0);
+  buffer.writeUInt8(spiType.CONSTANTS_COUNT.id, 1);
+  buffer.writeUInt16BE(constants.length, 2);
 
-  return countBuffer;
+  return buffer;
 }
 
 export const serializeNodeCount = nodes => {
-  var countBuffer = new Buffer(spiType.NODE_COUNT.size);
-  countBuffer.writeUInt8(spiType.NODE_COUNT.size, 0);
-  countBuffer.writeUInt8(spiType.NODE_COUNT.id, 1);
-  countBuffer.writeUInt16BE(nodes.length, 2);
+  var buffer = new Buffer(spiType.NODE_COUNT.size);
+  buffer.writeUInt8(spiType.NODE_COUNT.size, 0);
+  buffer.writeUInt8(spiType.NODE_COUNT.id, 1);
+  buffer.writeUInt16BE(nodes.length, 2);
 
-  return countBuffer;
+  return buffer;
 }
 
 export const serializeDirectOutput = (inputHwId, outputHwId) => {
-  var countBuffer = new Buffer(spiType.DIRECT_OUTPUT.size);
-  countBuffer.writeUInt8(spiType.DIRECT_OUTPUT.size, 0);
-  countBuffer.writeUInt8(spiType.DIRECT_OUTPUT.id, 1);
-  countBuffer.writeUInt16BE(inputHwId, 2);
-  countBuffer.writeUInt16BE(outputHwId, 4);
+  var buffer = new Buffer(spiType.DIRECT_OUTPUT.size);
+  buffer.writeUInt8(spiType.DIRECT_OUTPUT.size, 0);
+  buffer.writeUInt8(spiType.DIRECT_OUTPUT.id, 1);
+  buffer.writeUInt16BE(inputHwId, 2);
+  buffer.writeUInt16BE(outputHwId, 4);
 
-  return countBuffer;
+  return buffer;
 }
 
 export const serializeInputConfig = inputConfig => {
 
-  let numberOfOptions = inputConfig.optionValuesMidi.length;
-
-  var countBuffer = new Buffer(spiType.INPUT_CONFIG.size);
-  countBuffer.writeUInt8(spiType.INPUT_CONFIG.size, 0);
-  countBuffer.writeUInt8(spiType.INPUT_CONFIG.id, 1);
-  countBuffer.writeUInt16BE(inputConfig.inputPosition, 2); // position in graph input array
+  var buffer = new Buffer(spiType.INPUT_CONFIG.size);
+  buffer.writeUInt8(spiType.INPUT_CONFIG.size, 0);
+  buffer.writeUInt8(spiType.INPUT_CONFIG.id, 1);
+  buffer.writeUInt16BE(inputConfig.inputPosition, 2); // position in graph input array
 
   // midi bytes will be written even if they should not be used by the controller
-  countBuffer.writeUInt8(inputConfig.includeMidi ? 1 : 0, 4);
-  countBuffer.writeUInt8(inputConfig.midi.status, 5);
-  countBuffer.writeUInt8(inputConfig.midi.data1, 6);
-  countBuffer.writeUInt8(inputConfig.midi.hires ? 1 : 0, 7);
-  countBuffer.writeUInt8(inputConfig.midi.send ? 1 : 0, 8);
-  countBuffer.writeUInt8(inputConfig.midi.receive ? 1 : 0, 9);
+  buffer.writeUInt8(inputConfig.includeMidi ? 1 : 0, 4);
+  buffer.writeUInt8(inputConfig.midi.status, 5);
+  buffer.writeUInt8(inputConfig.midi.data1, 6);
+  buffer.writeUInt8(inputConfig.midi.hires ? 1 : 0, 7);
+  buffer.writeUInt8(inputConfig.midi.send ? 1 : 0, 8);
+  buffer.writeUInt8(inputConfig.midi.receive ? 1 : 0, 9);
 
-  countBuffer.writeUInt8(inputConfig.min, 10);
-  countBuffer.writeUInt8(inputConfig.max, 11);
-  countBuffer.writeUInt8(inputConfig.stepGenerationModeHwId, 12);
+  buffer.writeInt16BE(inputConfig.min, 10);
+  buffer.writeInt16BE(inputConfig.max, 12);
+  buffer.writeUInt8(inputConfig.stepGenerationModeHwId, 14);
+  buffer.writeUInt16BE(inputConfig.stepGenerationValue, 15);
 
-  //TODO: Separate command for options
-  //TODO: stepGenerationValue instead of other values.
-  if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.OPTIONS.id) {
-    countBuffer.writeUInt8(numberOfOptions, 13);
-    for (i = 0; i < numberOfOptions; i++) {
-      countBuffer.writeUInt8(inputConfig.optionValuesMidi[i], 14 + i);
-    }
-  } else if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.PREDEFINED_INTERVAL.id) {
-    // this is correct even if it looks slightly weird - conversion is done by the preparer
-    countBuffer.writeUInt8(input.stepInterval, 13);
-  } else if(inputConfig.stepGenerationMode === inputStepGenerationTypesById.NUMBER_OF_STEPS.id) {
-    countBuffer.writeUInt8(input.stepInterval, 13);
-  }
+  return buffer;
 }
+
+export const serializeInputConfigOption = (inputConfig, index) => {
+
+  var buffer = new Buffer(spiType.INPUT_CONFIG_OPTION.size);
+  buffer.writeUInt8(spiType.INPUT_CONFIG_OPTION.size, 0);
+  buffer.writeUInt8(spiType.INPUT_CONFIG_OPTION.id, 1);
+  buffer.writeUInt8(index, 2);
+  buffer.writeInt16BE(inputConfig.optionValues[index], 3);
+
+  return buffer;
+}
+
+export const serializeInputConfigOptionMidi = (inputConfig, index) => {
+
+  var buffer = new Buffer(spiType.INPUT_CONFIG_OPTION_MIDI.size);
+  buffer.writeUInt8(spiType.INPUT_CONFIG_OPTION_MIDI.size, 0);
+  buffer.writeUInt8(spiType.INPUT_CONFIG_OPTION_MIDI.id, 1);
+  buffer.writeUInt8(index, 2);
+  // 16 bit unsigned to be able to use hi-res midi
+  buffer.writeUInt16BE(inputConfig.optionValuesMidi[index], 3);
+
+  return buffer;
+}
+
+
 

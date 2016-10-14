@@ -18,7 +18,7 @@
  * 8) One virtual input without any link to midi or physical inputs
    */
 
-import { init, invert, sum, result, output, outputTuned, param, link, getMutableNodes } from './nodesTestTools';
+import { init, invert, sum, result, output, outputTuned, param, link, getImmutableNodes } from './nodesTestTools';
 import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
 import { inputsById } from '../../../../shared/graph/Inputs';
 import { unitsById } from '../../../../shared/graph/ParameterUnits';
@@ -42,4 +42,6 @@ link(node1, outputNode, '0');
 let outputTunedNode = outputTuned(outputsById.OUT_FILTER_1_RESONANCE);
 link(node1, outputTunedNode, '0');
 
-export default getMutableNodes;
+let graph = getImmutableNodes();
+
+export default graph;

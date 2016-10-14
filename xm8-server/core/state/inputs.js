@@ -126,6 +126,18 @@ const byId = (state, action) => {
   return state;
 }
 
+const updateVirtualInputPositions = (state, action) => {
+  _.each(state.get('byId').toJS, input => {
+    let offset = config.graph.numberOfInputs;
+    let newPosition = action.virtualInputPositions[input.id];
+    if(newPosition !== input.inputPosition){
+      state = state.updateIn([input.id, 'inputPosition'], newPosition);
+    }
+  });
+
+  return state;
+}
+
 const inputs = (state, action) => {
   switch(action.type){
     case types.INPUTCONFIG_NEW_INPUT:
@@ -140,6 +152,8 @@ const inputs = (state, action) => {
     case types.INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI:
     case types.RESET_PHYSICAL_INPUT:
       return state.update('byId', inputByIdMap => byId(inputByIdMap, action));
+    case types.INPUTCONFIG_UPDATE_POSITIONS_FOR_VIRTUAL:
+      return updateVirtualInputPositions(state, action);
     default:
       return state; 
   }   
@@ -148,7 +162,7 @@ const inputs = (state, action) => {
 const getInputType = action => {
   let reducer = 'virtual';
   if(action.inputId){
-    reducer = action.inputId.startsWith('virt') ? 'virtual' : 'physical'; 
+    reducer = action.inputId.startsWith('virt') ? 'virtual' : 'physical';
   }
   return reducer;
 }
@@ -207,7 +221,8 @@ export const physicalInputs = (state = emptyPhysicalState, action) => {
 
 // virtual inputs reducer
 export const virtualInputs = (state, action) => {
-  if(getInputType(action) === 'virtual') {
+  if(getInputType(action) === 'virtual' ||
+    action.type === types.INPUTCONFIG_UPDATE_POSITIONS_FOR_VIRTUAL) {
     if (action.type === patchActionTypes.RESET_PATCH) {
       return emptyVirtualState;
     } else {

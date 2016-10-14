@@ -10,7 +10,7 @@ chai.should();
 
 describe('Input config preparation:', function() {
 
-  let preparedInputs = prepareInputs(physicalInputs);
+  let preparedInputs = prepareInputs(physicalInputs, 0);
 
   describe('Options:', function () {
 

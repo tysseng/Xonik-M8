@@ -100,6 +100,10 @@ export const getMutableNodes = () => {
   return getNodes(voiceGroupId).toJS();
 }
 
+export const getImmutableNodes = () => {
+  return getNodes(voiceGroupId);
+}
+
 export const getMutableOutputs = () => {
   return getGraphOutputs(voiceGroupId).toJS();
 }

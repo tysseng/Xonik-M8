@@ -10,6 +10,7 @@ export const types = {
   INPUTCONFIG_NEW_OPTION: 'INPUTCONFIG_NEW_OPTION',
   INPUTCONFIG_SPREAD_OPTIONS_VALUES: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES',
   INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI: 'INPUTCONFIG_SPREAD_OPTIONS_VALUES_MIDI',
+  INPUTCONFIG_UPDATE_POSITIONS_FOR_VIRTUAL: 'INPUTCONFIG_UPDATE_POSITIONS_FOR_VIRTUAL',
   INPUT_DIRECT_OUTPUT_TOGGLE: 'INPUT_DIRECT_OUTPUT_TOGGLE',
   LOAD_PHYSICAL_INPUTS_FROM_FILE: 'LOAD_PHYSICAL_INPUTS_FROM_FILE',
   RESET_PHYSICAL_INPUTS: 'RESET_PHYSICAL_INPUTS',
@@ -174,6 +175,15 @@ export const resetPhysicalInput = (inputId, patchNumber = '-') => {
   return {
     type: types.RESET_PHYSICAL_INPUT,
     inputId,
+    target: 'SERVER',
+    patchNumber
+  }
+};
+
+export const updateVirtualInputPositions = (virtualInputPositions, patchNumber = '-') => {
+  return {
+    type: types.INPUTCONFIG_UPDATE_POSITIONS_FOR_VIRTUAL,
+    virtualInputPositions,
     target: 'SERVER',
     patchNumber
   }

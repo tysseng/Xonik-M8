@@ -18,6 +18,11 @@ midiReceive(inputWithMidi, true);
 let inputWithNumberOfSteps = inputsById.IN_AMP_ENV_RELEASE;
 stepGenerationMode(inputWithNumberOfSteps, inputStepGenerationTypesById.NUMBER_OF_STEPS);
 numberOfSteps(inputWithNumberOfSteps, 4);
+midiStatus(inputWithNumberOfSteps, midiStatusByNumber[0xB0].id);
+midiData1(inputWithNumberOfSteps, controllersById[7].id);
+midiHires(inputWithNumberOfSteps, true);
+midiSend(inputWithNumberOfSteps, true);
+midiReceive(inputWithNumberOfSteps, true);
 
 // options are converted to DAC values by the GUI code.
 let inputWithOptions = inputsById.IN_OSC_1_TRIANGLE;

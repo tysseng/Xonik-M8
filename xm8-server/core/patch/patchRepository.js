@@ -2,11 +2,12 @@ import _ from 'lodash';
 import store from '../state/store.js';
 import config from '../../shared/config.js';
 import spi from '../spi/spi-fd.js';
-import preparer from './preparer.js';
+import { prepareNetForSerialization, isNetValid } from './preparer.js';
 import commands from './commands.js';
 import { getPatch, getControllers, getNodes, getMatrix, getGraphOutputs } from '../state/selectors';
 
 import { loadPatchFromFile, setLoadedPatchFileDetails } from '../../shared/state/actions/patch';
+import { updateVirtualInputPositions } from '../../shared/state/actions/inputs';
 import { initPatchAutosaver } from '../autosave/autosaver';
 import { filetypes } from '../../shared/FileTypes';
 import { saveFile, loadFile } from '../persistence/fileRepo';
@@ -33,14 +34,18 @@ function sendPatch(voiceGroupId){
   let matrixState = getMatrix(voiceGroupId).toJS();
   let graphOutputsState = getGraphOutputs(voiceGroupId).toJS();
 
-  if(!preparer.isNetValid(nodesState)){
+  if(!isNetValid(nodesState)){
     console.log("Patch has validation errors, synth voices not updated");
     return {updated: false, message: "Graph has validation errors, synth voices not updated"};
   }
-  
+
+  // do whatever neccesary to make serialization a trivial process.
+  var net = prepareNetForSerialization(nodesState);
+  updateVirtualInputPositions(net.virtualInputPositions, voiceGroupId);
+
   spi.write(commands.stop);
 
-  var buffers = serialize(nodesState, matrixState, graphOutputsState, voiceGroupId);
+  var buffers = serialize(net, matrixState, graphOutputsState, voiceGroupId);
   _.each(buffers, function(buffer){
     spi.write(buffer);
   });  

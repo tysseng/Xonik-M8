@@ -262,13 +262,13 @@ describe('Patch preparation:', function() {
   describe('Virtual inputs:', function () {
 
     let result = prepareNetForSerialization(nodesWithVirtualInputs, virtualInputsForNodeTesting);
-    let virtualInputs = result.virtualInputs;
+    let virtualInputPositions = result.virtualInputPositions;
     let nodes = result.nodes;
 
     it('Should extract pure virtual inputs', function () {
-      virtualInputs.length.should.equal(2);
-      virtualInputs[0].should.equal(pureVirtual1.id);
-      virtualInputs[1].should.equal(pureVirtual2.id);
+      Object.keys(virtualInputPositions).length.should.equal(2);
+      virtualInputPositions[pureVirtual1.id].should.equal(64);
+      virtualInputPositions[pureVirtual2.id].should.equal(65);
       // pureVirtual3 is unreachable and should not be part of the result
       // virtualWithPhysical is, as the name implies, connected to a panel controller should not be part of the result
     });
