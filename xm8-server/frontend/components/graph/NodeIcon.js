@@ -57,7 +57,6 @@ const getIcon = (nodeType, x, y) => {
 }
 
 const NodeIcon = ({node, x, y}) => {
-
   let nodeType = nodeTypesById[node.type];
   return getIcon(nodeType, x, y);
 }

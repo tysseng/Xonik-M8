@@ -7,14 +7,14 @@ import NodeParameterForm from './NodeParameterForm';
 import ParameterUnitDropdown from './ParameterUnitDropdown';
 import MiniIcon from '../../framework/MiniIcon';
 
-import nodeTypes from '../../../../shared/graph/NodeTypes.js';
+import { nodeTypesById } from '../../../../shared/graph/NodeTypes.js';
 
 const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, onNodeResultChange, onResultUnitChange, onParameterTypeChange, onParameterValueChange, onParameterUnitChange, onCloseDialog }) => {
 
   if(!node){
     return null;
   }
-  let nodeType = nodeTypes.nodeTypesById[node.type];
+  let nodeType = nodeTypesById[node.type];
 
   return (
 

@@ -63,7 +63,7 @@ const getEmptyResult = () => Map({
 const getEmptyNode = (nodeId) => Map({
   id: nodeId,
   name: "Node " + nodeId,  
-  type: "-1",
+  type: nodeTypesById.NOT_SELECTED.id,
   vis: Map({x: 10, y: 10}),
   consumers: Map(),
   result: getEmptyResult()

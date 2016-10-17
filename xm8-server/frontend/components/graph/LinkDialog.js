@@ -27,7 +27,7 @@ const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate, onNodeTypeChange}) 
 
   return ( 
     <ModalBox heading='Connect nodes' boxClass='linkdialog'>
-      {toNode.type === "-1" && 
+      {toNode.type === nodeTypesById.NOT_SELECTED.id &&
         <div>
           <div className="intro">Before linking {fromNode.name} and {toNode.name} you have to select the type for {toNode.name}. What do you want it to be?</div>
           <div>
