@@ -1,12 +1,10 @@
 import React from 'react'
 import _ from 'lodash'
-import nodeTypes from '../../../../shared/graph/NodeTypes.js';
-
-let nodeTypeMap = nodeTypes.map;
+import { nodeTypesById } from '../../../../shared/graph/NodeTypes';
 
 const NodeLinkDropdown = ({currentnode, nodes, value, onNodeLinkChange}) => {
   let linkableNodes = _.filter(nodes, node => {
-    if(node.id !== currentnode.id && node.type !== nodeTypeMap.OUTPUT.id){
+    if(node.id !== currentnode.id && node.type !== nodeTypesById.OUTPUT.id){
       return true;
     }
   });

@@ -1,7 +1,7 @@
 import chai from 'chai';
 
 import spiType from '../../../core/spi/spiType';
-import { idMap as nodeTypesById } from '../../../shared/graph/NodeTypes';
+import { nodeTypesById } from '../../../shared/graph/NodeTypes';
 import { prepareNetForSerialization } from '../../../core/patch/preparer';
 import { prepareInputs } from '../../../core/patch/inputConfigPreparer';
 import {

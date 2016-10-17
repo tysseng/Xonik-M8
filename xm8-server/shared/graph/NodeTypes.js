@@ -7,7 +7,7 @@ const globalTypeBlacklist = [
   paramTypes.OUTPUT.id
 ];
 
-const nodeTypes = {
+const nodeTypesById = {
   NOT_SELECTED: {
     hwId: "-1", name: "Type not selected", params: []
   },
@@ -635,45 +635,36 @@ const nodeTypes = {
 };
 
 // add ids to each object
-_.each(nodeTypes, (nodeType, id) => {
+_.each(nodeTypesById, (nodeType, id) => {
   nodeType.id = id;
 });
 
-const nodeTypesList = [
-  nodeTypes.NOT_SELECTED,
-  nodeTypes.SUM,
-  nodeTypes.INVERT,
-  nodeTypes.INVERT_EACH_SIDE,
-  nodeTypes.RAMP,
-  nodeTypes.DELAY_LINE,
-  nodeTypes.MULTIPLY,
-  nodeTypes.MEMORY,
-  nodeTypes.LFO_PULSE,
-  nodeTypes.SWITCH,
-  nodeTypes.COMPARE,
-  nodeTypes.MAX,
-  nodeTypes.MIN,
-  nodeTypes.SCALE,
-  nodeTypes.TRIGGER,
-  nodeTypes.BINARY_AND,
-  nodeTypes.BINARY_OR,
-  nodeTypes.BINARY_XOR,
-  nodeTypes.BINARY_NOT,
-  nodeTypes.BUFFER_PARAMETER,
-  nodeTypes.OUTPUT,
-  nodeTypes.OUTPUT_TUNED,
-  nodeTypes.GLIDE,
-  nodeTypes.QUANTIZE,
-  nodeTypes.POSITIVE_EXPONENTIAL
+const nodeTypes = [
+  nodeTypesById.NOT_SELECTED,
+  nodeTypesById.SUM,
+  nodeTypesById.INVERT,
+  nodeTypesById.INVERT_EACH_SIDE,
+  nodeTypesById.RAMP,
+  nodeTypesById.DELAY_LINE,
+  nodeTypesById.MULTIPLY,
+  nodeTypesById.MEMORY,
+  nodeTypesById.LFO_PULSE,
+  nodeTypesById.SWITCH,
+  nodeTypesById.COMPARE,
+  nodeTypesById.MAX,
+  nodeTypesById.MIN,
+  nodeTypesById.SCALE,
+  nodeTypesById.TRIGGER,
+  nodeTypesById.BINARY_AND,
+  nodeTypesById.BINARY_OR,
+  nodeTypesById.BINARY_XOR,
+  nodeTypesById.BINARY_NOT,
+  nodeTypesById.BUFFER_PARAMETER,
+  nodeTypesById.OUTPUT,
+  nodeTypesById.OUTPUT_TUNED,
+  nodeTypesById.GLIDE,
+  nodeTypesById.QUANTIZE,
+  nodeTypesById.POSITIVE_EXPONENTIAL
 ];
 
-// make it easy to lookup a node type based on its id
-let nodeTypesIdMap = {};
-_.each(nodeTypesList, function(nodeType){
-  nodeTypesIdMap[nodeType.id] = nodeType;
-});
-
-module.exports.map = nodeTypes;
-module.exports.list = nodeTypesList;
-module.exports.idMap = nodeTypesIdMap;
-module.exports.globalTypeBlacklist = globalTypeBlacklist;
+export { nodeTypesById, nodeTypes, globalTypeBlacklist };

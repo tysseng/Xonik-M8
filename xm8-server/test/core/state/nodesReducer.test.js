@@ -9,7 +9,7 @@ import { resetGraph,
   createNewLink, deleteLink, changeLinkName, toggleLinkNameInGraph, changeNodeResult, changeNodeResultUnit } from '../../../shared/state/actions/nodes';
 import { deleteInput } from '../../../shared/state/actions/inputs';
 
-import { map as nodeTypesMap } from '../../../shared/graph/NodeTypes';
+import { nodeTypesById } from '../../../shared/graph/NodeTypes';
 import { map as paramTypesMap } from '../../../shared/graph/ParameterTypes';
 import { unitsById } from '../../../shared/graph/ParameterUnits';
 
@@ -57,34 +57,34 @@ describe('Nodes reducer:', function() {
     });
 
     it('should set initial type', function () {
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
       let node = getNode(voiceGroupId, '0').toJS();
 
-      node.type.should.equal(nodeTypesMap.INVERT.id);
+      node.type.should.equal(nodeTypesById.INVERT.id);
     });
 
     it('should set default properties when setting type', function () {
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
       let node = getNode(voiceGroupId, '0').toJS();
 
-      node.params.length.should.equal(nodeTypesMap.INVERT.params.length);
+      node.params.length.should.equal(nodeTypesById.INVERT.params.length);
     });
 
     it('should replace existing type type', function () {
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
-      store.dispatch(changeNodeType('0', nodeTypesMap.SUM.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.SUM.id, voiceGroupId));
       let node = getNode(voiceGroupId, '0').toJS();
-      node.type.should.equal(nodeTypesMap.SUM.id);
+      node.type.should.equal(nodeTypesById.SUM.id);
     });
 
     it('should clear properties when changing type', function () {
       // initial type
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
       store.dispatch(changeNodeParamType('0', '0', paramTypesMap.CONSTANT.id, voiceGroupId));
       store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.CONSTANT.id, 5, voiceGroupId));
 
       // change type
-      store.dispatch(changeNodeType('0', nodeTypesMap.SUM.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.SUM.id, voiceGroupId));
 
       let node = getNode(voiceGroupId, '0').toJS();
 
@@ -95,17 +95,17 @@ describe('Nodes reducer:', function() {
 
     it('should remove node from consumers when changing type', function () {
       // initial type
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
 
       // node to consume as invert value parameter
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesById.INVERT.id, voiceGroupId));
 
       // link nodes
       store.dispatch(createNewLink('1', '0', '0', voiceGroupId));
 
       // change node type, should clear consumer
-      store.dispatch(changeNodeType('0', nodeTypesMap.SUM.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.SUM.id, voiceGroupId));
 
       let fromNode = getNode(voiceGroupId, '1').toJS();
       expect(fromNode.consumers['1-0-0']).to.equal(undefined);
@@ -148,7 +148,7 @@ describe('Nodes reducer:', function() {
     beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
     });
 
     it('should remove node', function () {
@@ -162,7 +162,7 @@ describe('Nodes reducer:', function() {
 
       // node to consume as invert value parameter
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesById.INVERT.id, voiceGroupId));
 
       // link nodes
       store.dispatch(createNewLink('1', '0', '0', voiceGroupId));
@@ -178,7 +178,7 @@ describe('Nodes reducer:', function() {
 
       // node to consume as invert value parameter
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesById.INVERT.id, voiceGroupId));
 
       // link nodes
       store.dispatch(createNewLink('1', '0', '0', voiceGroupId));
@@ -194,7 +194,7 @@ describe('Nodes reducer:', function() {
 
       // node to consume as invert value parameter
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesById.INVERT.id, voiceGroupId));
 
       // link nodes
       store.dispatch(createNewLink('1', '0', '0', voiceGroupId));
@@ -212,7 +212,7 @@ describe('Nodes reducer:', function() {
     beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
     });
 
     it('should set param type', function () {
@@ -247,7 +247,7 @@ describe('Nodes reducer:', function() {
 
       // node to consume as invert value parameter
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesById.INVERT.id, voiceGroupId));
 
       // link nodes
       store.dispatch(createNewLink('1', '0', '0', voiceGroupId));
@@ -265,7 +265,7 @@ describe('Nodes reducer:', function() {
     beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
     });
 
     it('should set param value', function () {
@@ -352,7 +352,7 @@ describe('Nodes reducer:', function() {
     beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
       store.dispatch(changeNodeParamType('0', '0', paramTypesMap.VIRTUALINPUT.id, voiceGroupId));
       store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.VIRTUALINPUT.id, 'virt|123', voiceGroupId));
     });
@@ -371,7 +371,7 @@ describe('Nodes reducer:', function() {
     beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
       store.dispatch(changeNodeParamType('0', '0', paramTypesMap.CONSTANT.id, voiceGroupId));
       store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.CONSTANT.id, 123, voiceGroupId));
     });
@@ -389,9 +389,9 @@ describe('Nodes reducer:', function() {
     beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('0', nodeTypesMap.SUM.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.SUM.id, voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesById.INVERT.id, voiceGroupId));
     });
 
     it('should add to-node to consumer array of from-node ', function () {
@@ -451,9 +451,9 @@ describe('Nodes reducer:', function() {
     beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('0', nodeTypesMap.SUM.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.SUM.id, voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesById.INVERT.id, voiceGroupId));
       store.dispatch(createNewLink('1', '0', '2', voiceGroupId));
     });
 
@@ -485,9 +485,9 @@ describe('Nodes reducer:', function() {
     beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('0', nodeTypesMap.SUM.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.SUM.id, voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('1', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('1', nodeTypesById.INVERT.id, voiceGroupId));
       store.dispatch(createNewLink('1', '0', '2', voiceGroupId));
     });
 
@@ -518,7 +518,7 @@ describe('Nodes reducer:', function() {
     beforeEach(function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
-      store.dispatch(changeNodeType('0', nodeTypesMap.DELAY_LINE.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.DELAY_LINE.id, voiceGroupId));
       store.dispatch(changeNodeResult('0', 10, voiceGroupId));
       store.dispatch(changeNodeResultUnit('0', unitsById.OCTAVES.id, voiceGroupId));
     });
@@ -530,7 +530,7 @@ describe('Nodes reducer:', function() {
     });
 
     it('should clear result when changing node type', function () {
-      store.dispatch(changeNodeType('0', nodeTypesMap.INVERT.id, voiceGroupId));
+      store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
 
       let resultNode = getNode(voiceGroupId, '0').toJS();
       resultNode.result.value.should.equal('');

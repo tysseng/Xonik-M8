@@ -14,7 +14,7 @@ const NodeFormComponent = ({ node, nodes, onNodeNameChange, onNodeTypeChange, on
   if(!node){
     return null;
   }
-  let nodeType = nodeTypes.idMap[node.type];  
+  let nodeType = nodeTypes.nodeTypesById[node.type];
 
   return (
 

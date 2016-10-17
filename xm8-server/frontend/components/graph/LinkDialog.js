@@ -1,5 +1,5 @@
-import nodeTypes from '../../../shared/graph/NodeTypes.js';
-import {map as paramTypes} from '../../../shared/graph/ParameterTypes.js';
+import { nodeTypesById } from '../../../shared/graph/NodeTypes';
+import { map as paramTypes } from '../../../shared/graph/ParameterTypes';
 import ParameterDescription from './ParameterDescription';
 import NodeTypeDropdown from './nodeform/NodeTypeDropdown';
 import ModalBox from '../framework/ModalBox';     
@@ -22,7 +22,7 @@ const LinkDialog = ({nodes, linkDialog,  onCancel, onCreate, onNodeTypeChange}) 
   let toNode = nodes[linkDialog.toNodeId];
 
   if(!toNode || !fromNode) return null;
-  let nodeType = nodeTypes.idMap[toNode.type];
+  let nodeType = nodeTypesById[toNode.type];
 
 
   return ( 

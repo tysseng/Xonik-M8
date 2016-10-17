@@ -1,7 +1,7 @@
 import d3 from 'd3';
 import React from 'react';
 import {Component} from 'react';
-let nodeTypes = require('../../../shared/graph/NodeTypes.js').idMap;
+let nodeTypes = require('../../../shared/graph/NodeTypes.js').nodeTypesById;
 
 class GraphSvgLink extends Component {
   constructor(props) {

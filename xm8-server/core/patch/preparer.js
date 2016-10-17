@@ -1,16 +1,13 @@
 import _ from 'lodash';
 import paramTypes from '../../shared/graph/ParameterTypes';
-import nodeTypes from '../../shared/graph/NodeTypes';
+import { nodeTypesById } from '../../shared/graph/NodeTypes';
 import { unitsById } from '../../shared/graph/ParameterUnits';
 import { panelControllersById } from '../../shared/graph/PanelControllers';
-import { inputs as inputArray, inputsById } from '../../shared/graph/Inputs';
+import { inputsById } from '../../shared/graph/Inputs';
 import { outputsById } from '../../shared/graph/Outputs';
 import config from '../../shared/config';
 
 let paramType = paramTypes.map;
-let nodeType = nodeTypes.map;
-let nodeTypesIdMap = nodeTypes.idMap;
-
 
 const isLink = (type) => {
   return type === paramTypes.map.LINK.id;
@@ -28,7 +25,7 @@ const addMissingFieldsWithDefaults = (nodes) => {
 }
 
 const setParamsInUse = (node) => {
-  let typedef = nodeTypesIdMap[node.type];
+  let typedef = nodeTypesById[node.type];
   if(typedef.hasVariableParamsLength){
     let paramsInUse = 0;
 
@@ -64,7 +61,7 @@ const convertLinkValuesToRefs = (nodes) => {
 
 export const markReachable = (nodes) => {
   _.each(nodes, function(node){
-    if(node.type === nodeType.OUTPUT.id || node.type === nodeType.OUTPUT_TUNED.id || node.type === nodeType.DELAY_LINE.id){
+    if(node.type === nodeTypesById.OUTPUT.id || node.type === nodeTypesById.OUTPUT_TUNED.id || node.type === nodeTypesById.DELAY_LINE.id){
       markAsReachable(node);
     }
   });
@@ -76,7 +73,7 @@ const markAsReachable = (node) => {
     // abort if value is not yet set
     if(!param.value.from) return;
 
-    if(param.type === paramType.LINK.id && !param.value.from.reachable && param.value.from.type !== nodeType.DELAY_LINE.id){
+    if(param.type === paramType.LINK.id && !param.value.from.reachable && param.value.from.type !== nodeTypesById.DELAY_LINE.id){
       markAsReachable(param.value.from);
     }
   });
@@ -150,7 +147,7 @@ function getReachableIndependentNodes(nodes){
       _.each(node.params, function(param){
         // nodes depending on a previous delay line are per definition not dependent of those,
         // the result of the delay line is used in the NEXT cycle of the calulation.
-        if(param.type === paramType.LINK.id && param.value.from.type !== nodeType.DELAY_LINE.id) {
+        if(param.type === paramType.LINK.id && param.value.from.type !== nodeTypesById.DELAY_LINE.id) {
           independent = false;
         }
       });
@@ -163,7 +160,7 @@ function getReachableIndependentNodes(nodes){
 
 const setNodeTypeHwIdOnNode = nodes => {
   _.each(nodes, node => {
-    let nodeType = nodeTypesIdMap[node.type];
+    let nodeType = nodeTypesById[node.type];
     node.typeHwId = nodeType.hwId;
   });
   return nodes;

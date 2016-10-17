@@ -22,7 +22,7 @@ import React from 'react';
 import {Component} from 'react';
 import GraphSvgNode from './GraphSvgNode';
 import GraphSvgLink from './GraphSvgLink';
-import { idMap as nodeTypesById } from '../../../shared/graph/NodeTypes';
+import { nodeTypesById } from '../../../shared/graph/NodeTypes';
 import { publish } from '../../userMessages';
 
 class GraphSvg extends Component {

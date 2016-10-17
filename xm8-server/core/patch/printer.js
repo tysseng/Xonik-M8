@@ -1,17 +1,17 @@
 var paramTypes = require('../../shared/graph/ParameterTypes.js');
 var nodeTypes = require('../../shared/graph/NodeTypes.js');
+import { nodeTypesById } from '../../shared/graph/NodeTypes';
 var _ = require('lodash');
 
-let nodeType = nodeTypes.map;
 let paramType = paramTypes.map;
 
 function getNodeTypeStr(type){
   switch(type){
-    case nodeType.LFO_PULSE.id:
+    case nodeTypesById.LFO_PULSE.id:
       return "NODE_LFO_PULSE";
-    case nodeType.OUTPUT.id:
+    case nodeTypesById.OUTPUT.id:
       return "NODE_OUTPUT";
-    case nodeType.INVERT.id:
+    case nodeTypesById.INVERT.id:
       return "NODE_INVERT";
     default:
       return "UNKNOWN (" + type + ")";

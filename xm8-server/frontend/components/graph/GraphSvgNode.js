@@ -3,7 +3,7 @@ import d3 from 'd3';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
 import {Component} from 'react';
-import {map as nodeTypes} from '../../../shared/graph/NodeTypes';
+import { nodeTypesById } from '../../../shared/graph/NodeTypes';
 import NodeIcon from './NodeIcon';
 
 class GraphSvgNode extends Component {
@@ -41,7 +41,7 @@ class GraphSvgNode extends Component {
   getClassName(type, selected, valid){
 
     let className = 'nodebox';
-    if(type === nodeTypes.OUTPUT.id || type === nodeTypes.OUTPUT_TUNED){
+    if(type === nodeTypesById.OUTPUT.id || type === nodeTypesById.OUTPUT_TUNED){
       className += ' output';
     }
     if(selected){

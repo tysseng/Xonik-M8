@@ -4,6 +4,7 @@ import _ from 'lodash';
 import config from '../../../shared/config';
 import { outputsById } from '../../../shared/graph/Outputs';
 import { panelControllersById } from '../../../shared/graph/PanelControllers';
+import { nodeTypesById } from '../../../shared/graph/NodeTypes';
 
 import { prepareNetForSerialization, isNetValid, convertParamTo16BitSigned } from '../../../core/patch/preparer';
 import nodesWithInvalid from './mockedNodes/nodes-with-invalid';
@@ -16,6 +17,7 @@ import nodesForSorting from './mockedNodes/nodes-for-sorting';
 import nodesForSortingWithLoop from './mockedNodes/nodes-for-sorting-with-loop';
 import nodesWithVirtualInputs from './mockedNodes/nodes-with-virtual-inputs';
 import nodesWithPhysicalInputs from './mockedNodes/nodes-with-physical-inputs';
+import nodesWithNodeTypeHwId from './mockedNodes/nodes-with-node-type-hw-id';
 import virtualInputsForNodeTesting, { pureVirtual1, pureVirtual2 } from './mockedInputs/virtual-inputs-for-node-testing';
 
 chai.should();
@@ -291,6 +293,16 @@ describe('Patch preparation:', function() {
     it('Should set correct index for physical inputs', function () {
       nodes[0].params[0].nodePos.should.equal(panelControllersById.PC_FILTER_1_ENV_RELEASE.hwId);
       nodes[0].params[1].nodePos.should.equal(panelControllersById.PC_FILTER_1_CUTOFF.hwId);
+    });
+  });
+
+
+  describe('Node type:', function () {
+    let result = prepareNetForSerialization(nodesWithNodeTypeHwId, virtualInputsForNodeTesting);
+    let nodes = result.nodes;
+
+    it('Should set hw id from NodeType as typeHwId on node', function () {
+      nodes[0].typeHwId.should.equal(nodeTypesById.SUM.hwId);
     });
   });
 });

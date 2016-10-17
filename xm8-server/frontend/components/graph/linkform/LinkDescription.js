@@ -1,4 +1,4 @@
-let nodeTypes = require('../../../../shared/graph/NodeTypes.js').idMap;
+let nodeTypes = require('../../../../shared/graph/NodeTypes.js').nodeTypesById;
 
 const LinkDescription = ({link, nodes}) => {
 

@@ -1,4 +1,4 @@
-import nodeTypes from '../../../shared/graph/NodeTypes';
+import { nodeTypesById } from '../../../shared/graph/NodeTypes';
 import paramTypes from '../../../shared/graph/ParameterTypes';
 import {unitsById} from '../../../shared/graph/ParameterUnits';
 import { types } from '../../../shared/state/actions/nodes';
@@ -44,7 +44,7 @@ const getPreselectedParamType = (paramDefinition) => {
 }
 
 const getEmptyParams = (typeId) => {
-  let definition = nodeTypes.idMap[typeId];
+  let definition = nodeTypesById[typeId];
   let params = List();
 
   _.each(definition.params, (param) => {
@@ -117,8 +117,8 @@ const createConsumerLink = action => {
 const validateNode = (state) => {
   let nodeIsValid = true;
 
-  let definition = nodeTypes.idMap[state.get('type')];
-  if(definition && definition.id != nodeTypes.map.NOT_SELECTED.id) {
+  let definition = nodeTypesById[state.get('type')];
+  if(definition && definition.id != nodeTypesById.NOT_SELECTED.id) {
 
     _.each(definition.params, paramDef => {
       let param = state.getIn(['params', paramDef.id]);

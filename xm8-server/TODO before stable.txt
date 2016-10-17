@@ -1,11 +1,10 @@
 TODO før "stabilt"
 
 TODO:
+- Teste at preparer setter hwId fra NodeType på node
 - Kalkulere interval/antall steps for inputs også for view, nå virker bare options
 - Range-sjekking på midi options, må være 0-127 eller 0-14bit
 - Cancel i link-dialog fungerer ikke
-- Standardisere NodeTypes som andre enums
-
 - Teste displayoptions, kalle det noe annet?
 
 - Fikse subscribe i patchRepo

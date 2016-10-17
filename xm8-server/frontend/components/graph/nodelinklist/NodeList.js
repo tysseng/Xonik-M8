@@ -1,6 +1,5 @@
 import MiniIcon from '../../framework/MiniIcon';
-import _ from 'lodash';
-import { idMap as nodeTypes } from '../../../../shared/graph/NodeTypes.js';
+import { nodeTypesById } from '../../../../shared/graph/NodeTypes.js';
 
 const NodeList = ({nodes, onNodeClick, onDeleteClick}) => {
   return (
@@ -9,7 +8,7 @@ const NodeList = ({nodes, onNodeClick, onDeleteClick}) => {
       <div className="contents">
         <ul>
           {Object.values(nodes).map(node => {
-            let nodeTypeDefinition = nodeTypes[node.type];
+            let nodeTypeDefinition = nodeTypesById[node.type];
             let type = nodeTypeDefinition ? nodeTypeDefinition.name : "Type not selected";
 
             let color = node.valid ? {} : {color: '#ff0000'};
