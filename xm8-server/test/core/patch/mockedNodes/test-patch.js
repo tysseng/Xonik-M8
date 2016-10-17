@@ -19,7 +19,7 @@
    */
 
 import { init, invert, sum, result, output, outputTuned, param, link, getImmutableNodes } from './nodesTestTools';
-import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
+import { paramTypesById } from '../../../../shared/graph/ParameterTypes';
 import { inputsById } from '../../../../shared/graph/Inputs';
 import { unitsById } from '../../../../shared/graph/ParameterUnits';
 import { outputsById } from '../../../../shared/graph/Outputs';
@@ -27,10 +27,10 @@ import { outputsById } from '../../../../shared/graph/Outputs';
 init();
 
 let node0 = sum();
-param(node0, '0', paramTypesMap.CONSTANT, 12, unitsById.SEMITONES);
-param(node0, '1', paramTypesMap.CONSTANT, 1, unitsById.VOLTS);
-param(node0, '2', paramTypesMap.INPUT, inputsById.IN_OSC_1_SQUARE.id);
-param(node0, '3', paramTypesMap.INPUT, inputsById.IN_OSC_1_SAW.id);
+param(node0, '0', paramTypesById.CONSTANT, 12, unitsById.SEMITONES);
+param(node0, '1', paramTypesById.CONSTANT, 1, unitsById.VOLTS);
+param(node0, '2', paramTypesById.INPUT, inputsById.IN_OSC_1_SQUARE.id);
+param(node0, '3', paramTypesById.INPUT, inputsById.IN_OSC_1_SAW.id);
 
 let node1 = invert();
 link(node0, node1, '0');

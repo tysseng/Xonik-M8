@@ -1,8 +1,7 @@
 import chai from 'chai';
 import _ from 'lodash';
 import {washParamTypesList} from '../../../../../frontend/components/graph/nodeform/NodeParameterTypeDropdown';
-import {map as paramTypes, list as paramTypesList} from '../../../../../shared/graph/ParameterTypes.js';
-import {globalTypeBlacklist} from '../../../../../shared/graph/NodeTypes.js';
+import { paramTypesById, paramTypes } from '../../../../../shared/graph/ParameterTypes';
 
 chai.should();
 
@@ -16,7 +15,7 @@ describe('ParameterType filtering', function() {
         name: "Output target",
         validator: function(value){},
         optional: false,
-        typeWhitelist: [paramTypes.OUTPUT.id]
+        typeWhitelist: [paramTypesById.OUTPUT.id]
       }
 
       // run
@@ -24,7 +23,7 @@ describe('ParameterType filtering', function() {
 
       // assert
       filteredParamTypes.length.should.equal(1);
-      filteredParamTypes[0].should.equal(paramTypes.OUTPUT);
+      filteredParamTypes[0].should.equal(paramTypesById.OUTPUT);
 
     });
 
@@ -35,16 +34,16 @@ describe('ParameterType filtering', function() {
         name: "Output value",
         validator: function(value){},
         optional: false,
-        typeBlacklist: [paramTypes.INPUT.id]
+        typeBlacklist: [paramTypesById.INPUT.id]
       }
 
       // run
       let filteredParamTypes = washParamTypesList(paramDefinition);
 
       // assert
-      filteredParamTypes.length.should.equal(paramTypesList.length - 1) ;
+      filteredParamTypes.length.should.equal(paramTypes.length - 1) ;
 
-      let filteredListIncludesOutput = _.includes(filteredParamTypes, paramTypes.INPUT)
+      let filteredListIncludesOutput = _.includes(filteredParamTypes, paramTypesById.INPUT)
       filteredListIncludesOutput.should.be.false;
 
     });
@@ -62,8 +61,8 @@ describe('ParameterType filtering', function() {
       let filteredParamTypes = washParamTypesList(paramDefinition);
 
       // assert
-      filteredParamTypes.length.should.equal(paramTypesList.length - 1);
-      let filteredListIncludesOutput = _.includes(filteredParamTypes, paramTypes.OUTPUT)
+      filteredParamTypes.length.should.equal(paramTypes.length - 1);
+      let filteredListIncludesOutput = _.includes(filteredParamTypes, paramTypesById.OUTPUT)
       filteredListIncludesOutput.should.be.false;
     });
   });    

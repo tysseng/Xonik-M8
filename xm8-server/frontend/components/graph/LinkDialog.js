@@ -1,5 +1,5 @@
 import { nodeTypesById } from '../../../shared/graph/NodeTypes';
-import { map as paramTypes } from '../../../shared/graph/ParameterTypes';
+import { paramTypesById } from '../../../shared/graph/ParameterTypes';
 import ParameterDescription from './ParameterDescription';
 import NodeTypeDropdown from './nodeform/NodeTypeDropdown';
 import ModalBox from '../framework/ModalBox';     
@@ -9,9 +9,9 @@ const isLinkable = (parameterDefinition) => {
   let blacklist = parameterDefinition.typeBlacklist;
 
   if(whitelist){
-    return _.includes(whitelist, paramTypes.INPUT.id);
+    return _.includes(whitelist, paramTypesById.INPUT.id);
   } else if(blacklist){
-    return !_.includes(blacklist, paramTypes.INPUT.id);
+    return !_.includes(blacklist, paramTypesById.INPUT.id);
   } 
   return true;
 }

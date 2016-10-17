@@ -1,12 +1,12 @@
 import store from '../../../../core/state/store';
 import { resetGraph,
-  createNewNode, changeNodeType, changeNodeName, moveNode, deleteNode,
+  createNewNode, changeNodeType, changeNodeName,
   changeNodeResult, changeNodeResultUnit,
   changeNodeParamType, changeNodeParamValue, changeNodeParamUnit,
-  createNewLink, deleteLink, changeLinkName, toggleLinkNameInGraph } from '../../../../shared/state/actions/nodes';
+  createNewLink } from '../../../../shared/state/actions/nodes';
 import { getNode, getNodes, getGraphOutputs } from '../../../../core/state/selectors';
 import { nodeTypesById } from '../../../../shared/graph/NodeTypes';
-import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
+import { paramTypesById } from '../../../../shared/graph/ParameterTypes';
 
 let currentNodeId = 0;
 let voiceGroupId = '0';
@@ -54,7 +54,7 @@ export const output = (output) => {
   let nodeId = getNextNodeId();
   store.dispatch(createNewNode(voiceGroupId));
   store.dispatch(changeNodeType(nodeId, nodeTypesById.OUTPUT.id, voiceGroupId));
-  if(output) setParamFromNodeId(nodeId, '1', paramTypesMap.OUTPUT, output.id, voiceGroupId);
+  if(output) setParamFromNodeId(nodeId, '1', paramTypesById.OUTPUT, output.id, voiceGroupId);
   return getNode(voiceGroupId, nodeId).toJS();
 }
 
@@ -62,7 +62,7 @@ export const outputTuned = (output) => {
   let nodeId = getNextNodeId();
   store.dispatch(createNewNode(voiceGroupId));
   store.dispatch(changeNodeType(nodeId, nodeTypesById.OUTPUT_TUNED.id, voiceGroupId));
-  if(output) setParamFromNodeId(nodeId, '1', paramTypesMap.OUTPUT, output.id, voiceGroupId);
+  if(output) setParamFromNodeId(nodeId, '1', paramTypesById.OUTPUT, output.id, voiceGroupId);
   return getNode(voiceGroupId, nodeId).toJS();
 }
 

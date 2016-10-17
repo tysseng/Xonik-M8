@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import { List, Map } from 'immutable';
-import paramTypes from '../../../shared/graph/ParameterTypes';
+import { Map } from 'immutable';
+import { paramTypesById } from '../../../shared/graph/ParameterTypes';
 import { types } from '../../../shared/state/actions/nodes';
 
 const isOutput = (type) => {
-  return type === paramTypes.map.OUTPUT.id;
+  return type === paramTypesById.OUTPUT.id;
 }
 
 const getOutputsForNode = (outputs, nodeId) => {

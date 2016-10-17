@@ -1,19 +1,19 @@
 import { init, invert, output, outputTuned, delay, param, link, name, getMutableNodes } from './nodesTestTools';
-import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
+import { paramTypesById } from '../../../../shared/graph/ParameterTypes';
 import { outputsById } from '../../../../shared/graph/Outputs';
 
 init();
 
 let unreachableNode = invert();
 name(unreachableNode, "Unreachable");
-param(unreachableNode, '0', paramTypesMap.CONSTANT, '2');
+param(unreachableNode, '0', paramTypesById.CONSTANT, '2');
 
 let reachableOutput = output(outputsById.OUT_VCO_1_PITCH);
-param(reachableOutput, '0', paramTypesMap.CONSTANT, '10');
+param(reachableOutput, '0', paramTypesById.CONSTANT, '10');
 name(reachableOutput, "Reachable");
 
 let reachableOutputTuned = outputTuned(outputsById.OUT_VCO_2_PITCH);
-param(reachableOutputTuned, '0', paramTypesMap.CONSTANT, '2');
+param(reachableOutputTuned, '0', paramTypesById.CONSTANT, '2');
 name(reachableOutputTuned, "Reachable 2");
 
 let reachableDelay = delay();

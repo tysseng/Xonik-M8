@@ -2,7 +2,7 @@ import { Map, OrderedMap } from 'immutable';
 import { types, changeNodeParamValue } from '../../shared/state/actions/nodes';
 import { types as inputActionTypes } from '../../shared/state/actions/inputs';
 import { types as patchActionTypes } from '../../shared/state/actions/patch';
-import paramTypes from '../../shared/graph/ParameterTypes';
+import { paramTypesById } from '../../shared/graph/ParameterTypes';
 import outputs from './graph/outputs';
 import nodes from './graph/nodes';
 
@@ -23,7 +23,7 @@ export const undoableActions = [
 ];
 
 const isOutput = (type) => {
-  return type === paramTypes.map.OUTPUT.id;
+  return type === paramTypesById.OUTPUT.id;
 }
 
 // remove output from parameter value of the node currently outputting to this output.

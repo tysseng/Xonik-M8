@@ -1,5 +1,5 @@
 // TODO: SWITCH TO https://www.npmjs.com/package/es6-enum
-import { map as paramTypes } from '../../graph/ParameterTypes'
+import { paramTypesById } from '../../graph/ParameterTypes'
 
 export const types = {
   SELECT_NODE: 'SELECT_NODE',
@@ -154,7 +154,7 @@ export const createNewLink = (fromNodeId, toNodeId, toParamId, patchNumber = '-'
 
   return {
     type: types.NEW_LINK,
-    paramType: paramTypes.LINK.id,
+    paramType: paramTypesById.LINK.id,
     paramValue: fromNodeId,
     nodeId: toNodeId,
     paramId: toParamId,

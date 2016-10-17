@@ -1,5 +1,5 @@
 import { init, sum, output, param, link, getMutableNodes } from './nodesTestTools';
-import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
+import { paramTypesById } from '../../../../shared/graph/ParameterTypes';
 import { outputsById } from '../../../../shared/graph/Outputs';
 
 import { filterEnvRelease, filterCutoff } from '../mockedInputs/physical-inputs-for-node-testing';
@@ -7,8 +7,8 @@ import { filterEnvRelease, filterCutoff } from '../mockedInputs/physical-inputs-
 init();
 
 let sum1 = sum();
-param(sum1, '0', paramTypesMap.INPUT, filterEnvRelease.id);
-param(sum1, '1', paramTypesMap.INPUT, filterCutoff.id);
+param(sum1, '0', paramTypesById.INPUT, filterEnvRelease.id);
+param(sum1, '1', paramTypesById.INPUT, filterCutoff.id);
 
 let outputNode = output(outputsById.OUT_VCO_1_PITCH);
 link(sum1, outputNode, '0');

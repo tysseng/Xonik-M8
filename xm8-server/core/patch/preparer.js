@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import paramTypes from '../../shared/graph/ParameterTypes';
+import { paramTypesById } from '../../shared/graph/ParameterTypes';
 import { nodeTypesById } from '../../shared/graph/NodeTypes';
 import { unitsById } from '../../shared/graph/ParameterUnits';
 import { panelControllersById } from '../../shared/graph/PanelControllers';
@@ -7,10 +7,8 @@ import { inputsById } from '../../shared/graph/Inputs';
 import { outputsById } from '../../shared/graph/Outputs';
 import config from '../../shared/config';
 
-let paramType = paramTypes.map;
-
 const isLink = (type) => {
-  return type === paramTypes.map.LINK.id;
+  return type === paramTypesById.LINK.id;
 }
 
 const addMissingFieldsWithDefaults = (nodes) => {
@@ -32,7 +30,7 @@ const setParamsInUse = (node) => {
     // used parameters must be sequential, e.g. without any gap. (TODO: improve this later, allow gaps?)
     for(let i = 0; i<node.params.length; i++){
       let param = node.params[paramsInUse];
-      if(param.type === paramType.UNUSED.id || param.type == ''){
+      if(param.type === paramTypesById.UNUSED.id || param.type == ''){
         break;
       }
       paramsInUse++;
@@ -73,7 +71,7 @@ const markAsReachable = (node) => {
     // abort if value is not yet set
     if(!param.value.from) return;
 
-    if(param.type === paramType.LINK.id && !param.value.from.reachable && param.value.from.type !== nodeTypesById.DELAY_LINE.id){
+    if(param.type === paramTypesById.LINK.id && !param.value.from.reachable && param.value.from.type !== nodeTypesById.DELAY_LINE.id){
       markAsReachable(param.value.from);
     }
   });
@@ -109,17 +107,17 @@ function setParamNodePosAndExtractConstants(nodes){
   _.each(nodes, function(node){
     if(node.reachable){
       _.each(node.params, function(param){
-        if(param.type === paramType.CONSTANT.id || param.type === paramType.OUTPUT.id){
+        if(param.type === paramTypesById.CONSTANT.id || param.type === paramTypesById.OUTPUT.id){
           param.nodePos = constants.length + config.graph.numberOfInputs;
 
-          if(param.type === paramType.OUTPUT.id){
+          if(param.type === paramTypesById.OUTPUT.id){
             constants.push(outputsById[param.value].hwId);
 
           } else {
             let value = convertParamTo16BitSigned(param);
             constants.push(value);
           }
-        } else if(param.type === paramType.INPUT.id){
+        } else if(param.type === paramTypesById.INPUT.id){
           let input = inputsById[param.value];
           param.nodePos = getControllerHwId(input.panelController);
         }
@@ -147,7 +145,7 @@ function getReachableIndependentNodes(nodes){
       _.each(node.params, function(param){
         // nodes depending on a previous delay line are per definition not dependent of those,
         // the result of the delay line is used in the NEXT cycle of the calulation.
-        if(param.type === paramType.LINK.id && param.value.from.type !== nodeTypesById.DELAY_LINE.id) {
+        if(param.type === paramTypesById.LINK.id && param.value.from.type !== nodeTypesById.DELAY_LINE.id) {
           independent = false;
         }
       });
@@ -255,7 +253,7 @@ const findPureVirtualInputsInUse = (virtualInputs, nodes, offset) => {
 
   _.each(nodes, node => {
      _.each(node.params, param => {
-       if(param.type === paramTypes.map.VIRTUALINPUT.id){
+       if(param.type === paramTypesById.VIRTUALINPUT.id){
          let virtualInput = virtualInputs[param.value];
 
          // virtual inputs that are just alternative representations of physical inputs are

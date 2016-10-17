@@ -1,8 +1,7 @@
 import React from 'react'
-import parameterTypes from '../../../shared/graph/ParameterTypes.js';
-import {inputsById} from '../../../shared/graph/Inputs.js'
-import {outputsById} from '../../../shared/graph/Outputs.js'
-import {unitsById} from '../../../shared/graph/ParameterUnits.js';
+import { inputsById } from '../../../shared/graph/Inputs'
+import { outputsById } from '../../../shared/graph/Outputs'
+import { unitsById } from '../../../shared/graph/ParameterUnits';
 
 const ParameterDescription = ({
   name,

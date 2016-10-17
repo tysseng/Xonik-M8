@@ -1,5 +1,5 @@
 import { init, invert, output, sum, param, link, name, getMutableNodes } from './nodesTestTools';
-import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
+import { paramTypesById } from '../../../../shared/graph/ParameterTypes';
 import { outputsById } from '../../../../shared/graph/Outputs';
 
 /*
@@ -31,15 +31,15 @@ name(inputSummer, 'inputSummer');
 
 let independent3 = invert();
 name(independent3, 'independent3');
-param(independent3, '0', paramTypesMap.CONSTANT, '3');
+param(independent3, '0', paramTypesById.CONSTANT, '3');
 
 let independent2 = invert();
 name(independent2, 'independent2');
-param(independent2, '0', paramTypesMap.CONSTANT, '2');
+param(independent2, '0', paramTypesById.CONSTANT, '2');
 
 let independent1 = invert();
 name(independent1, 'independent1');
-param(independent1, '0', paramTypesMap.CONSTANT, '1');
+param(independent1, '0', paramTypesById.CONSTANT, '1');
 
 link(independent1, inputSummer, '0');
 link(independent2, inputSummer, '1');

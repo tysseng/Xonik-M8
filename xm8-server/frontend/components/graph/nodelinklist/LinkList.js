@@ -1,6 +1,5 @@
 import MiniIcon from '../../framework/MiniIcon';
 import LinkDescription from '../linkform/LinkDescription';
-import paramTypes from '../../../../shared/graph/ParameterTypes';
 
 const NodeList = ({links, nodes, onLinkClick, onDeleteClick}) => {
   return (

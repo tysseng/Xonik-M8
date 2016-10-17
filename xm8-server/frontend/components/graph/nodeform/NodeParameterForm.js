@@ -1,11 +1,10 @@
 import React from 'react'
-import parameterTypes from '../../../../shared/graph/ParameterTypes.js';
 
-import NodeParameterTypeDropdown from './NodeParameterTypeDropdown.js';
-import NodeLinkDropdown from './NodeLinkDropdown.js';
-import InputDropdown from '../../inputs/InputDropdown.js';
-import OutputLinkDropdown from './OutputLinkDropdown.js';
-import ParameterUnitDropdown from './ParameterUnitDropdown.js';
+import NodeParameterTypeDropdown from './NodeParameterTypeDropdown';
+import NodeLinkDropdown from './NodeLinkDropdown';
+import InputDropdown from '../../inputs/InputDropdown';
+import OutputLinkDropdown from './OutputLinkDropdown';
+import ParameterUnitDropdown from './ParameterUnitDropdown';
 
 const NodeParameterForm = ({
   parameterDefinition,

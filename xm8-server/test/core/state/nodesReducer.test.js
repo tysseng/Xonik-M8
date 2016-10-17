@@ -10,7 +10,7 @@ import { resetGraph,
 import { deleteInput } from '../../../shared/state/actions/inputs';
 
 import { nodeTypesById } from '../../../shared/graph/NodeTypes';
-import { map as paramTypesMap } from '../../../shared/graph/ParameterTypes';
+import { paramTypesById } from '../../../shared/graph/ParameterTypes';
 import { unitsById } from '../../../shared/graph/ParameterUnits';
 
 chai.should();
@@ -80,8 +80,8 @@ describe('Nodes reducer:', function() {
     it('should clear properties when changing type', function () {
       // initial type
       store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.CONSTANT.id, voiceGroupId));
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.CONSTANT.id, 5, voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.CONSTANT.id, voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.CONSTANT.id, 5, voiceGroupId));
 
       // change type
       store.dispatch(changeNodeType('0', nodeTypesById.SUM.id, voiceGroupId));
@@ -203,7 +203,7 @@ describe('Nodes reducer:', function() {
       store.dispatch(deleteNode('1', voiceGroupId));
 
       let toNode = getNode(voiceGroupId, '0').toJS();
-      toNode.params['0'].type.should.equal(paramTypesMap.LINK.id);
+      toNode.params['0'].type.should.equal(paramTypesById.LINK.id);
     });
   });
 
@@ -216,29 +216,29 @@ describe('Nodes reducer:', function() {
     });
 
     it('should set param type', function () {
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.INPUT.id, voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.INPUT.id, voiceGroupId));
       let node = getNode(voiceGroupId, '0').toJS();
 
-      node.params['0'].type.should.equal(paramTypesMap.INPUT.id);
+      node.params['0'].type.should.equal(paramTypesById.INPUT.id);
     });
 
     it('should set units to fraction if type is constant', function () {
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.CONSTANT.id, voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.CONSTANT.id, voiceGroupId));
       let node = getNode(voiceGroupId, '0').toJS();
 
       node.params['0'].unit.should.equal(unitsById.FRACTION.id);
     });
 
     it('should clear param value and unit when param type changes', function () {
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.CONSTANT.id, voiceGroupId));
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.CONSTANT.id, 123, voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.CONSTANT.id, voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.CONSTANT.id, 123, voiceGroupId));
       store.dispatch(changeNodeParamUnit('0', '0', unitsById.CENTS.id, voiceGroupId));
 
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.INPUT.id, voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.INPUT.id, voiceGroupId));
 
       let node = getNode(voiceGroupId, '0').toJS();
 
-      node.params['0'].type.should.equal(paramTypesMap.INPUT.id);
+      node.params['0'].type.should.equal(paramTypesById.INPUT.id);
       node.params['0'].value.should.equal('');
       node.params['0'].unit.should.equal('');
     });
@@ -253,7 +253,7 @@ describe('Nodes reducer:', function() {
       store.dispatch(createNewLink('1', '0', '0', voiceGroupId));
 
       // change param type, should clear consumer
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.CONSTANT.id, voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.CONSTANT.id, voiceGroupId));
 
       let fromNode = getNode(voiceGroupId, '1').toJS();
       expect(fromNode.consumers['1-0-0']).to.equal(undefined);
@@ -269,8 +269,8 @@ describe('Nodes reducer:', function() {
     });
 
     it('should set param value', function () {
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.CONSTANT.id, voiceGroupId));
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.CONSTANT.id, 123, voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.CONSTANT.id, voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.CONSTANT.id, 123, voiceGroupId));
       let node = getNode(voiceGroupId, '0').toJS();
 
       node.params['0'].value.should.equal(123);
@@ -281,8 +281,8 @@ describe('Nodes reducer:', function() {
       store.dispatch(createNewNode(voiceGroupId));
 
       // create link
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.LINK.id, voiceGroupId));
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.LINK.id, '1', voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.LINK.id, voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.LINK.id, '1', voiceGroupId));
 
       let toNode = getNode(voiceGroupId, '0').toJS();
 
@@ -300,8 +300,8 @@ describe('Nodes reducer:', function() {
       store.dispatch(createNewNode(voiceGroupId));
 
       // create link
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.LINK.id, voiceGroupId));
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.LINK.id, '1', voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.LINK.id, voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.LINK.id, '1', voiceGroupId));
 
       let fromNode = getNode(voiceGroupId, '1').toJS();
 
@@ -317,11 +317,11 @@ describe('Nodes reducer:', function() {
       store.dispatch(createNewNode(voiceGroupId));
 
       // create link
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.LINK.id, voiceGroupId));
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.LINK.id, '1', voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.LINK.id, voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.LINK.id, '1', voiceGroupId));
 
       // delete parameter should clear consumer
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.LINK.id, '', voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.LINK.id, '', voiceGroupId));
 
       let fromNode = getNode(voiceGroupId, '1').toJS();
 
@@ -336,11 +336,11 @@ describe('Nodes reducer:', function() {
       store.dispatch(createNewNode(voiceGroupId));
 
       // create link
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.LINK.id, voiceGroupId));
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.LINK.id, '1', voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.LINK.id, voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.LINK.id, '1', voiceGroupId));
 
       // delete parameter should clear consumer
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.LINK.id, '2', voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.LINK.id, '2', voiceGroupId));
 
       let fromNode = getNode(voiceGroupId, '1').toJS();
       expect(fromNode.consumers['1-0-0']).to.equal(undefined);
@@ -353,8 +353,8 @@ describe('Nodes reducer:', function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
       store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.VIRTUALINPUT.id, voiceGroupId));
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.VIRTUALINPUT.id, 'virt|123', voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.VIRTUALINPUT.id, voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.VIRTUALINPUT.id, 'virt|123', voiceGroupId));
     });
 
     it('should clear any parameter using that virtual input', function () {
@@ -372,8 +372,8 @@ describe('Nodes reducer:', function() {
       store.dispatch(resetGraph(voiceGroupId));
       store.dispatch(createNewNode(voiceGroupId));
       store.dispatch(changeNodeType('0', nodeTypesById.INVERT.id, voiceGroupId));
-      store.dispatch(changeNodeParamType('0', '0', paramTypesMap.CONSTANT.id, voiceGroupId));
-      store.dispatch(changeNodeParamValue('0', '0', paramTypesMap.CONSTANT.id, 123, voiceGroupId));
+      store.dispatch(changeNodeParamType('0', '0', paramTypesById.CONSTANT.id, voiceGroupId));
+      store.dispatch(changeNodeParamValue('0', '0', paramTypesById.CONSTANT.id, 123, voiceGroupId));
     });
 
     it('should set param unit', function () {
@@ -415,7 +415,7 @@ describe('Nodes reducer:', function() {
 
       // id is from-to-paramId
       let toParam = toNode.params['2'];
-      toParam.type.should.equal(paramTypesMap.LINK.id);
+      toParam.type.should.equal(paramTypesById.LINK.id);
 
       let link = toParam.value;
       link.from.should.equal('1');
@@ -503,7 +503,7 @@ describe('Nodes reducer:', function() {
       store.dispatch(deleteLink('1-0-2', voiceGroupId));
 
       let toNode = getNode(voiceGroupId, '0').toJS();
-      toNode.params['2'].type.should.equal(paramTypesMap.LINK.id);
+      toNode.params['2'].type.should.equal(paramTypesById.LINK.id);
     });
 
     it('should remove to-node from consumer list', function () {

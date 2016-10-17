@@ -1,14 +1,13 @@
 //TODO: Check if unused is a legal option
 import React from 'react'
 import _ from 'lodash';
-import parameterTypes from '../../../../shared/graph/ParameterTypes.js';  
-import {globalTypeBlacklist} from '../../../../shared/graph/NodeTypes.js';  
+import { paramTypes as allTypes } from '../../../../shared/graph/ParameterTypes';
+import { globalTypeBlacklist } from '../../../../shared/graph/NodeTypes';
 
 export const washParamTypesList = (parameterDefinition) => {
-  let allTypes = parameterTypes.list;
 
-  let whitelist = parameterDefinition.typeWhitelist
-  let blacklist = parameterDefinition.typeBlacklist
+  let whitelist = parameterDefinition.typeWhitelist;
+  let blacklist = parameterDefinition.typeBlacklist;
   if(whitelist){
     return _.filter(allTypes, paramType => {
       return _.includes(whitelist, paramType.id);

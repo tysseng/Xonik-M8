@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import { map as paramTypes } from './ParameterTypes';
+import { paramTypesById } from './ParameterTypes';
 // TODO: Add property key as key instead, and loop over list to make map?
 
 // global type blacklist is only used if no white or blacklist exists for a parameter
 const globalTypeBlacklist = [
-  paramTypes.OUTPUT.id
+  paramTypesById.OUTPUT.id
 ];
 
 const nodeTypesById = {
@@ -561,7 +561,7 @@ const nodeTypesById = {
       name: "Output target",
       validator: function(value){},
       optional: false,
-      typeWhitelist: [paramTypes.OUTPUT.id]
+      typeWhitelist: [paramTypesById.OUTPUT.id]
     }]    
   }, 
   OUTPUT_TUNED: {
@@ -581,7 +581,7 @@ const nodeTypesById = {
       name: "Output to VCO",
       validator: function(value){},
       optional: false,
-      typeWhitelist: [paramTypes.OUTPUT.id]
+      typeWhitelist: [paramTypesById.OUTPUT.id]
     }]
   },
   GLIDE: {

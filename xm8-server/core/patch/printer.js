@@ -1,9 +1,7 @@
-var paramTypes = require('../../shared/graph/ParameterTypes.js');
-var nodeTypes = require('../../shared/graph/NodeTypes.js');
+import { paramTypesById } from '../../shared/graph/ParameterTypes';
 import { nodeTypesById } from '../../shared/graph/NodeTypes';
 var _ = require('lodash');
 
-let paramType = paramTypes.map;
 
 function getNodeTypeStr(type){
   switch(type){
@@ -20,13 +18,13 @@ function getNodeTypeStr(type){
 
 function getParamTypeStr(type){
   switch(type){
-    case paramType.CONSTANT.id:
+    case paramTypesById.CONSTANT.id:
       return "CONSTANT";
-    case paramType.LINK.id:
+    case paramTypesById.LINK.id:
       return "LINK";
-    case paramType.INPUT.id:
+    case paramTypesById.INPUT.id:
       return "INPUT";
-    case paramType.UNUSED.id:
+    case paramTypesById.UNUSED.id:
       return "EMPTY";
     default:
       return "UNKNOWN (" + type + ")";
@@ -36,7 +34,7 @@ function getParamTypeStr(type){
 function isComplete(node){
   var isComplete = true;
   _.each(node.params, function(param){
-    if(param.type === paramType.UNUSED.id) isComplete = false;
+    if(param.type === paramTypesById.UNUSED.id) isComplete = false;
   });
   return isComplete;
 }
@@ -52,7 +50,7 @@ function printNode(node){
   
   _.each(node.params, function(param){
     var parType = getParamTypeStr(param.type);
-    var parValue = (param.type === paramType.LINK.id ?  "from " + getNodeTypeStr(param.value.from.type) : param.value);
+    var parValue = (param.type === paramTypesById.LINK.id ?  "from " + getNodeTypeStr(param.value.from.type) : param.value);
     var parLabel = param.label ? " (" + param.label + ")" : "";
     console.log("Param: " + parType + ' ' + parValue + parLabel + ", pos " + param.nodePos);
   });

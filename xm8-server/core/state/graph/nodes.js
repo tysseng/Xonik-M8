@@ -1,22 +1,22 @@
 import { nodeTypesById } from '../../../shared/graph/NodeTypes';
-import paramTypes from '../../../shared/graph/ParameterTypes';
-import {unitsById} from '../../../shared/graph/ParameterUnits';
+import { paramTypesById } from '../../../shared/graph/ParameterTypes';
+import { unitsById } from '../../../shared/graph/ParameterUnits';
 import { types } from '../../../shared/state/actions/nodes';
 import { types as inputActionTypes } from '../../../shared/state/actions/inputs';
 import { List, Map } from 'immutable';
 import _ from 'lodash';
 
 const isLink = (type) => {
-  return type === paramTypes.map.LINK.id;
+  return type === paramTypesById.LINK.id;
 }
 
 const isVirtualInput = (type) => {
-  return type === paramTypes.map.VIRTUALINPUT.id;
+  return type === paramTypesById.VIRTUALINPUT.id;
 }
 
 const getEmptyParam = (id, type) => {
   let unit = '';
-  if(type === paramTypes.map.CONSTANT.id){
+  if(type === paramTypesById.CONSTANT.id){
     unit = unitsById.FRACTION.id;
   }
 
@@ -125,7 +125,7 @@ const validateNode = (state) => {
       let paramValue = param.get('value');
       let paramType = param.get('type');
       let hasValue = paramValue && paramValue != "";
-      let hasSelectedType = paramType !== '' && paramType !== paramTypes.map.UNUSED.id;
+      let hasSelectedType = paramType !== '' && paramType !== paramTypesById.UNUSED.id;
       let paramIsValid = paramDef.optional && !hasSelectedType || hasValue; // TODO: Add type and custom validators here
 
       if(!paramIsValid){
@@ -186,7 +186,7 @@ const param = (state, action) => {
       return state.set('unit', action.paramUnit);
     case types.NEW_LINK:
       let newLinkParamValue = createLink(action);
-      return state.merge(getParam(action.paramId, paramTypes.map.LINK.id, newLinkParamValue, ''));
+      return state.merge(getParam(action.paramId, paramTypesById.LINK.id, newLinkParamValue, ''));
     case types.DELETE_NODE: 
       // check if deleted node is the value of this parameter
       if(isLink(state.get('type')) && getFromNodeId(state) === action.nodeId){

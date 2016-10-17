@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import paramTypes from '../../../shared/graph/ParameterTypes.js';
+import { paramTypesById } from '../../../shared/graph/ParameterTypes.js';
 
 const isLink = (type) => {
-  return type === paramTypes.map.LINK.id;
+  return type === paramTypesById.LINK.id;
 }
 
 export const getLinks = (nodes) => {

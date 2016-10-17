@@ -1,11 +1,11 @@
 import { init, invert, output, param, link, getMutableNodes } from './nodesTestTools';
-import { map as paramTypesMap } from '../../../../shared/graph/ParameterTypes';
+import { paramTypesById } from '../../../../shared/graph/ParameterTypes';
 import { outputsById } from '../../../../shared/graph/Outputs';
 
 init();
 
 let node0 = invert();
-param(node0, '0', paramTypesMap.CONSTANT, 3);
+param(node0, '0', paramTypesById.CONSTANT, 3);
 
 let node1 = invert();
 link(node0, node1, '0');

@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { selectLink, changeLinkName, toggleLinkNameInGraph } from '../../../../shared/state/actions/nodes';
-import paramTypes from '../../../../shared/graph/ParameterTypes.js';
+import { paramTypesById } from '../../../../shared/graph/ParameterTypes';
 import LinkForm from './LinkForm'
 import { getNodes, getGuiPatchview } from '../../../state/selectors';
 
 const isLink = (type) => {
-  return type === paramTypes.map.LINK.id;
+  return type === paramTypesById.LINK.id;
 }
 
 const mapStateToProps = (state, ownProps) => {

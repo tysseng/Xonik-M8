@@ -1,6 +1,6 @@
 // TODO: validate constant value, max 32767 etc.
 
-var parameterTypes = {
+var paramTypesById = {
   UNUSED: {
     id: "unused", 
     name: "Unused",
@@ -34,14 +34,13 @@ var parameterTypes = {
 };
 
 // sorted list for dropdowns etc
-var parameterTypesList = [
-  parameterTypes.UNUSED,
-  parameterTypes.CONSTANT,
-  parameterTypes.INPUT,
-  parameterTypes.VIRTUALINPUT,
-  parameterTypes.OUTPUT,
-  parameterTypes.LINK,
+var paramTypes = [
+  paramTypesById.UNUSED,
+  paramTypesById.CONSTANT,
+  paramTypesById.INPUT,
+  paramTypesById.VIRTUALINPUT,
+  paramTypesById.OUTPUT,
+  paramTypesById.LINK,
 ]
 
-module.exports.map = parameterTypes;
-module.exports.list = parameterTypesList;
+export { paramTypesById, paramTypes }
