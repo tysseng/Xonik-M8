@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux'; 
+import _ from 'lodash';
+import { connect } from 'react-redux';
 import { moveElement, inputgroupsUndoPointPositionChanged } from '../../../shared/state/actions/inputgroups.js'
 import { selectElement, deselectElement, deselectDragElement } from '../../../shared/state/actions/gui/guiinputgroups.js'
 import { getGuiVirtualInputGroups, getVirtualInputGroups, getVirtualInputs, getPhysicalInputs } from '../../state/selectors';
@@ -29,7 +30,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return {  
+  return {
     selectElement: (id, mouseX, mouseY, offsetXem, offsetYem) => dispatch(selectElement(id, mouseX, mouseY, offsetXem, offsetYem)),
     moveElement: (groupId, id, x, y) => dispatch(moveElement(groupId, id, x, y)),
     deselectDragElement: () => {

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export const currentVoiceGroupId = state => state.guipatchviews.get('selectedPatchNumber');
 
 export const getVirtualInputGroups = state => state.patches.getIn([currentVoiceGroupId(state), 'inputgroups']);

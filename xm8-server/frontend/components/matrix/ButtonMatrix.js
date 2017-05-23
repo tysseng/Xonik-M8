@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 import outputs from '../../../shared/graph/Outputs'
 import ButtonMatrixRow from './ButtonMatrixRow';
@@ -15,7 +16,7 @@ const ButtonMatrix = ({inputs, directoutputs, toggleButton, onHover}) => {
             return <ButtonMatrixRow key={'row' + input.id} input={input} directoutputs={directoutputs} toggleButton={toggleButton} onHover={onHover}/>
           })}
         </tbody>
-      </table>           
+      </table>
     </div>
   )
 

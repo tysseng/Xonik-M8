@@ -1,10 +1,11 @@
 import React from 'react';
+import _ from 'lodash';
 
 const ButtonMatrixRowLabels = ({inputs, hover}) => {
 
   inputs = _.sortBy(inputs, ['sortKey']);
 
-  return ( 
+  return (
     <div id='buttonmatrixrows'>
       <div className="corner"></div>
       <table>
@@ -14,7 +15,7 @@ const ButtonMatrixRowLabels = ({inputs, hover}) => {
             return <tr key={'labelrow' + input.id}><td><span className={className}>{input.name.full}</span></td></tr>
           })}
         </tbody>
-      </table>           
+      </table>
     </div>
   )
 

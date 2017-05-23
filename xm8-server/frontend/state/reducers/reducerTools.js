@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { setState } from '../../../shared/state/actions/index';
 import config from '../../../shared/config';
 

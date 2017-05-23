@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux'; 
+import _ from 'lodash';
+import { connect } from 'react-redux';
 import { toggleDirectOutput} from '../../../shared/state/actions/matrix';
 import { toggleHover} from '../../../shared/state/actions/gui/guimatrix';
 import { getPhysicalInputs, getMatrix, getGuiMatrix, getGraph } from '../../state/selectors';
@@ -13,7 +14,7 @@ const mapStateToProps = (state, ownProps) => {
   let hover = getGuiMatrix(state).get('hover').toJS();
   let graphOutputs = getGraph(state).get('outputs').toJS();
   inputs = _.sortBy(inputs, ['sortKey']);
-  
+
   return {
     inputs,
     directoutputs,
@@ -23,7 +24,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return {  
+  return {
     toggleButton: (inputId, outputId) => dispatch(toggleDirectOutput(inputId, outputId)),
     onHover: (inputId, outputId) => dispatch(toggleHover(inputId, outputId))
   }

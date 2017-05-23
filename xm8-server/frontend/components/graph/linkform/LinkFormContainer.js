@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import { selectLink, changeLinkName, toggleLinkNameInGraph } from '../../../../shared/state/actions/nodes';
 import { paramTypesById } from '../../../../shared/graph/ParameterTypes';
@@ -23,7 +24,7 @@ const mapStateToProps = (state, ownProps) => {
 
   let selecedLinkId = getGuiPatchview(state).get('selectedLink');
   let link = links[selecedLinkId];
-  
+
   return {
     link,
     nodes

@@ -4,6 +4,7 @@ import {filetypes} from './FileTypes';
 try{
   // NB: Must use require as import cannot be used within a try/catch block.
   var localOverrides = require('./localConfigOverrides.js');
+  console.log(localOverrides);
 } catch (e){
   console.log("No local config overrides found");
 }
@@ -18,7 +19,7 @@ let config = {
       controllers: '/api/controller',
       state: '/api/state'
     }
-  },  
+  },
   spi: {
     mockSpi: true,
     slaveReadEnabled: true,
@@ -30,9 +31,9 @@ let config = {
     //200k seems to work too
     //250k makes pic32 fail at times
     //1000000 fails all the time
-    maxSpeed: 200000, 
+    maxSpeed: 200000,
     interruptPin: 22,
-    minBufferSize: 16 
+    minBufferSize: 16
   },
   graph: {
     numberOfInputs: 64
@@ -63,7 +64,7 @@ let config = {
       ip: "10.0.0.200",
       netmask: "255.255.255.0",
       fakeDomain: "xm8.net",
-      channel: 1      
+      channel: 1
     },
     dhcp: {
       range: '10.0.0.50,10.0.0.199,12h'
@@ -74,7 +75,7 @@ let config = {
       wpaLog: '/tmp/wpa_supplicant.log',
       hostapdConf: '/etc/hostapd/hostapd.conf',
       dnsmasqConf: '/etc/dnsmasq.conf'
-    }    
+    }
   },
   persistence: {
     filesystemPaths: {
