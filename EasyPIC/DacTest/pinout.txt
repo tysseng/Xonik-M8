@@ -109,4 +109,6 @@ SPI in
 7 - POWER-IN
 8 - GND
 
-
+DEBUG LEDS
+1 - 6 - RC1
+2 - 7 - RC2
