@@ -95,8 +95,3 @@ EBASE=9FC01000
 VECTOR_SPACEING=32
 VECTOR_MODE=1
 USE_SRS=7
-[EXPANDED NODES]
-Node1=Sources
-Node2=Header Files
-Node3=Output Files
-Count=3
