@@ -1,0 +1,114 @@
+ICP
+1 - +3V3
+2 - PGC - 24 - PGEC1 (RB1)
+3 - PGD - 25 - PGED1 (RB0)
+4 - MCLR - 13 - MCLR
+5 - GND
+
+SPI out
+ 1 - SDO-OUT
+ 2 - SDI-OUT
+ 3 - SCLK-OUT
+ 4 - +3V3
+ 5 - GND
+ 6 - SDO-OUT
+ 7 - SDI-OUT
+ 8 - SCLK-OUT
+ 8 - +3V3
+10 - GND
+
+SPI out VC
+1 - SDO-OUT - 50 - SDO3A (RF5)
+2 - SDI-OUT - 49 - SDI3A (RF4)
+3 - SCLK-OUT - 39 - SCK3A (RF13)
+4 - TUNE-IN - 20 - RB5 (AN5)
+5 - TUNE-A0 - 23 - RB2 (AN2)
+6 - TUNE-A1 - 22 - RB3 (AN3)
+7 - +3V3
+8 - GND
+
+Address bus
+ 1 - DAC-A0 - 72 - RD0
+ 2 - DAC-A1 (SR-A1) - 76 - RD1
+ 3 - DAC-A2 - 77 - RD2
+ 4 - DAC-A3 (SR-A3) - 78 - RD3
+ 5 - DAC-A4 - 81 - RD4
+ 6 - DAC-A5 - 82 - RD5
+ 7 - DAC-A6 - 83 - RD6
+ 8 - DAC-A7 - 84 - RD7
+ 9 - DAC-A8 - 68 - RD8
+10 - DAC-A9 - 69 - RD9
+11 - DAC-A10 - 70 - RD10
+12 - DAC-A11 - 71 - RD11
+13 - DAC-A12 - 79 - RD12
+14 - DAC-A13 - 80 - RD13
+15 - DAC-A14 - 47 - RD14
+16 - DAC-A15 - 48 - RD15
+
+Control
+ 1 - DAC-A - 93 - RE0
+ 2 - DAC-WR-LD (SR-A0) - 94 - RE1 
+ 3 - SR-EN - 98 - RE2
+ 4 - DIG-OUT2-0 (SR-A2) - 99 - RE3
+ 5 - DIG-OUT2-1 - 100 - RE4
+ 6 - DIG-OUT2-2 - 3 - RE5
+ 7 - DIG-OUT2-3 - 4 - RE6
+ 8 - DIG-OUT2-4 - 5 - RE7
+ 9 - +3V3
+10 - GND
+
+Midi
+1 - MIDI-IN4
+2 - MIDI-IN5
+3 - GND
+4 - MIDI-TX - 53 - U1ATX (RF8)
+5 - +3V3
+
+MIDI-RX - 52 - U1ARX (RF2)
+
+Outputs
+ 1 - DIG-OUT0 - 17 - RA0 
+ 2 - DIG-OUT1 - 38 - RA1
+ 3 - DIG-OUT2 - 58 - RA2
+ 4 - DIG-OUT3 - 59 - RA3
+ 5 - DIG-OUT4 - 60 - RA4
+ 6 - DIG-OUT5 - 61 - RA5
+ 7 - DIG-OUT6 - 91 - RA6
+ 8 - DIG-OUT7 - 92 - RA7
+ 9 - +3V3
+10 - GND
+
+Inputs
+1 - DIG-IN0 - 32 - RB8 (AN8)
+2 - DIG-IN1 - 33 - RB9 (AN9)
+3 - DIG-IN2 - 34 - RB10 (AN10)
+4 - DIG-IN3 - 35 - RB11 (AN11)
+5 - DIG-IN4 - 41 - RB12 (AN12) 
+6 - DIG-IN5 - 42 - RB13 (AN13)
+7 - DIG-IN6 - 43 - RB14 (AN14)
+8 - DIG-IN7 - 44 - RB15 (AN15)
+
+Interrupts
+1 - int 1 - 18 - RE8
+2 - int 2 - 19 - RE9
+3 - int 3 - 66 - RA14
+4 - int 4 - 67 - RA15
+5 - dig-in2-0 - 32 - RB7 (AN7)
+6 - dig-in2-1 - 33 - RB6 (AN6)
+7 - dig-in2-2 - 34 - RA10
+8 - dig-in2-3 - 35 - RA9
+
+
+SPI in
+1 - SDI-IN - 11 - SDI2A (RG7)
+2 - SDO-IN - 12 - SDO2A (RG8)
+3 - SCLK-IN - 10 - SCK2A (RG6)
+4 - SS-IN - 14 - SS2A (RG9)
+5 - SLAVE-INT - 9 - RC4
+6 - N/C 
+7 - POWER-IN
+8 - GND
+
+DEBUG LEDS
+1 - 6 - RC1
+2 - 7 - RC2
