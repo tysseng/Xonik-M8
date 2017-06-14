@@ -18,6 +18,8 @@
  * Note:
  *  - _SPI_ACTIVE_2_IDLE in MikroC PRO for PIC32 equals _SPI_HIGH_2_LOW in
  *    MikroC PRO for PIC
+ *  - SPI names have changed between old and new versions of the datasheet.
+ *  - The eagle drawings v1, v1.1 and v1.2 use the old names.
  *  - in MikroC, SPI3A is named SPI4
     - SPI2A however, is named SPI2
  *  - Data received through SPI is displayed on PORTB
@@ -30,6 +32,7 @@
   #include "Spi.test.h"
 #endif
 
+#include "PinConfig.h"
 #include "Dac.h"
 #include "Matrix.h"
 #include "Tune.h"
@@ -39,9 +42,6 @@
 #include "Spi.internal.h"
 #include "ByteArrayTools.h"
 #include <built_in.h>
-
-#define TX_INTERRUPT_TRIS TRISC4_bit
-#define TX_INTERRUPT LATC4_bit
 
 unsigned int i = 0;
 
@@ -73,21 +73,21 @@ unsigned short potmeter[8]; // last registered potmeter value
 #define SPI_RX_IE SPI2RXIE_bit
 #define SPI_RX_IF SPI2RXIF_bit
 #define SPI_CON_ENHBUF SPI2CON.ENHBUF
-#define SPI_IVT IVT_SPI_2
+#define SLAVE_SPI_IVT IVT_SPI_2
 #define SPI_BUF SPI2BUF
 #define SLAVE_SPI_Init_Advanced SPI2_Init_Advanced
 
-void SPI3_interrupt() iv SPI_IVT ilevel 6 ics ICS_SOFT{
+void SLAVE_SPI_interrupt() iv SLAVE_SPI_IVT ilevel 6 ics ICS_SOFT{
   volatile char rxbyte;
 
   rxbyte = SPI_BUF;
 
 //  LATA = rxbyte;
-  
+
   if(dataToSend){
     // Remove interrupt after first byte has been sent.
     if(txbytecounter == 1){
-      TX_INTERRUPT = 0;
+      SPI_IN_TX_INTERRUPT = 0;
     }
 
     // Prepare next byte if one is present.
@@ -108,7 +108,7 @@ void SPI3_interrupt() iv SPI_IVT ilevel 6 ics ICS_SOFT{
   if(!dataToSend){
     SPI_BUF = 0;
   }
-  
+
   receiveByte(rxbyte);
 
   //reset interrupt
@@ -177,8 +177,6 @@ void initSlaveSPIInterrupts(){
 
 
 void initSlaveSPI(){
-  //NB: SPI4 = SPI3A on the chip as Mikroelektronika and Microchip use
-  //    different naming schemes
   SLAVE_SPI_Init_Advanced(
     _SPI_SLAVE,
     _SPI_8_BIT,
@@ -187,13 +185,13 @@ void initSlaveSPI(){
     _SPI_DATA_SAMPLE_END,
     _SPI_CLK_IDLE_LOW,
     _SPI_ACTIVE_2_IDLE);
-    
+
   initSlaveSPIInterrupts();
 }
 
 void initSlaveInterrupt(){
-  TX_INTERRUPT_TRIS = 0; //Interrupt pin as output
-  TX_INTERRUPT = 0;
+  SPI_IN_TX_INTERRUPT_TRIS = 0; //Interrupt pin as output
+  SPI_IN_TX_INTERRUPT = 0;
 }
 
 void updateControllerFromSpi8bit(char* package){
@@ -318,7 +316,7 @@ void updateControllerAndSendThroughSpi(unsigned short id, unsigned short value){
     SPI4BUF = txbuffer[0];
 
     // raise interrupt to make master to fetch data
-    TX_INTERRUPT = 1;
+    SPI_IN_TX_INTERRUPT = 1;
   }
 }
 */

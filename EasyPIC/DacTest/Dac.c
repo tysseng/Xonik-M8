@@ -67,10 +67,10 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
     // yet.
     if(MX_matrixCalculationCompleted){
       OUT_swapBuffers();
-      
+
       // store the number of updates the dac did during the previous matrix
       // calculation. This will be used as a multiplier for ramp/timers in the
-      // next cycle to correct any skewing due to matrix calculation taking more 
+      // next cycle to correct any skewing due to matrix calculation taking more
       // than 1 DAC update (as DAC update frequency is our timer)
       DAC_intervalMultiplier = DAC_dacUpdatesFinished;
       MX_matrixCalculationCompleted = 0;
@@ -171,10 +171,10 @@ void initDacPorts(){
   // be high.
   DAC_WR_LD = 1;
   DAC_WR_LD_TRIS = 0;
-  
+
   SH_EN = 0;
   SH_EN_TRIS = 0;
-  
+
   DAC_BUS = 0;
   DAC_BUS_TRIS = 0;
 }
@@ -183,23 +183,23 @@ void DAC_startTimer(){
   //Prescaler 1:1; PR1 Preload = 2; Actual Interrupt Time = 25 ns
 
   // enable and clear interrupt
-  T1IE_bit         = 1;
-  T1IF_bit         = 0;
+  T1IE_bit = 1;
+  T1IF_bit = 0;
 
   // set interrupt priority
-  T1IP0_bit         = 1;
-  T1IP1_bit         = 1;
-  T1IP2_bit         = 1;
+  T1IP0_bit = 1;
+  T1IP1_bit = 1;
+  T1IP2_bit = 1;
 
 
   // set period = 25uS
-  PR1                 = 2000;
+  PR1 = 2000;
 
   // clear timer
   TMR1 = 0;
 
   // start timer
-  T1CON         = 0x8000;
+  T1CON = 0x8000;
 }
 
 void DAC_init(){
@@ -215,5 +215,5 @@ void DAC_init(){
 
   DAC_ADDRESS = 0;
   loadDac(0x8000);
-  
+
 }

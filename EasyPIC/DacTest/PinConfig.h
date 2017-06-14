@@ -3,7 +3,7 @@
 
 
 // **** SPI out VC port ****
-// SPI: SPI3A, see
+// SPI: SPI4 in newest datasheet, SPI3A in old and in eagle drawings, see Dco.c
 
 // 4: pin 20, RB5/AN5
 #define TUNE_IN LATB5_bit
@@ -105,8 +105,10 @@
 #define DIG_IN2_3_TRIS TRISA9_bit
 
 // **** SPI in port ****
-// SPI: SPI2A, see Spi.c
-// 5: SLAVE_INT = TX_INTERRUPT //TODO: Move here?
+// SPI: SPI2 in newest datasheet, SPI2A in old and in eagle drawings, see Spi.c
+// 5: SLAVE_INT = TX_INTERRUPT
+#define SPI_IN_TX_INTERRUPT LATC4_bit
+#define SPI_IN_TX_INTERRUPT_TRIS TRISC4_bit
 
 // **** Debug LEDs ****
 // 1: pin 6, RC1

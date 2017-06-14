@@ -1,17 +1,63 @@
-#include
+#include "PinConfig.h"
+#include "Config.h"
 
-// TODO: Set these correctly according to datasheet and eagle
-#define SPI_IP0 IPC7.B26
-#define SPI_IP1 IPC7.B27
-#define SPI_IP2 IPC7.B28
-#define SPI_RX_IE SPI2RXIE_bit
-#define SPI_RX_IF SPI2RXIF_bit
-#define SPI_CON_ENHBUF SPI2CON.ENHBUF
-#define SPI_IVT IVT_SPI_2
-#define SPI_BUF SPI2BUF
-#define DCO_SPI_Init_Advanced SPI2_Init_Advanced
-#define DCO_SPI_Write SPI2_Write
-#define DCO_DATA_READY PORTA.F0
+// TODO: Change this later, but for now it is practical to use the same connector for SPI and data ready
+#define DCO_DATA_READY TUNE_A0
+#define DCO_DATA_READY_TRIS TUNE_A0_TRIS
+#define DCO_SPI_Init_Advanced SPI4_Init_Advanced
+#define DCO_SPI_Write SPI4_Write
+#define DCO_SPI_IVT IVT_SPI_4
+#define DCO_SPI_TXBUF SPI4BUF
+#define DCO_SPI_TXBUF_EMPTY_IF SOMETHINGHERE
+#define DCO_SPI_TXBUF_EMPTY_IE SOMETHINGHERE
+#define DCO_BYTE_TIMER_IVT SOMETHINGELSE
+#define DCO_BYTE_TIMER_IF SOMETHINGELSE
+
+// to be able to write to multiple DCOs in one go, we have to write the first and second bytes
+// separately
+unsigned short currentByte = 1; // must be 1 initially to allow first write.
+unsigned short dcoByte1[CONNECTED_DCOS];
+unsigned short dcoByte2[CONNECTED_DCOS];
+
+void DCO_NEXT_BYTE_interrupt() iv DCO_BYTE_TIMER_IVT ilevel 6 ics ICS_SOFT{
+  if(DCO_BYTE_TIMER_IF){
+    DCO_BYTE_TIMER_IF = 0;
+    currentByte = 1:
+    writeBytesToDco(dcoByte2);
+  }
+}
+
+void DCO_TX_COMPLETE_interrupt() iv DCO_SPI_IVT ilevel 6 ics ICS_SOFT{
+  if(DCO_SPI_TXBUF_EMPTY_IF){
+    // flash data ready to make DCOs persist value
+    DCO_DATA_READY = 1;
+    DCO_DATA_READY = 0;
+    DCO_SPI_TXBUF_EMPTY_IF = 0;
+
+    // TODO: Start next byte timer.
+    currentByte = 1;
+  }
+}
+
+void writeBytesToDco(unsigned short[] bytesToTransfer) {
+  unsigned short i;
+  for(i=0; i<CONNECTED_DCOS){
+    // todo: write to SPI buffer here
+  }
+}
+
+// Write to multiple DCOs at once. Write is done in two chunks (all high bytes then all low bytes)
+// for maximum transfer speed (we are using SPI chaining so multiple DCO SPI buffers act as one
+// large shift register). Chunked writing happens using timers and interrupts, so we only need to
+// call write once.
+void DCO_writeValues(unsigned int[] dcoValues){
+  // prevent writing if previous byte has not yet been sent (not sure if really necessary, are there
+  // any cases where this may happen?
+  if(currentByte == 1){
+    currentByte = 0:
+    writeBytesToDco(dcoByte1);
+  }
+}
 
 void DCO_writeValue(unsigned int dcoValue){
   // TODO: Change to async writing - write bytes to buffer, set
@@ -28,8 +74,9 @@ void DCO_writeValue(unsigned int dcoValue){
 }
 
 void initDcoSPI(){
-  //NB: SPI4 = SPI3A on the chip as Mikroelektronika and Microchip use
-  //    different naming schemes
+  DCO_DATA_READY_TRIS = 0;
+  DCO_DATA_READY = 0;
+
   DCO_SPI_Init_Advanced(
     _SPI_MASTER,
     _SPI_8_BIT,

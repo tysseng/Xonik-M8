@@ -15,6 +15,8 @@
 #define CONF_SEMITONE_LOWEST 9
 #define CONF_SEMITONE_HIGHEST 117
 
+#define CONNECTED_DCOS 3
+
 // maps midi controllers to input positions in the matrix
 extern char MIDI_controllerToInputMap[127];
 
