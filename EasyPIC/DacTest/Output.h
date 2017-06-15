@@ -3,8 +3,8 @@
 #include "Config.h"
 #include "Types.h"
 
-extern matrixint *OUT_outputBuffer;
-extern matrixint *OUT_dacBuffer;
+extern matrixint *OUT_matrixBuffer;
+extern matrixint *OUT_activeBuffer;
 void OUT_init();
 void OUT_swapBuffers();
 

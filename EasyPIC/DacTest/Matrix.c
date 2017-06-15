@@ -34,7 +34,7 @@ char MX_isSuspended = 0;
 // TODO: Keep input constant during calculation?
 
 // result of matrix Node calculations for each Node. In addition, input values
-// received over spi and input constants are stored as results and must be 
+// received over spi and input constants are stored as results and must be
 // placed at the start of the results array.
 matrixint MX_nodeResults[INPUTS + MAX_CONSTANTS + MAX_NODES];
 char constantsInUse = 0;
@@ -125,7 +125,7 @@ void nodeFuncRamp(Node *aNode){
         aNode->state.B0 = RUNNING;
     } else {
 
-        // TODO 
+        // TODO
         // ERROR
         // ERROR
         // ERROR
@@ -355,7 +355,7 @@ void nodeFuncBinaryNot(Node *aNode){
 }
 
 // fetch an input from the corresponding position in the Node results. This
-// buffers the input in case the input changes during the matrix calculation and 
+// buffers the input in case the input changes during the matrix calculation and
 // can be used to get a constant value for all later nodes if that is important.
 void nodeFuncBufferInput(Node *aNode){
     *aNode->result = MX_nodeResults[*aNode->params[0]];
@@ -365,7 +365,7 @@ void nodeFuncBufferInput(Node *aNode){
 // Param 0: index of Node to fetch result from
 // Param 1: output buffer position
 void nodeFuncOutput(Node *aNode){
-  OUT_outputBuffer[*aNode->params[1]] = *aNode->params[0];
+  OUT_matrixBuffer[*aNode->params[1]] = *aNode->params[0];
 }
 
 // Convert linear value to exponential. Only positive values are converted,
@@ -388,12 +388,12 @@ void nodeFuncPositiveExp(Node *aNode){
 void nodeFuncOutputTuned(Node *aNode){
   char vco = *aNode->params[1]; // must be 0,1,2
   matrixint value = *aNode->params[0];
-  
+
   // convert value to 7 bit (between -64 and +63)
   int tuneIndex = 64 + (value >> 9);
 
   // TODO: Check if in range?
-  OUT_outputBuffer[vco] = value + MX_vcoTuning[vco][tuneIndex];
+  OUT_matrixBuffer[vco] = value + MX_vcoTuning[vco][tuneIndex];
 }
 
 //glide any output. resists change.
@@ -402,7 +402,7 @@ void nodeFuncGlide(Node *aNode){
     matrixint maxchange = *aNode->params[1]; // maximum rate of change - consider inverting this to get 0=no glide, max = max glide.
     matrixint glideUp   = *aNode->params[2]; // should glide up?
     matrixint glideDown = *aNode->params[3]; // should glide down?
-    
+
     matrixint change = input - *aNode->result;
     if(change > 0 && glideUp){ // input is larger than current output
         if(change > maxchange){
@@ -449,13 +449,13 @@ void MX_addNode(unsigned short *bytes){
   unsigned short resultPosition = nodesInUse + constantsInUse + INPUTS;
   unsigned short position = nodesInUse;
   unsigned short i;
-  
+
   nodes[position].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
   for(i=0; i<8; i++){
     nodes[position].params[i] = &MX_nodeResults[BAT_getAsUInt(bytes, i*2 + NODE_PARAM_0_HI)];
   }
   nodes[position].paramsInUse = bytes[NODE_PARAMS_IN_USE];
-  
+
   MX_nodeResults[resultPosition] = BAT_getAsInt(bytes, NODE_RESULT_HI);
   nodes[position].result = &MX_nodeResults[resultPosition];
   nodes[position].highResState = 0;
@@ -472,7 +472,7 @@ void MX_updateNode(unsigned short *bytes){
   unsigned int resultPosition = BAT_getAsUInt(bytes, NODE_POSITION_HI);
   unsigned int position = resultPosition - constantsInUse - INPUTS;
   unsigned short i;
-  
+
   unsigned int paramPos;
 
   nodes[position].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
@@ -482,13 +482,13 @@ void MX_updateNode(unsigned short *bytes){
     nodes[position].params[i] = &MX_nodeResults[paramPos];
   }
   nodes[position].paramsInUse = bytes[NODE_PARAMS_IN_USE];
-  
+
   MX_nodeResults[resultPosition] = BAT_getAsInt(bytes, NODE_RESULT_HI);
   nodes[position].result = &MX_nodeResults[resultPosition];
   nodes[position].highResState = 0;
   nodes[position].state = 0;
 }
-    
+
 void MX_setNodeCount(unsigned short *bytes){
   nodesInUse = BAT_getAsUInt(bytes, NODES_COUNT_HI);
 }
@@ -543,7 +543,7 @@ void MX_command(char* package){
 
 void resetMatrix(){
   char i;
-  
+
   nodesInUse = 0;
   constantsInUse = 0;
 

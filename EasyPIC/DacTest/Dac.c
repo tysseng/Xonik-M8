@@ -134,13 +134,13 @@ void writeValuesToSH(char sr_output){
   // select and load DAC B
   DAC_ADDRESS = 1;
 
-  loadDac(OUT_dacBuffer[sr_output] + 0x8000);
+  loadDac(OUT_activeBuffer[sr_output] + 0x8000);
 
   //TODO: Switch DAC A/B outputs later.
   // select and load DAC A
   DAC_ADDRESS = 0;
 
-  loadDac(OUT_dacBuffer[SR_OUTPUTS + sr_output] + 0x8000);
+  loadDac(OUT_activeBuffer[SR_OUTPUTS + sr_output] + 0x8000);
 
   // set SH address
 

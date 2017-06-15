@@ -24,9 +24,9 @@ void testSum(){
     aNode.paramsInUse = 3;
     aNode.paramIsConstant = 0b00000111;
     MX_addNode(&aNode);
-    
+
     MX_runMatrix();
-    
+
     assertEquals(7,aNode.result,"sum");
 }
 
@@ -39,7 +39,7 @@ void testMultiply(){
     aNode.paramsInUse = 3;
     aNode.paramIsConstant = 0b00000111;
     MX_addNode(&aNode);
-    
+
     MX_runMatrix();
 
     assertEquals(64,aNode.result,"product");
@@ -139,7 +139,7 @@ void testDelayLine(){
     MX_addNode(&aNode);
 
     assertEquals(0,aNode.result,"delay line precondition");
-    
+
     MX_runMatrix();
 
     assertEquals(10,aNode.result,"delay line");
@@ -206,7 +206,7 @@ void testLfoPulse(){
 
     assertEquals(10,aNode.result,"LFO Pulse trigger");
     assertEquals(0,aNode.highResState,"LFO Pulse init iterator");
-    
+
     aNode.params[2] = 0; // remove trigger
 
     MX_runMatrix();
@@ -216,7 +216,7 @@ void testLfoPulse(){
     assertEquals(1,aNode.highResState,"LFO Pulse iterator increment");
 
     MX_runMatrix();
-    
+
     // after two cycles we should have reached the pulse length and the lfo should drop to its minimum value
     assertEquals(-5,aNode.result,"LFO Pulse step 3");
 
@@ -243,7 +243,7 @@ void testLfoPulseRetrigger(){
 
     MX_runMatrix();
 
-    // on the first run, trigger should cause the output to go high and reset 
+    // on the first run, trigger should cause the output to go high and reset
     // the iteration counter
     assertEquals(10,aNode.result,"LFO Pulse trigger");
     assertEquals(0,aNode.highResState,"LFO Pulse init iterator");
@@ -374,7 +374,7 @@ void testScale(){
 
     MX_runMatrix();
     assertEquals(MAX_POSITIVE,aNode.result,"Scale max positive");
-    
+
     // Full scale, no reduction
     aNode.params[0] = MAX_POSITIVE;
     aNode.params[1] = MAX_POSITIVE - 1;
@@ -401,7 +401,7 @@ void testScale(){
 
     MX_runMatrix();
     assertEquals(-1,aNode.result,"Scale minus 1");
-    
+
     // edge cases for multiplying maximum values - will not reach max negative
     // as the positive scale factor is less than the negative.
     aNode.params[0] = MAX_NEGATIVE;
@@ -564,7 +564,7 @@ void testOutputTunedOnSemitone(){
 
   MX_runMatrix();
 
-  assertEquals(100, OUT_outputBuffer[0], "Pitch not corrected");
+  assertEquals(100, OUT_matrixBuffer[0], "Pitch not corrected");
 }
 
 void testOutputTunedPitchRoundingLower(){
@@ -578,7 +578,7 @@ void testOutputTunedPitchRoundingLower(){
 
   MX_runMatrix();
 
-  assertEquals(-32668, OUT_outputBuffer[0], "Pitch not corrected");
+  assertEquals(-32668, OUT_matrixBuffer[0], "Pitch not corrected");
 }
 
 void testOutputTunedPitchRoundingHigher(){
@@ -592,7 +592,7 @@ void testOutputTunedPitchRoundingHigher(){
 
   MX_runMatrix();
 
-  assertEquals(32667, OUT_outputBuffer[0], "Pitch not corrected");
+  assertEquals(32667, OUT_matrixBuffer[0], "Pitch not corrected");
 }
 
 void testOutputTunedPitchRounding(){
@@ -604,7 +604,7 @@ void testOutputTunedPitchRounding(){
 
   MX_runMatrix();
 
-  assertEquals(12124, OUT_outputBuffer[0], "Pitch not corrected");
+  assertEquals(12124, OUT_matrixBuffer[0], "Pitch not corrected");
 }
 
 void testPositiveExpPositiveEdge(){
@@ -621,7 +621,7 @@ void testPositiveExpPositiveEdge(){
   MX_addNode(aNode);
 
   MX_runMatrix();
-  
+
   assertEquals(32767, MX_nodeResults[64], "Wrong edge conversion");
 }
 
@@ -637,7 +637,7 @@ void testPositiveExpPositive(){
   aNode[NODE_PARAM_0_HI] = 0;
 
   MX_addNode(aNode);
-  
+
   MX_runMatrix();
 
   assertEquals(400, MX_nodeResults[64], "Wrong positive conversion");
@@ -655,7 +655,7 @@ void testPositiveExpNegative(){
   aNode[NODE_PARAM_0_HI] = 0;
 
   MX_addNode(aNode);
-  
+
   MX_runMatrix();
 
   assertEquals(0, MX_nodeResults[64], "Wrong negative conversion");
@@ -668,17 +668,17 @@ void runMatrixTests(){
     add(&testOutputTunedPitchRoundingLower);
     add(&testOutputTunedPitchRoundingHigher);
     add(&testOutputTunedPitchRounding);
-    
+
     add(&testPositiveExpPositiveEdge);
     add(&testPositiveExpPositive);
     add(&testPositiveExpNegative);
-    
+
     //TODO: Add exp conv tests
-    
+
     /*
     add(&testSum);
     add(&testMultiply);
-    
+
     add(&testInvertPositive);
     add(&testInvertNegative);
     add(&testInvertMaxNegative);
@@ -687,13 +687,13 @@ void runMatrixTests(){
     add(&testInvertEachSideZero);
     add(&testInvertEachSidePositive);
     add(&testInvertEachSideNegative);
-    
+
     add(&testDelayLine);
 
     add(&testMemorySet);
     add(&testMemoryHold);
     add(&testMemoryClear);
-    
+
     add(&testLfoPulse);
     add(&testLfoPulseRetrigger);
     add(&testLfoPulseStartOnBottom);
@@ -706,7 +706,7 @@ void runMatrixTests(){
     add(&testBinaryAnd);
     add(&testBinaryOr);
 */
-    
+
     run(resetMatrixTests);
 }
 
