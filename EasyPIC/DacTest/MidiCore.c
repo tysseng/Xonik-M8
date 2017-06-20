@@ -42,11 +42,11 @@ bit inSysexMode;
 bit sysexForThisDevice;
 
 //index of sysex byte after sysex status
-unsigned int sysexByteCounter = 0;
+char sysexByteCounter = 0;
 
 // cyclic counter counting bytes after sysex address, reset to 0 when one sysex
 // operation has been completed (operation length in bytes may depend)
-char sysexDataCounter = 0;
+unsigned int sysexDataCounter = 0;
 char sysexAddress[] = {0, 43, 92}; //randomly chosen but must start with 0
 
 char activeMidiChannels[16];
@@ -54,13 +54,13 @@ char activeMidiChannels[16];
 void MidiRxInterrupt() iv IVT_UART_1 ilevel 5 ics ICS_AUTO {
   char midiByte;
   char midiStatus;
-  
+
   if (U1RXIF_bit){
     midiByte = U1RXREG;
 
-    //TODO: May have to use a while loop, checking UR1DA_bit for data as 
+    //TODO: May have to use a while loop, checking UR1DA_bit for data as
     // U1RXREG is an 8 byte FIFO queue
-    
+
     if(midiByte > 0xF7){
       MIDI_HOOK_treatRealtimeStatus(midiByte);
     } else {
@@ -126,10 +126,6 @@ void MIDI_CORE_readFromRxBuffer(){
 
 
 // ******** [start midi data handling and conversion] ********
-
-// Gets a midi byte from the input buffer and performs the necessary actions.
-// Returns 0 if everything went fine (If the pg200 write buffer is full, we
-// will return 1 and try to read the byte again later).
 void treatMidiByte(char midiByte){
   if(midiByte.F7 == 1){
     treatStatusByte(midiByte);
@@ -196,8 +192,8 @@ void treatDataByte(char midiByte){
 
   // Must recheck as sysex mode may have been aborted in the previous call
   if(!inSysexMode){
-  
-    // Store last received first-parameter. Switch to 1 after second param to 
+
+    // Store last received first-parameter. Switch to 1 after second param to
     // allow for running status
     if(midiByteCounter == 1){ // first parameter received
       if(statusMessageLength[lastMidiStatus] == 2){
@@ -222,15 +218,13 @@ void treatSysexDataByte(char midiByte){
     if(midiByte != sysexAddress[sysexByteCounter]){
       sysexForThisDevice = 0;
     }
+    sysexByteCounter++;
   } else {
     if(sysexForThisDevice){
       MIDI_HOOK_treatSysexByte(midiByte, sysexDataCounter);
       sysexDataCounter++;
     }
   }
-  // NB: This will overflow, so maximum 256 bytes of sysex (-3 address bytes)
-  // can be sent.
-  sysexByteCounter++;
 }
 
 void initStatusMessageLengths(){
@@ -276,7 +270,7 @@ void setupInterrupts(){
   // interrupt sub priority 3
   U1IS0_bit = 1;
   U1IS1_bit = 1;
-  
+
   U1RXIE_bit = 1;            // enable USART RX interrupt
 }
 
@@ -300,7 +294,7 @@ void flashStatus(char times){
 // set channels to listen to
 void setupActiveMidiChannels(){
   char i;
-  
+
   for(i=0; i<16; i++){
     activeMidiChannels[i] = 0;
   }

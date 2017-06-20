@@ -10,7 +10,7 @@ extern void MIDI_HOOK_treatTwoByteMessage(char lastMidiChannel, char lastMidiSta
 extern void MIDI_HOOK_treatThreeByteMessage(char lastMidiChannel, char lastMidiStatus, char lastMidiParam1, char midiByte);
 extern void MIDI_HOOK_treatTuneRequest();
 extern void MIDI_HOOK_treatRealtimeStatus(char status);
-extern void MIDI_HOOK_treatSysexByte(char midiByte, char bytePosition);
+extern void MIDI_HOOK_treatSysexByte(char midiByte, unsigned int bytePosition);
 extern void MIDI_HOOK_sysexAborted();
 
 #endif

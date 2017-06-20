@@ -21,7 +21,7 @@ void OUT_init(){
 
   for(i=0; i<OUTPUTS; i++){
     OUT_matrixBuffer[i] = 0;
-    OUT_activeBuffer[i]    = 0;
+    OUT_activeBuffer[i] = 0;
   }
 }
 
