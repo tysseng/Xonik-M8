@@ -68,14 +68,14 @@ void DCO_writeValues(unsigned int dcoValues[]){
 
 void DCO_writeValue(unsigned int dcoValue){
   LED_flash1(1);
-  DCO_SPI_Write(0);
+
   // TODO: Change to async writing - write bytes to buffer, set
   // data ready in write complete interrupt, start writing second byte etc.
-  //DCO_SPI_Write(Hi(dcoValue));
+  DCO_SPI_Write(Hi(dcoValue));
   /*DCO_DATA_READY = 1;
   DCO_DATA_READY = 0;
   delay_ms(1);*/
-  //DCO_SPI_Write(Lo(dcoValue));
+  DCO_SPI_Write(Lo(dcoValue));
   DCO_DATA_READY = 1;
   DCO_DATA_READY = 0;
   delay_ms(1);

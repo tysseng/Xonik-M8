@@ -27,6 +27,7 @@
 // Primary Oscillator Configuration: XT osc mode
 
 #include "Dac.h"
+#include "Dco.h"
 #include "AnalogInputs.h"
 #include "Spi.h"
 #include "Matrix.h"
@@ -119,6 +120,7 @@ void main() {
 
   AI_init();
   DAC_init();
+  DCO_init();
   SPI_init();
   MIDI_init();
   MX_init();
@@ -145,7 +147,7 @@ void main() {
 
   while(1){
     if(alive == 0){
-      LED_flash2(1);
+      //LED_flash2(1);
     }
     alive++;
 
