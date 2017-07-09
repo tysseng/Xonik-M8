@@ -114,7 +114,6 @@ void main() {
   JTAGEN_bit = 0;
 
   TRISA = 0;
-  LATA = 0xFFFF;
 
   LED_init();
   
@@ -137,9 +136,8 @@ void main() {
   // will not be incremented.
   MX_runMatrix();
 
-  // TODO: Starting the dac timer crashes the system
   // start the dac
-//  DAC_startTimer();
+  DAC_startTimer();
 
   // Tell the world that booting has completed
   LED_flash2(2);
@@ -152,7 +150,7 @@ void main() {
     alive++;
 
     MIDI_CORE_readFromRxBuffer();
-/*
+
 //    AI_readPotmeters();
 
     SPI_checkForReceivedData();
@@ -161,7 +159,6 @@ void main() {
       DAC_dacUpdatesFinished = 0;
       MX_runMatrix();
     }
-*/
   }
 }
 #endif

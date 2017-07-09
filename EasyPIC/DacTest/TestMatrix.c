@@ -3,6 +3,26 @@
 #include "Types.h"
 #include "Spi.h"
 
+// direct output of pitch to dco
+void TM_setupTestMatrix(){
+    char aNode0[21];
+    
+    MX_addConstant(0); // output result to output 0;
+
+    aNode0[NODE_FUNC] = NODE_OUTPUT;
+    // Where to get output from
+    aNode0[NODE_PARAM_0_LO] = MATRIX_INPUT_PITCH;
+    aNode0[NODE_PARAM_0_HI] = 0;
+    // output position
+    aNode0[NODE_PARAM_1_LO] = INPUTS; // output 0
+    aNode0[NODE_PARAM_1_HI] = 0;
+
+    aNode0[NODE_PARAMS_IN_USE] = 2;
+    MX_addNode(aNode0);
+
+}
+
+/*
 void TM_setupTestMatrix(){
   char stop[]     = {0x03, 0x06, 0x03};
   char cycle[]    = {0x06, 0x03, 0x00, 0x40, 0x00, 0x04};
@@ -30,7 +50,7 @@ void TM_setupTestMatrix(){
   SPI_mockReceive(outputnode);
   SPI_mockReceive(nodelen);
  // SPI_mockReceive({0x03, 0x06, 0x03});
-}
+}*/
 
 void TsM_setupTestMatrix(){
     char aNode0[21], aNode1[21], aNode2[21], aNode3[21];
@@ -62,7 +82,7 @@ void TsM_setupTestMatrix(){
     aNode2[NODE_PARAM_5_HI] = 0;
     aNode2[NODE_PARAMS_IN_USE] = 6;
     MX_addNode(aNode2);
-    
+
     aNode3[NODE_FUNC] = NODE_OUTPUT;
     // Node to get output from
     aNode3[NODE_PARAM_0_LO] = 7 + INPUTS; // Node 2 (lfo pulse)

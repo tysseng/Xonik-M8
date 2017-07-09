@@ -50,7 +50,6 @@ char output = 0;
 // TODO: Move this away from DAC file
 unsigned int currentDcoValue = 0;
 unsigned int nextDcoValue = 0;
-unsigned int temp  = 0;
 
 #ifndef RUNTESTS
 void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
@@ -77,13 +76,7 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
       MX_matrixCalculationCompleted = 0;
     }
 
-    // TODO: Temporary code to write to DCO
-    if(temp == 2500){
-      temp = 0;
-      currentDcoValue += 512;
-    }
-    temp++;
-
+    nextDcoValue = OUT_activeBuffer[0];
     if(currentDcoValue != nextDcoValue){
       DCO_writeValue(nextDcoValue);
       currentDcoValue = nextDcoValue;

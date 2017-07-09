@@ -17,6 +17,7 @@
 #include "Matrix.h"
 #include "ByteArrayTools.h"
 #include "LinToExpTable.h"
+#include "DebugLed.h"
 
 // matrix nodes
 volatile Node nodes[MAX_NODES];
@@ -478,7 +479,6 @@ void MX_updateNode(unsigned short *bytes){
   nodes[position].func = MX_getFunctionPointer(bytes[NODE_FUNC]);
   for(i=0; i<8; i++){
     paramPos = BAT_getAsUInt(bytes, i*2 + NODE_PARAM_0_HI);
-    LATA = paramPos;
     nodes[position].params[i] = &MX_nodeResults[paramPos];
   }
   nodes[position].paramsInUse = bytes[NODE_PARAMS_IN_USE];
@@ -498,6 +498,7 @@ void MX_setConstantsCount(unsigned short *bytes){
 }
 
 void MX_noteOn(int pitch, int velocity){
+  LED_flash2(1);
   MX_nodeResults[MATRIX_INPUT_PITCH] = MX_keyToMatrixMapper[pitch];
   MX_nodeResults[MATRIX_INPUT_VELOCITY] = velocity << 8;
   MX_nodeResults[MATRIX_INPUT_GATE] = 0x7FFF;
@@ -515,7 +516,6 @@ void MX_runMatrix(){
   if(MX_isSuspended) return;
 
   for(i = 0; i<nodesInUse; i++){
-    LATA=i;
     nodes[i].func(&nodes[i]);
   }
 

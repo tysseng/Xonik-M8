@@ -2,13 +2,9 @@
 
 #define DEBUG_LED_ON 0
 #define DEBUG_LED_OFF 1
-#define DEBUG_LED_DELAY 200
+#define DEBUG_LED_DELAY 50
 
 void LED_flash1(char times){
-  // it is necessary to make a copy of the value before looping. Without this,
-  // it seems the compiler messes up things if the value changes inside an
-  // interrupt
-//  volatile char times = originalTimes;
   char i;
   for(i=0; i< times; i++){
     DEBUG_LED_1 = DEBUG_LED_ON;
