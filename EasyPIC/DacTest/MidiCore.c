@@ -2,11 +2,12 @@
 #include "MidiCore.h"
 #include "MidiControllerNumbers.h"
 #include "MidiStatusMessages.h"
+#include "DebugLed.h"
 
 //TODO: Treat time code messages in interrupt?
 
 //RX ring buffer length. Must not exceed 256 bytes...
-#define RX_LEN 256
+#define RX_LEN 6
 
 //midi bitmasks
 #define MIDI_BITMASK_STATUS 0xF0
@@ -114,6 +115,9 @@ void MIDI_CORE_readFromRxBuffer(){
   char midiByte;
 
   while(midiRxReadPtr != midiRxWritePtr){
+    // Indicate that midi byte is available
+    LED_flash1(1);
+
     nextRxPtr = (midiRxReadPtr + 1) % RX_LEN;
     midiByte = midiRxBuffer[nextRxPtr];
     treatMidiByte(midiByte);
@@ -165,7 +169,7 @@ void treatSysexStatusByte(char midiByte){
   if(midiByte == SM_SYSEX_START){
 
     // tell the world that we received a start message
-    // flashStatus(1);
+    LED_flash1(3);
 
     sysexByteCounter = 0;
     sysexDataCounter = 0;
@@ -174,7 +178,8 @@ void treatSysexStatusByte(char midiByte){
   } else if(midiByte == SM_SYSEX_END){
 
     // tell the world that we received an end message
-    flashStatus(2);
+    LED_flash1(2);
+    
     inSysexMode = 0;
     MIDI_HOOK_sysexAborted();
   } else {
@@ -277,18 +282,6 @@ void setupInterrupts(){
 void setupUsart(){
   UART1_Init(31250);        // initialize USART module
   Delay_ms(100);            // Wait for UART module to stabilize
-}
-
-void flashStatus(char times){
-/*
-  char i;
-  for(i=0; i< times; i++){
-    STATUS_LED = STATUS_LED_ON;
-    delay_ms(100);
-    STATUS_LED = STATUS_LED_OFF;
-    delay_ms(100);
-  }
-*/
 }
 
 // set channels to listen to

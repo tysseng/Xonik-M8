@@ -1,0 +1,29 @@
+#include "PinConfig.h"
+
+#define DEBUG_LED_ON 0
+#define DEBUG_LED_OFF 1
+
+void LED_flash1(char times){
+  char i;
+  for(i=0; i< times; i++){
+    DEBUG_LED_1 = DEBUG_LED_ON;
+    delay_ms(100);
+    DEBUG_LED_1 = DEBUG_LED_OFF;
+    delay_ms(100);
+  }
+}
+
+void LED_flash2(char times){
+  char i;
+  for(i=0; i< times; i++){
+    DEBUG_LED_2 = DEBUG_LED_ON;
+    delay_ms(100);
+    DEBUG_LED_2 = DEBUG_LED_OFF;
+    delay_ms(100);
+  }
+}
+
+void LED_init() {
+  DEBUG_LED_TRIS_1 = 0;
+  DEBUG_LED_TRIS_2 = 0;
+}

@@ -37,6 +37,7 @@
 #include "built_in.h"
 #include "Config.test.h"
 #include "PinConfig.h"
+#include "DebugLed.h"
 
 #ifdef RUNTESTS
   #include "Spi.test.h"
@@ -115,13 +116,21 @@ void main() {
   TRISA = 0;
   LATA = 0xFFFF;
 
+  LED_init();
+  
+  // Tell the world that we are booting up
+  LED_flash1(2);
+  LED_flash2(2);
+
   AI_init();
   DAC_init();
   SPI_init();
   MIDI_init();
   MX_init();
   MIDI_CORE_init();
+  
   EnableInterrupts();
+  
   TM_setupTestMatrix();
   
   OUT_init();
@@ -132,21 +141,21 @@ void main() {
   // will not be incremented.
   MX_runMatrix();
 
+  // TODO: Starting the dac timer crashes the system
   // start the dac
-  DAC_startTimer();
+//  DAC_startTimer();
+
+  // Tell the world that booting has completed
+  LED_flash2(2);
+  LED_flash1(2);
 
   while(1){
-
     if(alive == 0){
-      if(LATA == 0){
-        LATA = 0xFFFF;
-      } else {
-        LATA = 0;
-      }
+      LED_flash2(1);
     }
     alive++;
 
-//    MIDI_CORE_readFromRxBuffer();
+    MIDI_CORE_readFromRxBuffer();
 //    AI_readPotmeters();
 
     SPI_checkForReceivedData();

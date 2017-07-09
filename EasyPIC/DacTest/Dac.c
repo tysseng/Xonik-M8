@@ -25,6 +25,7 @@
 #include "built_in.h"
 #include "Dac.h"
 #include "Dac.internal.h"
+#include "Dco.h"
 #include "Matrix.h"
 #include "Output.h"
 #include "PinConfig.h"
@@ -81,7 +82,7 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
       temp = 0;
       currentDcoValue += 512;
     }
-    temp++:
+    temp++;
 
     if(currentDcoValue != nextDcoValue){
       DCO_writeValue(nextDcoValue);

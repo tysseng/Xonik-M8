@@ -111,6 +111,7 @@
 #define SPI_IN_TX_INTERRUPT_TRIS TRISC4_bit
 
 // **** Debug LEDs ****
+/*
 // 1: pin 6, RC1
 #define DEBUG_LED_1 LATC1_bit
 #define DEBUG_LED_TRIS_1 TRISC1_bit
@@ -118,5 +119,10 @@
 // 2: pin 7, RC2
 #define DEBUG_LED_2 LATC2_bit
 #define DEBUG_LED_TRIS_2 TRISC2_bit
+*/
+#define DEBUG_LED_1 LATA0_bit
+#define DEBUG_LED_TRIS_1 TRISA0_bit
+#define DEBUG_LED_2 LATA1_bit
+#define DEBUG_LED_TRIS_2 TRISA1_bit
 
 #endif

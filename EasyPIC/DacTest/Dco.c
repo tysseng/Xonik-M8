@@ -1,5 +1,6 @@
 #include "PinConfig.h"
 #include "Config.h"
+#include <built_in.h>
 
 // TODO: Change this later, but for now it is practical to use the same connector for SPI and data ready
 #define DCO_DATA_READY TUNE_A0
@@ -19,6 +20,7 @@ unsigned short currentByte = 1; // must be 1 initially to allow first write.
 unsigned short dcoByte1[CONNECTED_DCOS];
 unsigned short dcoByte2[CONNECTED_DCOS];
 
+/*
 void DCO_NEXT_BYTE_interrupt() iv DCO_BYTE_TIMER_IVT ilevel 6 ics ICS_SOFT{
   if(DCO_BYTE_TIMER_IF){
     DCO_BYTE_TIMER_IF = 0;
@@ -37,11 +39,11 @@ void DCO_TX_COMPLETE_interrupt() iv DCO_SPI_IVT ilevel 6 ics ICS_SOFT{
     // TODO: Start next byte timer.
     currentByte = 1;
   }
-}
+} */
 
-void writeBytesToDco(unsigned short[] bytesToTransfer) {
+void writeBytesToDco(unsigned short bytesToTransfer[]) {
   unsigned short i;
-  for(i=0; i<CONNECTED_DCOS){
+  for(i=0; i<CONNECTED_DCOS; i++){
     // todo: write to SPI buffer here
   }
 }
@@ -50,11 +52,11 @@ void writeBytesToDco(unsigned short[] bytesToTransfer) {
 // for maximum transfer speed (we are using SPI chaining so multiple DCO SPI buffers act as one
 // large shift register). Chunked writing happens using timers and interrupts, so we only need to
 // call write once.
-void DCO_writeValues(unsigned int[] dcoValues){
+void DCO_writeValues(unsigned int dcoValues[]){
   // prevent writing if previous byte has not yet been sent (not sure if really necessary, are there
   // any cases where this may happen?
   if(currentByte == 1){
-    currentByte = 0:
+    currentByte = 0;
     writeBytesToDco(dcoByte1);
   }
 }
