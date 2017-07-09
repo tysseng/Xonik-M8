@@ -7,7 +7,7 @@
 //TODO: Treat time code messages in interrupt?
 
 //RX ring buffer length. Must not exceed 256 bytes...
-#define RX_LEN 6
+#define RX_LEN 256
 
 //midi bitmasks
 #define MIDI_BITMASK_STATUS 0xF0
@@ -20,7 +20,7 @@ char midiRxBuffer[RX_LEN];
 //The last position in the rxBuffer that was read from
 char midiRxReadPtr;
 //The last position in the rxBuffer thas was written to
-char midiRxWritePtr;
+volatile char midiRxWritePtr;
 
 // last received midi status and first parameter (e.g. key for note on/off)
 char lastMidiStatus = 0;
@@ -58,14 +58,24 @@ void MidiRxInterrupt() iv IVT_UART_1 ilevel 5 ics ICS_AUTO {
 
   if (U1RXIF_bit){
     midiByte = U1RXREG;
-
     //TODO: May have to use a while loop, checking UR1DA_bit for data as
     // U1RXREG is an 8 byte FIFO queue
 
     if(midiByte > 0xF7){
       MIDI_HOOK_treatRealtimeStatus(midiByte);
     } else {
-      writeToRxBuffer(midiByte);
+      // For some reason, this has to be inlined in the interrupt routine.
+      // Calling it as a function messed up the midiRxWritePtr for a little
+      // while, maybe the compiler does some smart trick.
+      // PS: See comment on the writeToRxBuffer_Test function
+      char nextRxPtr;
+      nextRxPtr = (midiRxWritePtr + 1) % RX_LEN;
+
+      //check if the read pointer is ahead of the write pointer
+      if(nextRxPtr != midiRxReadPtr){
+        midiRxWritePtr = nextRxPtr;
+        midiRxBuffer[midiRxWritePtr] = midiByte;
+      }
     }
     U1RXIF_bit = 0;
   }
@@ -86,17 +96,6 @@ void MidiRxInterrupt() iv IVT_UART_1 ilevel 5 ics ICS_AUTO {
 //
 // - Need to rewrite this to reject the second message if the first is rejected
 // (or the next two if it is a status message that is rejected).
-void writeToRxBuffer(char input){
-  char nextRxPtr;
-  nextRxPtr = (midiRxWritePtr + 1) % RX_LEN;
-
-  //check if the read pointer is ahead of the write pointer
-  if(nextRxPtr != midiRxReadPtr){
-    midiRxWritePtr = nextRxPtr;
-    midiRxBuffer[midiRxWritePtr] = input;
-  }
-}
-
 void writeToRxBuffer_Test(char input){
   char nextRxPtr;
   nextRxPtr = (midiRxWritePtr + 1) % RX_LEN;
@@ -115,10 +114,8 @@ void MIDI_CORE_readFromRxBuffer(){
   char midiByte;
 
   while(midiRxReadPtr != midiRxWritePtr){
-    // Indicate that midi byte is available
-    LED_flash1(1);
-
     nextRxPtr = (midiRxReadPtr + 1) % RX_LEN;
+    
     midiByte = midiRxBuffer[nextRxPtr];
     treatMidiByte(midiByte);
 

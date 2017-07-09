@@ -118,10 +118,6 @@ void main() {
 
   LED_init();
   
-  // Tell the world that we are booting up
-  LED_flash1(2);
-  LED_flash2(2);
-
   AI_init();
   DAC_init();
   SPI_init();
@@ -151,11 +147,12 @@ void main() {
 
   while(1){
     if(alive == 0){
-      LED_flash2(1);
+//      LED_flash2(1);
     }
     alive++;
 
     MIDI_CORE_readFromRxBuffer();
+/*
 //    AI_readPotmeters();
 
     SPI_checkForReceivedData();
@@ -164,6 +161,7 @@ void main() {
       DAC_dacUpdatesFinished = 0;
       MX_runMatrix();
     }
+*/
   }
 }
 #endif
