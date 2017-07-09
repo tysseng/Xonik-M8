@@ -5,8 +5,11 @@
 
 
 // TODO: Change this later, but for now it is practical to use the same connector for SPI and data ready
-#define DCO_DATA_READY TUNE_A0
-#define DCO_DATA_READY_TRIS TUNE_A0_TRIS
+//#define DCO_DATA_READY TUNE_A0
+//#define DCO_DATA_READY_TRIS TUNE_A0_TRIS
+#define DCO_DATA_READY LATA7_bit
+#define DCO_DATA_READY_TRIS TRISA7_bit
+
 #define DCO_SPI_Init_Advanced SPI4_Init_Advanced
 #define DCO_SPI_Write SPI4_Write
 #define DCO_SPI_IVT IVT_SPI_4
@@ -65,18 +68,17 @@ void DCO_writeValues(unsigned int dcoValues[]){
 
 void DCO_writeValue(unsigned int dcoValue){
   LED_flash1(1);
+  DCO_SPI_Write(0);
   // TODO: Change to async writing - write bytes to buffer, set
   // data ready in write complete interrupt, start writing second byte etc.
-  /*
-  DCO_SPI_Write(Hi(dcoValue));
+  //DCO_SPI_Write(Hi(dcoValue));
+  /*DCO_DATA_READY = 1;
+  DCO_DATA_READY = 0;
+  delay_ms(1);*/
+  //DCO_SPI_Write(Lo(dcoValue));
   DCO_DATA_READY = 1;
   DCO_DATA_READY = 0;
   delay_ms(1);
-  DCO_SPI_Write(Lo(dcoValue));
-  DCO_DATA_READY = 1;
-  DCO_DATA_READY = 0;
-  delay_ms(1);
-  */
 }
 
 void initDcoSPI(){

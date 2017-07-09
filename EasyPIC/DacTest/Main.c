@@ -116,7 +116,7 @@ void main() {
   TRISA = 0;
 
   LED_init();
-  
+
   AI_init();
   DAC_init();
   SPI_init();
@@ -145,7 +145,7 @@ void main() {
 
   while(1){
     if(alive == 0){
-//      LED_flash2(1);
+      LED_flash2(1);
     }
     alive++;
 
