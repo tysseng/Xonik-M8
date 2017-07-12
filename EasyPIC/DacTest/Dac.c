@@ -78,7 +78,7 @@ void Timer1Interrupt() iv IVT_TIMER_1 ilevel 7 ics ICS_SRS {
 
     nextDcoValue = OUT_activeBuffer[0];
     if(currentDcoValue != nextDcoValue){
-      DCO_writeValue(nextDcoValue);
+      DCO_writeValue(nextDcoValue + 0x8000);
       currentDcoValue = nextDcoValue;
     }
     // TODO: This comment is somewhat fishy
