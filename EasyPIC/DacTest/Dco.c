@@ -67,7 +67,7 @@ void DCO_writeValues(unsigned int dcoValues[]){
 }
 
 void DCO_writeValue(unsigned int dcoValue){
-  LED_flash1(1);
+//  LED_flash1(1);
 
   // TODO: Change to async writing - write bytes to buffer, set
   // data ready in write complete interrupt, start writing second byte etc.
@@ -78,7 +78,7 @@ void DCO_writeValue(unsigned int dcoValue){
   DCO_SPI_Write(Lo(dcoValue));
   DCO_DATA_READY = 1;
   DCO_DATA_READY = 0;
-  delay_ms(1);
+//  delay_ms(1);
 }
 
 void initDcoSPI(){
@@ -88,7 +88,7 @@ void initDcoSPI(){
   DCO_SPI_Init_Advanced(
     _SPI_MASTER,
     _SPI_8_BIT,
-    1024, // Clock divider, sets speed.
+    128, // Clock divider, sets speed.
     _SPI_SS_DISABLE,
     _SPI_DATA_SAMPLE_END,
     _SPI_CLK_IDLE_LOW,

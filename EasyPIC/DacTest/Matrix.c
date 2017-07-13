@@ -498,7 +498,7 @@ void MX_setConstantsCount(unsigned short *bytes){
 }
 
 void MX_noteOn(int pitch, int velocity){
-  LED_flash2(1);
+//  LED_flash2(1);
   MX_nodeResults[MATRIX_INPUT_PITCH] = MX_keyToMatrixMapper[pitch];
   MX_nodeResults[MATRIX_INPUT_VELOCITY] = velocity << 8;
   MX_nodeResults[MATRIX_INPUT_GATE] = 0x7FFF;
