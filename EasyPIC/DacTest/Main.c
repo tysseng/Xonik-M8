@@ -115,12 +115,12 @@ void main() {
   JTAGEN_bit = 0;
 
   TRISA = 0;
-
+  DCO_init();
   LED_init();
 
   AI_init();
   DAC_init();
-  DCO_init();
+
   SPI_init();
   MIDI_init();
   MX_init();
@@ -145,6 +145,8 @@ void main() {
   LED_flash2(2);
   LED_flash1(2);
 
+  //DCO_calibrate();
+
   while(1){
     if(alive == 0){
       //LED_flash2(1);
@@ -162,6 +164,7 @@ void main() {
       MX_runMatrix();
     }
   }
+
 }
 #endif
 

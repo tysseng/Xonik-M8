@@ -3,6 +3,10 @@
 #include "Config.h"
 #include "DebugLed.h"
 
+// Commands, shared with DCO
+#define RUN_FREQUENCY_UPDATE 0b00000001
+#define RUN_AMPLITUDE_CALIBRATE 0b00000010
+
 
 // TODO: Change this later, but for now it is practical to use the same connector for SPI and data ready
 //#define DCO_DATA_READY TUNE_A0
@@ -67,23 +71,31 @@ void DCO_writeValues(unsigned int dcoValues[]){
 }
 
 void DCO_writeValue(unsigned int dcoValue){
-//  LED_flash1(1);
+  LED_flash1(1);
 
   // TODO: Change to async writing - write bytes to buffer, set
   // data ready in write complete interrupt, start writing second byte etc.
   DCO_SPI_Write(Hi(dcoValue));
-  /*DCO_DATA_READY = 1;
-  DCO_DATA_READY = 0;
-  delay_ms(1);*/
   DCO_SPI_Write(Lo(dcoValue));
+  DCO_SPI_Write(RUN_FREQUENCY_UPDATE);
+
   DCO_DATA_READY = 1;
+  
+  // This is needed for the DCO to register the change! 1us was not enough
+  delay_us(10);
   DCO_DATA_READY = 0;
-//  delay_ms(1);
+}
+
+void DCO_calibrate(){
+  DCO_SPI_Write(RUN_AMPLITUDE_CALIBRATE);
+  DCO_SPI_Write(0);
+  DCO_SPI_Write(0);
+  DCO_DATA_READY = 1;
+  delay_us(10);
+  DCO_DATA_READY = 0;
 }
 
 void initDcoSPI(){
-  DCO_DATA_READY_TRIS = 0;
-  DCO_DATA_READY = 0;
 
   DCO_SPI_Init_Advanced(
     _SPI_MASTER,
@@ -93,6 +105,9 @@ void initDcoSPI(){
     _SPI_DATA_SAMPLE_END,
     _SPI_CLK_IDLE_LOW,
     _SPI_ACTIVE_2_IDLE);
+
+  DCO_DATA_READY_TRIS = 0;
+  DCO_DATA_READY = 0;
 
 //  initSlaveSPIInterrupts();
 }
