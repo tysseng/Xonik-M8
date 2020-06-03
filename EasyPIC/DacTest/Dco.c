@@ -75,27 +75,25 @@ void DCO_writeValue(unsigned int dcoValue){
 
   // TODO: Change to async writing - write bytes to buffer, set
   // data ready in write complete interrupt, start writing second byte etc.
+  DCO_DATA_READY = 0;
   DCO_SPI_Write(Hi(dcoValue));
   DCO_SPI_Write(Lo(dcoValue));
   DCO_SPI_Write(RUN_FREQUENCY_UPDATE);
-
   DCO_DATA_READY = 1;
   
-  // This is needed for the DCO to register the change! 1us was not enough
-  delay_us(10);
-  DCO_DATA_READY = 0;
 }
 
 void DCO_calibrate(){
+  DCO_DATA_READY = 0;
   DCO_SPI_Write(RUN_AMPLITUDE_CALIBRATE);
   DCO_SPI_Write(0);
   DCO_SPI_Write(0);
   DCO_DATA_READY = 1;
-  delay_us(10);
-  DCO_DATA_READY = 0;
 }
 
 void initDcoSPI(){
+  DCO_DATA_READY_TRIS = 0;
+  DCO_DATA_READY = 1;
 
   DCO_SPI_Init_Advanced(
     _SPI_MASTER,
@@ -105,9 +103,6 @@ void initDcoSPI(){
     _SPI_DATA_SAMPLE_END,
     _SPI_CLK_IDLE_LOW,
     _SPI_ACTIVE_2_IDLE);
-
-  DCO_DATA_READY_TRIS = 0;
-  DCO_DATA_READY = 0;
 
 //  initSlaveSPIInterrupts();
 }
